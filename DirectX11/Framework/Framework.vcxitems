@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{2bd0b095-5bf6-4c3f-9e1d-798fbeba12bc}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\IntVector2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\MathUtility.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Matrix3x3.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Matrix4x3.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Matrix4x4.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\OBB3D.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Plane.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Quaternion.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Rect.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Vector2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Vector3.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\Vector4.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utility\Debug.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\IntVector2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\MathUtility.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Matrix3x3.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Matrix4x3.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Matrix4x4.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\OBB3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Plane.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Primitive2D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Quaternion.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Rect.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Vector2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Vector3.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\Vector4.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility\Debug.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility\Singleton.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility\StringBuilder.h" />
+  </ItemGroup>
+</Project>
