@@ -3,21 +3,25 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(SolutionDir)Temp\bin\$(PlatformTarget)\$(Configuration)\%(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)Temp\bin\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Temp\obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <FxCompile>
-      <ShaderModel>5.1</ShaderModel>
+      <ShaderModel>4.1</ShaderModel>
+      <ObjectFileOutput>$(OutDir)\cso\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Resources" "$(TargetDir)Resources" /Y /I /R /S /E </Command>
     </PostBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(Directory)%(FileName)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(Directory)%(FileName)</ObjectFileName>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

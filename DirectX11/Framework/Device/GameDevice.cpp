@@ -1,0 +1,61 @@
+#include "GameDevice.h"
+#include "Define/Window.h"
+#include "Graphics/GraphicsDevice.h"
+#include "Graphics/RenderingManager.h"
+#include "Input/InputManager.h"
+#include "Utility/Debug.h"
+#include "Window/Window.h"
+
+namespace Framework {
+namespace Device {
+
+Window::Window& GameDevice::getWindow() const {
+    return *mMainWindow;
+}
+
+Graphics::RenderingManager* GameDevice::getRenderingManager() const {
+    return mRenderingManager.get();
+}
+
+Input::InputManager* GameDevice::getInputManager() const {
+    return mInputManager.get();
+}
+
+void GameDevice::update() {
+    mInputManager->update();
+}
+
+bool GameDevice::isEnd() const {
+    return mMainWindow->isClosed();
+}
+
+void GameDevice::finalize() {
+    mMainWindow->quit();
+}
+
+void GameDevice::initialize() {
+    mRenderingManager->initialize();
+}
+
+GameDevice::GameDevice() {
+    const Math::Vector2 screenSize(
+        static_cast<float>(Define::Window::WIDTH),
+        static_cast<float>(Define::Window::HEIGHT));
+    mMainWindow = std::make_unique<Window::Window>(
+        screenSize,
+        Math::Vector2(100, 100),
+        Define::Window::TITLE,
+        true);
+
+    mRenderingManager = std::make_unique<Graphics::RenderingManager>(
+        mMainWindow->getHWND(),
+        screenSize,
+        false);
+    mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);
+}
+
+GameDevice::~GameDevice() {}
+
+
+} //Device 
+} //Framework 

@@ -7,4 +7,34 @@
   <ItemGroup>
     <ClInclude Include="Scene\Title.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\AnimationPS.hlsl" />
+    <FxCompile Include="Resources\Shader\AnimationVS.hlsl" />
+    <FxCompile Include="Resources\Shader\BlurPS.hlsl" />
+    <FxCompile Include="Resources\Shader\CameraBlendPS.hlsl" />
+    <FxCompile Include="Resources\Shader\CompositePS.hlsl" />
+    <FxCompile Include="Resources\Shader\Cone1PS.hlsl" />
+    <FxCompile Include="Resources\Shader\LightingPS.hlsl" />
+    <FxCompile Include="Resources\Shader\LightingVS.hlsl" />
+    <FxCompile Include="Resources\Shader\ModelPS.hlsl" />
+    <FxCompile Include="Resources\Shader\ModelVS.hlsl" />
+    <FxCompile Include="Resources\Shader\MonoPS.hlsl" />
+    <FxCompile Include="Resources\Shader\MultiPS.hlsl" />
+    <FxCompile Include="Resources\Shader\NoTextureNoLightingPS.hlsl" />
+    <FxCompile Include="Resources\Shader\OnlyPositionPS.hlsl" />
+    <FxCompile Include="Resources\Shader\OnlyPositionVS.hlsl" />
+    <FxCompile Include="Resources\Shader\PositionPS.hlsl" />
+    <FxCompile Include="Resources\Shader\PositionVS.hlsl" />
+    <FxCompile Include="Resources\Shader\Primitive2DPS.hlsl" />
+    <FxCompile Include="Resources\Shader\Primitive2DVS.hlsl" />
+    <FxCompile Include="Resources\Shader\RedModelPS.hlsl" />
+    <FxCompile Include="Resources\Shader\Sepia.hlsl" />
+    <FxCompile Include="Resources\Shader\Texture2DPS.hlsl" />
+    <FxCompile Include="Resources\Shader\Texture2DVS.hlsl" />
+    <FxCompile Include="Resources\Shader\Texture3DPS.hlsl" />
+    <FxCompile Include="Resources\Shader\Texture3DVS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shader\ShaderDefine.hlsli" />
+  </ItemGroup>
 </Project>

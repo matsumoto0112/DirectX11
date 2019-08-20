@@ -8,20 +8,22 @@
 * @def VisualStudioの出力にログ出力
 * @param mes 表示するメッセージ
 */
-#define MY_DEBUG_LOG(mes) Utility::Debug::getInstance().debugLog(__FUNCTION__,__LINE__, mes)
+#define MY_DEBUG_LOG(mes) Framework::Utility::Debug::getInstance().debugLog(__FUNCTION__,__LINE__, mes)
+
 /**
 * @def アサーション
 * @param cond 条件式
 * @param mes condがfalseの時に表示するメッセージ
 */
-#define MY_ASSERTION(cond,mes) Utility::Debug::getInstance().assertion(__FUNCTION__,__LINE__,cond, mes);
+#define MY_ASSERTION(cond,mes) Framework::Utility::Debug::getInstance().assertion(__FUNCTION__,__LINE__,cond, mes);
+
 /**
 * @def エラーウィンドウの表示
 * @param cond 条件式
 * @param mes condがfalseの時に表示するメッセージ
 * @details デバッグ時にはメッセージとともに発生した関数名、行番号が表示される
 */
-#define MY_ERROR_WINDOW(cond,mes) Utility::Debug::getInstance().errorWindow(__FUNCTION__,__LINE__,cond,mes);
+#define MY_ERROR_WINDOW(cond,mes) Framework::Utility::Debug::getInstance().errorWindow(__FUNCTION__,__LINE__,cond,mes);
 
 /**
 * @def 条件を満たしていたらVisualStudioの出力にログ出力
