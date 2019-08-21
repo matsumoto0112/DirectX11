@@ -1,20 +1,20 @@
 #include "Title.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Graphics/String/TextureString.h"
 #include "Framework/Scene/Collecter.h"
-#include "Source/Scene/Data/TitleData.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Source/Scene/Data/TitleData.h"
+#include "Framework/Define/Window.h"
 
 using namespace Framework;
 
 Title::Title()
     :mTitleStr(std::make_unique<Graphics::TextureString>("Title", 140, "")) {
-    mTitleStr->setPosition(Math::Vector2(0, 0));
+    mTitleStr->setPosition(Math::Vector2(50, 0));
 }
 
 Title::~Title() {}
 
-void Title::load(Scene::Collecter& collecter) {}
+void Title::load(Framework::Scene::Collecter& collecter) {}
 
 void Title::update(float delta) {}
 

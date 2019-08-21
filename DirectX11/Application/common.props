@@ -18,6 +18,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(Directory)%(FileName)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(Directory)%(FileName)</ObjectFileName>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>libfbxsdk-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>

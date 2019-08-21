@@ -1,5 +1,5 @@
 #pragma once
-#include "Scene/SceneData/SceneDataBase.h"
+#include "Framework/Scene/SceneDataBase.h"
 
 namespace Scene {
 
@@ -7,7 +7,7 @@ namespace Scene {
 * @class ParticleTestData
 * @brief パーティクルテストシーンデータ
 */
-class ParticleTestData : public SceneDataBase {
+class ParticleTestData : public Framework::Scene::SceneDataBase {
 public:
     /**
     * @brief デストラクタ

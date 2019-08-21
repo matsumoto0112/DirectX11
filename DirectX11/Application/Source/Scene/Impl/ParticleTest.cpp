@@ -32,7 +32,7 @@ ParticleTest::ParticleTest()
 
 ParticleTest::~ParticleTest() {}
 
-void ParticleTest::load(Scene::Collecter& collecter) {}
+void ParticleTest::load(Framework::Scene::Collecter& collecter) {}
 
 void ParticleTest::update(float delta) {}
 
@@ -54,4 +54,3 @@ void ParticleTest::end() {}
 Define::SceneType ParticleTest::next() {
     return Define::SceneType::Title;
 }
-

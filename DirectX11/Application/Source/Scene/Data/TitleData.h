@@ -1,6 +1,8 @@
 #pragma once
 #include "Framework/Scene/SceneDataBase.h"
 
+namespace Scene {
+
 /**
 * @class TitleData
 * @brief タイトルシーン情報クラス
@@ -12,3 +14,5 @@ public:
     */
     virtual ~TitleData() = default;
 };
+
+} //Scene

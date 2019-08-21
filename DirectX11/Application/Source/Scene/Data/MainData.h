@@ -1,13 +1,11 @@
 #pragma once
-#include "Scene/SceneData/SceneDataBase.h"
-
-namespace Scene {
+#include "Framework/Scene/SceneDataBase.h"
 
 /**
 * @class MainData
 * @brief メインシーン情報クラス
 */
-class MainData : public SceneDataBase {
+class MainData : public Framework::Scene::SceneDataBase {
 public:
     /**
     * @brief コンストラクタ
