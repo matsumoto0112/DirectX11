@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "Scene/SceneBase.h"
+#include "Framework/Scene/SceneBase.h"
 
 namespace Framework {
 namespace Graphics {

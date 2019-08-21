@@ -1,15 +1,15 @@
 #include "ParticleTest.h"
-#include "Utility/Wrap/OftenUsed.h"
-#include "Graphics/String/TextureString.h"
-#include "Graphics/Texture/TextureLoader.h"
-#include "Define/Path.h"
-#include "Graphics/Particle/SimpleParticleEmitter.h"
-#include "Utility/Wrap/OftenUsed.h"
+#include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Graphics/String/TextureString.h"
+#include "Framework/Graphics/Texture/TextureLoader.h"
+#include "Framework/Define/Path.h"
+#include "Framework/Graphics/Particle/SimpleParticleEmitter.h"
+#include "Framework/Utility/Wrap/OftenUsed.h"
 
-#include "Graphics/Model/Model.h"
-#include "Utility/Resource/ResourceManager.h"
-#include "Utility/Random.h"
-#include "Define/Window.h"
+#include "Framework/Graphics/Model/Model.h"
+#include "Framework/Utility/Resource/ResourceManager.h"
+#include "Framework/Utility/Random.h"
+#include "Framework/Define/Window.h"
 
 namespace {
 std::shared_ptr<Framework::Graphics::Model> model;

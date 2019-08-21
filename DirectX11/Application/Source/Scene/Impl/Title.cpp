@@ -1,9 +1,9 @@
 #include "Title.h"
-#include "Define/Window.h"
-#include "Graphics/String/TextureString.h"
-#include "Scene/Collecter.h"
+#include "Framework/Define/Window.h"
+#include "Framework/Graphics/String/TextureString.h"
+#include "Framework/Scene/Collecter.h"
 #include "Source/Scene/Data/TitleData.h"
-#include "Utility/Wrap/OftenUsed.h"
+#include "Framework/Utility/Wrap/OftenUsed.h"
 
 using namespace Framework;
 
