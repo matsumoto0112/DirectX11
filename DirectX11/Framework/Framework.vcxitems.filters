@@ -93,6 +93,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\ImGUI\Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Game.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\Collecter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Scene\Manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Utility\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Math\IntVector2.h" />
@@ -219,5 +222,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\ImGUI\Manager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Utility\STLExtend\ExtendUnorderedMap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Game.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\Collecter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\Manager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Define\SceneType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Scene\SceneDataBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utility\Random.h" />
   </ItemGroup>
 </Project>

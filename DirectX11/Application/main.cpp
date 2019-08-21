@@ -17,6 +17,8 @@
 #include "Graphics/RenderingManager.h"
 #include "Utility/ImGUI/Window.h"
 #include "Utility/ImGUI/Button.h"
+#include "Scene/Manager.h"
+#include "Source/Scene/Impl/Title.h"
 
 using namespace Framework;
 
@@ -33,19 +35,28 @@ private:
         HWND hWnd = window.getHWND();
         window.setProcedureEvent(new Window::DestroyProc());
         window.setProcedureEvent(new Window::CloseProc());
+
+        mSceneManager = std::make_unique<Scene::Manager>();
+        mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
+        mSceneManager->loadScene(Define::SceneType::Title);
         return true;
     }
     virtual void update(float deltaTime) override {
         mGameDevice.update();
+        mSceneManager->update(deltaTime);
     }
     virtual void draw() override {
         mGameDevice.getRenderingManager()->drawBegin();
+
+        mSceneManager->draw();
+
         mGameDevice.getRenderingManager()->drawEnd();
     }
     virtual void finalize() override {
         Game::finalize();
     }
 private:
+    std::unique_ptr<Scene::Manager> mSceneManager;
 };
 
 int main() {

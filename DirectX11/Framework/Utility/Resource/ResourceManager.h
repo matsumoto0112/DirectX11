@@ -6,7 +6,6 @@
 #include "Utility/Resource/PixelShaderResourceStorage.h"
 
 namespace Framework {
-
 namespace Utility {
 
 class ResourceManager : public Singleton<ResourceManager> {
