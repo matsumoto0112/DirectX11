@@ -4,6 +4,8 @@ static const int MAX_CAMERA_NUM = 4; //最大カメラ数
 
 static const int MAX_BONES = 256; //最大ボーン数
 
+static const float EPSILON = 1e-6; //誤差
+
 //ワールド・ビュー・プロジェクション行列
 //2D時はviewに-(カメラの座標)の行列が入ってくる
 struct MVPMatrix

@@ -1,5 +1,3 @@
-#include "ShaderDefine.hlsli"
-
 struct vs_input
 {
     float4 pos : POSITION;
@@ -9,6 +7,7 @@ struct vs_input
     uint4 index : BLENDINDICES0;
     float4 weight : BLENDWEIGHT0;
 };
+
 
 struct ps_input
 {

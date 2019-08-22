@@ -29,7 +29,7 @@ Path::Path() {
     std::string::size_type pos = sDir.find_last_of("\\/");
     sDir = sDir.substr(0, pos);
 
-    mShader = sDir + "/cso/";
+    mShader = sDir + "/cso/Resources/Shader/";
     mResource = sDir + "/Resources/";
     mModel = mResource + "Model/";
     mFBXModel = mModel + "FBX/";

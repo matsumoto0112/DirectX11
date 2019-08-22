@@ -9,7 +9,7 @@
   <ItemDefinitionGroup>
     <FxCompile>
       <ShaderModel>4.1</ShaderModel>
-      <ObjectFileOutput>$(OutDir)\cso\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(OutDir)\cso\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Resources" "$(TargetDir)Resources" /Y /I /R /S /E </Command>

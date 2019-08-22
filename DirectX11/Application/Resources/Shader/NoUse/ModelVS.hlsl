@@ -5,7 +5,7 @@ struct VS_IN
     float4 Pos : POSITION;
     float3 Nor : NORMAL;
     float2 Tex : TEXCOORD0;
-    float4 Col : COLOR;
+    float4 Col : COLOR0;
 };
 
 struct PS_IN
@@ -13,7 +13,7 @@ struct PS_IN
     float4 Pos : SV_POSITION;
     float3 Nor : NORMAL;
     float2 Tex : TEXCOORD0;
-    float4 Col : COLOR;
+    float4 Col : COLOR0;
 };
 
 PS_IN main(VS_IN IN)

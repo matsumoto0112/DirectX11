@@ -20,6 +20,8 @@ DepthStencilTest::DepthStencilTest()
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
     fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
     mModel = fbx->getResource(Define::ModelType::Object);
+    mModel->setVertexShader(Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
+    mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Nodel_NoTexture));
 
     const int modelNum = 5;
     for (int i = 0; i < modelNum; i++) {
@@ -50,6 +52,7 @@ void DepthStencilTest::draw() {
         Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
         mModel->draw(*mModelTransforms[i]);
     }
+
     //for (int i = 5 - 1; i >= 0; i--) {
     //    color.r = i * 0.2f;
     //    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);

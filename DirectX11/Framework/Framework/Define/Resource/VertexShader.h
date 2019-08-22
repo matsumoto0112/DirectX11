@@ -7,13 +7,9 @@ namespace Define {
 * @brief 頂点シェーダ種類定義
 */
 enum class VertexShaderType {
-    Default2D,
-    OnlyPosition,
-    Default3D,
+    Texture2D,
     Model,
-    Lighting,
-
-    Position3D,
+    Model_Lighting,
 };
 
 /**
@@ -22,13 +18,9 @@ enum class VertexShaderType {
 */
 class VertexShaderName {
 public:
-    static const std::string DEFAULT_2D; //!< 2Dデフォルト頂点シェーダー
-    static const std::string ONLY_POSITION; //!< 頂点情報のみのシェーダー
-    static const std::string DEFAULT_3D; //!< 3Dデフォルト頂点シェーダー
-    static const std::string MODEL_NOLIGHTING; //!< ライティングなしモデル用頂点シェーダ
-    static const std::string MODEL_LIGHTING; //!< ライティングありモデル用頂点シェーダー
-
-    static const std::string POSITION3D;
+    static const std::string TEXTURE2D; //!< 2Dデフォルト
+    static const std::string MODEL; //!< 通常モデル
+    static const std::string MODEL_LIGHTING; //!< ライティングありモデル
 };
 
 } //Define 

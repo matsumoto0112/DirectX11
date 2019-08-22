@@ -27,7 +27,7 @@ ParticleTest::ParticleTest()
 
     Utility::ResourceManager::getInstance().getFBXModel()->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
     model = Utility::ResourceManager::getInstance().getFBXModel()->getResource(Define::ModelType::Object);
-    model->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::NoTextureNoLighting));
+    model->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model));
 }
 
 ParticleTest::~ParticleTest() {}

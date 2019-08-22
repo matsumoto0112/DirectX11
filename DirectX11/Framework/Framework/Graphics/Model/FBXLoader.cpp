@@ -506,8 +506,8 @@ std::unique_ptr<Mesh> FBXLoader::loadMeshWithAnimation(FbxMesh* mesh, std::vecto
 LoadEnd:
     result->mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, indices,
         PrimitiveTopology::TriangleList);
-    result->mVShader = std::make_unique<VertexShader>("AnimationVS");
-    result->mPShader = std::make_unique<PixelShader>("AnimationPS");
+    //result->mVShader = std::make_unique<VertexShader>("AnimationVS");
+    //result->mPShader = std::make_unique<PixelShader>("AnimationPS");
 
     return std::move(result);
 }
