@@ -32,7 +32,7 @@ void RenderingManager::initialize() {
 
 void RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    view->clear(Color4(1.0f, 0.0f, 0.0f, 1.0f));
+    view->clear(Color4(0.7f, 0.7f, 0.7f, 1.0f));
     view->set();
     viewport->set();
 }

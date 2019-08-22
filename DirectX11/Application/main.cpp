@@ -19,6 +19,7 @@
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Scene/Manager.h"
 #include "Source/Scene/Impl/Title.h"
+#include "Source/Scene/Impl/DepthStencilTest.h"
 
 using namespace Framework;
 
@@ -38,7 +39,8 @@ private:
 
         mSceneManager = std::make_unique<Scene::Manager>();
         mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
-        mSceneManager->loadScene(Define::SceneType::Title);
+        mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
+        mSceneManager->loadScene(Define::SceneType::DepthStencilTest);
         return true;
     }
     virtual void update(float deltaTime) override {

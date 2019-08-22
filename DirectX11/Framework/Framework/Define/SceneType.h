@@ -13,6 +13,7 @@ enum class SceneType {
     Load,
 
     ParticleTest,
+    DepthStencilTest,
 };
 
 } //Define 

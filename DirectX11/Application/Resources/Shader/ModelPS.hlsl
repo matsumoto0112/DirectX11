@@ -21,7 +21,7 @@ float GetN(float n)
 }
 float4 main(PS_IN IN) : SV_TARGET
 {
-    float4 o = difTex.Sample(samLinear, IN.Tex);
+    float4 o = color;
     //o = float4(GetN(IN.Nor.x), GetN(IN.Nor.y), GetN(IN.Nor.z), 1.0f);
     //clip(o.a - EPSILON);
     return o;
