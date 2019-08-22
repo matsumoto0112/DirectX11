@@ -6,6 +6,8 @@
 #include "Framework/Graphics/String/TextureString.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Utility/ImGUI/Window.h"
+#include "Framework/Utility/ImGUI/FloatField.h"
 
 using namespace Framework;
 
@@ -34,6 +36,20 @@ DepthStencilTest::DepthStencilTest()
             Math::Quaternion(),
             Math::Vector3(1.0f, 1.0f, 1.0f)));
     }
+
+    ImGUI::Window* window = ImGUI::Window::create("Camera");
+    ImGUI::FloatField* Xfield = new ImGUI::FloatField("X", 0.0f, [&](float val) {
+        Math::Vector3 pos = mPerspectiveCamera->getPosition();
+        Math::Vector3 look = mPerspectiveCamera->getLookat();
+        float sub = val - pos.x;
+        pos.x = val;
+        look.x += sub;
+        mPerspectiveCamera->setPosition(pos);
+        mPerspectiveCamera->setLookat(look);
+    });
+    Xfield->setMinValue(-10.0f);
+    Xfield->setMaxValue(10.0f);
+    window->addItem(Xfield);
 }
 
 DepthStencilTest::~DepthStencilTest() {}

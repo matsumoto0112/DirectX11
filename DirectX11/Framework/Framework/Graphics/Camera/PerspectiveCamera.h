@@ -35,9 +35,9 @@ public:
     */
     ~PerspectiveCamera();
     virtual void setPosition(const Math::Vector3& position);
-    virtual const Math::Vector3& getPosision() const;
+    virtual const Math::Vector3& getPosition() const;
     virtual void setLookat(const Math::Vector3& lookat);
-    virtual const Math::Vector3& setLookat() const;
+    virtual const Math::Vector3& getLookat() const;
     virtual void setUpVector(const Math::Vector3& up);
     virtual const Math::Vector3& getUpVector() const;
 private:

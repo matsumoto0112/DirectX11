@@ -24,7 +24,7 @@ void PerspectiveCamera::setPosition(const Math::Vector3& position) {
     mView.setUpView(mInfo.position, mInfo.lookat, mInfo.up);
 }
 
-const Math::Vector3& PerspectiveCamera::getPosision() const {
+const Math::Vector3& PerspectiveCamera::getPosition() const {
     return mInfo.position;
 }
 
@@ -33,7 +33,7 @@ void PerspectiveCamera::setLookat(const Math::Vector3& lookat) {
     mView.setUpView(mInfo.position, mInfo.lookat, mInfo.up);
 }
 
-const Math::Vector3& PerspectiveCamera::setLookat() const {
+const Math::Vector3& PerspectiveCamera::getLookat() const {
     return mInfo.lookat;
 }
 
