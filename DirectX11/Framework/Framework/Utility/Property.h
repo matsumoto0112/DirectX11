@@ -5,3 +5,8 @@ type typeName; \
 public: \
 inline void set ## funcName(const type& val) {typeName = val;} \
 inline const type& get ## funcName() const{return (typeName);}
+
+#define PROPERTY_READONLY(type,typeName,funcName) protected: \
+type typeName; \
+public: \
+inline const type& get##funcName() const { return typeName; }

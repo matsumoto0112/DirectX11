@@ -11,7 +11,7 @@
 #include "Framework/Graphics/Shader/VertexShader.h"
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/Texture.h"
-#include "Framework/Graphics/Vertex/Vertex.h"
+#include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 
 namespace Framework {
@@ -19,8 +19,8 @@ namespace Graphics {
 
 SpriteRenderer::SpriteRenderer() {
     mVIBuffer = std::make_unique<QuadInstance>();
-    mVertexShader = std::make_unique<VertexShader>("Texture2DVS");
-    mPixelShader = std::make_unique<PixelShader>("Texture2DPS");
+    mVertexShader = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D);
+    mPixelShader = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D);
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
 }

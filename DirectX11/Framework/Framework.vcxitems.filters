@@ -99,6 +99,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -234,5 +235,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.h" />
   </ItemGroup>
 </Project>

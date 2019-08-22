@@ -1,22 +1,26 @@
 #include "DepthStencilTest.h"
 #include "Framework/Define/Window.h"
+#include "Framework/Graphics/Camera/OrthographicCamera.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/Model/Model.h"
+#include "Framework/Graphics/String/TextureString.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 
 using namespace Framework;
 
 DepthStencilTest::DepthStencilTest()
-    :mPerspectiveCamera(std::make_unique<Framework::Graphics::PerspectiveCamera>(
-        Framework::Graphics::PerspectiveCamera::Info{
+    :mStr(std::make_unique<Graphics::TextureString>("Depth Stencil Test", 14, "")),
+    mPerspectiveCamera(std::make_unique<Graphics::PerspectiveCamera>(
+        Graphics::PerspectiveCamera::Info{
         Math::Vector3(0.0f,5.0f,-10.0f),
         Math::Vector3(0.0f,0.0f,0.0f),
         Math::Vector3::UP,
         45.0f,
         Define::Window::getSize(),
         0.1f,1000.0f
-        })) {
+        })),
+    mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
     fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
     mModel = fbx->getResource(Define::ModelType::Object);
@@ -52,6 +56,9 @@ void DepthStencilTest::draw() {
         Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
         mModel->draw(*mModelTransforms[i]);
     }
+
+    mOrthographicCamera->setMatrix();
+    mStr->draw();
 
     //for (int i = 5 - 1; i >= 0; i--) {
     //    color.r = i * 0.2f;

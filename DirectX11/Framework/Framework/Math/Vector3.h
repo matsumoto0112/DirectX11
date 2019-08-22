@@ -46,10 +46,6 @@ public:
     */
     bool operator !=(const Vector3 &a) const;
     /**
-    * @brief 0ベクトルの取得
-    */
-    static Vector3 zero();
-    /**
     * @brief 単項プラス演算子
     */
     Vector3 operator +() const;

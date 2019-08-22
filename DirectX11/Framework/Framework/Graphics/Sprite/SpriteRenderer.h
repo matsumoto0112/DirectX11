@@ -40,8 +40,8 @@ public:
     void draw(Sprite3D* sprite);
 private:
     std::shared_ptr<QuadInstance> mVIBuffer; //!< 頂点・インデックスバッファ
-    std::unique_ptr<VertexShader> mVertexShader; //!< 頂点シェーダー
-    std::unique_ptr<PixelShader> mPixelShader; //!< ピクセルシェーダー
+    std::shared_ptr<VertexShader> mVertexShader; //!< 頂点シェーダー
+    std::shared_ptr<PixelShader> mPixelShader; //!< ピクセルシェーダー
     std::unique_ptr<Sampler> mSampler; //!< サンプラー
 };
 
