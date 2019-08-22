@@ -1,4 +1,5 @@
 #include "RenderTargetView.h"
+#include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
@@ -10,19 +11,27 @@ RenderTargetView::RenderTargetView(ID3D11Resource* resource) {
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½");
 }
 
-RenderTargetView::RenderTargetView(ID3D11Resource* resource, D3D11_RENDER_TARGET_VIEW_DESC* desc) {
-    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource, desc, &mRenderTargetView);
+RenderTargetView::RenderTargetView(ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
+    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource, &desc, &mRenderTargetView);
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½");
 }
 
 RenderTargetView::~RenderTargetView() {}
 
 void RenderTargetView::set() {
-    Utility::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr);
+    if (mDepthStencil) {
+        Utility::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthStencil->getDepthStencilView().Get());
+    }
+    else {
+        Utility::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr);
+    }
 }
 
 void RenderTargetView::clear(const Color4& clearColor) {
     Utility::getContext()->ClearRenderTargetView(mRenderTargetView.Get(), clearColor.get().data());
+    if (mDepthStencil) {
+        mDepthStencil->clear();
+    }
 }
 
 } //Graphics 

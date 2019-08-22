@@ -5,6 +5,7 @@
 
 namespace Framework {
 namespace Graphics {
+class DepthStencilView;
 
 /**
 * @class RenderTargetView
@@ -22,7 +23,7 @@ public:
     * @param resource リソーステクスチャ
     * @param desc レンダーターゲットビューの設定
     */
-    RenderTargetView(ID3D11Resource* resource, D3D11_RENDER_TARGET_VIEW_DESC* desc);
+    RenderTargetView(ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
     /**
     * @brief デストラクタ
     */
@@ -35,8 +36,11 @@ public:
     * @brief レンダーターゲットビューのクリア処理
     */
     void clear(const Color4& clearColor);
+    void setDepthStencilView(std::unique_ptr<DepthStencilView> depthStencil) { mDepthStencil = std::move(depthStencil); }
+    DepthStencilView* getDepthStencilView() const { return mDepthStencil.get(); }
 private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+    std::unique_ptr<DepthStencilView> mDepthStencil;
 };
 
 } //Graphics 

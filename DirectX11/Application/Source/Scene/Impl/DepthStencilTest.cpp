@@ -24,7 +24,7 @@ DepthStencilTest::DepthStencilTest()
     const int modelNum = 5;
     for (int i = 0; i < modelNum; i++) {
         mModelTransforms.emplace_back(std::make_unique<Utility::Transform>(
-            Math::Vector3(i, 0, i),
+            Math::Vector3(i, i * 0.1f, i),
             Math::Quaternion(),
             Math::Vector3(1.0f, 1.0f, 1.0f)));
     }
