@@ -7,6 +7,7 @@
 namespace Framework {
 namespace Graphics {
 class DirectionalLight;
+class PointLight;
 class Model;
 class OrthographicCamera;
 class PerspectiveCamera;
@@ -57,6 +58,7 @@ private:
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mPerspectiveCamera;
     std::unique_ptr<Framework::Graphics::OrthographicCamera> mOrthographicCamera;
     std::shared_ptr<Framework::Graphics::DirectionalLight> mDirectionalLight;
+    std::shared_ptr<Framework::Graphics::PointLight> mPointLight;
 
     std::unique_ptr<Framework::ImGUI::Window> mUIWindow;
 };

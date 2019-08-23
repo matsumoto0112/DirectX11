@@ -10,4 +10,12 @@ enum class DirectionalLightType {
     Default,
 };
 
+/**
+* @enum PointLightType
+* @brief ポイントライトの種類定義
+*/
+enum class PointLightType {
+    LeftTopFloor,
+};
+
 } //Define 

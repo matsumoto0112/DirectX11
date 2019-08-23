@@ -26,11 +26,9 @@ float4 main(ps_input input) : SV_TARGET
     for (i = 0; i < MAX_POINTLIGHT; ++i)
     {
         float3 pDir = pLights[i].posPLight.xyz - input.WPosition.xyz;
-        float r = length(pDir);
+        float D = length(pDir);
         pDir = normalize(pDir);
-        rgb += pLights[i].colPLight.rgb
-            * saturate(pLights[i].attPLight.z * r + pLights[i].attPLight.w)
-            * saturate(dot(pDir, nor));
+        rgb += pLights[i].colPLight.rgb * ((1.0f - D / pLights[i].R) / (1.0f + D * pLights[i].A * pLights[i].A));
     }
     float4 o = float4(rgb, 1.0f) * tex.Sample(samLinear, input.uv);
     o *= input.color;

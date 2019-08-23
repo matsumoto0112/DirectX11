@@ -104,6 +104,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\DirectionalLight.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -245,5 +246,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.h" />
   </ItemGroup>
 </Project>

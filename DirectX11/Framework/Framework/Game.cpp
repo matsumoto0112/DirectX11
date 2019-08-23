@@ -21,7 +21,7 @@ Game::Game(const Math::Vector2& screenSize, bool isFullScreen, float fps)
     mIsFullScreen(isFullScreen),
     mFPS(fps) {
     //ÉÅÉÇÉäÉäÅ[ÉNåüèo
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 }
 
 Game::~Game() {}

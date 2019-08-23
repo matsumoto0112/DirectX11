@@ -68,25 +68,42 @@ NormalLightingTest::NormalLightingTest()
     mFloor.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
-    mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
-        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
+    //    Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    mPointLight = Utility::getLightManager()->addPointLight(Define::PointLightType::LeftTopFloor,
+        Math::Vector3(0.0f, 0.0f, 0.0),
+        Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f),
+        5.0f,
+        0.0f);
 
-    mUIWindow = std::make_unique<ImGUI::Window>("Directional Light");
+    mUIWindow = std::make_unique<ImGUI::Window>("Point Light");
 
 #define ADD_LIGHT_COLOR_CHANGE_SLIDER(Name,Type) { \
     std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#Name, 0.0f, [&](float val) { \
-        Graphics::Color4 color = mDirectionalLight->getColor();\
+        Graphics::Color4 color = mPointLight->getColor();\
         color. ## Type = val;\
-        mDirectionalLight->setColor(color);\
+        mPointLight->setColor(color);\
         });\
     field->setMinValue(0.0f);\
     field->setMaxValue(1.0f);\
     mUIWindow->addItem(field); }
+#define ADD_LIGHT_POSITION_CHANGE_SLIDER(Name,Type) { \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#Name, 0.0f, [&](float val) { \
+        Math::Vector3 pos = mPointLight->getPosition();\
+        pos. ## Type = val;\
+        mPointLight->setPosition(pos);\
+        });\
+    field->setMinValue(-10.0f);\
+    field->setMaxValue(10.0f);\
+    mUIWindow->addItem(field); }
 
-    //mDirectionalLight->getColor();
+    //    //mDirectionalLight->getColor();
     ADD_LIGHT_COLOR_CHANGE_SLIDER(R, r);
     ADD_LIGHT_COLOR_CHANGE_SLIDER(G, g);
     ADD_LIGHT_COLOR_CHANGE_SLIDER(B, b);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(X, x);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(Y, y);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(Z, z);
 }
 
 NormalLightingTest::~NormalLightingTest() {}

@@ -27,7 +27,8 @@ struct PointLight
 {
     float4 colPLight; //色
     float3 posPLight; //座標
-    float4 attPLight; //減衰パラメータ
+    float R; //最大距離
+    float A; //減衰率
 };
 
 //UV情報
