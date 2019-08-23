@@ -27,6 +27,7 @@
     <FxCompile Include="Resources\Shader\Model\Model_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_NoTexture_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Lighting_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -28,6 +28,10 @@ Graphics::RenderingManager* getRenderingManager();
 * @brief コンスタントバッファ管理者の取得
 */
 Graphics::ConstantBufferManager* getConstantBufferManager();
+/**
+* @brief ライト管理者の取得
+*/
+Graphics::LightManager* getLightManager();
 
 Input::InputManager* getInputManager();
 

@@ -34,6 +34,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\DirectX11GraphicsDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\ImGUI\Manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\DirectionalLight.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Animation.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\AnimationModel.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Bone.cpp" />
@@ -116,6 +119,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\CameraType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightSettings.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.h" />
@@ -149,6 +153,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DirectX11GraphicsDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\GraphicsDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ImGUI\Manager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\DirectionalLight.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Animation.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\AnimationModel.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Bone.h" />

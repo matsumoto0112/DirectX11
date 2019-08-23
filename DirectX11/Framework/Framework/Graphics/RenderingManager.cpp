@@ -23,6 +23,7 @@ RenderingManager::~RenderingManager() {}
 
 void RenderingManager::initialize() {
     mConstantBufferManager = std::make_unique<ConstantBufferManager>();
+    mLightManager = std::make_unique<LightManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
     view = std::make_unique<RenderTargetView>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
@@ -61,6 +62,7 @@ void RenderingManager::drawBegin() {
 
 void RenderingManager::drawEnd() {
     mImGUIManager->drawAll();
+    mLightManager->set();
 
     //•`‰æ‚ÌÅIˆ—‚ðs‚¤ 
     mGraphicsDevice->drawEnd();

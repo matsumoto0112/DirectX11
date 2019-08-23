@@ -81,12 +81,6 @@ void DepthStencilTest::draw() {
 
     mOrthographicCamera->setMatrix();
     mStr->draw();
-
-    //for (int i = 5 - 1; i >= 0; i--) {
-    //    color.r = i * 0.2f;
-    //    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
-    //    mModel->draw(*mModelTransforms[i]);
-    //}
 }
 
 void DepthStencilTest::end() {}

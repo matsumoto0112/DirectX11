@@ -6,11 +6,15 @@
 
 namespace Framework {
 namespace Graphics {
+class DirectionalLight;
 class Model;
 class OrthographicCamera;
 class PerspectiveCamera;
 class TextureString;
 } //Graphics
+namespace ImGUI {
+class Window;
+} //ImGUI 
 } //Framework 
 
 struct GameObject {
@@ -52,4 +56,7 @@ private:
     std::unique_ptr<Framework::Graphics::TextureString> mStr;
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mPerspectiveCamera;
     std::unique_ptr<Framework::Graphics::OrthographicCamera> mOrthographicCamera;
+    std::shared_ptr<Framework::Graphics::DirectionalLight> mDirectionalLight;
+
+    std::unique_ptr<Framework::ImGUI::Window> mUIWindow;
 };

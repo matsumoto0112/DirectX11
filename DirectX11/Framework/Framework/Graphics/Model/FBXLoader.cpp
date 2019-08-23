@@ -322,11 +322,12 @@ void FBXLoader::loadNormals(FbxMesh* mesh, std::vector<MeshVertex>* vertices) {
     FbxAMatrix mat = createPositionOffsetMatrix(mesh);
     for (int i = 0; i < normals.Size(); i++) {
         //–@ü‚Í‰ñ“]‚¾‚¯‚©‚¯‚½‚¢
-        normals[i] = mat.MultR(normals[i]);
+        normals[i] = mat.MultT(normals[i]);
+        std::cout << normals[i] << std::endl;
     }
 
     for (int i = 0; i < size; i++) {
-        FbxVector4& normal = normals[i];
+        const FbxVector4& normal = normals[i];
         (*vertices)[i].normal = convertNormalFromSourceNormal(normal);
     }
 }
@@ -348,7 +349,7 @@ void FBXLoader::loadUVs(FbxMesh* mesh, std::vector<MeshVertex>* vertices) {
     mesh->GetPolygonVertexUVs(uvNames[0], uvs);
     const int size = vertices->size();
     for (int i = 0; i < size; i++) {
-        FbxVector2& uv = uvs[i];
+        const FbxVector2& uv = uvs[i];
         (*vertices)[i].uv = convertUVFromSourceUV(uv);
     }
 }

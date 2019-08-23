@@ -41,11 +41,12 @@ private:
         window.setProcedureEvent(new Window::CloseProc());
 
         mSceneManager = std::make_unique<Scene::Manager>();
-        mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
-        mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
+        //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
+        //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
         mSceneManager->registerScene(Define::SceneType::NormalLighting, std::make_unique<NormalLightingTest>());
         mSceneManager->loadScene(Define::SceneType::NormalLighting);
 
+        ATLASSERT(_CrtCheckMemory());
         return true;
     }
     virtual void update(float deltaTime) override {
