@@ -1,4 +1,5 @@
 #include "NormalLightingTest.h"
+#include "Framework/Utility/Property.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/Camera/OrthographicCamera.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -68,7 +69,7 @@ NormalLightingTest::NormalLightingTest()
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
     mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
-        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(1.0f, 0.0f, 0.5f, 1.0f));
+        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
 
     mUIWindow = std::make_unique<ImGUI::Window>("Directional Light");
 

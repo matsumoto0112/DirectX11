@@ -8,7 +8,7 @@ Sprite3D::Sprite3D(std::shared_ptr<Texture> texture)
     :mTexture(texture),
     mPosition(Math::Vector3::ZERO),
     mScale(Math::Vector3(1.0f, 1.0f, 1.0f)),
-    mContentSize(texture->getWidth(), texture->getHeight()),
+    mContentSize(static_cast<float>(texture->getWidth()), static_cast<float>(texture->getHeight())),
     mColor(Color4::WHITE),
     mSrcRect(Math::Rect(0.0f, 0.0f, 1.0f, 1.0f)) {}
 
