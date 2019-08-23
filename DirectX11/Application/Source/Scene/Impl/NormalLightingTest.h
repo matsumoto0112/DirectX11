@@ -6,12 +6,18 @@
 
 namespace Framework {
 namespace Graphics {
-class Model; 
+class Model;
 class OrthographicCamera;
 class PerspectiveCamera;
 class TextureString;
 } //Graphics
 } //Framework 
+
+struct GameObject {
+    Framework::Utility::Transform mTransform;
+    std::shared_ptr<Framework::Graphics::Model> mModel;
+    void draw();
+};
 
 /**
 * @class NormalLightingTest
@@ -41,6 +47,8 @@ public:
 private:
     std::vector<Framework::Utility::Transform> mWallTransforms;
     std::shared_ptr<Framework::Graphics::Model> mWall;
+    GameObject mObject;
+    GameObject mFloor;
     std::unique_ptr<Framework::Graphics::TextureString> mStr;
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mPerspectiveCamera;
     std::unique_ptr<Framework::Graphics::OrthographicCamera> mOrthographicCamera;

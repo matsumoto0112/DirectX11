@@ -5,6 +5,7 @@
 #include "Framework/Utility/Debug.h"
 namespace Framework {
 namespace Math {
+const Quaternion Quaternion::IDENTITY = Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
 
 Quaternion::Quaternion() {
     identity();
@@ -14,43 +15,66 @@ Quaternion::Quaternion(float x, float y, float z, float w)
     :x(x), y(y), z(z), w(w) {}
 
 void Quaternion::identity() {
-    w = 1.0f;
-    x = y = z = 0.0f;
+    *this = IDENTITY;
 }
 
-void Quaternion::setToRotateAboutX(float theta) {
-    const float thetaOver2 = theta * 0.5f;
+void Quaternion::setToRotateAboutX(float degree) {
+    const float thetaOver2 = MathUtility::toRadian(degree) * 0.5f;
     w = cosf(thetaOver2);
     x = sinf(thetaOver2);
     y = 0.0f;
     z = 0.0f;
 }
 
-void Quaternion::setToRotateAboutY(float theta) {
-    const float thetaOver2 = theta * 0.5f;
+void Quaternion::setToRotateAboutY(float degree) {
+    const float thetaOver2 = MathUtility::toRadian(degree) * 0.5f;
     w = cosf(thetaOver2);
     x = 0.0f;
     y = sinf(thetaOver2);
     z = 0.0f;
 }
 
-void Quaternion::setToRotateAboutZ(float theta) {
-    const float thetaOver2 = theta * 0.5f;
+void Quaternion::setToRotateAboutZ(float degree) {
+    const float thetaOver2 = MathUtility::toRadian(degree) * 0.5f;
     w = cosf(thetaOver2);
     x = 0.0f;
     y = 0.0f;
     z = sinf(thetaOver2);
 }
-void Quaternion::setToRotateAboutAxis(const Vector3& axis, float theta) {
+void Quaternion::setToRotateAboutAxis(const Vector3& axis, float degree) {
     MY_ASSERTION(
         fabs(axis.length() - 1.0f) < EPSILON,
         "‰ñ“]Ž²‚ª³‹K‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
-    const float thetaOver2 = theta * 0.5f;
+    const float thetaOver2 = MathUtility::toRadian(degree) * 0.5f;
     const float sinThetaOver2 = sinf(thetaOver2);
     w = cosf(thetaOver2);
     x = sinThetaOver2 * axis.x;
     y = sinThetaOver2 * axis.y;
     z = sinThetaOver2 * axis.z;
+}
+
+Quaternion Quaternion::createRotateAboutX(float degree) {
+    Quaternion res;
+    res.setToRotateAboutX(degree);
+    return res;
+}
+
+Quaternion Quaternion::createRotateAboutY(float degree) {
+    Quaternion res;
+    res.setToRotateAboutY(degree);
+    return res;
+}
+
+Quaternion Quaternion::createRotateAboutZ(float degree) {
+    Quaternion res;
+    res.setToRotateAboutZ(degree);
+    return res;
+}
+
+Quaternion Quaternion::createRotateAboutAxis(const Vector3& axis, float degree) {
+    Quaternion res;
+    res.setToRotateAboutAxis(axis, degree);
+    return res;
 }
 
 Quaternion Quaternion::operator*(const Quaternion& a) const {

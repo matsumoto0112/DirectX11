@@ -13,6 +13,9 @@ class Matrix4x4;
 class Quaternion {
 public:
     float x, y, z, w;
+public:
+    static const Quaternion IDENTITY;
+public:
     /**
     * @brief デフォルトコンストラクタ
     */
@@ -27,25 +30,46 @@ public:
     void identity();
     /**
     * @brief  x軸に回転した角度でセットアップ
-    * @param theta 回転量(rad)
+    * @param theta 回転量（度）
     */
-    void setToRotateAboutX(float theta);
+    void setToRotateAboutX(float degree);
     /**
     * @brief  y軸に回転した角度でセットアップ
-    * @param theta 回転量(rad)
+    * @param theta 回転量（度）
     */
-    void setToRotateAboutY(float theta);
+    void setToRotateAboutY(float degree);
     /**
     * @brief  z軸に回転した角度でセットアップ
-    * @param theta 回転量(rad)
+    * @param theta 回転量（度）
     */
-    void setToRotateAboutZ(float theta);
+    void setToRotateAboutZ(float degree);
     /**
     * @brief  Axisを軸に回転した角度でセットアップ
     * @param theta 軸
+    * @param theta 回転量（度）
+    */
+    void setToRotateAboutAxis(const Vector3& axis, float degree);
+    /**
+    * @brief X軸回りの回転を作成
+    * @param degree 回転量（度）
+    */
+    static Quaternion createRotateAboutX(float degree);
+    /**
+    * @brief Y軸回りの回転を作成
+    * @param degree 回転量（度）
+    */
+    static Quaternion createRotateAboutY(float degree);
+    /**
+    * @brief Z軸回りの回転を作成
+    * @param degree 回転量（度）
+    */
+    static Quaternion createRotateAboutZ(float degree);
+    /**
+    * @brief  Axisを軸に回転した回転を作成
+    * @param theta 軸
     * @param theta 回転量(rad)
     */
-    void setToRotateAboutAxis(const Vector3& axis, float theta);
+    static Quaternion createRotateAboutAxis(const Vector3& axis, float degree);
 
     /**
     * @brief 外積
