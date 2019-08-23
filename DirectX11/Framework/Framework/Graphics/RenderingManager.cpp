@@ -3,12 +3,14 @@
 #include "Framework/Graphics/ImGUI/Manager.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/RenderTargetView.h"
+#include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
 
 namespace {
 std::unique_ptr<Framework::Graphics::RenderTargetView> view;
 std::unique_ptr<Framework::Graphics::Viewport> viewport;
+std::unique_ptr<Framework::Graphics::Sampler> mDefaultSampler;
 }
 namespace Framework {
 namespace Graphics {
@@ -45,6 +47,8 @@ void RenderingManager::initialize() {
     ds.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     ds.Texture2D.MipSlice = 0;
     view->setDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
+
+    mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }
 
 void RenderingManager::drawBegin() {
@@ -52,6 +56,7 @@ void RenderingManager::drawBegin() {
     view->clear(Color4(0.7f, 0.7f, 0.7f, 1.0f));
     view->set();
     viewport->set();
+    mDefaultSampler->setData(ShaderInputType::Pixel, 0);
 }
 
 void RenderingManager::drawEnd() {

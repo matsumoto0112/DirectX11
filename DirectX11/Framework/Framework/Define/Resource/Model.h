@@ -11,6 +11,7 @@ enum class ModelType {
     Enemy,
     Bullet,
     Object,
+    Wall,
 };
 
 /**
@@ -23,6 +24,7 @@ public:
     static const std::string OBJECT_NAME;
     static const std::string ENEMY_NAME;
     static const std::string BULLET_NAME;
+    static const std::string WALL;
 };
 
 } //Define 

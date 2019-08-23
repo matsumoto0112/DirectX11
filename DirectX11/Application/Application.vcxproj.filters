@@ -6,6 +6,7 @@
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
     <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
+    <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -15,6 +16,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\DepthStencilTest.h" />
+    <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -24,6 +26,7 @@
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_NoTexture_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Model\Model_Diffuse_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

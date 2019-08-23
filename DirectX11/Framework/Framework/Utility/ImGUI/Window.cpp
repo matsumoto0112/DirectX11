@@ -8,17 +8,6 @@ namespace ImGUI {
 Window::Window(const std::string& name)
     :IItem(name) {}
 
-std::shared_ptr<Window> Window::create(const std::string& name) {
-    class temp : public Window {
-    public:
-        temp(const std::string& name)
-            :Window(name) {}
-    };
-    std::shared_ptr<Window> window = std::make_shared<temp>(name);
-    Utility::getImGUIManager()->add(window);
-    return window;
-}
-
 Window::~Window() {}
 
 void Window::draw() {

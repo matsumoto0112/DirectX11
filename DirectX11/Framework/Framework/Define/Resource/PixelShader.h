@@ -11,6 +11,7 @@ enum class PixelShaderType {
     Model,
     Nodel_NoTexture,
     Model_Lighting,
+    Model_Diffuse,
 };
 
 /**
@@ -22,6 +23,7 @@ public:
     static const std::string TEXTURE2D; //!< 2Dテクスチャ
     static const std::string MODEL; //!< 通常モデル
     static const std::string MODEL_NOTEXTURE; //!< テクスチャなしモデル
+    static const std::string MODEL_DIFFUSE; //!< ディフューズテクスチャありモデル
     static const std::string MODEL_LIGHTING; //!< ライティングありモデル
 };
 

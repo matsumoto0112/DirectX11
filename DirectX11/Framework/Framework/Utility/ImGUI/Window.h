@@ -15,10 +15,9 @@ namespace ImGUI {
 class Window : public IItem {
 public:
     /**
-    * @brief ウィンドウの作成
-    * @param name ウィンドウ名
+    * @brief コンストラクタ
     */
-    static std::shared_ptr<Window> create(const std::string& name);
+    Window(const std::string& name);
     /**
     * @brief デストラクタ
     */
@@ -35,10 +34,6 @@ public:
     */
     virtual void draw() override;
 protected:
-    /**
-    * @brief コンストラクタ
-    */
-    Window(const std::string& name);
 private:
     std::vector<std::shared_ptr<IItem>> mItems; //!< ウィンドウについているアイテム
 };

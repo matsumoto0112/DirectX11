@@ -37,25 +37,25 @@ DepthStencilTest::DepthStencilTest()
             Math::Vector3(1.0f, 1.0f, 1.0f)));
     }
 
-    std::shared_ptr<ImGUI::Window> window = ImGUI::Window::create("Camera");
-#define ADD_CAMERA_MOVE_FIELD(NAME,TYPE) { \
-    float def =mPerspectiveCamera->getPosition().##TYPE; \
-    std::shared_ptr<ImGUI::FloatField> NAME##field = std::make_shared<ImGUI::FloatField>(#NAME, def, [&](float val) { \
-    Math::Vector3 pos = mPerspectiveCamera->getPosition(); \
-    Math::Vector3 look = mPerspectiveCamera->getLookat(); \
-    float sub = val - pos.##TYPE; \
-    pos.##TYPE = val; \
-    look.##TYPE += sub; \
-    mPerspectiveCamera->setPosition(pos); \
-    mPerspectiveCamera->setLookat(look); \
-    }); \
-    NAME##field->setMinValue(-50.0f); \
-    NAME##field->setMaxValue(50.0f); \
-    window->addItem(NAME##field); } 
-
-        ADD_CAMERA_MOVE_FIELD(X, x);
-    ADD_CAMERA_MOVE_FIELD(Y, y);
-    ADD_CAMERA_MOVE_FIELD(Z, z);
+//    std::shared_ptr<ImGUI::Window> window = NULL;
+//#define ADD_CAMERA_MOVE_FIELD(NAME,TYPE) { \
+//    float def =mPerspectiveCamera->getPosition().##TYPE; \
+//    std::shared_ptr<ImGUI::FloatField> NAME##field = std::make_shared<ImGUI::FloatField>(#NAME, def, [&](float val) { \
+//    Math::Vector3 pos = mPerspectiveCamera->getPosition(); \
+//    Math::Vector3 look = mPerspectiveCamera->getLookat(); \
+//    float sub = val - pos.##TYPE; \
+//    pos.##TYPE = val; \
+//    look.##TYPE += sub; \
+//    mPerspectiveCamera->setPosition(pos); \
+//    mPerspectiveCamera->setLookat(look); \
+//    }); \
+//    NAME##field->setMinValue(-50.0f); \
+//    NAME##field->setMaxValue(50.0f); \
+//    window->addItem(NAME##field); } 
+//
+//    ADD_CAMERA_MOVE_FIELD(X, x);
+//    ADD_CAMERA_MOVE_FIELD(Y, y);
+//    ADD_CAMERA_MOVE_FIELD(Z, z);
 }
 
 DepthStencilTest::~DepthStencilTest() {}

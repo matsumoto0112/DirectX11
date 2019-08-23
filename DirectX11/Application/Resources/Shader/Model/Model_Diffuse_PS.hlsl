@@ -1,4 +1,4 @@
-Texture2D tex : register(t0);
+Texture2D tex : register(t2);
 SamplerState samLinear : register(s0);
 
 #include "../Utility/ShaderDefine.hlsli"

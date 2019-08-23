@@ -7,8 +7,6 @@
 namespace Framework {
 namespace ImGUI {
 
-class Window;
-
 /**
 * @class Manager
 * @brief ImGUIの管理
@@ -27,12 +25,6 @@ public:
     * @brief アイテムをすべて描画する
     */
     void drawAll();
-    /**
-    * @brief ウィンドウの追加
-    */
-    void add(std::shared_ptr<Window> window);
-private:
-    std::vector<std::shared_ptr<Window>> mWindows; //!< GUIウィンドウのリスト
 };
 
 } //ImGUI
