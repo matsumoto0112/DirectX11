@@ -1,6 +1,7 @@
 #include "Framework/Game.h"
-#include <memory>
+#include <atlbase.h>
 #include <iostream>
+#include <memory>
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
 #include "Framework/Math/Vector2.h"
 #include "Framework/Device/GameDevice.h"
@@ -20,6 +21,7 @@
 #include "Framework/Scene/Manager.h"
 #include "Source/Scene/Impl/Title.h"
 #include "Source/Scene/Impl/DepthStencilTest.h"
+
 
 using namespace Framework;
 
@@ -41,13 +43,17 @@ private:
         mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
         mSceneManager->loadScene(Define::SceneType::DepthStencilTest);
+
         return true;
     }
     virtual void update(float deltaTime) override {
+        ATLASSERT(_CrtCheckMemory());
+
         mGameDevice.update();
-        mSceneManager->update(deltaTime);
+        mSceneManager->update(deltaTime);   
     }
     virtual void draw() override {
+        ATLASSERT(_CrtCheckMemory());
         mGameDevice.getRenderingManager()->drawBegin();
 
         mSceneManager->draw();

@@ -6,13 +6,13 @@
 namespace Framework {
 namespace Graphics {
 
-RenderTargetView::RenderTargetView(ID3D11Resource* resource) {
-    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource, nullptr, &mRenderTargetView);
+RenderTargetView::RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource) {
+    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource.Get(), nullptr, &mRenderTargetView);
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
 }
 
-RenderTargetView::RenderTargetView(ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
-    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource, &desc, &mRenderTargetView);
+RenderTargetView::RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
+    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource.Get(), &desc, &mRenderTargetView);
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
 }
 

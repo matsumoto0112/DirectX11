@@ -32,13 +32,13 @@ DepthStencilTest::DepthStencilTest()
     const int modelNum = 5;
     for (int i = 0; i < modelNum; i++) {
         mModelTransforms.emplace_back(std::make_unique<Utility::Transform>(
-            Math::Vector3(i, i * 0.1f, i),
+            Math::Vector3(i, 0.1f * i, i),
             Math::Quaternion(),
             Math::Vector3(1.0f, 1.0f, 1.0f)));
     }
 
-    ImGUI::Window* window = ImGUI::Window::create("Camera");
-    ImGUI::FloatField* Xfield = new ImGUI::FloatField("X", 0.0f, [&](float val) {
+    std::shared_ptr<ImGUI::Window> window = ImGUI::Window::create("Camera");
+    std::shared_ptr<ImGUI::FloatField> Xfield = std::make_shared<ImGUI::FloatField>("X", 0.0f, [&](float val) {
         Math::Vector3 pos = mPerspectiveCamera->getPosition();
         Math::Vector3 look = mPerspectiveCamera->getLookat();
         float sub = val - pos.x;

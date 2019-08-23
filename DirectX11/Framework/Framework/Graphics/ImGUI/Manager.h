@@ -27,9 +27,12 @@ public:
     * @brief アイテムをすべて描画する
     */
     void drawAll();
-    void add(Window* window);
+    /**
+    * @brief ウィンドウの追加
+    */
+    void add(std::shared_ptr<Window> window);
 private:
-    std::vector<std::unique_ptr<Window>> mWindows; //!< GUIウィンドウのリスト
+    std::vector<std::shared_ptr<Window>> mWindows; //!< GUIウィンドウのリスト
 };
 
 } //ImGUI

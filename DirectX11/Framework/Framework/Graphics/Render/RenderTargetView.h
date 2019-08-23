@@ -17,13 +17,13 @@ public:
     * @brief コンストラクタ
     * @param resource リソーステクスチャ
     */
-    RenderTargetView(ID3D11Resource* resource);
+    RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource);
     /**
     * @brief コンストラクタ
     * @param resource リソーステクスチャ
     * @param desc レンダーターゲットビューの設定
     */
-    RenderTargetView(ID3D11Resource* resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
+    RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
     /**
     * @brief デストラクタ
     */

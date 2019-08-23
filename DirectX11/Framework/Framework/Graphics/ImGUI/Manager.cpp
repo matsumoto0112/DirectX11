@@ -22,6 +22,7 @@ Manager::Manager() {
 }
 
 Manager::~Manager() {
+    mWindows.clear();
     ImGui_ImplDX11_Shutdown();
     ImGui::DestroyContext();
 }
@@ -35,7 +36,7 @@ void Manager::drawAll() {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Manager::add(Window* window) {
+void Manager::add(std::shared_ptr<Window> window) {
     mWindows.emplace_back(window);
 }
 

@@ -7,8 +7,8 @@
 #include "Framework/Graphics/Render/Viewport.h"
 
 namespace {
-Framework::Graphics::RenderTargetView* view;
-Framework::Graphics::Viewport* viewport;
+std::unique_ptr<Framework::Graphics::RenderTargetView> view;
+std::unique_ptr<Framework::Graphics::Viewport> viewport;
 }
 namespace Framework {
 namespace Graphics {
@@ -17,17 +17,14 @@ RenderingManager::RenderingManager(HWND hWnd, const Math::Vector2& screenSize, b
     :mScreenSize(screenSize), mGraphicsDevice(std::make_unique<GraphicsDevice>(hWnd, screenSize, isFullScreen)),
     mConstantBufferManager(nullptr) {}
 
-RenderingManager::~RenderingManager() {
-    if (view)delete view;
-    if (viewport)delete viewport;
-}
+RenderingManager::~RenderingManager() {}
 
 void RenderingManager::initialize() {
     mConstantBufferManager = std::make_unique<ConstantBufferManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
-    view = new RenderTargetView(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer().Get());
-    viewport = new Viewport(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y));
+    view = std::make_unique<RenderTargetView>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
+    viewport = std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y));
 
     D3D11_TEXTURE2D_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
@@ -42,13 +39,11 @@ void RenderingManager::initialize() {
     desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     desc.CPUAccessFlags = 0;
     desc.MiscFlags = 0;
-
     D3D11_DEPTH_STENCIL_VIEW_DESC ds;
     ZeroMemory(&ds, sizeof(ds));
     ds.Format = desc.Format;
     ds.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     ds.Texture2D.MipSlice = 0;
-
     view->setDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
 }
 

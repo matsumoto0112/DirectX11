@@ -18,15 +18,23 @@ public:
     * @brief ウィンドウの作成
     * @param name ウィンドウ名
     */
-    static Window* create(const std::string& name);
+    static std::shared_ptr<Window> create(const std::string& name);
     /**
     * @brief デストラクタ
     */
     ~Window();
+
+    /**
+    * @brief ウィンドウにアイテムを追加する
+    * @param item 追加するアイテム
+    */
     template<class T, std::enable_if_t<std::is_base_of<IItem, T>::value, std::nullptr_t> = nullptr>
-    std::weak_ptr<T> addItem(T* item);
+    std::shared_ptr<T> addItem(std::shared_ptr<T> item);
+    /**
+    * @brief 描画処理
+    */
     virtual void draw() override;
-private:
+protected:
     /**
     * @brief コンストラクタ
     */
@@ -37,11 +45,10 @@ private:
 
 
 template<class T, std::enable_if_t<std::is_base_of<IItem, T>::value, std::nullptr_t>>
-inline std::weak_ptr<T> Window::addItem(T* item) {
+inline std::shared_ptr<T> Window::addItem(std::shared_ptr<T> item) {
     static_assert(!std::is_same<T, Window>::value,"disallow template parameter T is ImGUI::Window");
-    std::shared_ptr<T> sharedItem(item);
-    mItems.emplace_back(sharedItem);
-    return sharedItem;
+    mItems.emplace_back(item);
+    return item;
 }
 
 } //ImGUI 
