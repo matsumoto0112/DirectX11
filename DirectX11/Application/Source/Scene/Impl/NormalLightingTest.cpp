@@ -59,6 +59,8 @@ NormalLightingTest::NormalLightingTest()
         Math::Quaternion::IDENTITY,
         Math::Vector3(0.5f, 0.5f, 0.5f));
     mObject.mModel = fbx->getResource(Define::ModelType::Object);
+    mObject.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
+    mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
     mFloor.mTransform = Utility::Transform(
         Math::Vector3(0.0f, -0.0f, 0.0f),
@@ -68,8 +70,8 @@ NormalLightingTest::NormalLightingTest()
     mFloor.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
-    //mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
-    //    Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
+        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mPointLight = Utility::getLightManager()->addPointLight(Define::PointLightType::LeftTopFloor,
         Math::Vector3(0.0f, 0.0f, 0.0),
         Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f),

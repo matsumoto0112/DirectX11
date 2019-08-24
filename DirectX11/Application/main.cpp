@@ -20,8 +20,9 @@
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Scene/Manager.h"
 #include "Source/Scene/Impl/Title.h"
-#include "Source/Scene/Impl/NormalLightingTest.h"
 #include "Source/Scene/Impl/DepthStencilTest.h"
+#include "Source/Scene/Impl/NormalLightingTest.h"
+#include "Source/Scene/Impl/ShadowMapTest.h"
 
 
 using namespace Framework;
@@ -36,15 +37,14 @@ private:
             return false;
         }
         auto& window = mGameDevice.getWindow();
-        HWND hWnd = window.getHWND();
         window.setProcedureEvent(new Window::DestroyProc());
         window.setProcedureEvent(new Window::CloseProc());
 
         mSceneManager = std::make_unique<Scene::Manager>();
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
-        mSceneManager->registerScene(Define::SceneType::NormalLighting, std::make_unique<NormalLightingTest>());
-        mSceneManager->loadScene(Define::SceneType::NormalLighting);
+        mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
+        mSceneManager->loadScene(Define::SceneType::ShadowMapTest);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

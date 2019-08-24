@@ -13,6 +13,7 @@ enum class PixelShaderType {
     Model_Lighting,
     Model_Diffuse,
     Model_Diffuse_Lighting,
+    Output_Z,
 };
 
 /**
@@ -27,6 +28,7 @@ public:
     static const std::string MODEL_DIFFUSE; //!< ディフューズテクスチャありモデル
     static const std::string MODEL_LIGHTING; //!< ライティングありモデル
     static const std::string MODEL_DIFFUSE_LIGHTING; //!< ディフューズテクスチャありライティングありモデル
+    static const std::string OUTPUT_Z; //!< Z値を出力
 };
 
 } //Define 

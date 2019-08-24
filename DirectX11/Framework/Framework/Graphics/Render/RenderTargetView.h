@@ -1,11 +1,11 @@
 #pragma once
 #include <d3d11.h>
 #include <wrl/client.h>
+#include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Color4.h"
 
 namespace Framework {
 namespace Graphics {
-class DepthStencilView;
 
 /**
 * @class RenderTargetView

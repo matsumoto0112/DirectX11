@@ -30,6 +30,15 @@ ShaderResourceView::ShaderResourceView(const TextureBuffer& texture, const D3D11
     }
 }
 
+ShaderResourceView::ShaderResourceView(const TextureBuffer& texture, D3D11_SHADER_RESOURCE_VIEW_DESC* descPtr) {
+    ID3D11Device* device = Utility::getDevice();
+    HRESULT hr = device->CreateShaderResourceView(texture.getBuffer().Get(),
+        descPtr, &mShaderResourceView);
+    if (FAILED(hr)) {
+        MY_ASSERTION(false, "ShaderResourceViewçÏê¨é∏îs");
+    }
+}
+
 ShaderResourceView::~ShaderResourceView() {}
 
 } //Graphics 

@@ -10,6 +10,7 @@ enum class VertexShaderType {
     Texture2D,
     Model,
     Model_Lighting,
+    Output_Z,
 };
 
 /**
@@ -21,6 +22,7 @@ public:
     static const std::string TEXTURE2D; //!< 2Dデフォルト
     static const std::string MODEL; //!< 通常モデル
     static const std::string MODEL_LIGHTING; //!< ライティングありモデル
+    static const std::string OUTPUT_Z; //!< Z値を出力
 };
 
 } //Define 

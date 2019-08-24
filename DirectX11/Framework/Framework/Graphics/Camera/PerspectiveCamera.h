@@ -3,6 +3,9 @@
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"
 
+#undef near
+#undef far
+
 namespace Framework {
 namespace Graphics {
 

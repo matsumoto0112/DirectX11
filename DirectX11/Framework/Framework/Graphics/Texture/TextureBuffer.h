@@ -23,17 +23,15 @@ public:
     TextureBuffer(DirectX11GraphicsDevice& device);
     /**
     * @brief コンストラクタ
-    * @param device DirectX11用グラフィックデバイス
     * @param desc テクスチャデスク
     */
-    TextureBuffer( const D3D11_TEXTURE2D_DESC& desc);
+    TextureBuffer(const D3D11_TEXTURE2D_DESC& desc);
     /**
     * @brief コンストラクタ
-    * @param device DirectX11用グラフィックデバイス
     * @param desc テクスチャデスク
     * @param sub サブリソース
     */
-    TextureBuffer( const D3D11_TEXTURE2D_DESC& desc, const D3D11_SUBRESOURCE_DATA& sub);
+    TextureBuffer(const D3D11_TEXTURE2D_DESC& desc, const D3D11_SUBRESOURCE_DATA& sub);
     /**
     * @brief デストラクタ
     */
