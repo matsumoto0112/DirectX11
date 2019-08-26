@@ -11,9 +11,6 @@ struct vs_input
 struct ps_input
 {
     float4 position : SV_POSITION;
-    float3 normal : NORMAL;
-    float2 uv : TEXCOORD0;
-    float4 color : COLOR0;
     float4 ShadowMapTex : TEXCOORD1;
 };
 
@@ -23,9 +20,6 @@ ps_input main(vs_input input)
     o.position = mul(input.position, mat.world);
     o.position = mul(o.position, mat.view);
     o.position = mul(o.position, mat.proj);
-    o.normal = mul(input.normal, (float3x3) mat.world);
-    o.color = input.color;
-    o.uv = input.uv * float2(uv.width, uv.height) + float2(uv.left, uv.top);
 
     o.ShadowMapTex = o.position;
     return o;

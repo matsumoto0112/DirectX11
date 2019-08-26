@@ -14,11 +14,21 @@
 #include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Render/RenderTargetView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
-
+#include "Framework/Graphics/Render/Viewport.h"
 using namespace Framework;
 
 namespace {
-Graphics::Sprite2D* spr;
+std::unique_ptr<Graphics::Sprite2D> mSprite;
+Math::Matrix4x4 lightView;
+Math::Matrix4x4 lightProj;
+Math::Vector3 lightPos;
+Math::Vector3 lightLookat;
+std::shared_ptr<Graphics::VertexShader> mOutputVS;
+std::shared_ptr<Graphics::PixelShader> mOutputPS;
+std::shared_ptr<Graphics::VertexShader> mShadowVS;
+std::shared_ptr<Graphics::PixelShader> mShadowPS;
+Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
+std::unique_ptr<Graphics::Viewport> mViewport;
 }
 
 ShadowMapTest::ShadowMapTest()
@@ -50,31 +60,18 @@ ShadowMapTest::ShadowMapTest()
     mWall->setVertexShader(vs->getResource(Define::VertexShaderType::Model));
     mWall->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
 
-    //mWallTransforms.emplace_back(
-    //    Math::Vector3(0, 10.0f, 10.0f),
-    //    Math::Quaternion::createRotateAboutX(-90.0f),
-    //    Math::Vector3(10.0f, 1.0f, 10.0f));
-    //mWallTransforms.emplace_back(
-    //    Math::Vector3(10.0f, 10.0f, 0.0f),
-    //    Math::Quaternion::createRotateAboutX(-90.0f) * Math::Quaternion::createRotateAboutY(90.0f),
-    //    Math::Vector3(10.0f, 1.0f, 10.0f));
-    //mWallTransforms.emplace_back(
-    //    Math::Vector3(-10.0f, 10.0f, 0.0f),
-    //    Math::Quaternion::createRotateAboutX(-90.0f) * Math::Quaternion::createRotateAboutY(-90.0f),
-    //    Math::Vector3(10.0f, 1.0f, 10.0f));
-
     mObject.mTransform = Utility::Transform(
         Math::Vector3(0.0f, 0.5f, 0.0f),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(0.5f, 0.5f, 0.5f));
+        Math::Vector3(1.0f, 1.0f, 1.0f));
     mObject.mModel = fbx->getResource(Define::ModelType::Object);
     mObject.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
     mFloor.mTransform = Utility::Transform(
-        Math::Vector3(0.0f, -0.0f, 0.0f),
+        Math::Vector3(0.0f, -20.0f, 0.0f),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(10.0f, 1.0f, 10.0f));
+        Math::Vector3(1.0f, 1.0f, 1.0f));
     mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
     mFloor.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
@@ -119,11 +116,11 @@ ShadowMapTest::ShadowMapTest()
     //Z値を格納するテクスチャを作成する
     D3D11_TEXTURE2D_DESC texDesc;
     ZeroMemory(&texDesc, sizeof(texDesc));
-    texDesc.Width = Define::Window::WIDTH;
-    texDesc.Height = Define::Window::HEIGHT;
+    texDesc.Width = 1024;
+    texDesc.Height = 1024;
     texDesc.MipLevels = 1;
     texDesc.ArraySize = 1;
-    texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_TYPELESS;
+    texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
     texDesc.SampleDesc.Count = 1;
     texDesc.SampleDesc.Quality = 0;
     texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
@@ -133,13 +130,37 @@ ShadowMapTest::ShadowMapTest()
 
     D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
     ZeroMemory(&viewDesc, sizeof(viewDesc));
-    viewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    viewDesc.Format = texDesc.Format;
     viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     //Z値を描画するときに使用するシェーダーリソースを作成する
-    mShaderResourceView = std::make_shared<Graphics::ShaderResourceView>(*mRenderTargetTextureBuffer);
+    mShaderResourceView = std::make_shared<Graphics::ShaderResourceView>(*mRenderTargetTextureBuffer, nullptr);
 
     mRenderTargetView = std::make_unique<Graphics::RenderTargetView>(mRenderTargetTextureBuffer->getBuffer().Get(), viewDesc);
+
+    D3D11_TEXTURE2D_DESC depthTexDesc;
+    ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
+    depthTexDesc.Width = texDesc.Width;
+    depthTexDesc.Height = texDesc.Height;
+    depthTexDesc.MipLevels = 1;
+    depthTexDesc.ArraySize = 1;
+    depthTexDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    depthTexDesc.SampleDesc.Count = 1;
+    depthTexDesc.SampleDesc.Quality = 0;
+    depthTexDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    depthTexDesc.CPUAccessFlags = 0;
+    depthTexDesc.MiscFlags = 0;
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsd;
+    ZeroMemory(&dsd, sizeof(dsd));
+    dsd.Format = depthTexDesc.Format;
+    dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsd.Texture2D.MipSlice = 0;
+    mRenderTargetView->setDepthStencilView(std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd));
+    Math::Rect viewRect(0, 0, depthTexDesc.Width, depthTexDesc.Height);
+    mViewport = std::make_unique<Graphics::Viewport>(viewRect);
+
 
     std::shared_ptr<Graphics::Texture> texture = std::make_shared<Graphics::Texture>(
         mRenderTargetTextureBuffer,
@@ -147,12 +168,32 @@ ShadowMapTest::ShadowMapTest()
         Define::Window::WIDTH,
         Define::Window::HEIGHT
         );
-    spr = new Graphics::Sprite2D(texture);
+    mSprite = std::make_unique<Graphics::Sprite2D>(texture);
     ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
     vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
-    mObject.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Output_Z));
-    mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Output_Z));
 
+    const float lightScale = 1.5f;
+    lightPos = Math::Vector3(lightScale * 100, lightScale * 55, lightScale * 100);
+    lightLookat = Math::Vector3(0, -20.0f, 0);
+    lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);
+    lightProj = Math::Matrix4x4::createProjection(40.0f, 1.0f, 1.0f, 40.0f, 300.0f);
+
+    mOutputVS = vs->getResource(Define::VertexShaderType::Output_Z);
+    mOutputPS = ps->getResource(Define::PixelShaderType::Output_Z);
+
+    D3D11_BLEND_DESC blendDesc;
+    ZeroMemory(&blendDesc, sizeof(blendDesc));
+    blendDesc.AlphaToCoverageEnable = FALSE;
+    blendDesc.IndependentBlendEnable = FALSE;
+    blendDesc.RenderTarget[0].BlendEnable = TRUE;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    Utility::getDevice()->CreateBlendState(&blendDesc, &mAlphaBlend);
 }
 
 ShadowMapTest::~ShadowMapTest() {}
@@ -166,37 +207,63 @@ bool ShadowMapTest::isEndScene() const {
 }
 
 void ShadowMapTest::draw() {
-    //mPerspectiveCamera->setMatrix();
-    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
-    //for (auto&& transform : mWallTransforms) {
-    //    mWall->draw(transform);
-    //}
-    //mObject.draw();
-    //mFloor.draw();
+    float clear[4] = { D3D11_BLEND_ONE,D3D11_BLEND_ONE ,D3D11_BLEND_ONE ,D3D11_BLEND_ONE };
+    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), nullptr, 0xffffffff);
 
-    ////mUIWindow->draw();
-    //mOrthographicCamera->setMatrix();
-    //mStr->draw();
-    ID3D11RenderTargetView* backView;
-    ID3D11DepthStencilView* backDepthStencil;
-    Utility::getContext()->OMGetRenderTargets(1, &backView, &backDepthStencil);
+    auto outZ = [&]() {
 
-    Utility::Transform tr(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, tr.createSRTMatrix());
-    mPerspectiveCamera->setMatrix();
-    mRenderTargetView->set();
-    mRenderTargetView->clear(Graphics::Color4::BLACK);
-    const int num = 1;
-    for (int z = 0; z < num; z++) {
+        ID3D11RenderTargetView* backView;
+        ID3D11DepthStencilView* backDepthStencil;
+        D3D11_VIEWPORT backViewport;
+        UINT backViewNum = 1;
+
+        Utility::getContext()->RSGetViewports(&backViewNum, &backViewport);
+        Utility::getContext()->OMGetRenderTargets(1, &backView, &backDepthStencil);
+
+        mViewport->set();
+        mPerspectiveCamera->setMatrix();
+
+        mObject.mModel->setVertexShader(mOutputVS);
+        mObject.mModel->setPixelShader(mOutputPS);
+        mRenderTargetView->set();
+        mRenderTargetView->clear(Graphics::Color4(0.0f,0.0f,0.0f,1.0f));
+
+        Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
+        Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
+
+        std::vector<Utility::Transform> objectTransforms;
+        const int num = 0;
         for (int x = 0; x < num; x++) {
-            mObject.mTransform.setPosition(Math::Vector3((x - num / 2)*2.0f, 0.0f, (z - num / 2) * 2.0f));
+            for (int z = 0; z < num; z++) {
+                objectTransforms.emplace_back(Utility::Transform(
+                    Math::Vector3(x * 20.0f, 0.0f, z * 20.0f),
+                    Math::Quaternion::IDENTITY,
+                    Math::Vector3(1.0f, 1.0f, 1.0f)
+                ));
+            }
+        }
+
+        mObject.mModel->setVertexShader(mOutputVS);
+        mObject.mModel->setPixelShader(mOutputPS);
+
+        for (auto&& tr : objectTransforms) {
+            mObject.mTransform = tr;
             mObject.draw();
         }
-    }
 
+        mFloor.mModel->setVertexShader(mOutputVS);
+        mFloor.mModel->setPixelShader(mOutputPS);
+
+        mFloor.draw();
+
+        Utility::getContext()->OMSetRenderTargets(1, &backView, backDepthStencil);
+        Utility::getContext()->RSSetViewports(backViewNum, &backViewport);
+    };
+
+    outZ();
     mOrthographicCamera->setMatrix();
-    Utility::getContext()->OMSetRenderTargets(1, &backView, backDepthStencil);
-    spr->draw();
+    mSprite->setAlpha(0.1f);
+    mSprite->draw();
 }
 
 void ShadowMapTest::end() {}
