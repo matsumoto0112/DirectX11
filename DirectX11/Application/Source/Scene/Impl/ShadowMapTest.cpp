@@ -29,6 +29,7 @@ std::shared_ptr<Graphics::VertexShader> mShadowVS;
 std::shared_ptr<Graphics::PixelShader> mShadowPS;
 Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
 std::unique_ptr<Graphics::Viewport> mViewport;
+static float f;
 }
 
 ShadowMapTest::ShadowMapTest()
@@ -69,7 +70,7 @@ ShadowMapTest::ShadowMapTest()
     mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
     mFloor.mTransform = Utility::Transform(
-        Math::Vector3(0.0f, -20.0f, 0.0f),
+        Math::Vector3(0.0f, -60.0f, 0.0f),
         Math::Quaternion::IDENTITY,
         Math::Vector3(1.0f, 1.0f, 1.0f));
     mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
@@ -186,21 +187,25 @@ ShadowMapTest::ShadowMapTest()
     blendDesc.AlphaToCoverageEnable = FALSE;
     blendDesc.IndependentBlendEnable = FALSE;
     blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_DEST_COLOR;
     blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
     blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
     blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
     blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
     Utility::getDevice()->CreateBlendState(&blendDesc, &mAlphaBlend);
+
+    f = 0.0f;
 }
 
 ShadowMapTest::~ShadowMapTest() {}
 
 void ShadowMapTest::load(Framework::Scene::Collecter & collecter) {}
 
-void ShadowMapTest::update(float delta) {}
+void ShadowMapTest::update(float delta) {
+    f += 0.2f;
+}
 
 bool ShadowMapTest::isEndScene() const {
     return false;
@@ -226,13 +231,13 @@ void ShadowMapTest::draw() {
         mObject.mModel->setVertexShader(mOutputVS);
         mObject.mModel->setPixelShader(mOutputPS);
         mRenderTargetView->set();
-        mRenderTargetView->clear(Graphics::Color4(0.0f,0.0f,0.0f,1.0f));
+        mRenderTargetView->clear(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
 
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
 
         std::vector<Utility::Transform> objectTransforms;
-        const int num = 0;
+        const int num = 4;
         for (int x = 0; x < num; x++) {
             for (int z = 0; z < num; z++) {
                 objectTransforms.emplace_back(Utility::Transform(
@@ -262,7 +267,6 @@ void ShadowMapTest::draw() {
 
     outZ();
     mOrthographicCamera->setMatrix();
-    mSprite->setAlpha(0.1f);
     mSprite->draw();
 }
 
