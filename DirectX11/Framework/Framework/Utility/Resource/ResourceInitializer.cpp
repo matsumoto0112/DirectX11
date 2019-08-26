@@ -18,7 +18,7 @@ ResourceInitializeOnStart::ResourceInitializeOnStart(ResourceManager& resourceMa
 
     LOAD_PS(Define::PixelShaderType::Texture2D, Define::PixelShaderName::TEXTURE2D);
     LOAD_PS(Define::PixelShaderType::Model, Define::PixelShaderName::MODEL);
-    LOAD_PS(Define::PixelShaderType::Nodel_NoTexture, Define::PixelShaderName::MODEL_NOTEXTURE);
+    LOAD_PS(Define::PixelShaderType::Model_NoTexture, Define::PixelShaderName::MODEL_NOTEXTURE);
     LOAD_PS(Define::PixelShaderType::Model_Lighting, Define::PixelShaderName::MODEL_LIGHTING);
 }
 } //Utility 

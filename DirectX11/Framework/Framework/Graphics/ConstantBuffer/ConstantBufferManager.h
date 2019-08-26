@@ -19,6 +19,11 @@ struct ColorCBufferStruct;
 struct MaterialCBufferStruct;
 struct CameraNumCBufferStruct;
 
+struct LightMatrixCBufferStruct {
+    Math::Matrix4x4 view;
+    Math::Matrix4x4 proj;
+};
+
 /**
 * @class ConstantBufferManager
 * @brief コンスタントバッファ管理者
@@ -94,6 +99,7 @@ private:
     std::unique_ptr<ConstantBuffer<CameraNumCBufferStruct>> mCameraCBuffer; //!< カメラ用コンスタントバッファ
     std::unique_ptr<ConstantBuffer<LightingCBufferStruct>> mLightingCBuffer; //!< ライティング用コンスタントバッファ
     std::unique_ptr<ConstantBuffer<BoneMatrixCBufferStruct>> mBoneMatrixCBuffer; //!< ボーン行列用コンスタントバッファ
+    std::unique_ptr<ConstantBuffer<LightMatrixCBufferStruct>> mLightMatrixCBuffer; //!< ボーン行列用コンスタントバッファ
 
     std::unique_ptr<ConstantBufferTypeManager<Math::Matrix4x4>> mMatrixBufferManager; //!< 行列用バッファ転送管理者
     std::unique_ptr<ConstantBufferTypeManager<float>> mFloatBufferManager; //!< Float用バッファ転送管理者
@@ -111,6 +117,12 @@ template<>
 inline void ConstantBufferManager::setStruct(const BoneMatrixCBufferStruct& value) {
     mBoneMatrixCBuffer->setBuffer(value);
     mBoneMatrixCBuffer->sendBuffer();
+}
+
+template<>
+inline void ConstantBufferManager::setStruct(const LightMatrixCBufferStruct& value) {
+    mLightMatrixCBuffer->setBuffer(value);
+    mLightMatrixCBuffer->sendBuffer();
 }
 
 template<class T>

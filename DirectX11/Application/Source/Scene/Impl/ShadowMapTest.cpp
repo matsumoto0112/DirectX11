@@ -21,14 +21,19 @@ namespace {
 std::unique_ptr<Graphics::Sprite2D> mSprite;
 Math::Matrix4x4 lightView;
 Math::Matrix4x4 lightProj;
+Math::Matrix4x4 cameraView;
+Math::Matrix4x4 cameraProj;
 Math::Vector3 lightPos;
 Math::Vector3 lightLookat;
+std::shared_ptr<Graphics::VertexShader> mNormalVS;
+std::shared_ptr<Graphics::PixelShader> mNormalPS;
 std::shared_ptr<Graphics::VertexShader> mOutputVS;
 std::shared_ptr<Graphics::PixelShader> mOutputPS;
 std::shared_ptr<Graphics::VertexShader> mShadowVS;
 std::shared_ptr<Graphics::PixelShader> mShadowPS;
 Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
 std::unique_ptr<Graphics::Viewport> mViewport;
+std::shared_ptr<Graphics::Texture> mShadowMapTex;
 static float f;
 }
 
@@ -41,7 +46,7 @@ ShadowMapTest::ShadowMapTest()
         Math::Vector3::UP,
         45.0f,
         Define::Window::getSize(),
-        0.1f,1000.0f
+        10.0f,1000.0f
         })),
     mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
@@ -53,10 +58,12 @@ ShadowMapTest::ShadowMapTest()
 
     auto vs = Utility::ResourceManager::getInstance().getVertexShader();
     vs->importResource(Define::VertexShaderType::Model_Lighting, Define::VertexShaderName::MODEL_LIGHTING);
+    vs->importResource(Define::VertexShaderType::Model_Shadow, Define::VertexShaderName::MODEL_SHADOW);
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
     ps->importResource(Define::PixelShaderType::Model_Diffuse_Lighting, Define::PixelShaderName::MODEL_DIFFUSE_LIGHTING);
+    ps->importResource(Define::PixelShaderType::Model_Shadow, Define::PixelShaderName::MODEL_SHADOW);
 
     mWall->setVertexShader(vs->getResource(Define::VertexShaderType::Model));
     mWall->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
@@ -163,13 +170,13 @@ ShadowMapTest::ShadowMapTest()
     mViewport = std::make_unique<Graphics::Viewport>(viewRect);
 
 
-    std::shared_ptr<Graphics::Texture> texture = std::make_shared<Graphics::Texture>(
+    mShadowMapTex = std::make_shared<Graphics::Texture>(
         mRenderTargetTextureBuffer,
         mShaderResourceView,
         Define::Window::WIDTH,
         Define::Window::HEIGHT
         );
-    mSprite = std::make_unique<Graphics::Sprite2D>(texture);
+    mSprite = std::make_unique<Graphics::Sprite2D>(mShadowMapTex);
     ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
     vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
 
@@ -178,9 +185,20 @@ ShadowMapTest::ShadowMapTest()
     lightLookat = Math::Vector3(0, -20.0f, 0);
     lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);
     lightProj = Math::Matrix4x4::createProjection(40.0f, 1.0f, 1.0f, 40.0f, 300.0f);
+    cameraView = Math::Matrix4x4::createView(
+        Math::Vector3(0, 70, 40),
+        Math::Vector3(20, -20, 020),
+        Math::Vector3::UP
+    );
+    cameraProj = Math::Matrix4x4::createProjection(45.0f,
+        Define::Window::WIDTH, Define::Window::HEIGHT, 10.0f, 1000.0f);
 
+    mNormalVS = vs->getResource(Define::VertexShaderType::Model);
+    mNormalPS = ps->getResource(Define::PixelShaderType::Model_NoTexture);
     mOutputVS = vs->getResource(Define::VertexShaderType::Output_Z);
     mOutputPS = ps->getResource(Define::PixelShaderType::Output_Z);
+    mShadowVS = vs->getResource(Define::VertexShaderType::Model_Shadow);
+    mShadowPS = ps->getResource(Define::PixelShaderType::Model_Shadow);
 
     D3D11_BLEND_DESC blendDesc;
     ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -195,7 +213,7 @@ ShadowMapTest::ShadowMapTest()
     blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
     Utility::getDevice()->CreateBlendState(&blendDesc, &mAlphaBlend);
-
+    mSprite->setScale(Math::Vector2(0.25f, 0.25f));
     f = 0.0f;
 }
 
@@ -213,10 +231,36 @@ bool ShadowMapTest::isEndScene() const {
 
 void ShadowMapTest::draw() {
     float clear[4] = { D3D11_BLEND_ONE,D3D11_BLEND_ONE ,D3D11_BLEND_ONE ,D3D11_BLEND_ONE };
-    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), nullptr, 0xffffffff);
+    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), clear, 0xffffffff);
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
+    std::vector<Utility::Transform> objectTransforms;
+    const int num = 0;
+    for (int x = 0; x < num; x++) {
+        for (int z = 0; z < num; z++) {
+            objectTransforms.emplace_back(Utility::Transform(
+                Math::Vector3(x * 20.0f, 0.0f, z * 20.0f),
+                Math::Quaternion::IDENTITY,
+                Math::Vector3(1.0f, 1.0f, 1.0f)
+            ));
+        }
+    }
+
+    auto drawObject = [&](auto s1, auto s2) {
+        mObject.mModel->setVertexShader(s1);
+        mObject.mModel->setPixelShader(s2);
+
+        for (auto&& tr : objectTransforms) {
+            mObject.mTransform = tr;
+            mObject.draw();
+        }
+
+        mFloor.mModel->setVertexShader(s1);
+        mFloor.mModel->setPixelShader(s2);
+
+        mFloor.draw();
+    };
 
     auto outZ = [&]() {
-
         ID3D11RenderTargetView* backView;
         ID3D11DepthStencilView* backDepthStencil;
         D3D11_VIEWPORT backViewport;
@@ -228,44 +272,46 @@ void ShadowMapTest::draw() {
         mViewport->set();
         mPerspectiveCamera->setMatrix();
 
-        mObject.mModel->setVertexShader(mOutputVS);
-        mObject.mModel->setPixelShader(mOutputPS);
         mRenderTargetView->set();
         mRenderTargetView->clear(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
 
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
 
-        std::vector<Utility::Transform> objectTransforms;
-        const int num = 4;
-        for (int x = 0; x < num; x++) {
-            for (int z = 0; z < num; z++) {
-                objectTransforms.emplace_back(Utility::Transform(
-                    Math::Vector3(x * 20.0f, 0.0f, z * 20.0f),
-                    Math::Quaternion::IDENTITY,
-                    Math::Vector3(1.0f, 1.0f, 1.0f)
-                ));
-            }
-        }
-
-        mObject.mModel->setVertexShader(mOutputVS);
-        mObject.mModel->setPixelShader(mOutputPS);
-
-        for (auto&& tr : objectTransforms) {
-            mObject.mTransform = tr;
-            mObject.draw();
-        }
-
-        mFloor.mModel->setVertexShader(mOutputVS);
-        mFloor.mModel->setPixelShader(mOutputPS);
-
-        mFloor.draw();
+        drawObject(mOutputVS, mOutputPS);
 
         Utility::getContext()->OMSetRenderTargets(1, &backView, backDepthStencil);
         Utility::getContext()->RSSetViewports(backViewNum, &backViewport);
     };
 
+    auto drawWithShadow = [&]() {
+        mShadowMapTex->setData(Graphics::ShaderInputType::Pixel, 0);
+
+        mPerspectiveCamera->setView(cameraView);
+        mPerspectiveCamera->setProjection(cameraProj);
+        mPerspectiveCamera->setMatrix();
+
+        Graphics::LightMatrixCBufferStruct lm;
+        lm.view = Math::Matrix4x4::transposition(lightView);
+        lm.proj = Math::Matrix4x4::transposition(lightProj);
+        Utility::getConstantBufferManager()->setStruct(lm);
+
+        drawObject(mShadowVS, mShadowPS);
+    };
+
+    auto drawNormal = [&]() {
+        mPerspectiveCamera->setView(cameraView);
+        mPerspectiveCamera->setProjection(cameraProj);
+        mPerspectiveCamera->setMatrix();
+
+        drawObject(mNormalVS, mNormalPS);
+    };
+
     outZ();
+    //drawWithShadow();
+
+    //drawNormal();
+
     mOrthographicCamera->setMatrix();
     mSprite->draw();
 }

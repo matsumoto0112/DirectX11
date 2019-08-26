@@ -106,6 +106,9 @@ buffer->setBuffer(s);})
 
     mBoneMatrixCBuffer = std::make_unique<ConstantBuffer<BoneMatrixCBufferStruct>>(
         ShaderInputType::VertexAndPixel, 6);
+
+    mLightMatrixCBuffer = std::make_unique<ConstantBuffer<LightMatrixCBufferStruct>>(
+        ShaderInputType::VertexAndPixel, 7);
 }
 
 } //Graphics 

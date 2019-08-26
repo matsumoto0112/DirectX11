@@ -9,6 +9,7 @@ const std::string PixelShaderName::MODEL_LIGHTING = "Model/Model_Lighting_PS";
 const std::string PixelShaderName::MODEL_DIFFUSE = "Model/Model_Diffuse_PS";
 const std::string PixelShaderName::MODEL_DIFFUSE_LIGHTING = "Model/Model_Diffuse_Lighting_PS";
 const std::string PixelShaderName::OUTPUT_Z = "Model/Output_Z_PS";
+const std::string PixelShaderName::MODEL_SHADOW = "Model/Model_Shadow_PS";
 
 
 } //Define 

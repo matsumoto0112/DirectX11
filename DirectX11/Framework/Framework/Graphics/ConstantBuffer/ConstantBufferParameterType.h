@@ -20,6 +20,8 @@ enum class ConstantBufferParameterType {
     Specular,
     Shininess,
     Alpha,
+
+    LightMat,
 };
 
 } //Graphics 

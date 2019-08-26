@@ -27,7 +27,7 @@ DepthStencilTest::DepthStencilTest()
     fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
     mModel = fbx->getResource(Define::ModelType::Object);
     mModel->setVertexShader(Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
-    mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Nodel_NoTexture));
+    mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_NoTexture));
 
     const int modelNum = 5;
     for (int i = 0; i < modelNum; i++) {

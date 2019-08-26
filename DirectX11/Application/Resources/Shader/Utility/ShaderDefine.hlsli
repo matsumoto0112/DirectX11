@@ -50,6 +50,12 @@ struct Material
     float alpha;
 };
 
+struct LightMatrix
+{
+    matrix view; //ライトビュー行列
+    matrix proj; //ライト射影行列
+};
+
 //ワールド・ビュー・プロジェクション行列バッファ
 cbuffer CB0 : register(b0)
 {
@@ -91,6 +97,12 @@ cbuffer CameraNum : register(b5)
 cbuffer Skinning : register(b6)
 {
     float4x4 bones[MAX_BONES];
+}
+
+
+cbuffer LightMat : register(b7)
+{
+    LightMatrix lightMat;
 }
 
 /**

@@ -3,7 +3,7 @@
 struct ps_input
 {
     float4 position : SV_POSITION;
-    float4 ShadowMapTex : TEXCOORD1;
+    float4 ShadowMapTex : TEXCOORD0;
 };
 
 float4 main(ps_input input) : SV_TARGET

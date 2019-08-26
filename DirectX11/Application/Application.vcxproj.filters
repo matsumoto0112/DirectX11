@@ -32,6 +32,8 @@
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Lighting_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Output_Z_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Output_Z_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Model\Model_Shadow_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Model\Model_Shadow_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
