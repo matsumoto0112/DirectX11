@@ -11,11 +11,6 @@
 
 #include "Source/DefienClearColor.h"
 
-namespace {
-std::unique_ptr<Framework::Graphics::RenderTargetView> view;
-std::unique_ptr<Framework::Graphics::Viewport> viewport;
-std::unique_ptr<Framework::Graphics::Sampler> mDefaultSampler;
-}
 namespace Framework {
 namespace Graphics {
 
@@ -30,8 +25,8 @@ void RenderingManager::initialize() {
     mLightManager = std::make_unique<LightManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
-    view = std::make_unique<RenderTargetView>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
-    viewport = std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y));
+    mRenderTargetView = std::make_unique<RenderTargetView>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
+    mViewport = std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y));
 
     D3D11_TEXTURE2D_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
@@ -51,16 +46,16 @@ void RenderingManager::initialize() {
     ds.Format = desc.Format;
     ds.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     ds.Texture2D.MipSlice = 0;
-    view->setDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
+    mRenderTargetView->setDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }
 
 void RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    view->clear(ClearRenderTargetColor);
-    view->set();
-    viewport->set();
+    mRenderTargetView->clear(ClearRenderTargetColor);
+    mRenderTargetView->set();
+    mViewport->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);
 }
 
