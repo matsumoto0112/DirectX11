@@ -49,6 +49,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\2D\QuadInstance.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RendererCommonBufferStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RendererCommonBufferStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RendererInstanceType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />

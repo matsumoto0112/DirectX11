@@ -16,7 +16,7 @@
 #include "Framework/Graphics/Render/RenderTargetView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
-
+#include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Source/DefienClearColor.h"
 using namespace Framework;
 
@@ -36,7 +36,7 @@ std::shared_ptr<Graphics::VertexShader> mOutputVS;
 std::shared_ptr<Graphics::PixelShader> mOutputPS;
 std::shared_ptr<Graphics::VertexShader> mShadowVS;
 std::shared_ptr<Graphics::PixelShader> mShadowPS;
-Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
+std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
 Microsoft::WRL::ComPtr<ID3D11BlendState> mNoAlpha;
 std::unique_ptr<Graphics::Viewport> mViewport;
 std::shared_ptr<Graphics::Texture> mShadowMapTex;
@@ -292,7 +292,7 @@ ShadowMapTest::ShadowMapTest()
     blendDesc.IndependentBlendEnable = FALSE;
     blendDesc.RenderTarget[0] = CreateTestBlendDesc();
 
-    Utility::getDevice()->CreateBlendState(&blendDesc, &mAlphaBlend);
+    mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(blendDesc);
 
     blendDesc.RenderTarget[0] = CreateDefaultBlendDesc();
     Utility::getDevice()->CreateBlendState(&blendDesc, &mNoAlpha);
@@ -365,9 +365,7 @@ bool ShadowMapTest::isEndScene() const {
 }
 
 void ShadowMapTest::draw() {
-    //float clear[4] = { D3D11_BLEND_ONE,D3D11_BLEND_ONE,D3D11_BLEND_ONE,D3D11_BLEND_ONE };
-    float clear[4] = { 0,0,0,0 };
-    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), clear, 0xffffffff);
+    mAlphaBlend->set({ 0,0,0,0 });
 
     Graphics::Color4 color(1.0f, 0.0f, 0.0f, 0.2f);
     Utility::getConstantBufferManager()->setColor(
