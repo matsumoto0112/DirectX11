@@ -353,9 +353,12 @@ void ShadowMapTest::draw() {
     const int num = 4;
     for (int x = 0; x < num; x++) {
         for (int z = 0; z < num; z++) {
+            Math::Quaternion rot =
+                Math::Quaternion::createRotateAboutY(f)
+                * Math::Quaternion::createRotateAboutZ(f*2.353f);
             objectTransforms.emplace_back(Utility::Transform(
-                Math::Vector3(x * 20.0f, 0.0f, z * 20.0f),
-                Math::Quaternion::IDENTITY,
+                Math::Vector3(x * 20.0f, std::sinf(f / 10) * 20, z * 20.0f),
+                rot,
                 Math::Vector3(1.0f, 1.0f, 1.0f)
             ));
         }
@@ -426,6 +429,13 @@ void ShadowMapTest::draw() {
 
     outZ();
     Utility::getContext()->OMSetBlendState(mNoAlpha.Get(), clear, 0xffffffff);
+
+    cameraView = Math::Matrix4x4::createView(
+        Math::Vector3(40 * std::sinf(f / 10), 70, 40 * std::cosf(f / 10)),
+        Math::Vector3(20, -20, 20),
+        Math::Vector3::UP
+    );
+
     drawWithShadow();
 
     //drawNormal();
