@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "RenderingManager.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
@@ -7,6 +8,8 @@
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
+
+#include "Source/DefienClearColor.h"
 
 namespace {
 std::unique_ptr<Framework::Graphics::RenderTargetView> view;
@@ -55,7 +58,7 @@ void RenderingManager::initialize() {
 
 void RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    view->clear(Color4(0.0f, 0.0f, 0.0f, 0.0f));
+    view->clear(ClearRenderTargetColor);
     view->set();
     viewport->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);

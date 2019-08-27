@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ShadowMapTest.h"
 #include "Framework/Utility/Property.h"
 #include "Framework/Define/Window.h"
@@ -15,6 +16,8 @@
 #include "Framework/Graphics/Render/RenderTargetView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
+
+#include "Source/DefienClearColor.h"
 using namespace Framework;
 
 namespace {
@@ -32,11 +35,119 @@ std::shared_ptr<Graphics::PixelShader> mOutputPS;
 std::shared_ptr<Graphics::VertexShader> mShadowVS;
 std::shared_ptr<Graphics::PixelShader> mShadowPS;
 Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
+Microsoft::WRL::ComPtr<ID3D11BlendState> mNoAlpha;
 std::unique_ptr<Graphics::Viewport> mViewport;
 std::shared_ptr<Graphics::Texture> mShadowMapTex;
 static float f;
-}
 
+auto CreateDefaultBlendDesc = []() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = FALSE;
+    RenderTarget.SrcBlend = D3D11_BLEND_ONE;
+    RenderTarget.DestBlend = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+};
+
+auto CreateAlignmentBlendDesc = []() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+};
+
+// 加算合成用ブレンド ステートのためのを設定を取得する
+auto CreateAddBlendDesc = []() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+};
+
+// 減算合成用ブレンド ステートのためのを設定を取得する
+auto CreateSubtractBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+};
+
+// 積算合成用ブレンド ステートのためのを設定を取得する
+auto CreateMultipleBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_ZERO;
+    RenderTarget.DestBlend = D3D11_BLEND_SRC_COLOR;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+};
+
+auto CreateAddBlendDesc2 = []() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_DEST_COLOR;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    return RenderTarget;
+};
+
+auto CreateTestBlendDesc = []() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
+    RenderTarget.BlendEnable = FALSE;
+    RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
+    RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    return RenderTarget;
+};
+
+
+}
 ShadowMapTest::ShadowMapTest()
     : mStr(std::make_unique<Graphics::TextureString>("ShadowMap Test", 14, "")),
     mPerspectiveCamera(std::make_unique<Graphics::PerspectiveCamera>(
@@ -204,15 +315,14 @@ ShadowMapTest::ShadowMapTest()
     ZeroMemory(&blendDesc, sizeof(blendDesc));
     blendDesc.AlphaToCoverageEnable = FALSE;
     blendDesc.IndependentBlendEnable = FALSE;
-    blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
-    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
-    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
-    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    blendDesc.RenderTarget[0] = CreateTestBlendDesc();
+
     Utility::getDevice()->CreateBlendState(&blendDesc, &mAlphaBlend);
+
+    blendDesc.RenderTarget[0] = CreateDefaultBlendDesc();
+    Utility::getDevice()->CreateBlendState(&blendDesc, &mNoAlpha);
+
+
     mSprite->setScale(Math::Vector2(0.25f, 0.25f));
     f = 0.0f;
 }
@@ -230,11 +340,17 @@ bool ShadowMapTest::isEndScene() const {
 }
 
 void ShadowMapTest::draw() {
-    float clear[4] = { D3D11_BLEND_ONE,D3D11_BLEND_ONE ,D3D11_BLEND_ONE ,D3D11_BLEND_ONE };
+    //float clear[4] = { D3D11_BLEND_ONE,D3D11_BLEND_ONE,D3D11_BLEND_ONE,D3D11_BLEND_ONE };
+    float clear[4] = { 0,0,0,0 };
     Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), clear, 0xffffffff);
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
+
+    Graphics::Color4 color(1.0f, 0.0f, 0.0f, 0.2f);
+    Utility::getConstantBufferManager()->setColor(
+        Graphics::ConstantBufferParameterType::Color,
+        color);
+
     std::vector<Utility::Transform> objectTransforms;
-    const int num = 0;
+    const int num = 4;
     for (int x = 0; x < num; x++) {
         for (int z = 0; z < num; z++) {
             objectTransforms.emplace_back(Utility::Transform(
@@ -273,7 +389,8 @@ void ShadowMapTest::draw() {
         mPerspectiveCamera->setMatrix();
 
         mRenderTargetView->set();
-        mRenderTargetView->clear(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+
+        mRenderTargetView->clear(ClearShadowMapColor);
 
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
@@ -308,7 +425,8 @@ void ShadowMapTest::draw() {
     };
 
     outZ();
-    //drawWithShadow();
+    Utility::getContext()->OMSetBlendState(mNoAlpha.Get(), clear, 0xffffffff);
+    drawWithShadow();
 
     //drawNormal();
 
