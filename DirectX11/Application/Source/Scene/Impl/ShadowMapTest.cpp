@@ -137,7 +137,7 @@ auto CreateAddBlendDesc2 = []() {
 auto CreateTestBlendDesc = []() {
     D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
     ZeroMemory(&RenderTarget, sizeof(RenderTarget));
-    RenderTarget.BlendEnable = FALSE;
+    RenderTarget.BlendEnable = TRUE;
     RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
     RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
     RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;

@@ -15,6 +15,7 @@ enum class PixelShaderType {
     Model_Diffuse_Lighting,
     Output_Z,
     Model_Shadow,
+    Model_Diffuse_Split4Color,
 };
 
 /**
@@ -31,6 +32,7 @@ public:
     static const std::string MODEL_DIFFUSE_LIGHTING; //!< ディフューズテクスチャありライティングありモデル
     static const std::string OUTPUT_Z; //!< Z値を出力
     static const std::string MODEL_SHADOW; //!< Z値を出力
+    static const std::string MODEL_DIFFUSE_SPLIT4COLOR; //!< 色を4つに分割して出力する
 };
 
 } //Define 

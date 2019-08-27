@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
+    <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\DepthStencilTest.h" />
+    <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
     <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Scene\Impl\ShadowMapTest.h" />
@@ -165,6 +167,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Split4Color_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

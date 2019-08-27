@@ -16,6 +16,7 @@ enum class SceneType {
     DepthStencilTest,
     NormalLighting,
     ShadowMapTest,
+    MultiRenderTargetTest,
 };
 
 } //Define 

@@ -8,6 +8,7 @@
     <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
+    <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -20,6 +21,7 @@
     <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
     <ClInclude Include="Source\Scene\Impl\ShadowMapTest.h" />
     <ClInclude Include="Source\DefienClearColor.h" />
+    <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -35,6 +37,7 @@
     <FxCompile Include="Resources\Shader\Model\Output_Z_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Split4Color_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
