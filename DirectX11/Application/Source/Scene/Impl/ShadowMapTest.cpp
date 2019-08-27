@@ -24,10 +24,12 @@ namespace {
 std::unique_ptr<Graphics::Sprite2D> mSprite;
 Math::Matrix4x4 lightView;
 Math::Matrix4x4 lightProj;
-Math::Matrix4x4 cameraView;
-Math::Matrix4x4 cameraProj;
 Math::Vector3 lightPos;
 Math::Vector3 lightLookat;
+Math::Matrix4x4 cameraView;
+Math::Matrix4x4 cameraProj;
+Math::Vector3 cameraPos;
+Math::Vector3 cameraLookat;
 std::shared_ptr<Graphics::VertexShader> mNormalVS;
 std::shared_ptr<Graphics::PixelShader> mNormalPS;
 std::shared_ptr<Graphics::VertexShader> mOutputVS;
@@ -203,34 +205,6 @@ ShadowMapTest::ShadowMapTest()
         5.0f,
         0.0f);
 
-    //    mUIWindow = std::make_unique<ImGUI::Window>("Point Light");
-    //
-    //#define ADD_LIGHT_COLOR_CHANGE_SLIDER(Name,Type) { \
-    //    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#Name, 0.0f, [&](float val) { \
-    //        Graphics::Color4 color = mPointLight->getColor();\
-    //        color. ## Type = val;\
-    //        mPointLight->setColor(color);\
-    //        });\
-    //    field->setMinValue(0.0f);\
-    //    field->setMaxValue(1.0f);\
-    //    mUIWindow->addItem(field); }
-    //#define ADD_LIGHT_POSITION_CHANGE_SLIDER(Name,Type) { \
-    //    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#Name, 0.0f, [&](float val) { \
-    //        Math::Vector3 pos = mPointLight->getPosition();\
-    //        pos. ## Type = val;\
-    //        mPointLight->setPosition(pos);\
-    //        });\
-    //    field->setMinValue(-10.0f);\
-    //    field->setMaxValue(10.0f);\
-    //    mUIWindow->addItem(field); }
-    //
-    //    //    //mDirectionalLight->getColor();
-    //    ADD_LIGHT_COLOR_CHANGE_SLIDER(R, r);
-    //    ADD_LIGHT_COLOR_CHANGE_SLIDER(G, g);
-    //    ADD_LIGHT_COLOR_CHANGE_SLIDER(B, b);
-    //    ADD_LIGHT_POSITION_CHANGE_SLIDER(X, x);
-    //    ADD_LIGHT_POSITION_CHANGE_SLIDER(Y, y);
-    //    ADD_LIGHT_POSITION_CHANGE_SLIDER(Z, z);
 
     //Z値を格納するテクスチャを作成する
     D3D11_TEXTURE2D_DESC texDesc;
@@ -296,11 +270,12 @@ ShadowMapTest::ShadowMapTest()
     lightLookat = Math::Vector3(0, -20.0f, 0);
     lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);
     lightProj = Math::Matrix4x4::createProjection(40.0f, 1.0f, 1.0f, 40.0f, 300.0f);
-    cameraView = Math::Matrix4x4::createView(
-        Math::Vector3(0, 70, 40),
-        Math::Vector3(20, -20, 020),
-        Math::Vector3::UP
-    );
+    cameraPos = Math::Vector3(0, 70, -60);
+    cameraLookat = Math::Vector3(0, 0, 0);
+
+    mPerspectiveCamera->setPosition(cameraPos);
+    mPerspectiveCamera->setLookat(cameraLookat);
+
     cameraProj = Math::Matrix4x4::createProjection(45.0f,
         Define::Window::WIDTH, Define::Window::HEIGHT, 10.0f, 1000.0f);
 
@@ -325,6 +300,56 @@ ShadowMapTest::ShadowMapTest()
 
     mSprite->setScale(Math::Vector2(0.25f, 0.25f));
     f = 0.0f;
+
+    mUIWindow = std::make_unique<ImGUI::Window>("Change Area");
+#define ADD_CAMERA_POSITION_CHANGE_SLIDER(name,type) {\
+    float def = mPerspectiveCamera->getPosition().##type; \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
+        Math::Vector3 pos = mPerspectiveCamera->getPosition(); \
+        Math::Vector3 look = mPerspectiveCamera->getLookat(); \
+        float dest = val - pos.##type; \
+        pos.##type =val; \
+        look.##type += dest; \
+        mPerspectiveCamera->setPosition(pos); \
+        mPerspectiveCamera->setLookat(look); \
+        }); \
+    field->setMinValue(-100.0f); \
+    field->setMaxValue(100.0f); \
+    mUIWindow->addItem(field); \
+    }
+
+#define ADD_LIGHT_POSITION_CHANGE_SLIDER(name,type) {\
+    float def = lightPos.##type; \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
+        lightPos.##type = val; \
+        }); \
+    field->setMinValue(-500.0f); \
+    field->setMaxValue(500.0f); \
+    mUIWindow->addItem(field); \
+    }
+
+#define ADD_LIGHT_LOOKAT_CHANGE_SLIDER(name,type) {\
+    float def = lightLookat.##type; \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
+        lightLookat.##type = val; \
+        }); \
+    field->setMinValue(-500.0f); \
+    field->setMaxValue(500.0f); \
+    mUIWindow->addItem(field); \
+    }
+
+
+    ADD_CAMERA_POSITION_CHANGE_SLIDER(CAMERA_X, x);
+    ADD_CAMERA_POSITION_CHANGE_SLIDER(CAMERA_Y, y);
+    ADD_CAMERA_POSITION_CHANGE_SLIDER(CAMERA_Z, z);
+
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(LIGHT_X, x);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(LIGHT_Y, y);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(LIGHT_Z, z);
+
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LIGHT_LOOK_X, x);
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LIGHT_LOOK_Y, y);
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LIGHT_LOOK_Z, z);
 }
 
 ShadowMapTest::~ShadowMapTest() {}
@@ -394,6 +419,8 @@ void ShadowMapTest::draw() {
         mRenderTargetView->set();
 
         mRenderTargetView->clear(ClearShadowMapColor);
+        lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);
+        lightProj = Math::Matrix4x4::createProjection(40.0f, 1.0f, 1.0f, 40.0f, 300.0f);
 
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
         Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
@@ -407,8 +434,6 @@ void ShadowMapTest::draw() {
     auto drawWithShadow = [&]() {
         mShadowMapTex->setData(Graphics::ShaderInputType::Pixel, 0);
 
-        mPerspectiveCamera->setView(cameraView);
-        mPerspectiveCamera->setProjection(cameraProj);
         mPerspectiveCamera->setMatrix();
 
         Graphics::LightMatrixCBufferStruct lm;
@@ -420,21 +445,12 @@ void ShadowMapTest::draw() {
     };
 
     auto drawNormal = [&]() {
-        mPerspectiveCamera->setView(cameraView);
-        mPerspectiveCamera->setProjection(cameraProj);
         mPerspectiveCamera->setMatrix();
 
         drawObject(mNormalVS, mNormalPS);
     };
 
     outZ();
-    Utility::getContext()->OMSetBlendState(mNoAlpha.Get(), clear, 0xffffffff);
-
-    cameraView = Math::Matrix4x4::createView(
-        Math::Vector3(40 * std::sinf(f / 10), 70, 40 * std::cosf(f / 10)),
-        Math::Vector3(20, -20, 20),
-        Math::Vector3::UP
-    );
 
     drawWithShadow();
 
@@ -442,6 +458,8 @@ void ShadowMapTest::draw() {
 
     mOrthographicCamera->setMatrix();
     mSprite->draw();
+
+    mUIWindow->draw();
 }
 
 void ShadowMapTest::end() {}
