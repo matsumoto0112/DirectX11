@@ -2,8 +2,8 @@
 
 namespace Define {
 
-const int Window::WIDTH = 640;
-const int Window::HEIGHT = 480;
+const int Window::WIDTH = 800;
+const int Window::HEIGHT = 600;
 const std::string Window::TITLE = "Game";
 
 } //Define 

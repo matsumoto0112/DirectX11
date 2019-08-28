@@ -8,7 +8,7 @@ const Color4 Color4::BLACK = Color4(0.0f, 0.0f, 0.0f, 1.0f);
 const Color4 Color4::WHITE = Color4(1.0f, 1.0f, 1.0f, 1.0f);
 
 Color4::Color4()
-    :r(0.0f), g(0.0f), b(0.0f), a(1.0f) {}
+    :r(1.0f), g(1.0f), b(1.0f), a(1.0f) {}
 
 Color4::Color4(float r, float g, float b, float a)
     : r(r), g(g), b(b), a(a) {}

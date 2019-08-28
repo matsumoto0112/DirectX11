@@ -24,6 +24,7 @@
 #include "Source/Scene/Impl/NormalLightingTest.h"
 #include "Source/Scene/Impl/ShadowMapTest.h"
 #include "Source/Scene/Impl/MultiRenderTargetTest.h"
+#include "Source/Scene/Impl/AlphaBlendTest.h"
 
 
 using namespace Framework;
@@ -46,7 +47,8 @@ private:
         //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
         mSceneManager->registerScene(Define::SceneType::MultiRenderTargetTest, std::make_unique<MultiRenderTargetTest>());
         mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
-        mSceneManager->loadScene(Define::SceneType::MultiRenderTargetTest);
+        mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
+        mSceneManager->loadScene(Define::SceneType::AlphaTest);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

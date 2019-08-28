@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
+    <ClInclude Include="Source\Scene\Impl\AlphaBlendTest.h" />
     <ClInclude Include="Source\Scene\Impl\DepthStencilTest.h" />
     <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
     <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
