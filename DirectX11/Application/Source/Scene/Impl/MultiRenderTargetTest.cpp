@@ -14,7 +14,6 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
-#include "Source/DefienClearColor.h"
 #include "Framework/Utility/ImGUI/Button.h"
 
 using namespace Framework;

@@ -39,7 +39,7 @@ public:
     /**
     * @brief •`‰æŠJn
     */
-    void drawBegin();
+    void drawBegin(const Color4& clearColor);
     /**
     * @brief •`‰æI—¹
     */

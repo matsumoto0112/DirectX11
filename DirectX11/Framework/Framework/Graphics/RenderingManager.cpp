@@ -8,8 +8,7 @@
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
-
-#include "Source/DefienClearColor.h"
+#include "Framework/Graphics/Render/AlphaBlend.h"
 
 namespace Framework {
 namespace Graphics {
@@ -46,14 +45,14 @@ void RenderingManager::initialize() {
     ds.Format = desc.Format;
     ds.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     ds.Texture2D.MipSlice = 0;
-    mRenderTargetView->setDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
+    mRenderTargetView->bindDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }
 
-void RenderingManager::drawBegin() {
+void RenderingManager::drawBegin(const Color4& clearColor) {
     mGraphicsDevice->drawBegin();
-    mRenderTargetView->clear(DefineClearColor::getColor());
+    mRenderTargetView->clear(clearColor);
     mRenderTargetView->set();
     mViewport->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);

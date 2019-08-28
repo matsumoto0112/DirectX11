@@ -57,11 +57,11 @@ private:
         ATLASSERT(_CrtCheckMemory());
 
         mGameDevice.update();
-        mSceneManager->update(deltaTime);   
+        mSceneManager->update(deltaTime);
     }
     virtual void draw() override {
         ATLASSERT(_CrtCheckMemory());
-        mGameDevice.getRenderingManager()->drawBegin();
+        mGameDevice.getRenderingManager()->drawBegin(Graphics::Color4::WHITE);
 
         mSceneManager->draw();
 

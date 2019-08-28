@@ -17,7 +17,6 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
-#include "Source/DefienClearColor.h"
 using namespace Framework;
 
 namespace {
@@ -250,7 +249,7 @@ ShadowMapTest::ShadowMapTest()
     dsd.Format = depthTexDesc.Format;
     dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     dsd.Texture2D.MipSlice = 0;
-    mRenderTargetView->setDepthStencilView(std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd));
+    mRenderTargetView->bindDepthStencilView(std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd));
     Math::Rect viewRect(0, 0, depthTexDesc.Width, depthTexDesc.Height);
     mViewport = std::make_unique<Graphics::Viewport>(viewRect);
 

@@ -36,11 +36,13 @@ public:
     * @brief レンダーターゲットビューのクリア処理
     */
     void clear(const Color4& clearColor);
-    void setDepthStencilView(std::unique_ptr<DepthStencilView> depthStencil) { mDepthStencil = std::move(depthStencil); }
-    DepthStencilView* getDepthStencilView() const { return mDepthStencil.get(); }
+    /**
+    * @brief 深度・ステンシルビューをバインドする
+    */
+    void bindDepthStencilView(std::unique_ptr<DepthStencilView> depthStencil) { mDepthStencil = std::move(depthStencil); }
 private:
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView;
-    std::unique_ptr<DepthStencilView> mDepthStencil;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView; //!< レンダーターゲットビュー
+    std::unique_ptr<DepthStencilView> mDepthStencil; //!< 深度・ステンシルビュー
 };
 
 } //Graphics 

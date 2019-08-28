@@ -7,22 +7,12 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Utility/ImGUI/FloatField.h"
-#include "Source/DefienClearColor.h"
 #include "Framework/Utility/ImGUI/Text.h"
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 using namespace Framework;
 
-#define ADD_BACK_COLOR_CHANGE_FIELD(name,type) { \
-        std::shared_ptr<ImGUI::FloatField> field = \
-            std::make_shared<ImGUI::FloatField>(#name,DefineClearColor::getColor().##type,[&](float val){ \
-            Graphics::Color4 col = DefineClearColor::getColor(); \
-            col.##type = val; \
-            DefineClearColor::setColor(col); \
-            }); \
-        mUIWindow->addItem(field); \
-    }
 #define ADD_ALPHABLEND_STATE_CHANGE_FIELD(name,var,val) {\
         std::shared_ptr<ImGUI::Button> btn = \
             std::make_shared<ImGUI::Button>(#name,[&](){ \
@@ -94,12 +84,6 @@ AlphaBlendTest::AlphaBlendTest()
     mObj2Color = Graphics::Color4::WHITE;
 
     mUIWindow = std::make_unique<ImGUI::Window>("Changable Area");
-
-    ADD_BACK_COLOR_CHANGE_FIELD(R, r);
-    ADD_BACK_COLOR_CHANGE_FIELD(G, g);
-    ADD_BACK_COLOR_CHANGE_FIELD(B, b);
-    ADD_BACK_COLOR_CHANGE_FIELD(A, a);
-
 
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(AlphaToCoverageEnable, AlphaToCoverageEnable, TRUE);
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(NonAlphaToCoverageEnable, AlphaToCoverageEnable, FALSE);
