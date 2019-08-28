@@ -15,7 +15,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    AlphaBlend(const D3D11_BLEND_DESC& blendDesc);
+    AlphaBlend(const D3D11_BLEND_DESC& desc);
     /**
     * @brief デストラクタ
     */
@@ -24,8 +24,16 @@ public:
     * @brief アルファブレンドをコンテキストに設定する
     */
     void set();
+    /**
+    * @brief 現在のブレンドステートを取得する
+    */
+    D3D11_BLEND_DESC getCurrentBlendStateDesc() const;
+    /**
+    * @brief ブレンドステートを設定する
+    */
+    void setBlendStateFromDesc(const D3D11_BLEND_DESC& desc);
 private:
-    Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;
+    Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend; //!< ブレンドステート
 };
 
 } //Graphics 
