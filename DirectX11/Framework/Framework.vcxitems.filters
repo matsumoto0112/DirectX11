@@ -106,6 +106,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -250,5 +251,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.h" />
   </ItemGroup>
 </Project>

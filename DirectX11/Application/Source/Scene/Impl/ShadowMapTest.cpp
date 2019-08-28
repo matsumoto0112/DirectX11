@@ -41,112 +41,112 @@ std::unique_ptr<Graphics::Viewport> mViewport;
 std::shared_ptr<Graphics::Texture> mShadowMapTex;
 static float f;
 
-auto CreateDefaultBlendDesc = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = FALSE;
-    RenderTarget.SrcBlend = D3D11_BLEND_ONE;
-    RenderTarget.DestBlend = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-};
-
-auto CreateAlignmentBlendDesc = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-};
-
-// 加算合成用ブレンド ステートのためのを設定を取得する
-auto CreateAddBlendDesc = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_ONE;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-};
-
-// 減算合成用ブレンド ステートのためのを設定を取得する
-auto CreateSubtractBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_ONE;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-};
-
-// 積算合成用ブレンド ステートのためのを設定を取得する
-auto CreateMultipleBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_ZERO;
-    RenderTarget.DestBlend = D3D11_BLEND_SRC_COLOR;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-};
-
-auto CreateAddBlendDesc2 = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_DEST_COLOR;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    return RenderTarget;
-};
-
-auto CreateTestBlendDesc = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
-    RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    return RenderTarget;
-};
-
+//auto CreateDefaultBlendDesc = []() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//
+//    RenderTarget.BlendEnable = FALSE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlend = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//    return RenderTarget;
+//};
+//
+//auto CreateAlignmentBlendDesc = []() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+//    RenderTarget.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//    return RenderTarget;
+//};
+//
+//// 加算合成用ブレンド ステートのためのを設定を取得する
+//auto CreateAddBlendDesc = []() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+//    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//    return RenderTarget;
+//};
+//
+//// 減算合成用ブレンド ステートのためのを設定を取得する
+//auto CreateSubtractBlendDesc() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+//    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//    return RenderTarget;
+//};
+//
+//// 積算合成用ブレンド ステートのためのを設定を取得する
+//auto CreateMultipleBlendDesc() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_ZERO;
+//    RenderTarget.DestBlend = D3D11_BLEND_SRC_COLOR;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//    return RenderTarget;
+//};
+//
+//auto CreateAddBlendDesc2 = []() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+//    RenderTarget.DestBlend = D3D11_BLEND_DEST_COLOR;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//    return RenderTarget;
+//};
+//
+//auto CreateTestBlendDesc = []() {
+//    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+//    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
+//    RenderTarget.BlendEnable = TRUE;
+//    RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
+//    RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
+//    RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+//    RenderTarget.SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
+//    RenderTarget.DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
+//    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+//    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//    return RenderTarget;
+//};
+//
 
 }
 ShadowMapTest::ShadowMapTest()
@@ -249,7 +249,7 @@ ShadowMapTest::ShadowMapTest()
     dsd.Format = depthTexDesc.Format;
     dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     dsd.Texture2D.MipSlice = 0;
-    mRenderTargetView->bindDepthStencilView(std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd));
+    //mRenderTargetView->bindDepthStencilView(std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd));
     Math::Rect viewRect(0, 0, depthTexDesc.Width, depthTexDesc.Height);
     mViewport = std::make_unique<Graphics::Viewport>(viewRect);
 
@@ -289,11 +289,11 @@ ShadowMapTest::ShadowMapTest()
     ZeroMemory(&blendDesc, sizeof(blendDesc));
     blendDesc.AlphaToCoverageEnable = FALSE;
     blendDesc.IndependentBlendEnable = FALSE;
-    blendDesc.RenderTarget[0] = CreateTestBlendDesc();
+    //blendDesc.RenderTarget[0] = CreateTestBlendDesc();
 
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(blendDesc);
 
-    blendDesc.RenderTarget[0] = CreateDefaultBlendDesc();
+    //blendDesc.RenderTarget[0] = CreateDefaultBlendDesc();
     Utility::getDevice()->CreateBlendState(&blendDesc, &mNoAlpha);
 
 
@@ -413,7 +413,7 @@ void ShadowMapTest::draw() {
         mViewport->set();
         mPerspectiveCamera->setMatrix();
 
-        mRenderTargetView->set();
+        //mRenderTargetView->set();
 
         mRenderTargetView->clear(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
         lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);

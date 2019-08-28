@@ -1,5 +1,4 @@
 #include "RenderTargetView.h"
-#include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
@@ -18,20 +17,8 @@ RenderTargetView::RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resour
 
 RenderTargetView::~RenderTargetView() {}
 
-void RenderTargetView::set() {
-    if (mDepthStencil) {
-        Utility::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthStencil->getDepthStencilView().Get());
-    }
-    else {
-        Utility::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr);
-    }
-}
-
 void RenderTargetView::clear(const Color4& clearColor) {
     Utility::getContext()->ClearRenderTargetView(mRenderTargetView.Get(), clearColor.get().data());
-    if (mDepthStencil) {
-        mDepthStencil->clear();
-    }
 }
 
 } //Graphics 

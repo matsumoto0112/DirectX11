@@ -1,8 +1,8 @@
 #pragma once
 #include <d3d11.h>
 #include <wrl/client.h>
-#include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Color4.h"
+#include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
@@ -29,20 +29,16 @@ public:
     */
     ~RenderTargetView();
     /**
-    * @brief レンダーターゲットを設定する
+    * @brief レンダーターゲットビューを取得する
     */
-    void set();
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> getRenderTargetView() const { return mRenderTargetView; }
     /**
-    * @brief レンダーターゲットビューのクリア処理
+    * @brief レンダーターゲットのクリア
+    * @param clearColor クリア色
     */
     void clear(const Color4& clearColor);
-    /**
-    * @brief 深度・ステンシルビューをバインドする
-    */
-    void bindDepthStencilView(std::unique_ptr<DepthStencilView> depthStencil) { mDepthStencil = std::move(depthStencil); }
 private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView; //!< レンダーターゲットビュー
-    std::unique_ptr<DepthStencilView> mDepthStencil; //!< 深度・ステンシルビュー
 };
 
 } //Graphics 

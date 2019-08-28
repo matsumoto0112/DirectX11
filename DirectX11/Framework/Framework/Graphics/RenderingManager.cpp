@@ -3,8 +3,7 @@
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
 #include "Framework/Graphics/ImGUI/Manager.h"
-#include "Framework/Graphics/Render/DepthStencilView.h"
-#include "Framework/Graphics/Render/RenderTargetView.h"
+#include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/Viewport.h"
@@ -24,7 +23,7 @@ void RenderingManager::initialize() {
     mLightManager = std::make_unique<LightManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
-    mRenderTargetView = std::make_unique<RenderTargetView>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
+    mRenderTarget = std::make_unique<RenderTarget>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()->getBuffer());
     mViewport = std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y));
 
     D3D11_TEXTURE2D_DESC desc;
@@ -45,15 +44,16 @@ void RenderingManager::initialize() {
     ds.Format = desc.Format;
     ds.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     ds.Texture2D.MipSlice = 0;
-    mRenderTargetView->bindDepthStencilView(std::make_unique<DepthStencilView>(desc, ds));
+    mRenderTarget->bindDepthStencilView(desc, ds);
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }
 
 void RenderingManager::drawBegin(const Color4& clearColor) {
     mGraphicsDevice->drawBegin();
-    mRenderTargetView->clear(clearColor);
-    mRenderTargetView->set();
+    mRenderTarget->setClearColor(clearColor);
+    mRenderTarget->clear();
+    mRenderTarget->set();
     mViewport->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);
 }

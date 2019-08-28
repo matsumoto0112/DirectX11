@@ -11,7 +11,7 @@ class Manager;
 } //ImGUI 
 namespace Graphics {
 class AlphaBlend;
-class RenderTargetView;
+class RenderTarget;
 class Sampler;
 class Viewport;
 /**
@@ -66,7 +66,7 @@ private:
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<LightManager> mLightManager; //!< ライト管理
     std::unique_ptr<AlphaBlend> mAlphaBlend; //!< アルファブレンド
-    std::unique_ptr<RenderTargetView> mRenderTargetView; //!< レンダーターゲットビュー
+    std::unique_ptr<RenderTarget> mRenderTarget; //!< レンダーターゲット
     std::unique_ptr<Viewport> mViewport; //!< ビューポート
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理
