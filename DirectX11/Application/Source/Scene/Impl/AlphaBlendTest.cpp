@@ -8,12 +8,28 @@
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Utility/ImGUI/FloatField.h"
 #include "Source/DefienClearColor.h"
+#include "Framework/Utility/ImGUI/Text.h"
+#include "Framework/Utility/ImGUI/Button.h"
 
 using namespace Framework;
+
+#define ADD_BACK_COLOR_CHANGE_FIELD(name,type) { \
+        std::shared_ptr<ImGUI::FloatField> field = \
+            std::make_shared<ImGUI::FloatField>(#name,DefineClearColor::getColor().##type,[&](float val){ \
+            Graphics::Color4 col = DefineClearColor::getColor(); \
+            col.##type = val; \
+            DefineClearColor::setColor(col); \
+            }); \
+        mUIWindow->addItem(field); \
+    }
+
 
 namespace {
 std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
 float f;
+D3D11_BLEND_DESC bd;
+D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+std::shared_ptr<ImGUI::Text> mCurrentText;
 }
 
 AlphaBlendTest::AlphaBlendTest()
@@ -38,11 +54,10 @@ AlphaBlendTest::AlphaBlendTest()
     );
     f = 0.0f;
 
-    D3D11_BLEND_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
+    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
     bd.AlphaToCoverageEnable = FALSE;
     bd.IndependentBlendEnable = FALSE;
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
     RenderTarget.BlendEnable = TRUE;
     RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
     RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
@@ -56,20 +71,27 @@ AlphaBlendTest::AlphaBlendTest()
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
 
     mUIWindow = std::make_unique<ImGUI::Window>("Changable Area");
-#define ADD_BACK_COLOR_CHANGE_FIELD(name,type) { \
-        std::shared_ptr<ImGUI::FloatField> field = \
-            std::make_shared<ImGUI::FloatField>(#name,DefineClearColor::getColor().##type,[&](float val){ \
-            Graphics::Color4 col = DefineClearColor::getColor(); \
-            col.##type = val; \
-            DefineClearColor::setColor(col); \
-            }); \
-        mUIWindow->addItem(field); \
-    }
+
+    mCurrentText = std::make_shared<ImGUI::Text>("");
+    mUIWindow->addItem(mCurrentText);
 
     ADD_BACK_COLOR_CHANGE_FIELD(R, r);
     ADD_BACK_COLOR_CHANGE_FIELD(G, g);
     ADD_BACK_COLOR_CHANGE_FIELD(B, b);
     ADD_BACK_COLOR_CHANGE_FIELD(A, a);
+
+#define ADD_ALPHABLEND_STATE_CHANGE_FIELD(name,var,val) {\
+        std::shared_ptr<ImGUI::Button> btn = \
+            std::make_shared<ImGUI::Button>(#name,[&](){ \
+                RenderTarget.##var = val; \
+                bd.RenderTarget[0] = RenderTarget; \
+                mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd); \
+        }); \
+        mUIWindow->addItem(btn); \
+    }
+
+    ADD_ALPHABLEND_STATE_CHANGE_FIELD(ENABLE, BlendEnable, TRUE);
+    ADD_ALPHABLEND_STATE_CHANGE_FIELD(UNABLE, BlendEnable, FALSE);
 }
 
 AlphaBlendTest::~AlphaBlendTest() {}
@@ -91,7 +113,13 @@ void AlphaBlendTest::draw() {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
     mPerspectiveCamera->setMatrix();
     mEnemy.draw();
-
+    {
+        Utility::StringBuilder sb("");
+        Graphics::Color4 col = DefineClearColor::getColor();
+        sb << "(" << col.r << "," << col.g << "," << col.b << "," << col.a << ")\n";
+        sb << RenderTarget.BlendEnable << "\n";
+        mCurrentText->setText(sb.getStr());
+    }
     mUIWindow->draw();
 }
 
