@@ -117,6 +117,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\WindowProcedures.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Desc\DepthStencil.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
