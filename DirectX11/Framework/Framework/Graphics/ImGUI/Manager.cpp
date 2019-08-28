@@ -23,6 +23,7 @@ Manager::Manager() {
 
 Manager::~Manager() {
     ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
 

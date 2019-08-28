@@ -22,7 +22,29 @@ using namespace Framework;
             }); \
         mUIWindow->addItem(field); \
     }
-
+#define ADD_ALPHABLEND_STATE_CHANGE_FIELD(name,var,val) {\
+        std::shared_ptr<ImGUI::Button> btn = \
+            std::make_shared<ImGUI::Button>(#name,[&](){ \
+                RenderTarget.##var = val; \
+                updateBlend(); \
+            }); \
+        mUIWindow->addItem(btn); \
+    }
+#define ADD_CHANGE_BLEND_STATE_SET(name,func) { \
+        std::shared_ptr<ImGUI::Button> btn = \
+            std::make_shared<ImGUI::Button>(#name ,[&](){ \
+                RenderTarget = func (); \
+                updateBlend(); \
+            }); \
+        mUIWindow->addItem(btn); \
+    }
+#define ADD_COLOR_CHANGE_FIELD(name,var,type) {\
+        std::shared_ptr<ImGUI::FloatField> field = \
+            std::make_shared<ImGUI::FloatField>(#name ,var.##type,[&](float val){ \
+                var.##type = val; \
+            }); \
+        mUIWindow->addItem(field); \
+    }
 
 namespace {
 std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
@@ -30,6 +52,83 @@ float f;
 D3D11_BLEND_DESC bd;
 D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
 std::shared_ptr<ImGUI::Text> mCurrentText;
+Utility::Transform mObj1, mObj2;
+Graphics::Color4 mObj1Color, mObj2Color;
+
+D3D11_RENDER_TARGET_BLEND_DESC createDefaultBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = FALSE;
+    RenderTarget.SrcBlend = D3D11_BLEND_ONE;
+    RenderTarget.DestBlend = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+}
+
+D3D11_RENDER_TARGET_BLEND_DESC createAlignmentBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+}
+
+D3D11_RENDER_TARGET_BLEND_DESC createAddBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+}
+
+D3D11_RENDER_TARGET_BLEND_DESC createSubtractBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    RenderTarget.DestBlend = D3D11_BLEND_ONE;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+}
+
+D3D11_RENDER_TARGET_BLEND_DESC createMultipleBlendDesc() {
+    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
+
+    RenderTarget.BlendEnable = TRUE;
+    RenderTarget.SrcBlend = D3D11_BLEND_ZERO;
+    RenderTarget.DestBlend = D3D11_BLEND_SRC_COLOR;
+    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
+    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
+    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
+    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    return RenderTarget;
+}
 }
 
 AlphaBlendTest::AlphaBlendTest()
@@ -47,8 +146,13 @@ AlphaBlendTest::AlphaBlendTest()
     fbx->importResource(Define::ModelType::Cube, Define::ModelName::CUBE);
     mEnemy.mModel = fbx->getResource(Define::ModelType::Cube);
     mEnemy.mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Diffuse));
-    mEnemy.mTransform = Utility::Transform(
+    mObj1 = Utility::Transform(
         Math::Vector3::ZERO,
+        Math::Quaternion::IDENTITY,
+        Math::Vector3(1, 1, 1)
+    );
+    mObj2 = Utility::Transform(
+        Math::Vector3(3, 0, 5),
         Math::Quaternion::IDENTITY,
         Math::Vector3(1, 1, 1)
     );
@@ -70,28 +174,44 @@ AlphaBlendTest::AlphaBlendTest()
 
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
 
+    mObj1Color = Graphics::Color4::WHITE;
+    mObj2Color = Graphics::Color4::WHITE;
+
     mUIWindow = std::make_unique<ImGUI::Window>("Changable Area");
 
     mCurrentText = std::make_shared<ImGUI::Text>("");
     mUIWindow->addItem(mCurrentText);
+
+    auto updateBlend = [&]() {
+        bd.RenderTarget[0] = RenderTarget;
+        mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
+    };
 
     ADD_BACK_COLOR_CHANGE_FIELD(R, r);
     ADD_BACK_COLOR_CHANGE_FIELD(G, g);
     ADD_BACK_COLOR_CHANGE_FIELD(B, b);
     ADD_BACK_COLOR_CHANGE_FIELD(A, a);
 
-#define ADD_ALPHABLEND_STATE_CHANGE_FIELD(name,var,val) {\
-        std::shared_ptr<ImGUI::Button> btn = \
-            std::make_shared<ImGUI::Button>(#name,[&](){ \
-                RenderTarget.##var = val; \
-                bd.RenderTarget[0] = RenderTarget; \
-                mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd); \
-        }); \
-        mUIWindow->addItem(btn); \
-    }
 
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(ENABLE, BlendEnable, TRUE);
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(UNABLE, BlendEnable, FALSE);
+
+    ADD_CHANGE_BLEND_STATE_SET(Default, createDefaultBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Align, createAlignmentBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Add, createAddBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Subtract, createSubtractBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Multiply, createMultipleBlendDesc);
+
+    ADD_COLOR_CHANGE_FIELD((object 1 color R), mObj1Color, r);
+    ADD_COLOR_CHANGE_FIELD((object 1 color G), mObj1Color, g);
+    ADD_COLOR_CHANGE_FIELD((object 1 color B), mObj1Color, b);
+    ADD_COLOR_CHANGE_FIELD((object 1 color A), mObj1Color, a);
+
+    ADD_COLOR_CHANGE_FIELD((object 2 color R), mObj2Color, r);
+    ADD_COLOR_CHANGE_FIELD((object 2 color G), mObj2Color, g);
+    ADD_COLOR_CHANGE_FIELD((object 2 color B), mObj2Color, b);
+    ADD_COLOR_CHANGE_FIELD((object 2 color A), mObj2Color, a);
+
 }
 
 AlphaBlendTest::~AlphaBlendTest() {}
@@ -101,7 +221,10 @@ void AlphaBlendTest::load(Scene::Collecter& collecter) {}
 void AlphaBlendTest::update(float delta) {
     f += 1.0f;
     Math::Quaternion rot = Math::Quaternion::createRotateAboutZ(f * 2.5) * Math::Quaternion::createRotateAboutY(f);
-    mEnemy.mTransform.setRotate(rot);
+    mObj1.setRotate(rot);
+
+    rot = Math::Quaternion::createRotateAboutZ(-f * 2.5) * Math::Quaternion::createRotateAboutY(-f);
+    mObj2.setRotate(rot);
 }
 
 bool AlphaBlendTest::isEndScene() const {
@@ -110,9 +233,19 @@ bool AlphaBlendTest::isEndScene() const {
 
 void AlphaBlendTest::draw() {
     mAlphaBlend->set({ 0,0,0,0 });
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
-    mPerspectiveCamera->setMatrix();
-    mEnemy.draw();
+    {
+        Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mObj1Color);
+        mPerspectiveCamera->setMatrix();
+        mEnemy.mTransform = mObj1;
+        mEnemy.draw();
+    }
+
+    {
+        Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mObj2Color);
+        mEnemy.mTransform = mObj2;
+        mEnemy.draw();
+    }
+
     {
         Utility::StringBuilder sb("");
         Graphics::Color4 col = DefineClearColor::getColor();
