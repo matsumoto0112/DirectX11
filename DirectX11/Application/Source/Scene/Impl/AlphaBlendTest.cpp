@@ -10,6 +10,7 @@
 #include "Source/DefienClearColor.h"
 #include "Framework/Utility/ImGUI/Text.h"
 #include "Framework/Utility/ImGUI/Button.h"
+#include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 using namespace Framework;
 
@@ -54,81 +55,6 @@ D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
 std::shared_ptr<ImGUI::Text> mCurrentText;
 Utility::Transform mObj1, mObj2;
 Graphics::Color4 mObj1Color, mObj2Color;
-
-D3D11_RENDER_TARGET_BLEND_DESC createDefaultBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = FALSE;
-    RenderTarget.SrcBlend = D3D11_BLEND_ONE;
-    RenderTarget.DestBlend = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-}
-
-D3D11_RENDER_TARGET_BLEND_DESC createAlignmentBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-}
-
-D3D11_RENDER_TARGET_BLEND_DESC createAddBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_ONE;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-}
-
-D3D11_RENDER_TARGET_BLEND_DESC createSubtractBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND_ONE;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-}
-
-D3D11_RENDER_TARGET_BLEND_DESC createMultipleBlendDesc() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-
-    RenderTarget.BlendEnable = TRUE;
-    RenderTarget.SrcBlend = D3D11_BLEND_ZERO;
-    RenderTarget.DestBlend = D3D11_BLEND_SRC_COLOR;
-    RenderTarget.BlendOp = D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    return RenderTarget;
-}
 }
 
 AlphaBlendTest::AlphaBlendTest()
@@ -195,11 +121,11 @@ AlphaBlendTest::AlphaBlendTest()
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(AlphaToCoverageEnable, AlphaToCoverageEnable, TRUE);
     ADD_ALPHABLEND_STATE_CHANGE_FIELD(NonAlphaToCoverageEnable, AlphaToCoverageEnable, FALSE);
 
-    ADD_CHANGE_BLEND_STATE_SET(Default, createDefaultBlendDesc);
-    ADD_CHANGE_BLEND_STATE_SET(Align, createAlignmentBlendDesc);
-    ADD_CHANGE_BLEND_STATE_SET(Add, createAddBlendDesc);
-    ADD_CHANGE_BLEND_STATE_SET(Subtract, createSubtractBlendDesc);
-    ADD_CHANGE_BLEND_STATE_SET(Multiply, createMultipleBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Default, Graphics::AlphaBlendSetting::getDefaultDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Align, Graphics::AlphaBlendSetting::getAlignmentBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Add, Graphics::AlphaBlendSetting::getAddBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Subtract, Graphics::AlphaBlendSetting::getSubtractBlendDesc);
+    ADD_CHANGE_BLEND_STATE_SET(Multiply, Graphics::AlphaBlendSetting::getMultipleBlendDesc);
 
     ADD_COLOR_CHANGE_FIELD((object 1 color R), mObj1Color, r);
     ADD_COLOR_CHANGE_FIELD((object 1 color G), mObj1Color, g);

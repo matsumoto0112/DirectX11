@@ -249,5 +249,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
   </ItemGroup>
 </Project>

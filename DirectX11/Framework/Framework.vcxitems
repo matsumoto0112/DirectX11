@@ -173,6 +173,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RendererInstanceType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
