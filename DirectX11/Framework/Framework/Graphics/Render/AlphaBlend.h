@@ -20,6 +20,10 @@ public:
     * @brief デストラクタ
     */
     ~AlphaBlend();
+    /**
+    * @brief アルファブレンドをコンテキストに設定する
+    * @param blendFactor 
+    */
     void set(const std::array<float, 4>& blendFactor);
 private:
     Microsoft::WRL::ComPtr<ID3D11BlendState> mAlphaBlend;

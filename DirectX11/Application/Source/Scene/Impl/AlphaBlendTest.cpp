@@ -25,7 +25,7 @@ using namespace Framework;
 #define ADD_ALPHABLEND_STATE_CHANGE_FIELD(name,var,val) {\
         std::shared_ptr<ImGUI::Button> btn = \
             std::make_shared<ImGUI::Button>(#name,[&](){ \
-                RenderTarget.##var = val; \
+                bd.##var = val; \
                 updateBlend(); \
             }); \
         mUIWindow->addItem(btn); \
@@ -192,9 +192,8 @@ AlphaBlendTest::AlphaBlendTest()
     ADD_BACK_COLOR_CHANGE_FIELD(B, b);
     ADD_BACK_COLOR_CHANGE_FIELD(A, a);
 
-
-    ADD_ALPHABLEND_STATE_CHANGE_FIELD(ENABLE, BlendEnable, TRUE);
-    ADD_ALPHABLEND_STATE_CHANGE_FIELD(UNABLE, BlendEnable, FALSE);
+    ADD_ALPHABLEND_STATE_CHANGE_FIELD(AlphaToCoverageEnable, AlphaToCoverageEnable, TRUE);
+    ADD_ALPHABLEND_STATE_CHANGE_FIELD(NonAlphaToCoverageEnable, AlphaToCoverageEnable, FALSE);
 
     ADD_CHANGE_BLEND_STATE_SET(Default, createDefaultBlendDesc);
     ADD_CHANGE_BLEND_STATE_SET(Align, createAlignmentBlendDesc);

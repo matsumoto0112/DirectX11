@@ -3,7 +3,7 @@
 #include "Framework/Utility/Wrap/DirectX.h"
 
 namespace {
-static const UINT sampleMask = 0xffffffff;
+static constexpr UINT sampleMask = 0xffffffff;
 }
 
 namespace Framework {
@@ -17,7 +17,7 @@ AlphaBlend::AlphaBlend(const D3D11_BLEND_DESC& blendDesc) {
 AlphaBlend::~AlphaBlend() {}
 
 void AlphaBlend::set(const std::array<float, 4>& blendFactor) {
-    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), blendFactor.data(), sampleMask);
+    Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), nullptr, sampleMask);
 }
 
 } //Graphics 
