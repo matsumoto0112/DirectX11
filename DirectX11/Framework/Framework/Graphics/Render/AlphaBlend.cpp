@@ -16,7 +16,7 @@ AlphaBlend::AlphaBlend(const D3D11_BLEND_DESC& blendDesc) {
 
 AlphaBlend::~AlphaBlend() {}
 
-void AlphaBlend::set(const std::array<float, 4>& blendFactor) {
+void AlphaBlend::set() {
     Utility::getContext()->OMSetBlendState(mAlphaBlend.Get(), nullptr, sampleMask);
 }
 

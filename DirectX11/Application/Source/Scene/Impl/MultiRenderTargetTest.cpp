@@ -168,7 +168,7 @@ bool MultiRenderTargetTest::isEndScene() const {
 
 void MultiRenderTargetTest::draw() {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
-    mAlphaBlend->set({ 0,0,0,0 });
+    mAlphaBlend->set();
     //前のレンダーターゲットの保存
     ID3D11DepthStencilView* backDepthStencil;
     ID3D11RenderTargetView* backRenderTarget;
@@ -180,8 +180,9 @@ void MultiRenderTargetTest::draw() {
 
     Utility::getContext()->RSSetViewports(RTV_NUM, mViewports.data());
     Utility::getContext()->OMSetRenderTargets(RTV_NUM, mRenderTargetViews.data(), mDepthStencil->getDepthStencilView().Get());
-    for (int i = 0; i < RTV_NUM ; i++) {
-        Utility::getContext()->ClearRenderTargetView(mRenderTargetViews[i], ClearRenderTargetColor.get().data());
+    for (int i = 0; i < RTV_NUM; i++) {
+        constexpr float c[4]{ 1.0f,1.0f,1.0f,1.0f };
+        Utility::getContext()->ClearRenderTargetView(mRenderTargetViews[i], c);
     }
 
     mDepthStencil->clear();

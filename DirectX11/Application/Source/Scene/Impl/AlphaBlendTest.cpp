@@ -157,7 +157,7 @@ bool AlphaBlendTest::isEndScene() const {
 }
 
 void AlphaBlendTest::draw() {
-    mAlphaBlend->set({ 0,0,0,0 });
+    mAlphaBlend->set();
     {
         Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mObj1Color);
         mPerspectiveCamera->setMatrix();

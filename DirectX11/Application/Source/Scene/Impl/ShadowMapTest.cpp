@@ -365,7 +365,7 @@ bool ShadowMapTest::isEndScene() const {
 }
 
 void ShadowMapTest::draw() {
-    mAlphaBlend->set({ 0,0,0,0 });
+    mAlphaBlend->set();
 
     Graphics::Color4 color(1.0f, 0.0f, 0.0f, 0.2f);
     Utility::getConstantBufferManager()->setColor(
@@ -416,7 +416,7 @@ void ShadowMapTest::draw() {
 
         mRenderTargetView->set();
 
-        mRenderTargetView->clear(ClearShadowMapColor);
+        mRenderTargetView->clear(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
         lightView = Math::Matrix4x4::createView(lightPos, lightLookat, Math::Vector3::UP);
         lightProj = Math::Matrix4x4::createProjection(40.0f, 1.0f, 1.0f, 40.0f, 300.0f);
 
