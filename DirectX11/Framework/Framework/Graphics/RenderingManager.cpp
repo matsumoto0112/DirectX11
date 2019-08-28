@@ -53,7 +53,7 @@ void RenderingManager::initialize() {
 
 void RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    mRenderTargetView->clear(ClearRenderTargetColor);
+    mRenderTargetView->clear(DefineClearColor::getColor());
     mRenderTargetView->set();
     mViewport->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);

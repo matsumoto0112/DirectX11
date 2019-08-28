@@ -6,6 +6,8 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
+#include "Framework/Utility/ImGUI/FloatField.h"
+#include "Source/DefienClearColor.h"
 
 using namespace Framework;
 
@@ -41,7 +43,7 @@ AlphaBlendTest::AlphaBlendTest()
     bd.IndependentBlendEnable = FALSE;
     D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
     ZeroMemory(&RenderTarget, sizeof(RenderTarget));
-    RenderTarget.BlendEnable = FALSE;
+    RenderTarget.BlendEnable = TRUE;
     RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
     RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
     RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
@@ -52,6 +54,22 @@ AlphaBlendTest::AlphaBlendTest()
     bd.RenderTarget[0] = RenderTarget;
 
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
+
+    mUIWindow = std::make_unique<ImGUI::Window>("Changable Area");
+#define ADD_BACK_COLOR_CHANGE_FIELD(name,type) { \
+        std::shared_ptr<ImGUI::FloatField> field = \
+            std::make_shared<ImGUI::FloatField>(#name,DefineClearColor::getColor().##type,[&](float val){ \
+            Graphics::Color4 col = DefineClearColor::getColor(); \
+            col.##type = val; \
+            DefineClearColor::setColor(col); \
+            }); \
+        mUIWindow->addItem(field); \
+    }
+
+    ADD_BACK_COLOR_CHANGE_FIELD(R, r);
+    ADD_BACK_COLOR_CHANGE_FIELD(G, g);
+    ADD_BACK_COLOR_CHANGE_FIELD(B, b);
+    ADD_BACK_COLOR_CHANGE_FIELD(A, a);
 }
 
 AlphaBlendTest::~AlphaBlendTest() {}
@@ -73,6 +91,8 @@ void AlphaBlendTest::draw() {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
     mPerspectiveCamera->setMatrix();
     mEnemy.draw();
+
+    mUIWindow->draw();
 }
 
 void AlphaBlendTest::end() {}

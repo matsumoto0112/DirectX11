@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\DefineClearColor.cpp" />
     <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />

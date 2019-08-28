@@ -10,6 +10,7 @@
     <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
+    <ClCompile Include="Source\DefineClearColor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
