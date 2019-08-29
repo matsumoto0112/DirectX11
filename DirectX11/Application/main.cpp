@@ -46,8 +46,8 @@ private:
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
         mSceneManager->registerScene(Define::SceneType::MultiRenderTargetTest, std::make_unique<MultiRenderTargetTest>());
-        //mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
-        //mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
+        mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
+        mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
         mSceneManager->loadScene(Define::SceneType::MultiRenderTargetTest);
 
         ATLASSERT(_CrtCheckMemory());

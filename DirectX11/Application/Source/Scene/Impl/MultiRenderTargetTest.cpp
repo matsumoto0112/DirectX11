@@ -14,6 +14,7 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
+#include "Framework/Graphics/Render/MultiRenderTarget.h"
 #include "Framework/Utility/ImGUI/Button.h"
 #include <dxgidebug.h>
 using namespace Framework;
@@ -23,14 +24,9 @@ struct Tmp {
     static constexpr int RTV_NUM = 4;
     std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
     std::unique_ptr<Graphics::Sprite2D> mSprite;
-    std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>> mRenderTargetViews;
-    std::unique_ptr<Graphics::DepthStencilView> mDepthStencil;
+    std::unique_ptr<Graphics::MultiRenderTarget> mRenderTargetViews;
     std::array<std::shared_ptr<Graphics::Texture>, RTV_NUM> mRenderTargetTexs;
     std::array<D3D11_VIEWPORT, RTV_NUM> mViewports;
-
-    ~Tmp() {
-        mRenderTargetViews.clear();
-    }
 };
 std::unique_ptr<Tmp> mTmp;
 
@@ -93,14 +89,22 @@ MultiRenderTargetTest::MultiRenderTargetTest()
     ZeroMemory(&viewDesc, sizeof(viewDesc));
     viewDesc.Format = texDesc.Format;
     viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-    mTmp->mRenderTargetViews = std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>>(mTmp->RTV_NUM);
+
+    std::vector<std::shared_ptr<Graphics::TextureBuffer>> texBufs;
     for (int i = 0; i < mTmp->RTV_NUM; i++) {
         auto texBuffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
-        HRESULT hr = Utility::getDevice()->CreateRenderTargetView(texBuffer->getBuffer().Get(), &viewDesc, &mTmp->mRenderTargetViews[i]);
-        MY_ASSERTION(SUCCEEDED(hr), "");
-        auto srv = std::make_shared<Graphics::ShaderResourceView>(*texBuffer, nullptr);
+        texBufs.emplace_back(texBuffer);
+    }
+
+    mTmp->mRenderTargetViews = std::make_unique<Graphics::MultiRenderTarget>(
+        mTmp->RTV_NUM,
+        texBufs,
+        viewDesc);
+
+    for (int i = 0; i < mTmp->RTV_NUM; i++) {
+        auto srv = std::make_shared<Graphics::ShaderResourceView>(*texBufs[i], nullptr);
         mTmp->mRenderTargetTexs[i] = std::make_shared<Graphics::Texture>(
-            texBuffer,
+            texBufs[i],
             srv,
             texDesc.Width,
             texDesc.Height);
@@ -132,7 +136,8 @@ MultiRenderTargetTest::MultiRenderTargetTest()
     dsd.Format = depthTexDesc.Format;
     dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     dsd.Texture2D.MipSlice = 0;
-    mTmp->mDepthStencil = std::make_unique<Graphics::DepthStencilView>(depthTexDesc, dsd);
+    mTmp->mRenderTargetViews->bindDepthStencilView(depthTexDesc, dsd);
+    mTmp->mRenderTargetViews->setClearColor(Graphics::Color4::WHITE);
 
     mTmp->mSprite = std::make_unique<Graphics::Sprite2D>(mTmp->mRenderTargetTexs[0]);
 
@@ -146,20 +151,20 @@ MultiRenderTargetTest::MultiRenderTargetTest()
     blendDesc.RenderTarget[3] = CreateTestBlendDesc();
 
     mTmp->mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(blendDesc);
-    
-        mUIWindow = std::make_unique<ImGUI::Window>("Output");
-    #define ADD_CHANGE_OUTPUT_COLOR_BUTTON(num) { \
+
+    mUIWindow = std::make_unique<ImGUI::Window>("Output");
+#define ADD_CHANGE_OUTPUT_COLOR_BUTTON(num) { \
             std::shared_ptr<ImGUI::Button> button = \
         std::make_shared<ImGUI::Button>(#num, [&]() { \
             mTmp->mSprite->setTexture(mTmp->mRenderTargetTexs[num], false); \
         }); \
         mUIWindow->addItem(button); \
         }
-    
-        ADD_CHANGE_OUTPUT_COLOR_BUTTON(0);
-        ADD_CHANGE_OUTPUT_COLOR_BUTTON(1);
-        ADD_CHANGE_OUTPUT_COLOR_BUTTON(2);
-        ADD_CHANGE_OUTPUT_COLOR_BUTTON(3);
+
+    ADD_CHANGE_OUTPUT_COLOR_BUTTON(0);
+    ADD_CHANGE_OUTPUT_COLOR_BUTTON(1);
+    ADD_CHANGE_OUTPUT_COLOR_BUTTON(2);
+    ADD_CHANGE_OUTPUT_COLOR_BUTTON(3);
 }
 
 MultiRenderTargetTest::~MultiRenderTargetTest() {}
@@ -185,13 +190,10 @@ void MultiRenderTargetTest::draw() {
     Utility::getContext()->OMGetRenderTargets(backRenderTargetNum, &backRenderTarget, &backDepthStencil);
 
     Utility::getContext()->RSSetViewports(mTmp->RTV_NUM, mTmp->mViewports.data());
-    Utility::getContext()->OMSetRenderTargets(mTmp->RTV_NUM, mTmp->mRenderTargetViews[0].GetAddressOf(), mTmp->mDepthStencil->getDepthStencilView().Get());
-    for (int i = 0; i < mTmp->RTV_NUM; i++) {
-        constexpr float c[4]{ 1.0f,1.0f,1.0f,1.0f };
-        Utility::getContext()->ClearRenderTargetView(mTmp->mRenderTargetViews[i].Get(), c);
-    }
 
-    mTmp->mDepthStencil->clear();
+    mTmp->mRenderTargetViews->set();
+    mTmp->mRenderTargetViews->clear();
+
 
     mPerspectiveCamera->setMatrix();
     mEnemy.draw();
