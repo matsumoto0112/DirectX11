@@ -228,7 +228,7 @@ ShadowMapTest::ShadowMapTest()
     //Z値を描画するときに使用するシェーダーリソースを作成する
     mShaderResourceView = std::make_shared<Graphics::ShaderResourceView>(*mRenderTargetTextureBuffer, nullptr);
 
-    mRenderTargetView = std::make_unique<Graphics::RenderTargetView>(mRenderTargetTextureBuffer->getBuffer().Get(), viewDesc);
+    mRenderTargetView = std::make_unique<Graphics::RenderTargetView>(mRenderTargetTextureBuffer, viewDesc);
 
     D3D11_TEXTURE2D_DESC depthTexDesc;
     ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));

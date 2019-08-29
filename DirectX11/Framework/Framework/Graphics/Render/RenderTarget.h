@@ -9,24 +9,27 @@ namespace Framework {
 namespace Graphics {
 class RenderTargetView;
 class DepthStencilView;
+class TextureBuffer;
 
 /**
 * @class RenderTarget
 * @brief レンダーターゲット
 */
 class RenderTarget {
+private:
+    using TexturePtr = std::shared_ptr<TextureBuffer>;
 public:
     /**
     * @brief コンストラクタ
-    * @param レンダーターゲットに使用するテクスチャ
+    * @param texture レンダーターゲットに使用するテクスチャ
     */
-    RenderTarget(Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTargetTexture);
+    RenderTarget(TexturePtr texture);
     /**
     * @brief コンストラクタ
-    * @param レンダーターゲットに使用するテクスチャ
+    * @param texture レンダーターゲットに使用するテクスチャ
     * @param rtvDesc レンダーターゲットのデスク
     */
-    RenderTarget(Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTargetTexture, const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc);
+    RenderTarget(TexturePtr texture, const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc);
     /**
     * @brief デストラクタ
     */

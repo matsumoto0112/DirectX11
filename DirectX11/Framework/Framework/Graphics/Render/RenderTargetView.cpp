@@ -1,17 +1,19 @@
 #include "RenderTargetView.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
 namespace Framework {
 namespace Graphics {
 
-RenderTargetView::RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource) {
-    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource.Get(), nullptr, &mRenderTargetView);
+RenderTargetView::RenderTargetView(TexturePtr texture) {
+    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(texture->getBuffer().Get(), nullptr, &mRenderTargetView);
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
 }
 
-RenderTargetView::RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
-    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(resource.Get(), &desc, &mRenderTargetView);
+RenderTargetView::RenderTargetView(TexturePtr texture,
+    const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
+    HRESULT hr = Utility::getDevice()->CreateRenderTargetView(texture->getBuffer().Get(), &desc, &mRenderTargetView);
     MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
 }
 

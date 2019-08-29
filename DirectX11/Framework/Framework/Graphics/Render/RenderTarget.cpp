@@ -1,21 +1,22 @@
 #include "RenderTarget.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/RenderTargetView.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
 namespace Framework {
 namespace Graphics {
 
-RenderTarget::RenderTarget(Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTargetTexture)
-    :mRenderTargetView(std::make_unique<RenderTargetView>(renderTargetTexture)),
+RenderTarget::RenderTarget(TexturePtr texture)
+    :mRenderTargetView(std::make_unique<RenderTargetView>(texture)),
     mDepthStencilView(nullptr),
     mUseDepthStencil(false),
     mClearColor(Color4::WHITE) {}
 
-RenderTarget::RenderTarget(Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTargetTexture,
+RenderTarget::RenderTarget(TexturePtr texture,
     const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc)
-    : mRenderTargetView(std::make_unique<RenderTargetView>(renderTargetTexture, rtvDesc)) {}
+    : mRenderTargetView(std::make_unique<RenderTargetView>(texture, rtvDesc)) {}
 
 RenderTarget::~RenderTarget() {}
 

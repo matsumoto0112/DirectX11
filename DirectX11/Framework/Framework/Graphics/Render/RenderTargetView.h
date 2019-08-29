@@ -6,24 +6,26 @@
 
 namespace Framework {
 namespace Graphics {
-
+class TextureBuffer;
 /**
 * @class RenderTargetView
 * @brief レンダーターゲットビュー
 */
 class RenderTargetView {
+private:
+    using TexturePtr = std::shared_ptr<TextureBuffer>;
 public:
     /**
     * @brief コンストラクタ
-    * @param resource リソーステクスチャ
+    * @param texture リソーステクスチャ
     */
-    RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource);
+    RenderTargetView(TexturePtr texture);
     /**
     * @brief コンストラクタ
-    * @param resource リソーステクスチャ
+    * @param texture リソーステクスチャ
     * @param desc レンダーターゲットビューの設定
     */
-    RenderTargetView(Microsoft::WRL::ComPtr<ID3D11Resource> resource, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
+    RenderTargetView(TexturePtr texture, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
     /**
     * @brief デストラクタ
     */
