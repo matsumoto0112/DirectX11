@@ -7,9 +7,11 @@
 namespace Framework {
 namespace Graphics {
 
-MultiRenderTarget::MultiRenderTarget(UINT renderTargetNum, std::vector<Texture2DPtr> texture, const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc)
-    :mRenderTargetViewNum(renderTargetNum),
-    mRTVs(renderTargetNum) {
+MultiRenderTarget::MultiRenderTarget(UINT renderTargetNum,
+    std::vector<Texture2DPtr> texture,
+    const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc,
+    const Math::Rect& rect)
+    :mRTVs(renderTargetNum), mViewport(std::make_unique<MultiViewport>(renderTargetNum, rect)) {
     for (UINT i = 0; i < renderTargetNum; i++) {
         Utility::getDevice()->CreateRenderTargetView(texture[i]->getBuffer().Get(), &rtvDesc, &mRTVs[i]);
     }
@@ -27,25 +29,26 @@ void MultiRenderTarget::bindDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc
 void MultiRenderTarget::set() {
     if (mUseDepthStencil) {
         MY_ASSERTION(mDepthStencilView != nullptr, "深度・ステンシルビューが未作成です");
-        Utility::getContext()->OMSetRenderTargets(mRenderTargetViewNum,
+        Utility::getContext()->OMSetRenderTargets(mRTVs.size(),
             mRTVs[0].GetAddressOf(),
             mDepthStencilView->getDepthStencilView().Get());
     }
     else {
-        Utility::getContext()->OMSetRenderTargets(mRenderTargetViewNum,
+        Utility::getContext()->OMSetRenderTargets(mRTVs.size(),
             mRTVs[0].GetAddressOf(),
             nullptr);
     }
+    mViewport->set();
 }
 
 void MultiRenderTarget::clear() {
-    for (UINT i = 0; i < mRenderTargetViewNum; i++) {
+    const UINT size = mRTVs.size();
+    for (UINT i = 0; i < size; i++) {
         Utility::getContext()->ClearRenderTargetView(mRTVs[i].Get(), mClearColor.get().data());
     }
     if (mUseDepthStencil && mDepthStencilView) {
         mDepthStencilView->clear();
     }
-
 }
 
 } //Graphics 

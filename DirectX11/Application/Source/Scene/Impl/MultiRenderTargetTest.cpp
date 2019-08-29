@@ -16,7 +16,8 @@
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/MultiRenderTarget.h"
 #include "Framework/Utility/ImGUI/Button.h"
-#include <dxgidebug.h>
+#include "Framework/Graphics/Render/AlphaBlendSetting.h"
+
 using namespace Framework;
 
 namespace {
@@ -26,24 +27,8 @@ struct Tmp {
     std::unique_ptr<Graphics::Sprite2D> mSprite;
     std::unique_ptr<Graphics::MultiRenderTarget> mRenderTargetViews;
     std::array<std::shared_ptr<Graphics::Texture>, RTV_NUM> mRenderTargetTexs;
-    std::array<D3D11_VIEWPORT, RTV_NUM> mViewports;
 };
 std::unique_ptr<Tmp> mTmp;
-
-auto CreateTestBlendDesc = []() {
-    D3D11_RENDER_TARGET_BLEND_DESC RenderTarget;
-    ZeroMemory(&RenderTarget, sizeof(RenderTarget));
-    RenderTarget.BlendEnable = FALSE;
-    RenderTarget.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
-    RenderTarget.DestBlend = D3D11_BLEND::D3D11_BLEND_DEST_COLOR;
-    RenderTarget.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    RenderTarget.SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
-    RenderTarget.DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
-    RenderTarget.BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-    RenderTarget.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    return RenderTarget;
-};
-
 }
 
 MultiRenderTargetTest::MultiRenderTargetTest()
@@ -96,10 +81,12 @@ MultiRenderTargetTest::MultiRenderTargetTest()
         texBufs.emplace_back(texBuffer);
     }
 
+    Math::Rect vpRect(0, 0, texDesc.Width, texDesc.Height);
     mTmp->mRenderTargetViews = std::make_unique<Graphics::MultiRenderTarget>(
         mTmp->RTV_NUM,
         texBufs,
-        viewDesc);
+        viewDesc,
+        vpRect);
 
     for (int i = 0; i < mTmp->RTV_NUM; i++) {
         auto srv = std::make_shared<Graphics::ShaderResourceView>(*texBufs[i], nullptr);
@@ -108,12 +95,6 @@ MultiRenderTargetTest::MultiRenderTargetTest()
             srv,
             texDesc.Width,
             texDesc.Height);
-        mTmp->mViewports[i].TopLeftX = 0;
-        mTmp->mViewports[i].TopLeftY = 0;
-        mTmp->mViewports[i].Width = texDesc.Width;
-        mTmp->mViewports[i].Height = texDesc.Height;
-        mTmp->mViewports[i].MinDepth = 0;
-        mTmp->mViewports[i].MaxDepth = 1.0;
     }
 
 
@@ -145,10 +126,10 @@ MultiRenderTargetTest::MultiRenderTargetTest()
     ZeroMemory(&blendDesc, sizeof(blendDesc));
     blendDesc.AlphaToCoverageEnable = FALSE;
     blendDesc.IndependentBlendEnable = FALSE;
-    blendDesc.RenderTarget[0] = CreateTestBlendDesc();
-    blendDesc.RenderTarget[1] = CreateTestBlendDesc();
-    blendDesc.RenderTarget[2] = CreateTestBlendDesc();
-    blendDesc.RenderTarget[3] = CreateTestBlendDesc();
+    blendDesc.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
+    blendDesc.RenderTarget[1] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
+    blendDesc.RenderTarget[2] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
+    blendDesc.RenderTarget[3] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
 
     mTmp->mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(blendDesc);
 
@@ -188,8 +169,6 @@ void MultiRenderTargetTest::draw() {
     UINT backViewportNum = 1;
     Utility::getContext()->RSGetViewports(&backViewportNum, &backViewport);
     Utility::getContext()->OMGetRenderTargets(backRenderTargetNum, &backRenderTarget, &backDepthStencil);
-
-    Utility::getContext()->RSSetViewports(mTmp->RTV_NUM, mTmp->mViewports.data());
 
     mTmp->mRenderTargetViews->set();
     mTmp->mRenderTargetViews->clear();

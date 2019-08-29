@@ -28,6 +28,6 @@ ps_output main(ps_input input)
     o.target0 = float4(outColor.r, 0.0f, 0.0f, outColor.r);
     o.target1 = float4(0.0f, outColor.g, 0.0f, outColor.g);
     o.target2 = float4(0.0f, 0.0f, outColor.b, outColor.b);
-    o.target3 = float4(outColor.a, outColor.a, outColor.a, 1.0f);
+    o.target3 = float4(1 - outColor.a, 1 - outColor.a, 1 - outColor.a, 1.0f);
     return o;
 }
