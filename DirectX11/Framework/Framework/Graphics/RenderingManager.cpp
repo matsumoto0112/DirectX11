@@ -1,7 +1,7 @@
 #include "RenderingManager.h"
-#include "Framework/Define/Desc/DepthStencil.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
+#include "Framework/Graphics/Desc/DepthStencil.h"
 #include "Framework/Graphics/ImGUI/Manager.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Render/RenderTarget.h"
@@ -27,10 +27,10 @@ void RenderingManager::initialize() {
         mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer(),
         std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y)));
     mRenderTarget->bindDepthStencilView(
-        Define::DepthStencilDesc::getDefaultTexture2DDesc(
+        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(
             static_cast<UINT>(mScreenSize.x),
             static_cast<UINT>(mScreenSize.y)),
-        Define::DepthStencilDesc::getDefaultDepthStencilViewDesc());
+        DepthStencilDesc::getDefaultDepthStencilViewDesc());
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }

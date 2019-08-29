@@ -3,7 +3,7 @@
 #include "Framework/Define/Window.h"
 
 namespace Framework {
-namespace Define {
+namespace Graphics {
 
 /**
 * @class DepthStencil

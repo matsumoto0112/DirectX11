@@ -15,18 +15,20 @@ class ByteReader {
 public:
     /**
     * @brief コンストラクタ
+    * @param filepath ファイルパス
     */
-    ByteReader();
+    ByteReader(const std::string& filepath);
     /**
     * @brief デストラクタ
     */
     ~ByteReader();
     /**
-    * @brief 読む
-    * @param filepath ファイルパス
-    * @return 読み込んだデータ
+    * @brief データを取得する
+    * @return 読み込んだデータを返す
     */
-    std::vector<BYTE> read(const std::string& filepath);
+    std::vector<BYTE> get();
+private:
+    std::vector<BYTE> mData;
 };
 
 } //Utility 

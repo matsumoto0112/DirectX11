@@ -7,23 +7,23 @@
 namespace Framework {
 namespace Utility {
 
-ByteReader::ByteReader() {}
-
-ByteReader::~ByteReader() {}
-
-std::vector<BYTE> ByteReader::read(const std::string& filepath) {
+ByteReader::ByteReader(const std::string& filepath) {
     FILE* fp;
     //バイナリデータでファイルを開く
     int ret = fopen_s(&fp, filepath.c_str(), "rb");
     MY_ASSERTION(ret == 0, filepath + "が開けませんでした。");
     fseek(fp, 0, SEEK_END);
     //配列のサイズをデータの大きさにする
-    std::vector<BYTE> byteVector(ftell(fp));
+    mData = std::vector<BYTE>(ftell(fp));
     fseek(fp, 0, SEEK_SET);
-    fread(byteVector.data(), byteVector.size(), 1, fp);
+    fread(mData.data(), mData.size(), 1, fp);
     fclose(fp);
+}
 
-    return byteVector;
+ByteReader::~ByteReader() {}
+
+std::vector<BYTE> ByteReader::get() {
+    return mData;
 }
 
 } //Utility 

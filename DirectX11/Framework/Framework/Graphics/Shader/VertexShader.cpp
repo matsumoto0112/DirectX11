@@ -19,7 +19,7 @@ void VertexShader::create(const std::string& name) {
     //ファイルパスの作成
     const std::string filepath = Define::Path::getInstance().shader() + name + ".cso";
     //シェーダファイルの読み込み
-    std::vector<BYTE> shaderData = mByteReader->read(filepath);
+    std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
     const UINT shaderSize = shaderData.size();
 
     unsigned char *pInStruct = nullptr;

@@ -11,8 +11,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\VertexShader.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexAndIndexBuffer.cpp" />
@@ -33,7 +31,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RendererCommonBufferStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\VertexShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Sprite\Sprite2D.cpp" />
@@ -109,6 +106,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiRenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -119,9 +118,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\VertexShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBufferBindData.h" />
@@ -254,8 +250,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Desc\DepthStencil.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiRenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencil.h" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ void PixelShader::create(const std::string& name) {
     //ファイルパスの作成
     const std::string filename = Define::Path::getInstance().shader() + name + ".cso";
     //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = mByteReader->read(filename);
+    std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
     //シェーダファイル作成
     Utility::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mPixelShader);
 }
