@@ -57,7 +57,7 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, const int screenWidt
 }
 
 DirectX11GraphicsDevice::~DirectX11GraphicsDevice() {
-    // Ú×•\Ž¦
+    //// Ú×•\Ž¦
     //mDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 }
 

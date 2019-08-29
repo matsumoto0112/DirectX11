@@ -27,7 +27,7 @@ public:
     * @param width テクスチャの幅
     * @param height テクスチャの高さ
     */
-    static constexpr D3D11_TEXTURE2D_DESC getDefaultTexture2DDesc(int width, int height) {
+    static constexpr D3D11_TEXTURE2D_DESC getDefaultTexture2DDesc(UINT width, UINT height) {
         D3D11_TEXTURE2D_DESC desc{};
         desc.Width = width;
         desc.Height = height;

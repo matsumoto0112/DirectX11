@@ -253,5 +253,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Desc\DepthStencil.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiRenderTarget.h" />
   </ItemGroup>
 </Project>
