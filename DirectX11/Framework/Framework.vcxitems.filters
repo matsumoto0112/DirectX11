@@ -255,7 +255,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencil.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RenderTargetViewDesc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
   </ItemGroup>
 </Project>

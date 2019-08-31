@@ -16,7 +16,8 @@
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/MultiRenderTarget.h"
 #include "Framework/Utility/ImGUI/Button.h"
-#include "Framework/Graphics/Desc/DepthStencil.h"
+#include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
+#include "Framework/Graphics/Desc/DepthStencilDesc.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 using namespace Framework;
@@ -54,42 +55,25 @@ MultiRenderTargetTest::MultiRenderTargetTest()
         Math::Quaternion::IDENTITY,
         Math::Vector3(1.0f, 1.0f, 1.0f));
 
-    //Z値を格納するテクスチャを作成する
-    D3D11_TEXTURE2D_DESC texDesc;
-    ZeroMemory(&texDesc, sizeof(texDesc));
-    texDesc.Width = Define::Window::WIDTH;
-    texDesc.Height = Define::Window::HEIGHT;
-    texDesc.MipLevels = 1;
-    texDesc.ArraySize = 1;
-    texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
-    texDesc.SampleDesc.Count = 1;
-    texDesc.SampleDesc.Quality = 0;
-    texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-    texDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET;
-    texDesc.CPUAccessFlags = 0;
-
     mTmp = std::make_unique<Tmp>();
-
-    D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
-    ZeroMemory(&viewDesc, sizeof(viewDesc));
-    viewDesc.Format = texDesc.Format;
-    viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     std::vector<std::shared_ptr<Graphics::TextureBuffer>> texBufs;
     for (int i = 0; i < mTmp->RTV_NUM; i++) {
-        auto texBuffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
+        auto texBuffer = std::make_shared<Graphics::TextureBuffer>(Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(
+            Define::Window::WIDTH,
+            Define::Window::HEIGHT));
         texBufs.emplace_back(texBuffer);
     }
 
-    Math::Rect vpRect(0, 0, texDesc.Width, texDesc.Height);
+    Math::Rect vpRect(0, 0, Define::Window::WIDTH, Define::Window::HEIGHT);
     mTmp->mRenderTargetViews = std::make_unique<Graphics::MultiRenderTarget>(
         mTmp->RTV_NUM,
         texBufs,
-        viewDesc,
+        Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
         vpRect);
 
     mTmp->mRenderTargetViews->bindDepthStencilView(
-        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(texDesc.Width, texDesc.Height),
+        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(Define::Window::WIDTH, Define::Window::HEIGHT),
         Graphics::DepthStencilDesc::getDefaultDepthStencilViewDesc());
     mTmp->mRenderTargetViews->setClearColor(Graphics::Color4::WHITE);
 

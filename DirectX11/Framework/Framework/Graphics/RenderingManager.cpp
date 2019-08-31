@@ -1,7 +1,7 @@
 #include "RenderingManager.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
-#include "Framework/Graphics/Desc/DepthStencil.h"
+#include "Framework/Graphics/Desc/DepthStencilDesc.h"
 #include "Framework/Graphics/ImGUI/Manager.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Render/RenderTarget.h"

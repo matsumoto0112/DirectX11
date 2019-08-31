@@ -26,9 +26,13 @@ private:
 public:
     /**
     * @brief コンストラクタ
+    * @param renderTargetNum レンダーターゲット数
+    * @param textures 使用するテクスチャバッファ配列
+    * @param rtvDesc レンダーターゲットデスク
+    * @param rect レンダーターゲットの範囲
     */
     MultiRenderTarget(UINT renderTargetNum,
-        std::vector<Texture2DPtr> texture,
+        std::vector<Texture2DPtr> textures,
         const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc,
         const Math::Rect& rect);
     /**
@@ -56,7 +60,7 @@ private:
     std::vector<RenderTargetViewPtr> mRTVs; //<! レンダーターゲットビュー配列
     std::unique_ptr<DepthStencilView> mDepthStencilView; //!< 深度・ステンシルビュー
     MultiViewportPtr mViewport; //!< ビューポート
-    std::vector<TexturePtr> mRenderTargetTextures; //!< レンダーターゲットのシェーダーリソースビュー配列
+    std::vector<TexturePtr> mRenderTargetTextures; //!< レンダーターゲットのテクスチャ配列
     PROPERTY(Color4, mClearColor, ClearColor);
     PROPERTY(bool, mUseDepthStencil, UseDepthStencil);
 };
