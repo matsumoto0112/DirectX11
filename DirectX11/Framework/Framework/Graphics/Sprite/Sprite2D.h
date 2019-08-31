@@ -142,7 +142,7 @@ public:
     * @param texture 新しいテクスチャデータ
     * @param resize 新しい画像にスプライトの大きさを合わせるかどうか
     */
-    void setTexture(std::shared_ptr<Texture>& texture, bool resize);
+    void setTexture(std::shared_ptr<Texture> texture, bool resize);
 protected:
     std::shared_ptr<Texture> mTexture;
     Math::Vector2 mPosition;

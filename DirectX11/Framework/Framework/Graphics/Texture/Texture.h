@@ -28,7 +28,7 @@ public:
     * @param width テクスチャの幅
     * @param height テクスチャの高さ
     */
-    Texture(Texture2DPtr texture2D, SRVPtr srv, int width, int height);
+    Texture(Texture2DPtr texture2D, SRVPtr srv, int width = 0, int height = 0);
     /**
     * @brief デストラクタ
     */

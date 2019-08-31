@@ -182,6 +182,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />

@@ -16,6 +16,7 @@
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/MultiRenderTarget.h"
 #include "Framework/Utility/ImGUI/Button.h"
+#include "Framework/Graphics/Desc/DepthStencil.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 using namespace Framework;
@@ -26,7 +27,6 @@ struct Tmp {
     std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
     std::unique_ptr<Graphics::Sprite2D> mSprite;
     std::unique_ptr<Graphics::MultiRenderTarget> mRenderTargetViews;
-    std::array<std::shared_ptr<Graphics::Texture>, RTV_NUM> mRenderTargetTexs;
 };
 std::unique_ptr<Tmp> mTmp;
 }
@@ -88,39 +88,12 @@ MultiRenderTargetTest::MultiRenderTargetTest()
         viewDesc,
         vpRect);
 
-    for (int i = 0; i < mTmp->RTV_NUM; i++) {
-        auto srv = std::make_shared<Graphics::ShaderResourceView>(*texBufs[i], nullptr);
-        mTmp->mRenderTargetTexs[i] = std::make_shared<Graphics::Texture>(
-            texBufs[i],
-            srv,
-            texDesc.Width,
-            texDesc.Height);
-    }
-
-
-    D3D11_TEXTURE2D_DESC depthTexDesc;
-    ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
-    depthTexDesc.Width = texDesc.Width;
-    depthTexDesc.Height = texDesc.Height;
-    depthTexDesc.MipLevels = 1;
-    depthTexDesc.ArraySize = 1;
-    depthTexDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    depthTexDesc.SampleDesc.Count = 1;
-    depthTexDesc.SampleDesc.Quality = 0;
-    depthTexDesc.Usage = D3D11_USAGE_DEFAULT;
-    depthTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    depthTexDesc.CPUAccessFlags = 0;
-    depthTexDesc.MiscFlags = 0;
-
-    D3D11_DEPTH_STENCIL_VIEW_DESC dsd;
-    ZeroMemory(&dsd, sizeof(dsd));
-    dsd.Format = depthTexDesc.Format;
-    dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    dsd.Texture2D.MipSlice = 0;
-    mTmp->mRenderTargetViews->bindDepthStencilView(depthTexDesc, dsd);
+    mTmp->mRenderTargetViews->bindDepthStencilView(
+        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(texDesc.Width, texDesc.Height),
+        Graphics::DepthStencilDesc::getDefaultDepthStencilViewDesc());
     mTmp->mRenderTargetViews->setClearColor(Graphics::Color4::WHITE);
 
-    mTmp->mSprite = std::make_unique<Graphics::Sprite2D>(mTmp->mRenderTargetTexs[0]);
+    mTmp->mSprite = std::make_unique<Graphics::Sprite2D>(mTmp->mRenderTargetViews->getRenderTargetTexture(0));
 
     D3D11_BLEND_DESC blendDesc;
     ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -137,7 +110,7 @@ MultiRenderTargetTest::MultiRenderTargetTest()
 #define ADD_CHANGE_OUTPUT_COLOR_BUTTON(num) { \
             std::shared_ptr<ImGUI::Button> button = \
         std::make_shared<ImGUI::Button>(#num, [&]() { \
-            mTmp->mSprite->setTexture(mTmp->mRenderTargetTexs[num], false); \
+            mTmp->mSprite->setTexture(mTmp->mRenderTargetViews->getRenderTargetTexture(num), false); \
         }); \
         mUIWindow->addItem(button); \
         }

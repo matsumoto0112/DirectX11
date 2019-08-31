@@ -11,6 +11,7 @@ namespace Framework {
 namespace Graphics {
 class DepthStencilView;
 class TextureBuffer;
+class Texture;
 
 /**
 * @class MultiRenderTarget
@@ -21,6 +22,7 @@ private:
     using Texture2DPtr = std::shared_ptr<TextureBuffer>;
     using RenderTargetViewPtr = Microsoft::WRL::ComPtr<ID3D11RenderTargetView>;
     using MultiViewportPtr = std::unique_ptr<MultiViewport>;
+    using TexturePtr = std::shared_ptr<Texture>;
 public:
     /**
     * @brief コンストラクタ
@@ -45,10 +47,16 @@ public:
     * @brief レンダーターゲットをクリアする
     */
     void clear();
+    /**
+    * @brief レンダーターゲットのテクスチャを取得する
+    * @param num 配列のインデックス
+    */
+    TexturePtr getRenderTargetTexture(UINT index);
 private:
     std::vector<RenderTargetViewPtr> mRTVs; //<! レンダーターゲットビュー配列
     std::unique_ptr<DepthStencilView> mDepthStencilView; //!< 深度・ステンシルビュー
     MultiViewportPtr mViewport; //!< ビューポート
+    std::vector<TexturePtr> mRenderTargetTextures; //!< レンダーターゲットのシェーダーリソースビュー配列
     PROPERTY(Color4, mClearColor, ClearColor);
     PROPERTY(bool, mUseDepthStencil, UseDepthStencil);
 };

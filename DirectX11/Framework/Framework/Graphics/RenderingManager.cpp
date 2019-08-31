@@ -25,7 +25,8 @@ void RenderingManager::initialize() {
 
     mRenderTarget = std::make_unique<RenderTarget>(
         mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer(),
-        std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y)));
+        std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y)),
+        SRVFlag::NoUse);
     mRenderTarget->bindDepthStencilView(
         Graphics::DepthStencilDesc::getDefaultTexture2DDesc(
             static_cast<UINT>(mScreenSize.x),

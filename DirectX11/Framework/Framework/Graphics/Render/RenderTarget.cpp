@@ -1,6 +1,7 @@
 #include "RenderTarget.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Render/RenderTargetView.h"
+#include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
@@ -8,21 +9,33 @@
 namespace Framework {
 namespace Graphics {
 
-RenderTarget::RenderTarget(TexturePtr texture, ViewportPtr viewport)
+RenderTarget::RenderTarget(TexturePtr texture,
+    ViewportPtr viewport,
+    SRVFlag useSRV)
     :mRenderTargetView(std::make_unique<RenderTargetView>(texture)),
     mDepthStencilView(nullptr),
+    mShaderResourceView(nullptr),
     mViewport(std::move(viewport)),
     mEnableDepthStencil(false),
-    mClearColor(Color4::WHITE) {}
+    mClearColor(Color4::WHITE) {
+    if (useSRV == SRVFlag::Use) {
+        mShaderResourceView = std::make_unique<ShaderResourceView>(*texture, nullptr);
+    }
+}
 
 RenderTarget::RenderTarget(TexturePtr texture,
     const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc,
-    ViewportPtr viewport)
+    ViewportPtr viewport,
+    SRVFlag useSRV)
     : mRenderTargetView(std::make_unique<RenderTargetView>(texture, rtvDesc)),
     mDepthStencilView(nullptr),
     mViewport(std::move(viewport)),
     mEnableDepthStencil(false),
-    mClearColor(Color4::WHITE) {}
+    mClearColor(Color4::WHITE) {
+    if (useSRV == SRVFlag::Use) {
+        mShaderResourceView = std::make_unique<ShaderResourceView>(*texture, nullptr);
+    }
+}
 
 RenderTarget::~RenderTarget() {}
 

@@ -134,7 +134,7 @@ Texture* Sprite2D::getTexture() const {
     return mTexture.get();
 }
 
-void Sprite2D::setTexture(std::shared_ptr<Texture>& texture, bool resize) {
+void Sprite2D::setTexture(std::shared_ptr<Texture> texture, bool resize) {
     mTexture = texture;
     if (resize) {
         setScale(Math::Vector2(

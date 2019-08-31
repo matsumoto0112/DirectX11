@@ -1,6 +1,8 @@
 #include "MultiRenderTarget.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Render/DepthStencilView.h"
+#include "Framework/Graphics/Shader/ShaderResourceView.h"
+#include "Framework/Graphics/Texture/Texture.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
@@ -11,9 +13,15 @@ MultiRenderTarget::MultiRenderTarget(UINT renderTargetNum,
     std::vector<Texture2DPtr> texture,
     const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc,
     const Math::Rect& rect)
-    :mRTVs(renderTargetNum), mViewport(std::make_unique<MultiViewport>(renderTargetNum, rect)) {
+    :mRTVs(renderTargetNum),
+    mViewport(std::make_unique<MultiViewport>(renderTargetNum, rect)),
+    mRenderTargetTextures(renderTargetNum) {
     for (UINT i = 0; i < renderTargetNum; i++) {
         Utility::getDevice()->CreateRenderTargetView(texture[i]->getBuffer().Get(), &rtvDesc, &mRTVs[i]);
+        std::shared_ptr<ShaderResourceView> srv = std::make_shared<ShaderResourceView>(*texture[i], nullptr);
+        mRenderTargetTextures[i] = std::make_shared<Texture>(
+            texture[i],
+            srv);
     }
 }
 
@@ -49,6 +57,11 @@ void MultiRenderTarget::clear() {
     if (mUseDepthStencil && mDepthStencilView) {
         mDepthStencilView->clear();
     }
+}
+
+MultiRenderTarget::TexturePtr MultiRenderTarget::getRenderTargetTexture(UINT index) {
+    MY_ASSERTION(index < mRenderTargetTextures.size(), "”z—ñ‚Ì”ÍˆÍŠO‚Å‚·");
+    return mRenderTargetTextures[index];
 }
 
 } //Graphics 

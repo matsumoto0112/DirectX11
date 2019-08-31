@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
 #include "Framework/Graphics/Shader/ShaderResourceView.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 
@@ -11,7 +12,10 @@ Texture::Texture(Texture2DPtr texture2D, SRVPtr srv, int width, int height)
     :mTexture2D(texture2D),
     mSRV(srv),
     mWidth(width),
-    mHeight(height) {}
+    mHeight(height) {
+    mWidth = mTexture2D->getSize().x;
+    mHeight = mTexture2D->getSize().y;
+}
 
 Texture::~Texture() {}
 
