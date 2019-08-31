@@ -36,13 +36,25 @@ public:
         const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc,
         const Math::Rect& rect);
     /**
+    * @brief コンストラクタ
+    * @param renderTargetNum レンダーターゲット数
+    * @param rect レンダーターゲットの範囲
+    * @details デフォルトのレンダーターゲットの仕様で作成する
+    */
+    MultiRenderTarget(UINT renderTargetNum,
+        const Math::Rect& rect);
+    /**
     * @brief デストラクタ
     */
     ~MultiRenderTarget();
     /**
-    * @brief 深度・ステンシルビューを追加する
+    * @brief 深度・ステンシルビューをデフォルトの仕様で作成する
     */
-    void bindDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc);
+    void createDepthStencilView();
+    /**
+    * @brief 深度・ステンシルビューを作成する
+    */
+    void createDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc);
     /**
     * @brief レンダーターゲットをコンテキストにセットする
     */

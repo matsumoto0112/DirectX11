@@ -18,6 +18,12 @@ public:
     */
     DepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc);
     /**
+    * @brief コンストラクタ
+    * @param width 幅
+    * @param height 高さ
+    */
+    DepthStencilView(UINT width, UINT height);
+    /**
     * @brief デストラクタ
     */
     ~DepthStencilView();

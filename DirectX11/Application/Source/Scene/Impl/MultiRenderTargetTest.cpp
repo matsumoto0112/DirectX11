@@ -57,24 +57,10 @@ MultiRenderTargetTest::MultiRenderTargetTest()
 
     mTmp = std::make_unique<Tmp>();
 
-    std::vector<std::shared_ptr<Graphics::TextureBuffer>> texBufs;
-    for (int i = 0; i < mTmp->RTV_NUM; i++) {
-        auto texBuffer = std::make_shared<Graphics::TextureBuffer>(Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(
-            Define::Window::WIDTH,
-            Define::Window::HEIGHT));
-        texBufs.emplace_back(texBuffer);
-    }
-
     Math::Rect vpRect(0, 0, Define::Window::WIDTH, Define::Window::HEIGHT);
-    mTmp->mRenderTargetViews = std::make_unique<Graphics::MultiRenderTarget>(
-        mTmp->RTV_NUM,
-        texBufs,
-        Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
-        vpRect);
+    mTmp->mRenderTargetViews = std::make_unique<Graphics::MultiRenderTarget>(mTmp->RTV_NUM, vpRect);
 
-    mTmp->mRenderTargetViews->bindDepthStencilView(
-        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(Define::Window::WIDTH, Define::Window::HEIGHT),
-        Graphics::DepthStencilDesc::getDefaultDepthStencilViewDesc());
+    mTmp->mRenderTargetViews->createDepthStencilView();
     mTmp->mRenderTargetViews->setClearColor(Graphics::Color4::WHITE);
 
     mTmp->mSprite = std::make_unique<Graphics::Sprite2D>(mTmp->mRenderTargetViews->getRenderTargetTexture(0));

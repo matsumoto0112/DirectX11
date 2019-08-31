@@ -11,7 +11,7 @@ namespace Framework {
 namespace Graphics {
 class DepthStencilView;
 class RenderTargetView;
-class ShaderResourceView;
+class Texture;
 class TextureBuffer;
 
 /**
@@ -22,8 +22,8 @@ class RenderTarget {
 private:
     using DepthStencilViewPtr = std::unique_ptr<DepthStencilView>;
     using RenderTargetViewPtr = std::unique_ptr<RenderTargetView>;
-    using ShaderResourceViewPtr = std::unique_ptr<ShaderResourceView>;
-    using TexturePtr = std::shared_ptr<TextureBuffer>;
+    using TexturePtr = std::shared_ptr<Texture>;
+    using TextureBufferPtr = std::shared_ptr<TextureBuffer>;
     using ViewportPtr = std::unique_ptr<Viewport>;
 public:
     /**
@@ -32,7 +32,7 @@ public:
     * @param viewport ビューポート
     * @param useSRV シェーダーリソースビューを使用するか
     */
-    RenderTarget(TexturePtr texture, ViewportPtr viewport, SRVFlag useSRV);
+    RenderTarget(TextureBufferPtr texture, ViewportPtr viewport, SRVFlag useSRV);
     /**
     * @brief コンストラクタ
     * @param texture レンダーターゲットに使用するテクスチャ
@@ -40,15 +40,19 @@ public:
     * @param viewport ビューポート
     * @param useSRV シェーダーリソースビューを使用するか
     */
-    RenderTarget(TexturePtr texture, const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc, ViewportPtr viewport, SRVFlag useSRV);
+    RenderTarget(TextureBufferPtr texture, const D3D11_RENDER_TARGET_VIEW_DESC& rtvDesc, ViewportPtr viewport, SRVFlag useSRV);
     /**
     * @brief デストラクタ
     */
     ~RenderTarget();
     /**
-    * @brief 深度・ステンシルビューを追加する
+    * @brief 深度・ステンシルビューをデフォルトの仕様で作成する
     */
-    void bindDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc);
+    void createDepthStencilView();
+    /**
+    * @brief 深度・ステンシルビューを作成する
+    */
+    void createDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc, const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc);
     /**
     * @brief レンダーターゲットをコンテキストにセットする
     */
@@ -61,7 +65,7 @@ private:
     RenderTargetViewPtr mRenderTargetView; //!< レンダーターゲット
     DepthStencilViewPtr mDepthStencilView; //!< 深度・ステンシルビュー
     ViewportPtr mViewport; //!< ビューポート
-    ShaderResourceViewPtr mShaderResourceView; //!< レンダーターゲットのシェーダーリソースビュー
+    TexturePtr mTexture; //!< レンダーターゲットのテクスチャ
     PROPERTY(Color4, mClearColor, ClearColor);
     PROPERTY(bool, mEnableDepthStencil, EnableDepthStencil);
 };
