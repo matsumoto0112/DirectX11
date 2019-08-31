@@ -61,6 +61,10 @@ public:
     * @brief レンダーターゲットをクリアする
     */
     void clear();
+    /**
+    * @brief レンダーターゲットのテクスチャを取得する
+    */
+    TexturePtr getRenderTargetTexture();
 private:
     RenderTargetViewPtr mRenderTargetView; //!< レンダーターゲット
     DepthStencilViewPtr mDepthStencilView; //!< 深度・ステンシルビュー

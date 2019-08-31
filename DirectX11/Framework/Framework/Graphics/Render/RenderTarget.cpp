@@ -89,5 +89,9 @@ void RenderTarget::clear() {
     }
 }
 
+RenderTarget::TexturePtr RenderTarget::getRenderTargetTexture() {
+    return mTexture;
+}
+
 } //Graphics 
 } //Framework 
