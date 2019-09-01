@@ -24,10 +24,9 @@ public:
     * @brief コンストラクタ
     * @param hWnd ウィンドウハンドル
     * @param screenSize スクリーンの大きさ
-    * @param refleshRate リフレッシュレート
     * @param isFullScreen フルスクリーン起動か
     */
-    RenderingManager(HWND hWnd, const Math::Vector2& screenSize, UINT refleshRate, bool isFullScreen);
+    RenderingManager(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen);
     /**
     * @brief デストラクタ
     */

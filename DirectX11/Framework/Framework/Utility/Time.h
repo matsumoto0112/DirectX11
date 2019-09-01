@@ -26,10 +26,10 @@ public:
     */
     void init(float fps);
     void update();
-private:
     float mFPS; //!< ‚±‚ÌƒQ[ƒ€‚Å‚ÌFPS
     FPS mFPSCounter; //!< FPSŒv‘ª
     PROPERTY_READONLY(float, mDeltaTime, DeltaTime);
+private:
 };
 
 } //Utility 

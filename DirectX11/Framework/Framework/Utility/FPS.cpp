@@ -10,7 +10,7 @@ FPS::FPS(UINT sample) {
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&mCounter);
     mOldCounter = mCounter.QuadPart;
-    mFreq = 1000 / (double)freq.QuadPart;
+    mFreq = (double)freq.QuadPart;
     getFPS();
 }
 
@@ -34,11 +34,16 @@ void FPS::setSample(UINT sample) {
     mSumTimes = 0;
 }
 
+double FPS::getTime() {
+    QueryPerformanceCounter(&mCounter);
+    return (double)mCounter.QuadPart * 1000 / mFreq;
+}
+
 double FPS::getCurrentDifferenceTime() {
     QueryPerformanceCounter(&mCounter);
     double diff = (double)(mCounter.QuadPart - mOldCounter); //ç∑ï™
     mOldCounter = mCounter.QuadPart; //ílÇÃçXêV
-    return diff * mFreq;
+    return diff * 1000 / mFreq;
 }
 
 double FPS::updateFPS(double diff) {

@@ -12,6 +12,8 @@
 #include "Framework/Input/InputManager.h"
 #include "Framework/Input/Mouse.h"
 #include "Framework/Window/Window.h"
+#include "Framework/Utility/Time.h"
+#include "Framework/Define/Game.h"
 
 namespace Framework {
 
@@ -45,8 +47,23 @@ int Game::run() {
             DispatchMessage(&msg);
         }
         else {
+            double start = Utility::Time::getInstance().mFPSCounter.getTime();
             update(1.0f / mFPS);
             draw();
+            double end = Utility::Time::getInstance().mFPSCounter.getTime();
+            double diff = end - start;
+            double target = 1000.0 / Define::Game::FPS;
+            double wait = target - diff;
+            MY_DEBUG_LOG(Utility::StringBuilder("diff") << diff);
+            MY_DEBUG_LOG(Utility::StringBuilder("target") << target);
+            MY_DEBUG_LOG(Utility::StringBuilder("wait") << wait);
+            if (wait > 0) {
+                timeBeginPeriod(1);
+                Sleep(wait);
+                timeEndPeriod(1);
+            }
+            double fps = Utility::Time::getInstance().mFPSCounter.getFPS();
+            MY_DEBUG_LOG(Utility::StringBuilder("fps") << fps);
         }
     }
 

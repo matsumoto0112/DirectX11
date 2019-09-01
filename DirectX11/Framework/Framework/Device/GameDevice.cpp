@@ -51,7 +51,6 @@ GameDevice::GameDevice() {
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
         mMainWindow->getHWND(),
         screenSize,
-        Define::Game::FPS,
         false);
     mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);
 }

@@ -6,17 +6,17 @@
 namespace Framework {
 namespace Graphics {
 
-DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UINT screenHeight, UINT refleshRate, bool isFullScreen) {
+DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UINT screenHeight, bool isFullScreen) {
     //スワップチェイン作成
     DXGI_MODE_DESC modeDesc;
     ZeroMemory(&modeDesc, sizeof(modeDesc));
     modeDesc.Width = screenWidth;
     modeDesc.Height = screenHeight;
-    modeDesc.RefreshRate.Numerator = refleshRate;
+    modeDesc.RefreshRate.Numerator = 60;
     modeDesc.RefreshRate.Denominator = 1;
     modeDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    modeDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    modeDesc.Scaling = DXGI_MODE_SCALING_CENTERED;
+    //modeDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+    //modeDesc.Scaling = DXGI_MODE_SCALING_CENTERED;
 
     DXGI_SAMPLE_DESC sampleDesc;
     ZeroMemory(&sampleDesc, sizeof(sampleDesc));
@@ -28,10 +28,10 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
     swapChainDesc.BufferDesc = modeDesc;
     swapChainDesc.SampleDesc = sampleDesc;
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    swapChainDesc.BufferCount = 2;
+    swapChainDesc.BufferCount = 1;
     swapChainDesc.OutputWindow = hWnd;
     swapChainDesc.Windowed = !isFullScreen;
-    swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    //swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
     swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
     D3D_FEATURE_LEVEL level = D3D_FEATURE_LEVEL_11_0;
@@ -62,7 +62,7 @@ DirectX11GraphicsDevice::~DirectX11GraphicsDevice() {
 }
 
 void DirectX11GraphicsDevice::present(UINT syncInterval) {
-    mSwapChain->Present(syncInterval, 0);
+    mSwapChain->Present(0, 0);
 }
 
 std::shared_ptr<TextureBuffer> DirectX11GraphicsDevice::getBackBuffer() {

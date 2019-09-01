@@ -32,6 +32,8 @@ public:
     * @param sample サンプル数(多いほど全体の平均が求まるがメモリを多く使う)
     */
     void setSample(UINT sample);
+
+    double getTime();
 private:
     /**
     * @brief 現在の差分時間（ミリ秒）
