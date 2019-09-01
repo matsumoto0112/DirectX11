@@ -16,7 +16,7 @@ Title::~Title() {}
 
 void Title::load(Framework::Scene::Collecter& collecter) {}
 
-void Title::update(float delta) {}
+void Title::update() {}
 
 bool Title::isEndScene() const {
     return false;

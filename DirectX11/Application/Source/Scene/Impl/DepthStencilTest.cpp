@@ -62,7 +62,7 @@ DepthStencilTest::~DepthStencilTest() {}
 
 void DepthStencilTest::load(Scene::Collecter& collecter) {}
 
-void DepthStencilTest::update(float delta) {
+void DepthStencilTest::update() {
     Math::Matrix4x4 mat = mPerspectiveCamera->getView();
 }
 

@@ -45,7 +45,7 @@ public:
     ~ShadowMapTest();
     virtual void load(Framework::Scene::Collecter& collecter) override;
 
-    virtual void update(float delta) override;
+    virtual void update() override;
 
     virtual bool isEndScene() const override;
 

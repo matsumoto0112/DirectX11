@@ -8,7 +8,7 @@ namespace Utility {
 
 /**
 * @class Time
-* @brief discription
+* @brief 時間管理クラス
 */
 class Time :public Singleton<Time> {
 public:
@@ -25,11 +25,30 @@ public:
     * @param fps このゲームのFPS
     */
     void init(float fps);
-    void update();
+    /**
+    * @brief フレーム開始時に呼ぶ
+    */
+    void startFrame();
+    /**
+    * @brief フレーム終了時に呼ぶ
+    */
+    void endFrame();
+    /**
+    * @brief 決まったFPSを維持するために待機する
+    */
+    void wait();
+private: 
+    float mDeltaTime; //!< 差分時間
+    float mCurrentFPS; //!< 現在のFPS
+    double mStartTime; //!< フレーム開始時間
+    double mEndTime; //!< フレーム終了時間
+    double mFreq; //!< 環境の周波数
+    LARGE_INTEGER mCounter; //!< クロックカウント数
     float mFPS; //!< このゲームでのFPS
     FPS mFPSCounter; //!< FPS計測
-    PROPERTY_READONLY(float, mDeltaTime, DeltaTime);
-private:
+public:
+    ReadonlyProperty<float> DeltaTime{ mDeltaTime };
+    ReadonlyProperty<float> CurrentFPS{ mCurrentFPS };
 };
 
 } //Utility 

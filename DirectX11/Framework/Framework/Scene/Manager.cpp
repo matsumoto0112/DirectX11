@@ -11,9 +11,9 @@ Manager::Manager()
 
 Manager::~Manager() {}
 
-void Manager::update(float delta) {
+void Manager::update() {
     MY_ASSERTION(mCurrentScene, "ƒV[ƒ“‚ª‘¶Ý‚µ‚Ü‚¹‚ñ");
-    mCurrentScene->update(delta);
+    mCurrentScene->update();
     if (mCurrentScene->isEndScene()) {
         loadScene(mCurrentScene->next());
     }

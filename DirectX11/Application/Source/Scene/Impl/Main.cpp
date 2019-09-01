@@ -12,7 +12,7 @@ Main::~Main() {}
 
 void Main::load(Scene::Collecter& collecter) {}
 
-void Main::update(float delta) {
+void Main::update() {
     mManager->update();
 }
 

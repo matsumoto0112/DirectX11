@@ -112,7 +112,7 @@ NormalLightingTest::~NormalLightingTest() {}
 
 void NormalLightingTest::load(Scene::Collecter& collecter) {}
 
-void NormalLightingTest::update(float delta) {}
+void NormalLightingTest::update() {}
 
 bool NormalLightingTest::isEndScene() const {
     return false;

@@ -53,11 +53,11 @@ private:
         ATLASSERT(_CrtCheckMemory());
         return true;
     }
-    virtual void update(float deltaTime) override {
+    virtual void update() override {
         ATLASSERT(_CrtCheckMemory());
 
         mGameDevice.update();
-        mSceneManager->update(deltaTime);
+        mSceneManager->update();
     }
     virtual void draw() override {
         ATLASSERT(_CrtCheckMemory());

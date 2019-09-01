@@ -28,9 +28,8 @@ public:
     ~Manager();
     /**
     * @brief 更新
-    * @param delta 前フレームからの差分時間
     */
-    void update(float delta);
+    void update();
     /**
     * @brief 描画
     */

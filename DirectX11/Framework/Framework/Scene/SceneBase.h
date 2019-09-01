@@ -24,9 +24,8 @@ public:
     virtual void load(Collecter& collecter) = 0;
     /**
     * @brief 更新
-    * @param delta 前フレームからの差分時間
     */
-    virtual void update(float delta) = 0;
+    virtual void update() = 0;
     /**
     * @brief シーンが終了しているか
     */

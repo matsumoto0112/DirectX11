@@ -34,11 +34,6 @@ void FPS::setSample(UINT sample) {
     mSumTimes = 0;
 }
 
-double FPS::getTime() {
-    QueryPerformanceCounter(&mCounter);
-    return (double)mCounter.QuadPart * 1000 / mFreq;
-}
-
 double FPS::getCurrentDifferenceTime() {
     QueryPerformanceCounter(&mCounter);
     double diff = (double)(mCounter.QuadPart - mOldCounter); //ç∑ï™

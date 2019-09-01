@@ -95,7 +95,7 @@ MultiRenderTargetTest::~MultiRenderTargetTest() {}
 
 void MultiRenderTargetTest::load(Scene::Collecter& collecter) {}
 
-void MultiRenderTargetTest::update(float delta) {}
+void MultiRenderTargetTest::update() {}
 
 bool MultiRenderTargetTest::isEndScene() const {
     return false;

@@ -43,9 +43,8 @@ public:
 private:
     /**
     * @brief 更新
-    * @param deltaTime 1フレームの時間
     */
-    virtual void update(float deltaTime) = 0;
+    virtual void update() = 0;
     /**
     * @brief 描画
     */

@@ -34,7 +34,7 @@ ParticleTest::~ParticleTest() {}
 
 void ParticleTest::load(Framework::Scene::Collecter& collecter) {}
 
-void ParticleTest::update(float delta) {}
+void ParticleTest::update() {}
 
 bool ParticleTest::isEndScene() const {
     return false;

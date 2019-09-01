@@ -47,23 +47,13 @@ int Game::run() {
             DispatchMessage(&msg);
         }
         else {
-            double start = Utility::Time::getInstance().mFPSCounter.getTime();
-            update(1.0f / mFPS);
+            Utility::Time::getInstance().startFrame();
+            update();
             draw();
-            double end = Utility::Time::getInstance().mFPSCounter.getTime();
-            double diff = end - start;
-            double target = 1000.0 / Define::Game::FPS;
-            double wait = target - diff;
-            MY_DEBUG_LOG(Utility::StringBuilder("diff") << diff);
-            MY_DEBUG_LOG(Utility::StringBuilder("target") << target);
-            MY_DEBUG_LOG(Utility::StringBuilder("wait") << wait);
-            if (wait > 0) {
-                timeBeginPeriod(1);
-                Sleep(wait);
-                timeEndPeriod(1);
-            }
-            double fps = Utility::Time::getInstance().mFPSCounter.getFPS();
-            MY_DEBUG_LOG(Utility::StringBuilder("fps") << fps);
+            Utility::Time::getInstance().endFrame();
+            Utility::Time::getInstance().wait();
+            float delta = Utility::Time::getInstance().DeltaTime;
+            MY_DEBUG_LOG(Utility::StringBuilder("") << delta);
         }
     }
 
@@ -75,6 +65,7 @@ bool Game::init() {
     Utility::ResourceManager& resManager = Utility::ResourceManager::getInstance();
     (void)Utility::ResourceInitializeOnStart(resManager);
     mGameDevice.initialize();
+    Utility::Time::getInstance().init(mFPS);
     return true;
 }
 

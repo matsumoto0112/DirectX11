@@ -33,7 +33,7 @@ public:
     */
     ~AlphaBlendTest();
     virtual void load(Framework::Scene::Collecter& collecter) override;
-    virtual void update(float delta) override;
+    virtual void update() override;
     virtual bool isEndScene() const override;
     virtual void draw() override;
     virtual void end() override;

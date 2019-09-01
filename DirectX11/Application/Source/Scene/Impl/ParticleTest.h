@@ -30,7 +30,7 @@ public:
     /**
     * @brief XV
     */
-    virtual void update(float delta) override;
+    virtual void update() override;
     /**
     * @brief I—¹‚µ‚Ä‚¢‚é‚©
     */

@@ -6,7 +6,12 @@ namespace Framework {
 namespace Utility {
 
 Time::Time()
-    :mFPSCounter(10) {}
+    :mFPSCounter(10) {
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&mCounter);
+    mFreq = (double)freq.QuadPart;
+}
 
 Time::~Time() {}
 
@@ -14,10 +19,29 @@ void Time::init(float fps) {
     mFPS = fps;
 }
 
-void Time::update() {
-    //ç°âÒÇÃÉãÅ[Évå„ÇÃFPSÇåvë™
-    float fps = mFPSCounter.getFPS();
-    MY_DEBUG_LOG(StringBuilder("FPS:") << fps);
+void Time::startFrame() {
+    QueryPerformanceCounter(&mCounter);
+    double time = (double)mCounter.QuadPart * 1000.0 / mFreq;
+    mDeltaTime = static_cast<float>(time - mStartTime);
+    mStartTime = time;
+}
+
+void Time::endFrame() {
+    QueryPerformanceCounter(&mCounter);
+    mEndTime = (double)mCounter.QuadPart * 1000 / mFreq;
+    mCurrentFPS = static_cast<float>(mFPSCounter.getFPS());
+}
+
+void Time::wait() {
+    double diff = mEndTime - mStartTime;
+    double target = 1000.0 / mFPS;
+    double wait = target - diff;
+
+    if (wait > 0) {
+        timeBeginPeriod(1);
+        Sleep(wait);
+        timeEndPeriod(1);
+    }
 }
 
 } //Utility 

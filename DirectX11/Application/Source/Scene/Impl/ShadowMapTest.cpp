@@ -355,7 +355,7 @@ ShadowMapTest::~ShadowMapTest() {}
 
 void ShadowMapTest::load(Framework::Scene::Collecter & collecter) {}
 
-void ShadowMapTest::update(float delta) {
+void ShadowMapTest::update() {
     f += 0.2f;
 }
 

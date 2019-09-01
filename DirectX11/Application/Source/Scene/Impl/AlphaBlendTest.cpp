@@ -110,7 +110,7 @@ AlphaBlendTest::~AlphaBlendTest() {}
 
 void AlphaBlendTest::load(Scene::Collecter& collecter) {}
 
-void AlphaBlendTest::update(float delta) {
+void AlphaBlendTest::update() {
     f += 1.0f;
     Math::Quaternion rot = Math::Quaternion::createRotateAboutZ(f * 2.5) * Math::Quaternion::createRotateAboutY(f);
     mObj1.setRotate(rot);
