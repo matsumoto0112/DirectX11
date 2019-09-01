@@ -16,9 +16,10 @@ public:
     * @brief コンストラクタ
     * @param hWnd ウィンドウハンドル
     * @param screenSize スクリーンの大きさ
+    * @param refleshRate リフレッシュレート
     * @param isFullScreen フルスクリーンかどうか
     */
-    GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen);
+    GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, UINT refleshRate, bool isFullScreen);
     /**
     * @brief デストラクタ
     */

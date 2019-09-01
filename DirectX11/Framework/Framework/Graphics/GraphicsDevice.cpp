@@ -6,10 +6,9 @@
 namespace Framework {
 namespace Graphics {
 
-GraphicsDevice::GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen)
+GraphicsDevice::GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, UINT refleshRate, bool isFullScreen)
     :mDirectX11Device(std::make_unique<DirectX11GraphicsDevice>(
-        hWnd, static_cast<UINT>(screenSize.x), static_cast<UINT>(screenSize.y), isFullScreen)) {
-}
+        hWnd, static_cast<UINT>(screenSize.x), static_cast<UINT>(screenSize.y), refleshRate, isFullScreen)) {}
 
 GraphicsDevice::~GraphicsDevice() {}
 

@@ -4,6 +4,7 @@
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Utility/Debug.h"
+#include "Framework/Define/Game.h"
 #include "Framework/Window/Window.h"
 
 namespace Framework {
@@ -43,13 +44,14 @@ GameDevice::GameDevice() {
         static_cast<float>(Define::Window::HEIGHT));
     mMainWindow = std::make_unique<Window::Window>(
         screenSize,
-        Math::Vector2(100, 100),
+        Math::Vector2(0, 0),
         Define::Window::TITLE,
         true);
 
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
         mMainWindow->getHWND(),
         screenSize,
+        Define::Game::FPS,
         false);
     mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);
 }

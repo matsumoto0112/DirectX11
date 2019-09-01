@@ -23,7 +23,7 @@ public:
     * @brief コンストラクタ
     * @param hWnd ウィンドウハンドル
     */
-    DirectX11GraphicsDevice(HWND hWnd, const int screenWidth, const int screenHeight, bool isFullScreen);
+    DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UINT screenHeight, UINT refleshRate, bool isFullScreen);
     /**
     * @brief デストラクタ
     */

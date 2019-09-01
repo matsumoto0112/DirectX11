@@ -6,13 +6,13 @@
 namespace Framework {
 namespace Graphics {
 
-DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, const int screenWidth, const int screenHeight, bool isFullScreen) {
+DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UINT screenHeight, UINT refleshRate, bool isFullScreen) {
     //スワップチェイン作成
     DXGI_MODE_DESC modeDesc;
     ZeroMemory(&modeDesc, sizeof(modeDesc));
-    modeDesc.Width = static_cast<int>(screenWidth);
-    modeDesc.Height = static_cast<int>(screenHeight);
-    modeDesc.RefreshRate.Numerator = 60;
+    modeDesc.Width = screenWidth;
+    modeDesc.Height = screenHeight;
+    modeDesc.RefreshRate.Numerator = refleshRate;
     modeDesc.RefreshRate.Denominator = 1;
     modeDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     modeDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;

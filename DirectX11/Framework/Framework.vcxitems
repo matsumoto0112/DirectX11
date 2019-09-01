@@ -70,6 +70,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Texture\TextureBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Texture\TextureLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_draw.cpp" />
@@ -118,6 +119,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\WindowProcedures.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Texture\TextureLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Vertex\Vertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_impl_dx11.h" />

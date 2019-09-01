@@ -108,6 +108,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -258,5 +259,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RenderTargetViewDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,8 @@
     <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Main.cpp" />
+    <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -23,6 +25,9 @@
     <ClInclude Include="Source\Scene\Impl\ShadowMapTest.h" />
     <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
     <ClInclude Include="Source\Scene\Impl\AlphaBlendTest.h" />
+    <ClInclude Include="Source\Scene\Impl\Main.h" />
+    <ClInclude Include="Source\GameObject\GameObjectManager.h" />
+    <ClInclude Include="Source\GameObject\GameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

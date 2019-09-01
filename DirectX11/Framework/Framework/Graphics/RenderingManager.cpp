@@ -12,8 +12,8 @@
 namespace Framework {
 namespace Graphics {
 
-RenderingManager::RenderingManager(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen)
-    :mScreenSize(screenSize), mGraphicsDevice(std::make_unique<GraphicsDevice>(hWnd, screenSize, isFullScreen)),
+RenderingManager::RenderingManager(HWND hWnd, const Math::Vector2& screenSize, UINT refleshRate, bool isFullScreen)
+    :mScreenSize(screenSize), mGraphicsDevice(std::make_unique<GraphicsDevice>(hWnd, screenSize, refleshRate, isFullScreen)),
     mConstantBufferManager(nullptr) {}
 
 RenderingManager::~RenderingManager() {}
