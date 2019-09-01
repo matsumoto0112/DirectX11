@@ -25,9 +25,9 @@ NormalLightingTest::NormalLightingTest()
         })),
     mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
-    fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
-    fbx->importResource(Define::ModelType::Floor, Define::ModelName::FLOOR_NAME);
+    //fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
+    //fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
+    //fbx->importResource(Define::ModelType::Floor, Define::ModelName::FLOOR_NAME);
 
     mWall = fbx->getResource(Define::ModelType::Wall);
 
@@ -58,7 +58,7 @@ NormalLightingTest::NormalLightingTest()
         Math::Vector3(0.0f, 0.5f, 0.0f),
         Math::Quaternion::IDENTITY,
         Math::Vector3(0.5f, 0.5f, 0.5f));
-    mObject.mModel = fbx->getResource(Define::ModelType::Object);
+    //mObject.mModel = fbx->getResource(Define::ModelType::Object);
     mObject.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
@@ -66,7 +66,7 @@ NormalLightingTest::NormalLightingTest()
         Math::Vector3(0.0f, -0.0f, 0.0f),
         Math::Quaternion::IDENTITY,
         Math::Vector3(10.0f, 1.0f, 10.0f));
-    mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
+    //mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
     mFloor.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
@@ -100,12 +100,12 @@ NormalLightingTest::NormalLightingTest()
     mUIWindow->addItem(field); }
 
     //    //mDirectionalLight->getColor();
-    ADD_LIGHT_COLOR_CHANGE_SLIDER(R, r);
-    ADD_LIGHT_COLOR_CHANGE_SLIDER(G, g);
-    ADD_LIGHT_COLOR_CHANGE_SLIDER(B, b);
-    ADD_LIGHT_POSITION_CHANGE_SLIDER(X, x);
-    ADD_LIGHT_POSITION_CHANGE_SLIDER(Y, y);
-    ADD_LIGHT_POSITION_CHANGE_SLIDER(Z, z);
+    //ADD_LIGHT_COLOR_CHANGE_SLIDER(R, r);
+    //ADD_LIGHT_COLOR_CHANGE_SLIDER(G, g);
+    //ADD_LIGHT_COLOR_CHANGE_SLIDER(B, b);
+    //ADD_LIGHT_POSITION_CHANGE_SLIDER(X, x);
+    //ADD_LIGHT_POSITION_CHANGE_SLIDER(Y, y);
+    //ADD_LIGHT_POSITION_CHANGE_SLIDER(Z, z);
 }
 
 NormalLightingTest::~NormalLightingTest() {}
@@ -119,7 +119,7 @@ bool NormalLightingTest::isEndScene() const {
 }
 
 void NormalLightingTest::draw() {
-    mPerspectiveCamera->setMatrix();
+    mPerspectiveCamera->render();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
     for (auto&& transform : mWallTransforms) {
         mWall->draw(transform);
@@ -128,7 +128,7 @@ void NormalLightingTest::draw() {
     mFloor.draw();
 
     mUIWindow->draw();
-    mOrthographicCamera->setMatrix();
+    mOrthographicCamera->render();
     mStr->draw();
 }
 

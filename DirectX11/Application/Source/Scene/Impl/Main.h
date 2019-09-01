@@ -5,6 +5,7 @@
 namespace Framework {
 namespace Graphics {
 class Model;
+class PerspectiveCamera;
 } //Graphics 
 } //Framework 
 
@@ -37,4 +38,5 @@ public:
     virtual Define::SceneType next() override;
 private:
     std::unique_ptr<GameObjectManager> mManager;
+    std::unique_ptr<Framework::Graphics::PerspectiveCamera> mCamera;
 };

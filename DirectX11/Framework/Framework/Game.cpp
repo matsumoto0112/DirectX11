@@ -52,8 +52,6 @@ int Game::run() {
             draw();
             Utility::Time::getInstance().endFrame();
             Utility::Time::getInstance().wait();
-            float delta = Utility::Time::getInstance().DeltaTime;
-            MY_DEBUG_LOG(Utility::StringBuilder("") << delta);
         }
     }
 

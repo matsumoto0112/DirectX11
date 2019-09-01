@@ -17,12 +17,11 @@ static const Framework::Graphics::Color4 DefaultColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 Framework::Graphics::Color4 convertFromFbxDouble(const FbxDouble3& value, double mult) {
     Framework::Graphics::Color4 result;
-    if (mult != 1) {
-
+    //if (mult != 1) {
         result.r = (float)(value[0] * mult);
         result.g = (float)(value[1] * mult);
         result.b = (float)(value[2] * mult);
-    }
+    //}
     result.a = 1.0f;
     return result;
 }
@@ -153,9 +152,9 @@ std::unique_ptr<Model> FBXLoader::load(const std::string& filepath) {
             materialName = mesh->GetNode()->GetMaterial(0)->GetName();
         }
         //マテリアル名が一致するものをそのメッシュが使用するマテリアルとする
-        for (int i = 0; i < matNum; i++) {
-            if (materials[i]->materialName == materialName) {
-                meshes[i]->matIndex = i;
+        for (int j = 0; j < matNum; j++) {
+            if (materials[j]->materialName == materialName) {
+                meshes[i]->matIndex = j;
                 break;
             }
         }

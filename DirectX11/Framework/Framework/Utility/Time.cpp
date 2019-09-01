@@ -22,7 +22,7 @@ void Time::init(float fps) {
 void Time::startFrame() {
     QueryPerformanceCounter(&mCounter);
     double time = (double)mCounter.QuadPart * 1000.0 / mFreq;
-    mDeltaTime = static_cast<float>(time - mStartTime);
+    mDeltaTime = static_cast<float>(time - mStartTime) / 1000;
     mStartTime = time;
 }
 

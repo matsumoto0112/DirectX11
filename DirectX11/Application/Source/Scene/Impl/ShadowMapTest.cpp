@@ -163,8 +163,8 @@ ShadowMapTest::ShadowMapTest()
     mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
     fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
-    fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
-    fbx->importResource(Define::ModelType::Floor, Define::ModelName::FLOOR_NAME);
+    //fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
+    //fbx->importResource(Define::ModelType::Floor, Define::ModelName::FLOOR_NAME);
 
     mWall = fbx->getResource(Define::ModelType::Wall);
 
@@ -184,7 +184,7 @@ ShadowMapTest::ShadowMapTest()
         Math::Vector3(0.0f, 0.5f, 0.0f),
         Math::Quaternion::IDENTITY,
         Math::Vector3(1.0f, 1.0f, 1.0f));
-    mObject.mModel = fbx->getResource(Define::ModelType::Object);
+    //mObject.mModel = fbx->getResource(Define::ModelType::Object);
     mObject.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mObject.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
@@ -192,7 +192,7 @@ ShadowMapTest::ShadowMapTest()
         Math::Vector3(0.0f, -60.0f, 0.0f),
         Math::Quaternion::IDENTITY,
         Math::Vector3(1.0f, 1.0f, 1.0f));
-    mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
+    //mFloor.mModel = fbx->getResource(Define::ModelType::Floor);
     mFloor.mModel->setVertexShader(vs->getResource(Define::VertexShaderType::Model_Lighting));
     mFloor.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Lighting));
 
@@ -411,7 +411,7 @@ void ShadowMapTest::draw() {
         Utility::getContext()->OMGetRenderTargets(1, &backView, &backDepthStencil);
 
         mViewport->set();
-        mPerspectiveCamera->setMatrix();
+        mPerspectiveCamera->render();
 
         //mRenderTargetView->set();
 
@@ -431,7 +431,7 @@ void ShadowMapTest::draw() {
     auto drawWithShadow = [&]() {
         mShadowMapTex->setData(Graphics::ShaderInputType::Pixel, 0);
 
-        mPerspectiveCamera->setMatrix();
+        mPerspectiveCamera->render();
 
         Graphics::LightMatrixCBufferStruct lm;
         lm.view = Math::Matrix4x4::transposition(lightView);
@@ -442,7 +442,7 @@ void ShadowMapTest::draw() {
     };
 
     auto drawNormal = [&]() {
-        mPerspectiveCamera->setMatrix();
+        mPerspectiveCamera->render();
 
         drawObject(mNormalVS, mNormalPS);
     };
@@ -453,7 +453,7 @@ void ShadowMapTest::draw() {
 
     //drawNormal();
 
-    mOrthographicCamera->setMatrix();
+    mOrthographicCamera->render();
     mSprite->draw();
 
     mUIWindow->draw();

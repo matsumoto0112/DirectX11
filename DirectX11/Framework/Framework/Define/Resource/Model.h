@@ -7,12 +7,12 @@ namespace Define {
 * @brief ƒ‚ƒfƒ‹‚ÌŽí—Þ’è‹`
 */
 enum class ModelType {
-    Floor,
-    Enemy,
-    Bullet,
-    Object,
+    Plane,
     Wall,
-    Cube,
+    Red,
+    Green,
+    Blue,
+    Player,
 };
 
 /**
@@ -21,12 +21,12 @@ enum class ModelType {
 */
 class ModelName {
 public:
-    static const std::string FLOOR_NAME;
-    static const std::string OBJECT_NAME;
-    static const std::string ENEMY_NAME;
-    static const std::string BULLET_NAME;
+    static const std::string PLANE;
     static const std::string WALL;
-    static const std::string CUBE;
+    static const std::string RED;
+    static const std::string GREEN;
+    static const std::string BLUE;
+    static const std::string PLAYER;
 };
 
 } //Define 

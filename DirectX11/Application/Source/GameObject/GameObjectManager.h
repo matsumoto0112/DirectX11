@@ -21,6 +21,8 @@ public:
     ~GameObjectManager();
     void update();
     void draw();
+    void addWall(GameObjectPtr wall);
 private:
     GameObjectPtr mPlayer;
+    GameObjectList mWallList;
 };

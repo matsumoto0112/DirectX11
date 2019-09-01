@@ -88,10 +88,15 @@ public:
     */
     float dot(const Quaternion& a) const;
 
+    void normalize();
     /**
     * @brief オイラー角を取得
     */
     Vector3 toEular() const;
+    /**
+    * @brief オイラー角からクォータニオンを生成
+    */
+    static Quaternion fromEular(const Math::Vector3& eular);
 
     static Math::Quaternion conjugate(const Math::Quaternion& q);
 

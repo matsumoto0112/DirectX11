@@ -25,7 +25,7 @@
 #include "Source/Scene/Impl/ShadowMapTest.h"
 #include "Source/Scene/Impl/MultiRenderTargetTest.h"
 #include "Source/Scene/Impl/AlphaBlendTest.h"
-
+#include "Source/Scene/Impl/Main.h"
 
 using namespace Framework;
 
@@ -45,27 +45,27 @@ private:
         mSceneManager = std::make_unique<Scene::Manager>();
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
-        mSceneManager->registerScene(Define::SceneType::MultiRenderTargetTest, std::make_unique<MultiRenderTargetTest>());
-        mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
-        mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
-        mSceneManager->loadScene(Define::SceneType::MultiRenderTargetTest);
+        //mSceneManager->registerScene(Define::SceneType::MultiRenderTargetTest, std::make_unique<MultiRenderTargetTest>());
+        //mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
+        //mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
+        mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
+        mSceneManager->loadScene(Define::SceneType::MainPlay);
 
         ATLASSERT(_CrtCheckMemory());
         return true;
     }
     virtual void update() override {
-        ATLASSERT(_CrtCheckMemory());
-
         mGameDevice.update();
         mSceneManager->update();
+        ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        ATLASSERT(_CrtCheckMemory());
-        mGameDevice.getRenderingManager()->drawBegin(Graphics::Color4::WHITE);
+        mGameDevice.getRenderingManager()->drawBegin(Graphics::Color4::BLACK);
 
         mSceneManager->draw();
 
         mGameDevice.getRenderingManager()->drawEnd();
+        ATLASSERT(_CrtCheckMemory());
     }
     virtual void finalize() override {
         Game::finalize();

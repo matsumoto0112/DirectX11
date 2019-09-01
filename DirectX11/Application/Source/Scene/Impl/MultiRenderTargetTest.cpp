@@ -45,8 +45,8 @@ MultiRenderTargetTest::MultiRenderTargetTest()
         })),
     mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    fbx->importResource(Define::ModelType::Enemy, Define::ModelName::ENEMY_NAME);
-    mEnemy.mModel = fbx->getResource(Define::ModelType::Enemy);
+    //fbx->importResource(Define::ModelType::Enemy, Define::ModelName::ENEMY_NAME);
+    //mEnemy.mModel = fbx->getResource(Define::ModelType::Enemy);
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse_Split4Color, Define::PixelShaderName::MODEL_DIFFUSE_SPLIT4COLOR);
     mEnemy.mModel->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse_Split4Color));
@@ -117,14 +117,14 @@ void MultiRenderTargetTest::draw() {
     mTmp->mRenderTargetViews->clear();
 
 
-    mPerspectiveCamera->setMatrix();
+    mPerspectiveCamera->render();
     mEnemy.draw();
 
     //‘O‚Ìó‘Ô‚ð•œŒ³
     Utility::getContext()->RSSetViewports(backViewportNum, &backViewport);
     Utility::getContext()->OMSetRenderTargets(backRenderTargetNum, &backRenderTarget, backDepthStencil);
 
-    mOrthographicCamera->setMatrix();
+    mOrthographicCamera->render();
     mTmp->mSprite->draw();
 
     backRenderTarget->Release();

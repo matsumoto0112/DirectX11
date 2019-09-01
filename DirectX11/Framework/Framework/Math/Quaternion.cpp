@@ -1,8 +1,10 @@
 #include "Quaternion.h"
 #include <math.h>
-#include "Framework/Math/Vector3.h"
-#include "Framework/Math/Matrix4x4.h"
+#include "Vector3.h"
+#include "Matrix4x4.h"
 #include "Framework/Utility/Debug.h"
+#include "MathUtility.h"
+
 namespace Framework {
 namespace Math {
 const Quaternion Quaternion::IDENTITY = Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
@@ -27,10 +29,10 @@ void Quaternion::setToRotateAboutX(float degree) {
 }
 
 void Quaternion::setToRotateAboutY(float degree) {
-    const float thetaOver2 = MathUtility::toRadian(degree) * 0.5f;
-    w = cosf(thetaOver2);
+    const float thetaOver2 = degree * 0.5f;
+    w = MathUtility::cos(thetaOver2);
     x = 0.0f;
-    y = sinf(thetaOver2);
+    y = MathUtility::sin(thetaOver2);
     z = 0.0f;
 }
 
@@ -109,23 +111,53 @@ float Quaternion::dot(const Quaternion& a) const {
     return w * a.w + x * a.x + y * a.y + z * a.z;
 }
 
+void Quaternion::normalize() {
+    const float len = MathUtility::sqrt(w * w + x * x + y * y + z * z);
+    if (len > 0) {
+        float oneOverLen = 1.0f / len;
+        w *= oneOverLen;
+        x *= oneOverLen;
+        y *= oneOverLen;
+        z *= oneOverLen;
+    }
+}
+
 Vector3 Quaternion::toEular() const {
-    float ww = w * w;
-    float wx = w * x;
-    float wy = w * y;
-    float wz = w * z;
-    float xx = x * x;
-    float xy = x * y;
-    float xz = x * z;
-    float yy = y * y;
-    float yz = y * z;
-    float zz = z * z;
-    Math::Vector3 result(
-        MathUtility::atan2(2.0f *(yz + wx), ww - xx - yy + zz),
-        MathUtility::asin(2.0f * (wy - xz)),
-        MathUtility::atan2(2.0f *(xy + wz), ww + xx - yy - zz)
-    );
-    return result;
+    float rx, ry, rz;
+    float sy = -2.0f *(y * z + w * x);
+    if (MathUtility::abs(sy) > 0.9999f) {
+        rx = PI / 2 * sy;
+        ry = MathUtility::atan2(-x * z - w * y, 0.5f - y * y - z * z);
+        rz = 0.0f;
+    }
+    else {
+        rx = MathUtility::asin(sy);
+        ry = MathUtility::atan2(x * z - w * y, 0.5f - x * x - y * y);
+        rz = MathUtility::atan2(x * y - w * z, 0.5f - x * x - z * z);
+    }
+    return Vector3(rx, ry, rz);
+}
+
+Quaternion Quaternion::fromEular(const Math::Vector3& eular) {
+    float x = MathUtility::toRadian(eular.x) * 0.5f;
+    float y = MathUtility::toRadian(eular.y) * 0.5f;
+    float z = MathUtility::toRadian(eular.z) * 0.5f;
+
+    float c1 = std::cosf(x);
+    float c2 = std::cosf(y);
+    float c3 = std::cosf(z);
+
+    float s1 = std::sinf(x);
+    float s2 = std::sinf(y);
+    float s3 = std::sinf(z);
+
+    Quaternion res;
+    res.x = s1 * c2 * c3 + c1 * s2 * s3;
+    res.y = c1 * s2 * c3 - s1 * c2 * s3;
+    res.z = c1 * c2 * s3 - s1 * s2 * c3;
+    res.w = c1 * c2 * c3 + s1 * s2 * s3;
+
+    return res;
 }
 
 Math::Quaternion Quaternion::conjugate(const Math::Quaternion& q) {

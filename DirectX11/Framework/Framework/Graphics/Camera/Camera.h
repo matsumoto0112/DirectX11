@@ -20,7 +20,7 @@ public:
     */
     ~Camera();
 
-    virtual void setMatrix();
+    virtual void render();
 private:
     PROPERTY(Math::Matrix4x4, mView, View);
     PROPERTY(Math::Matrix4x4, mProjection, Projection);

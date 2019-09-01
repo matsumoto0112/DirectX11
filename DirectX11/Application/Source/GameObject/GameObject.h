@@ -19,6 +19,6 @@ public:
     virtual ~GameObject() = default;
     virtual void update() {};
     virtual void draw() {};
-private:
+protected:
     Framework::Utility::Transform mTransform;
 };

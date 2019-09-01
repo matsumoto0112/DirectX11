@@ -24,8 +24,8 @@ DepthStencilTest::DepthStencilTest()
         })),
     mOrthographicCamera(std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize())) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
-    mModel = fbx->getResource(Define::ModelType::Object);
+    //fbx->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
+    //mModel = fbx->getResource(Define::ModelType::Object);
     mModel->setVertexShader(Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
     mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_NoTexture));
 
@@ -71,7 +71,7 @@ bool DepthStencilTest::isEndScene() const {
 }
 
 void DepthStencilTest::draw() {
-    mPerspectiveCamera->setMatrix();
+    mPerspectiveCamera->render();
     Graphics::Color4 color(1.0f, 1.0f, 1.0f, 1.0f);
     for (int i = 0; i < mModelTransforms.size(); i++) {
         color.r = i * 0.2f;
@@ -79,7 +79,7 @@ void DepthStencilTest::draw() {
         mModel->draw(*mModelTransforms[i]);
     }
 
-    mOrthographicCamera->setMatrix();
+    mOrthographicCamera->render();
     mStr->draw();
 }
 

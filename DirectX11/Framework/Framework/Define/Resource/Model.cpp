@@ -1,11 +1,11 @@
 #include "Model.h"
 
 namespace Define {
-const std::string ModelName::FLOOR_NAME = "floor/floor.fbx";
-const std::string ModelName::OBJECT_NAME = "object/object.fbx";
-const std::string ModelName::ENEMY_NAME = "soldier/14070_WWII_Soldier_with_Rife_v1_L1.fbx";
-const std::string ModelName::BULLET_NAME = "bullet/bullet.fbx";
-const std::string ModelName::WALL = "wall/wall.fbx";
-const std::string ModelName::CUBE = "cube/cube.fbx";
+const std::string ModelName::PLANE = "stage/Plane.fbx";
+const std::string ModelName::WALL = "stage/wall.fbx";
+const std::string ModelName::RED = "stage/red.fbx";
+const std::string ModelName::GREEN = "stage/green.fbx";
+const std::string ModelName::BLUE = "stage/blue.fbx";
+const std::string ModelName::PLAYER = "player/player.fbx";
 
 } //Define 

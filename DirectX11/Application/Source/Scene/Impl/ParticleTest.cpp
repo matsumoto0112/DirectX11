@@ -25,8 +25,8 @@ ParticleTest::ParticleTest()
     origin->setLifeTime(10.0f);
     mParticle = std::make_unique<Graphics::SimpleParticleEmitter>(origin);
 
-    Utility::ResourceManager::getInstance().getFBXModel()->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
-    model = Utility::ResourceManager::getInstance().getFBXModel()->getResource(Define::ModelType::Object);
+    //Utility::ResourceManager::getInstance().getFBXModel()->importResource(Define::ModelType::Object, Define::ModelName::OBJECT_NAME);
+    //model = Utility::ResourceManager::getInstance().getFBXModel()->getResource(Define::ModelType::Object);
     model->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model));
 }
 

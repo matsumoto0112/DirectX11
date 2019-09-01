@@ -9,7 +9,7 @@ Camera::Camera(const Math::Matrix4x4& view, const Math::Matrix4x4& proj)
 
 Camera::~Camera() {}
 
-void Camera::setMatrix() {
+void Camera::render() {
     ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
     cbManager->setMatrix(ConstantBufferParameterType::View, mView);
     cbManager->setMatrix(ConstantBufferParameterType::Projection, mProjection);

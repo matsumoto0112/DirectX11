@@ -58,9 +58,9 @@ AlphaBlendTest::AlphaBlendTest()
         1000.0f
         })) {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    fbx->importResource(Define::ModelType::Cube, Define::ModelName::CUBE);
-    mEnemy.mModel = fbx->getResource(Define::ModelType::Cube);
-    mEnemy.mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Diffuse));
+    //fbx->importResource(Define::ModelType::Cube, Define::ModelName::CUBE);
+    //mEnemy.mModel = fbx->getResource(Define::ModelType::Cube);
+    //mEnemy.mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Diffuse));
     mObj1 = Utility::Transform(
         Math::Vector3::ZERO,
         Math::Quaternion::IDENTITY,
@@ -127,7 +127,7 @@ void AlphaBlendTest::draw() {
     mAlphaBlend->set();
     {
         Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mObj1Color);
-        mPerspectiveCamera->setMatrix();
+        mPerspectiveCamera->render();
         mEnemy.mTransform = mObj1;
         mEnemy.draw();
     }
