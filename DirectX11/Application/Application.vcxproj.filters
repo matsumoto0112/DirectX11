@@ -17,6 +17,7 @@
     <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\Floor.cpp" />
     <ClCompile Include="Source\GameObject\Bullet.cpp" />
+    <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
     <ClInclude Include="Source\GameObject\Bullet.h" />
+    <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

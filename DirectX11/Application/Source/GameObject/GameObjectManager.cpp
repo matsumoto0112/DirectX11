@@ -13,6 +13,9 @@ void GameObjectManager::update() {
     for (auto&& bullet : mBullets) {
         bullet->update();
     }
+    for (auto&& enemy : mEnemy) {
+        enemy->update();
+    }
 }
 
 void GameObjectManager::draw() {
@@ -20,6 +23,11 @@ void GameObjectManager::draw() {
     mPlayer->draw();
     for (auto&& bullet : mBullets) {
         bullet->draw();
+    }
+
+
+    for (auto&& enemy : mEnemy) {
+        enemy->draw();
     }
 
     for (auto&& wall : mWallList) {
@@ -33,4 +41,8 @@ void GameObjectManager::addWall(GameObjectPtr wall) {
 
 void GameObjectManager::addBullet(GameObjectPtr bullet) {
     mBullets.emplace_back(std::move(bullet));
+}
+
+void GameObjectManager::addEnemy(GameObjectPtr enemy) {
+    mEnemy.emplace_back(std::move(enemy));
 }

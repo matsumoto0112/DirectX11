@@ -8,5 +8,6 @@ const std::string ModelName::GREEN = "stage/green.fbx";
 const std::string ModelName::BLUE = "stage/blue.fbx";
 const std::string ModelName::PLAYER = "player/player.fbx";
 const std::string ModelName::BULLET = "bullet/bullet.fbx";
+const std::string ModelName::ENEMY = "enemy/enemy.fbx";
 
 } //Define 
