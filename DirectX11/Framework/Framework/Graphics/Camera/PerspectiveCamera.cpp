@@ -47,11 +47,11 @@ const Math::Vector3& PerspectiveCamera::getUpVector() const {
     return mInfo.up;
 }
 
-Math::Vector3 PerspectiveCamera::screenToWorldPosition(const Math::Vector2 & pos, float z) {
+Math::Vector3 PerspectiveCamera::screenToWorldPosition(const Math::Vector2 & pos, float z) const {
     return screenToWorldPosition(pos, z, Define::Window::getSize());
 }
 
-Math::Vector3 PerspectiveCamera::screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize) {
+Math::Vector3 PerspectiveCamera::screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize) const {
     Math::Matrix4x4 invView = Math::Matrix4x4::inverse(mView);
     Math::Matrix4x4 invProj = Math::Matrix4x4::inverse(mProjection);
     Math::Matrix4x4 vp(

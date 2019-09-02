@@ -11,17 +11,34 @@
 using namespace Framework;
 
 namespace {
-
-Math::Vector3 getPos(IMainSceneMediator& mediator) {
-    Math::Vector2 mousePositon = Utility::getInputManager()->getMouse().getMousePosition();
-
-    Math::Vector3 nearPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 0.0f);
-    Math::Vector3 farPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 1.0f);
+//マウスの座標を平面上の座標に変換する
+Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::PerspectiveCamera* camera) {
+    Math::Vector3 nearPos = camera->screenToWorldPosition(mouse, 0.0f);
+    Math::Vector3 farPos = camera->screenToWorldPosition(mouse, 1.0f);
     Math::Vector3 pos;
     if (!Utility::Collision::line_plane(Math::Line(nearPos, farPos), Math::Plane(Math::Vector3(0, 0, 0), Math::Vector3::UP), &pos)) {
         pos = farPos;
     }
     return pos;
+}
+
+//マウスの方向を向くクォータニオンを計算する
+Math::Quaternion calcMouseLookat(const Math::Vector3& player, const Graphics::PerspectiveCamera* camera) {
+    Math::Vector3 pos = getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), camera);
+
+    Math::Vector3 z = (pos - player).getNormal();
+    Math::Vector3 x = Math::Vector3::cross(Math::Vector3::UP, z).getNormal();
+    Math::Vector3 y = Math::Vector3::cross(z, x).getNormal();
+
+    Math::Matrix4x4 mat = Math::Matrix4x4(
+        x.x, x.y, x.z, 0,
+        y.x, y.y, y.z, 0,
+        z.x, z.y, z.z, 0,
+        0, 0, 0, 1
+    );
+
+    Math::Quaternion rot = mat.toQuaternion();
+    return rot;
 }
 }
 
@@ -51,20 +68,5 @@ void Player::update() {
 
     mTransform.setPosition(mTransform.getPosition() + movement * mMoveSpeed *  Utility::Time::getInstance().DeltaTime);
 
-    Math::Vector3 pos = getPos(mMediator);
-    Math::Vector3 playerPosition = mTransform.getPosition();
-
-    Math::Vector3 z = (pos - playerPosition).getNormal();
-    Math::Vector3 x = Math::Vector3::cross(Math::Vector3::UP, z).getNormal();
-    Math::Vector3 y = Math::Vector3::cross(z, x).getNormal();
-
-    Math::Matrix4x4 mat = Math::Matrix4x4(
-        x.x, x.y, x.z, 0,
-        y.x, y.y, y.z, 0,
-        z.x, z.y, z.z, 0,
-        0, 0, 0, 1
-    );
-
-    Math::Quaternion rot = mat.toQuaternion();
-    mTransform.setRotate(rot);
+    mTransform.setRotate(calcMouseLookat(mTransform.getPosition(), mMediator.getMainCamera()));
 }
