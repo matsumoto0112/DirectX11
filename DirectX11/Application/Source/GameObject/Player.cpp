@@ -51,4 +51,10 @@ void Player::update() {
     mTransform.setPosition(mTransform.getPosition() + movement * mMoveSpeed *  Utility::Time::getInstance().DeltaTime);
 
     mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
+
+    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left)) {
+        Utility::Transform bullet = mTransform;
+        bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
+        mMediator.shotBullet(bullet);
+    }
 }

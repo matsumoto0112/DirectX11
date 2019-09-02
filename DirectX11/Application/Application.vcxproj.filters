@@ -16,6 +16,7 @@
     <ClCompile Include="Source\GameObject\Wall.cpp" />
     <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\Floor.cpp" />
+    <ClCompile Include="Source\GameObject\Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Source\GameObject\Floor.h" />
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
+    <ClInclude Include="Source\GameObject\Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

@@ -39,6 +39,8 @@ public:
     virtual Define::SceneType next() override;
 
     virtual Framework::Graphics::PerspectiveCamera* getMainCamera() override;
+
+    virtual void shotBullet(const Framework::Utility::Transform& transform) override;
 private:
     std::unique_ptr<GameObjectManager> mManager;
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mCamera;

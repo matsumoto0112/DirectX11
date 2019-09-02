@@ -13,6 +13,7 @@ enum class ModelType {
     Green,
     Blue,
     Player,
+    Bullet,
 };
 
 /**
@@ -27,6 +28,7 @@ public:
     static const std::string GREEN;
     static const std::string BLUE;
     static const std::string PLAYER;
+    static const std::string BULLET;
 };
 
 } //Define 

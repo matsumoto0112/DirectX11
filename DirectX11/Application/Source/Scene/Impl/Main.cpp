@@ -7,6 +7,7 @@
 #include "Framework/Define/Window.h"
 #include "Source/GameObject/Wall.h"
 #include "Source/GameObject/Floor.h"
+#include "Source/GameObject/Bullet.h"
 
 #define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
     const float defValue  = mCamera->getPosition().##type; \
@@ -37,6 +38,7 @@ Main::Main() {
     fbx->importResource(Define::ModelType::Blue, Define::ModelName::BLUE);
     fbx->importResource(Define::ModelType::Green, Define::ModelName::GREEN);
     fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
+    fbx->importResource(Define::ModelType::Bullet, Define::ModelName::BULLET);
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
@@ -44,6 +46,7 @@ Main::Main() {
     fbx->getResource(Define::ModelType::Plane)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
     fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
     fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
+    fbx->getResource(Define::ModelType::Bullet)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
 
     std::unique_ptr<GameObject> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Floor> floor = std::make_unique<Floor>(Utility::Transform(
@@ -103,4 +106,8 @@ Define::SceneType Main::next() {
 
 Graphics::PerspectiveCamera* Main::getMainCamera() {
     return mCamera.get();
+}
+
+void Main::shotBullet(const Utility::Transform& transform) {
+    mManager->addBullet(std::make_unique<Bullet>(transform));
 }

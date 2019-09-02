@@ -1,6 +1,6 @@
 #pragma once
-
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
+#include "Framework/Utility/Transform.h"
 
 /**
 * @class IMainSceneMediator
@@ -16,4 +16,8 @@ public:
     * @brief ƒƒCƒ“ƒJƒƒ‰‚ğæ“¾‚·‚é
     */
     virtual Framework::Graphics::PerspectiveCamera* getMainCamera() = 0;
+    /**
+    * @brief ’e‚ğ’Ç‰Á‚·‚é
+    */
+    virtual void shotBullet(const Framework::Utility::Transform& transform) = 0;
 };

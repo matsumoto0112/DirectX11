@@ -22,8 +22,10 @@ public:
     void update();
     void draw();
     void addWall(GameObjectPtr wall);
+    void addBullet(GameObjectPtr bullet);
 private:
     GameObjectPtr mPlayer;
     GameObjectPtr mFloor;
     GameObjectList mWallList;
+    GameObjectList mBullets;
 };
