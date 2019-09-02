@@ -54,5 +54,20 @@ void Transform::setParent(Transform* parent) {
     mParent = parent;
 }
 
+void Transform::lookat(const Math::Vector3& target) {
+    Math::Vector3 z = (target - mPosition).getNormal();
+    Math::Vector3 x = Math::Vector3::cross(Math::Vector3::UP, z).getNormal();
+    Math::Vector3 y = Math::Vector3::cross(z, x).getNormal();
+
+    Math::Matrix4x4 mat = Math::Matrix4x4(
+        x.x, x.y, x.z, 0,
+        y.x, y.y, y.z, 0,
+        z.x, z.y, z.z, 0,
+        0, 0, 0, 1
+    );
+
+    mRotation = mat.toQuaternion();
+}
+
 } //Utility 
 } //Framework 

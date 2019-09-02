@@ -22,24 +22,6 @@ Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::
     return pos;
 }
 
-//マウスの方向を向くクォータニオンを計算する
-Math::Quaternion calcMouseLookat(const Math::Vector3& player, const Graphics::PerspectiveCamera* camera) {
-    Math::Vector3 pos = getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), camera);
-
-    Math::Vector3 z = (pos - player).getNormal();
-    Math::Vector3 x = Math::Vector3::cross(Math::Vector3::UP, z).getNormal();
-    Math::Vector3 y = Math::Vector3::cross(z, x).getNormal();
-
-    Math::Matrix4x4 mat = Math::Matrix4x4(
-        x.x, x.y, x.z, 0,
-        y.x, y.y, y.z, 0,
-        z.x, z.y, z.z, 0,
-        0, 0, 0, 1
-    );
-
-    Math::Quaternion rot = mat.toQuaternion();
-    return rot;
-}
 }
 
 Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator)
@@ -52,21 +34,21 @@ Player::~Player() {}
 void Player::update() {
     const Input::Keyboard& key = Utility::getInputManager()->getKeyboard();
     Math::Vector3 movement = Math::Vector3::ZERO;
-    if (key.getKey(Input::KeyCode::Left)) {
+    if (key.getKey(Input::KeyCode::A)) {
         movement.x--;
     }
-    if (key.getKey(Input::KeyCode::Right)) {
+    if (key.getKey(Input::KeyCode::D)) {
         movement.x++;
     }
-    if (key.getKey(Input::KeyCode::Up)) {
+    if (key.getKey(Input::KeyCode::W)) {
         movement.z++;
     }
-    if (key.getKey(Input::KeyCode::Down)) {
+    if (key.getKey(Input::KeyCode::S)) {
         movement.z--;
     }
     movement.normalize();
 
     mTransform.setPosition(mTransform.getPosition() + movement * mMoveSpeed *  Utility::Time::getInstance().DeltaTime);
 
-    mTransform.setRotate(calcMouseLookat(mTransform.getPosition(), mMediator.getMainCamera()));
+    mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
 }

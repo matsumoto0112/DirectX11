@@ -68,8 +68,15 @@ public:
     * @brief ローカルのSRT行列の作成
     */
     Math::Matrix4x4 createLocalSRTMatrix() const;
+    /**
+    * @brief トランスフォームのペアレントを設定する
+    */
     void setParent(Transform* parent);
-
+    /**
+    * @brief ターゲットの方向を向くように回転をセットする
+    * @param target 向かうターゲットの座標
+    */
+    void lookat(const Math::Vector3& target);
 private:
     Transform* mParent; //!< 親のトランスフォーム
     Math::Vector3 mPosition; //!< 座標
