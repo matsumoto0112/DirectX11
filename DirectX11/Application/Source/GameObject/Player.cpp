@@ -10,38 +10,12 @@
 using namespace Framework;
 
 namespace {
-Math::Vector3 calc(const Math::Vector3& mouse,
-    const Math::Matrix4x4& invView,
-    const Math::Matrix4x4& invProj,
-    const Math::Matrix4x4& invVP) {
-    Math::Matrix4x4 tmp = invVP * invProj * invView;
-    Math::Matrix4x4 pos = Math::Matrix4x4::createTranslate(mouse);
-    Math::Matrix4x4 m = pos * tmp;
-    Math::Vector3 res(m.m[3][0] / m.m[3][3], m.m[3][1] / m.m[3][3], m.m[3][2] / m.m[3][3]);
-    return res;
-}
 
 Math::Vector3 getPos(IMainSceneMediator& mediator) {
     Math::Vector2 mousePositon = Utility::getInputManager()->getMouse().getMousePosition();
-    Math::Matrix4x4 view = mediator.getMainCamera()->getView();
-    Math::Matrix4x4 proj = mediator.getMainCamera()->getProjection();
-    float x = Define::Window::WIDTH / 2;
-    float y = Define::Window::HEIGHT / 2;
-    Math::Matrix4x4 viewport = Math::Matrix4x4(
-        x, 0, 0, 0,
-        0, -y, 0, 0,
-        0, 0, 1, 0,
-        x, y, 0, 1
-    );
 
-    view = Math::Matrix4x4::inverse(view);
-    proj = Math::Matrix4x4::inverse(proj);
-    viewport = Math::Matrix4x4::inverse(viewport);
-
-    Math::Vector3 nearPos = calc(Math::Vector3(mousePositon.x, mousePositon.y, 0.0f),
-        view, proj, viewport);
-    Math::Vector3 farPos = calc(Math::Vector3(mousePositon.x, mousePositon.y, 1.0f),
-        view, proj, viewport);
+    Math::Vector3 nearPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 0.0f);
+    Math::Vector3 farPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 1.0f);
     Math::Vector3 ray = farPos - nearPos;
     ray.normalize();
 

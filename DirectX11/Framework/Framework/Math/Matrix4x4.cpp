@@ -501,6 +501,12 @@ Matrix4x4 Matrix4x4::lerp(const Matrix4x4& mat1, const Matrix4x4& mat2, float t)
     return mat1 * (1.0f - t) + mat2 * t;
 }
 
+Vector3 Matrix4x4::multiplyCoord(const Math::Vector3& v, const Math::Matrix4x4& m) {
+    Math::Matrix4x4 mat = createTranslate(v) * m;
+    Math::Vector3 res(mat.m[3][0] / mat.m[3][3], mat.m[3][1] / mat.m[3][3], mat.m[3][2] / mat.m[3][3]);
+    return res;
+}
+
 Vector3 operator*(const Vector3& v, const Matrix4x4& mat) {
     float x = v.x * mat.m[0][0] + v.y * mat.m[1][0] + v.z * mat.m[2][0] + mat.m[3][0];
     float y = v.x * mat.m[0][1] + v.y * mat.m[1][1] + v.z * mat.m[2][1] + mat.m[3][1];

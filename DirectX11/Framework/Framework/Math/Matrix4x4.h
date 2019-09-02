@@ -342,6 +342,10 @@ public:
     * @param t 補間係数
     */
     static Matrix4x4 lerp(const Matrix4x4& mat1, const Matrix4x4& mat2, float t);
+    /**
+    * @brief ベクトルと行列の積を求め、wで除算された値を返す
+    */
+    static Vector3 multiplyCoord(const Math::Vector3& v, const Math::Matrix4x4& m);
 
     friend std::ostream& operator<<(std::ostream& os, const Matrix4x4& mat);
 };

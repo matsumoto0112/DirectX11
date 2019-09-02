@@ -43,6 +43,19 @@ public:
     virtual const Math::Vector3& getLookat() const;
     virtual void setUpVector(const Math::Vector3& up);
     virtual const Math::Vector3& getUpVector() const;
+    /**
+    * @brief スクリーン座標からワールド座標に変換する
+    * @param pos 変換したい座標
+    * @param z 射影空間でのZ値
+    */
+    Math::Vector3 screenToWorldPosition(const Math::Vector2& pos, float z);
+    /**
+    * @brief スクリーン座標からワールド座標に変換する
+    * @param pos 変換したい座標
+    * @param z 射影空間でのZ値
+    * @param screenSize スクリーンの大きさ
+    */
+    Math::Vector3 screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize);
 private:
     Info mInfo;
 };
