@@ -51,10 +51,13 @@ public:
 
     /**
     * @brief アークサイン
-    * @return 角度（deg）を返す
+    * @return 角度(deg)を返す
     */
     static float asin(float x);
-
+    /**
+    * @brief アークコサイン
+    * @param 角度(deg)を返す
+    */
     static float acos(float x);
 
     /**
