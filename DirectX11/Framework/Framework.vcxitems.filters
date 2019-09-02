@@ -57,7 +57,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x3.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x4.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Plane.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Quaternion.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Rect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Vector2.cpp" />
@@ -109,6 +108,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -189,7 +189,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x3.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x4.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Plane.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Primitive2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Quaternion.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Rect.h" />
@@ -261,5 +260,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Primitive3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.h" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include "Source/GameObject/IMainSceneMediator.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Utility/Debug.h"
+#include "Framework/Utility/Collision.h"
 
 using namespace Framework;
 
@@ -16,15 +17,11 @@ Math::Vector3 getPos(IMainSceneMediator& mediator) {
 
     Math::Vector3 nearPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 0.0f);
     Math::Vector3 farPos = mediator.getMainCamera()->screenToWorldPosition(mousePositon, 1.0f);
-    Math::Vector3 ray = farPos - nearPos;
-    ray.normalize();
-
-    if (ray.y <= 0) {
-        float lRay = Math::Vector3::dot(ray, Math::Vector3::UP);
-        float lp0 = Math::Vector3::dot(-nearPos, Math::Vector3::UP);
-        return nearPos + (lp0 / lRay) * ray;
+    Math::Vector3 pos;
+    if (!Utility::Collision::line_plane(Math::Line(nearPos, farPos), Math::Plane(Math::Vector3(0, 0, 0), Math::Vector3::UP), &pos)) {
+        pos = farPos;
     }
-    return Math::Vector3::ZERO;
+    return pos;
 }
 }
 
