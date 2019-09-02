@@ -1,18 +1,12 @@
 #pragma once
 #include <memory>
-#include "Source/GameObject/GameObject.h"
-
-namespace Framework {
-namespace Graphics {
-class Model;
-} //Graphics 
-} //Framework 
+#include "Source/GameObject/GameObject3D.h"
 
 /**
 * @class Player
 * @brief discription
 */
-class Player :public GameObject {
+class Player :public GameObject3D {
 public:
     /**
     * @brief コンストラクタ
@@ -22,9 +16,10 @@ public:
     * @brief デストラクタ
     */
     ~Player();
+    /**
+    * @brief 更新
+    */
     virtual void update() override;
-    virtual void draw() override;
 private:
     float mMoveSpeed;
-    std::shared_ptr<Framework::Graphics::Model> mModel;
 };

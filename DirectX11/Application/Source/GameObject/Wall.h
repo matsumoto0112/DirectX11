@@ -1,17 +1,11 @@
 #pragma once
-#include "Source/GameObject/GameObject.h"
-
-namespace Framework {
-namespace Graphics {
-class Model;
-} //Graphics 
-} //Framework 
+#include "Source/GameObject/GameObject3D.h"
 
 /**
 * @class Wall
 * @brief 壁
 */
-class Wall :public GameObject {
+class Wall :public GameObject3D {
 public:
     /**
     * @brief コンストラクタ
@@ -21,8 +15,5 @@ public:
     * @brief デストラクタ
     */
     ~Wall();
-    virtual void update();
-    virtual void draw();
 private:
-    std::shared_ptr<Framework::Graphics::Model> mModel;
 };

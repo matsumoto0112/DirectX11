@@ -7,12 +7,8 @@
 using namespace Framework;
 
 Player::Player(const Utility::Transform& transform)
-    :GameObject(transform),
-    mMoveSpeed(10.f) {
-    auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    mModel = fbx->getResource(Define::ModelType::Player);
-    mModel->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Diffuse));
-}
+    :GameObject3D(transform, Define::ModelType::Player),
+    mMoveSpeed(10.0f) {}
 
 Player::~Player() {}
 
@@ -34,8 +30,4 @@ void Player::update() {
     movement.normalize();
 
     mTransform.setPosition(mTransform.getPosition() + movement * mMoveSpeed *  Utility::Time::getInstance().DeltaTime);
-}
-
-void Player::draw() {
-    mModel->draw(mTransform);
 }

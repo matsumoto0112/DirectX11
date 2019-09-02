@@ -42,6 +42,8 @@ Main::Main() {
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
 
     fbx->getResource(Define::ModelType::Plane)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
+    fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
+    fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
 
     std::unique_ptr<GameObject> player = std::make_unique<Player>(Utility::Transform());
     std::unique_ptr<Floor> floor = std::make_unique<Floor>(Utility::Transform(
