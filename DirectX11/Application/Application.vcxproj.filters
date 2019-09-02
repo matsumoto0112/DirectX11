@@ -14,6 +14,8 @@
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\GameObject\Wall.cpp" />
+    <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
+    <ClCompile Include="Source\GameObject\Floor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -32,6 +34,8 @@
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />
+    <ClInclude Include="Source\GameObject\Floor.h" />
+    <ClInclude Include="Source\GameObject\GameObject3D.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

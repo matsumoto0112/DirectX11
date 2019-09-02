@@ -13,8 +13,8 @@ Texture::Texture(Texture2DPtr texture2D, SRVPtr srv, int width, int height)
     mSRV(srv),
     mWidth(width),
     mHeight(height) {
-    mWidth = mTexture2D->getSize().x;
-    mHeight = mTexture2D->getSize().y;
+    mWidth = static_cast<int>(mTexture2D->getSize().x);
+    mHeight = static_cast<int>(mTexture2D->getSize().y);
 }
 
 Texture::~Texture() {}

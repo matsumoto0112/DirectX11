@@ -126,6 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\GameObject\Floor.cpp" />
+    <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\GameObject\Wall.cpp" />
@@ -137,10 +139,14 @@
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GameObject\Floor.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
+    <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\GameObjectManager.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />

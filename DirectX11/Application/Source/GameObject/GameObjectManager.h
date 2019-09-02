@@ -14,7 +14,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    GameObjectManager(GameObjectPtr player);
+    GameObjectManager(GameObjectPtr player, GameObjectPtr floor);
     /**
     * @brief デストラクタ
     */
@@ -24,5 +24,6 @@ public:
     void addWall(GameObjectPtr wall);
 private:
     GameObjectPtr mPlayer;
+    GameObjectPtr mFloor;
     GameObjectList mWallList;
 };

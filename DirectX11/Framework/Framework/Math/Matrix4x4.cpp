@@ -340,21 +340,21 @@ Matrix4x4& Matrix4x4::setUpView(const Vector3& eye, const Vector3& at, const Vec
     return *this;
 }
 
-Matrix4x4 Matrix4x4::createProjection(float fovY, float screenX, float screenY, float near, float far) {
+Matrix4x4 Matrix4x4::createProjection(float fovY, float screenX, float screenY, float nearZ, float farZ) {
     const float yScale = MathUtility::cot(fovY / 2.0f);
     const float xScale = screenY * yScale / screenX;
-    float subZ = far - near;
+    float subZ = farZ - nearZ;
     return Matrix4x4
     (
         xScale, 0, 0, 0,
         0, yScale, 0, 0,
-        0, 0, far / subZ, 1.0f,
-        0, 0, -near * far / subZ, 0
+        0, 0, farZ / subZ, 1.0f,
+        0, 0, -nearZ * farZ / subZ, 0
     );
 }
 
-Matrix4x4& Matrix4x4::setProjection(float fovY, float screenX, float screenY, float near, float far) {
-    *this = createProjection(fovY, screenX, screenY, near, far);
+Matrix4x4& Matrix4x4::setProjection(float fovY, float screenX, float screenY, float nearZ, float farZ) {
+    *this = createProjection(fovY, screenX, screenY, nearZ, farZ);
     return *this;
 }
 

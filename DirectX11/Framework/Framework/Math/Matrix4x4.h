@@ -276,21 +276,23 @@ public:
     * @param fovY 視野角(度)
     * @param screenX スクリーンの幅
     * @param screenY スクリーンの高さ
-    * @param near 最近点
-    * @param far 最遠点
+    * @param nearZ 最近点
+    * @param farZ 最遠点
     */
-    static Matrix4x4 createProjection(float fovY, float screenX, float screenY, float near, float far);
+    static Matrix4x4 createProjection(float fovY, float screenX, float screenY, float nearZ, float farZ);
 
     /**
     * @brief プロジェクション行列のセットアップ
     * @param fovY 視野角(度)
     * @param screenX スクリーンの幅
     * @param screenY スクリーンの高さ
-    * @param near 最近点
-    * @param far 最遠点
+    * @param nearZ 最近点
+    * @param farZ 最遠点
     */
-    Matrix4x4& setProjection(float fovY, float screenX, float screenY, float near, float far);
-
+    Matrix4x4& setProjection(float fovY, float screenX, float screenY, float nearZ, float farZ);
+    /**
+    * @brief 平行移動成分の取得
+    */
     Math::Vector3 getTranslate();
 
     /**
@@ -333,7 +335,12 @@ public:
     * @brief 3*3行列に変換(余分なデータ切り捨て)
     */
     static Matrix3x3 toMatrix3(const Matrix4x4& mat);
-
+    /**
+    * @brief 行列の補間
+    * @param mat1 行列1
+    * @param mat2 行列2
+    * @param t 補間係数
+    */
     static Matrix4x4 lerp(const Matrix4x4& mat1, const Matrix4x4& mat2, float t);
 
     friend std::ostream& operator<<(std::ostream& os, const Matrix4x4& mat);
