@@ -2,6 +2,8 @@
 #include <memory>
 #include "Source/GameObject/GameObject3D.h"
 
+class IMainSceneMediator;
+
 /**
 * @class Player
 * @brief discription
@@ -11,7 +13,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Player(const Framework::Utility::Transform& transform);
+    Player(const Framework::Utility::Transform& transform, IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */
@@ -21,5 +23,6 @@ public:
     */
     virtual void update() override;
 private:
+    IMainSceneMediator& mMediator;
     float mMoveSpeed;
 };

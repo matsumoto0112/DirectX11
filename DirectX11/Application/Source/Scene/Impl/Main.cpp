@@ -45,11 +45,11 @@ Main::Main() {
     fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
     fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
 
-    std::unique_ptr<GameObject> player = std::make_unique<Player>(Utility::Transform());
+    std::unique_ptr<GameObject> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Floor> floor = std::make_unique<Floor>(Utility::Transform(
         Math::Vector3(0, 0, 0),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(5, 5, 5)
+        Math::Vector3(5, 1, 5)
     ));
     mManager = std::make_unique<GameObjectManager>(std::move(player), std::move(floor));
     mManager->addWall(std::make_unique<Wall>(Utility::Transform(
@@ -99,4 +99,8 @@ void Main::end() {}
 
 Define::SceneType Main::next() {
     return Define::SceneType();
+}
+
+Graphics::PerspectiveCamera* Main::getMainCamera() {
+    return mCamera.get();
 }

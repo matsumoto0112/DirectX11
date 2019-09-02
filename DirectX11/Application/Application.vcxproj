@@ -148,6 +148,7 @@
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\GameObjectManager.h" />
+    <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />

@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include "Framework/Input/Keyboard.h"
+#include "Framework/Input/Mouse.h"
+#include "Framework/Input/Joystick.h"
 
 namespace Framework {
 namespace Window {
@@ -10,11 +12,6 @@ class Window;
 } //Window 
 
 namespace Input {
-class Joystick;
-class Keyboard;
-class Mouse;
-enum class ID;
-
 /**
 * @class InputManager
 * @brief “ü—ÍŠÇ—

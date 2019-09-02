@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Framework/Scene/SceneBase.h"
+#include "Source/GameObject/IMainSceneMediator.h"
 
 namespace Framework {
 namespace Graphics {
@@ -15,7 +16,7 @@ class GameObjectManager;
 * @class Main
 * @brief メインシーン実装クラス
 */
-class Main : public Framework::Scene::SceneBase {
+class Main : public Framework::Scene::SceneBase, public IMainSceneMediator {
 public:
     /**
     * @brief コンストラクタ
@@ -36,6 +37,8 @@ public:
     virtual void end() override;
 
     virtual Define::SceneType next() override;
+
+    virtual Framework::Graphics::PerspectiveCamera* getMainCamera() override;
 private:
     std::unique_ptr<GameObjectManager> mManager;
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mCamera;
