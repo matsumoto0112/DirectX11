@@ -115,3 +115,10 @@ float3 getWorldNormal(float4 nor4, matrix world)
 {
     return normalize(mul(nor4, world).xyz);
 }
+
+matrix MVP()
+{
+    matrix res = mul(mat.world, mat.view);
+    res = mul(res, mat.proj);
+    return res;
+}

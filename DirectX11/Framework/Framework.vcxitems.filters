@@ -109,6 +109,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -262,5 +265,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Primitive3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.h" />
   </ItemGroup>
 </Project>
