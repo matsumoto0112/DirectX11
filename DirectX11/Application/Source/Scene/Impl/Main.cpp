@@ -68,7 +68,7 @@ Main::Main() {
         Math::Vector3(-10.0f, 0.0f, 0.0f),
         Math::Quaternion::createRotateAboutY(90.0f),
         Math::Vector3(1.0f, 1.0f, 1.0f)
-    )));
+    ), *this));
 
     mCamera = std::make_unique<Graphics::PerspectiveCamera>(Graphics::PerspectiveCamera::Info{
         Math::Vector3(0,10,-10),
@@ -122,7 +122,6 @@ bool Main::isEndScene() const {
     return false;
 }
 
-float f = 0.0f;
 void Main::draw() {
     mAlphaBlend->set();
     //Utility::getContext()->RSSetState(pRasterizerState.Get());
