@@ -75,7 +75,7 @@ AlphaBlendTest::AlphaBlendTest()
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
-    bd.AlphaToCoverageEnable = FALSE;
+    bd.AlphaToCoverageEnable = TRUE;
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);

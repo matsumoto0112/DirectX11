@@ -19,7 +19,7 @@ void GameObjectManager::update() {
 }
 
 void GameObjectManager::draw() {
-    mFloor->draw();
+    //mFloor->draw();
     mPlayer->draw();
     for (auto&& bullet : mBullets) {
         bullet->draw();

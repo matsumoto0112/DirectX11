@@ -12,6 +12,8 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 
 #include "Framework/Graphics/Renderer/3D/Cube.h"
+#include "Framework/Graphics/Render/AlphaBlend.h"
+#include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 #define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
     const float defValue  = mCamera->getPosition().##type; \
@@ -26,14 +28,13 @@
     }); \
     field ->setMinValue(-50.0f); \
     field->setMaxValue(50.0f); \
-    mUIWindow->addItem(field); \
+    window->addItem(field); \
 }
 
 using namespace Framework;
 namespace {
-std::unique_ptr<ImGUI::Window> mUIWindow;
-std::unique_ptr<Graphics::Cube> mOBB;
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizerState;
+std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
 }
 
 Main::Main() {
@@ -79,12 +80,13 @@ Main::Main() {
         1000.0f
         });
 
-    mUIWindow = std::make_unique<ImGUI::Window>("Camera");
+    std::unique_ptr<ImGUI::Window> window = std::make_unique<ImGUI::Window>("Camera");
 
 
     ADD_CAMERA_POSITION_CHANGE_FIELD(X, x);
     ADD_CAMERA_POSITION_CHANGE_FIELD(Y, y);
     ADD_CAMERA_POSITION_CHANGE_FIELD(Z, z);
+    addDebugUI(std::move(window));
 
     mManager->addEnemy(std::make_unique<Enemy>(Utility::Transform(
         Math::Vector3(0, 0, 5),
@@ -92,15 +94,19 @@ Main::Main() {
         Math::Vector3(0.05f, 0.05f, 0.05f)
     )));
 
-    mOBB = std::make_unique<Graphics::Cube>();
-
     // ラスタライザの設定
     D3D11_RASTERIZER_DESC rdc = {};
-    rdc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    rdc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
     rdc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rdc.FrontCounterClockwise = TRUE;
     Utility::getDevice()->CreateRasterizerState(&rdc, &pRasterizerState);
 
+    D3D11_BLEND_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
+    bd.AlphaToCoverageEnable = FALSE;
+    bd.IndependentBlendEnable = FALSE;
+    bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
+    mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
 
 }
 
@@ -118,21 +124,14 @@ bool Main::isEndScene() const {
 
 float f = 0.0f;
 void Main::draw() {
+    mAlphaBlend->set();
+    //Utility::getContext()->RSSetState(pRasterizerState.Get());
     mCamera->render();
-    //mManager->draw();
-    Graphics::Color4 color = Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f);
-    Utility::getContext()->RSSetState(pRasterizerState.Get());
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
-    Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position)->set();
-    Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::OutPot_Color)->set();
-    Math::Quaternion rot =
-        Math::Quaternion::createRotateAboutY(f * 0.25f)
-        * Math::Quaternion::createRotateAboutZ(f * 0.7f)
-        * Math::Quaternion::createRotateAboutX(f);
-    f += 5.0f;
-    Utility::Transform tr(Math::Vector3::ZERO, rot, Math::Vector3(1.0f, 1.0f, 1.0f));
-    mOBB->render(tr);
-    //mUIWindow->draw();
+    mManager->draw();
+
+    for (auto&& window : mDebugUIs) {
+        window->draw();
+    }
 }
 
 void Main::end() {}
@@ -147,4 +146,8 @@ Graphics::PerspectiveCamera* Main::getMainCamera() {
 
 void Main::shotBullet(const Utility::Transform& transform) {
     mManager->addBullet(std::make_unique<Bullet>(transform));
+}
+
+void Main::addDebugUI(std::unique_ptr<ImGUI::Window> window) {
+    mDebugUIs.emplace_back(std::move(window));
 }

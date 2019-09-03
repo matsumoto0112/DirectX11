@@ -2,6 +2,12 @@
 #include <memory>
 #include "Source/GameObject/GameObject3D.h"
 
+namespace Framework {
+namespace Graphics {
+class Cube;
+} //Graphics 
+} //Framework 
+
 class IMainSceneMediator;
 
 /**
@@ -22,7 +28,11 @@ public:
     * @brief çXêV
     */
     virtual void update() override;
+
+    virtual void draw() override;
 private:
     IMainSceneMediator& mMediator;
     float mMoveSpeed;
+    std::unique_ptr<Framework::Graphics::Cube> mCube;
+    Framework::Utility::Transform mCubeTransform;
 };
