@@ -3,6 +3,7 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Source/GameObject/IMainSceneMediator.h"
+#include "Source/GameObject/Collider.h"
 
 using namespace Framework;
 #define ADD_POSITION_CHANGE_FIELD(name,type) {\
@@ -29,38 +30,20 @@ using namespace Framework;
 }
 
 
-Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mMediator)
-    : GameObject3D(transform, Define::ModelType::Wall) {
-    mCube = std::make_unique<Graphics::Cube>();
-    std::unique_ptr<ImGUI::Window> window = std::make_unique<ImGUI::Window>("WallCollision");
-    mCubeTransform = Utility::Transform(
+Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mediator)
+    : GameObject3D(transform, mediator, Define::ModelType::Wall) {
+    Utility::Transform tr = Utility::Transform(
         Math::Vector3(0, 0.0f, 0),
         Math::Quaternion::IDENTITY,
         Math::Vector3(10.0f, 5.0f, 1.0f)
     );
-    mCubeTransform.setParent(&mTransform);
-
-    ADD_POSITION_CHANGE_FIELD(Pos_X, x);
-    ADD_POSITION_CHANGE_FIELD(Pos_Y, y);
-    ADD_POSITION_CHANGE_FIELD(Pos_Z, z);
-
-    ADD_SCALE_CHANGE_FIELD(Scale_X, x);
-    ADD_SCALE_CHANGE_FIELD(Scale_Y, y);
-    ADD_SCALE_CHANGE_FIELD(Scale_Z, z);
-
-    mMediator.addDebugUI(std::move(window));
+    tr.setParent(&mTransform);
+    mCollider = std::make_unique<Collider>(tr);
 }
 
 Wall::~Wall() {}
 
 void Wall::draw() {
     GameObject3D::draw();
-
-    Graphics::Color4 color = Graphics::Color4(1.0f, 0.0f, 0.0f, 0.2f);
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
-    Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position)->set();
-    Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::OutPot_Color)->set();
-    mCube->render(mCubeTransform);
-    color = Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f);
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
+    mCollider->render();
 }

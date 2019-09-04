@@ -358,7 +358,7 @@ Matrix4x4& Matrix4x4::setProjection(float fovY, float screenX, float screenY, fl
     return *this;
 }
 
-Math::Vector3 Matrix4x4::getTranslate() {
+Math::Vector3 Matrix4x4::getTranslate() const{
     return Math::Vector3(m[3][0], m[3][1], m[3][2]);
 }
 

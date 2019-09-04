@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <sstream>
 
 #define PROPERTY(type,typeName,funcName) \
 protected: type typeName; \
@@ -15,7 +16,7 @@ template <class T>
 class Property {
 public:
     T& t;
-    std::function<void(T)> set = nullptr;
+    std::function<void(T value)> set = nullptr;
     std::function<T()> get = nullptr;
 
     operator T() {

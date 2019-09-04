@@ -3,8 +3,8 @@
 
 using namespace Framework;
 
-Bullet::Bullet(const Utility::Transform& transform)
-    :GameObject3D(transform, Define::ModelType::Bullet),
+Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator)
+    :GameObject3D(transform, mediator, Define::ModelType::Bullet),
     mSpeed(3.0f) {
 
 }

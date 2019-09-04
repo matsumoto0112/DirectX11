@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "Framework/Utility/Property.h"
 #include "Source/GameObject/GameObject3D.h"
 
 namespace Framework {
@@ -9,6 +10,7 @@ class Cube;
 } //Framework 
 
 class IMainSceneMediator;
+class Collider;
 
 /**
 * @class Player
@@ -30,9 +32,10 @@ public:
     virtual void update() override;
 
     virtual void draw() override;
+
+    Collider* getCollider() const { return mCollider.get(); }
 private:
     IMainSceneMediator& mMediator;
     float mMoveSpeed;
-    std::unique_ptr<Framework::Graphics::Cube> mCube;
-    Framework::Utility::Transform mCubeTransform;
+    std::unique_ptr<Collider> mCollider;
 };

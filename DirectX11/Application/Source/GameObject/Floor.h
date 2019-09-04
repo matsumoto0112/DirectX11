@@ -10,7 +10,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Floor(const Framework::Utility::Transform& transform);
+    Floor(const Framework::Utility::Transform& transform,IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */

@@ -98,6 +98,9 @@ public:
     */
     static Quaternion fromEular(const Math::Vector3& eular);
 
+    float getRotatAngle() const;
+    Vector3 getRotateAxis() const;
+
     static Math::Quaternion conjugate(const Math::Quaternion& q);
 
 

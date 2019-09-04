@@ -2,8 +2,8 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 using namespace Framework;
 
-GameObject3D::GameObject3D(const Utility::Transform& transform, Define::ModelType modelType)
-    :GameObject(transform) {
+GameObject3D::GameObject3D(const Utility::Transform& transform, IMainSceneMediator& mediator, Define::ModelType modelType)
+    :GameObject(transform, mediator) {
     mModel = Utility::ResourceManager::getInstance().getFBXModel()->getResource(modelType);
 }
 

@@ -293,7 +293,7 @@ public:
     /**
     * @brief •½sˆÚ“®¬•ª‚Ìæ“¾
     */
-    Math::Vector3 getTranslate();
+    Math::Vector3 getTranslate() const;
 
     /**
     * @brief ³“Š‰es—ñ‚Ìì¬

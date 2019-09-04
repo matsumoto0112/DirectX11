@@ -2,7 +2,7 @@
 
 using namespace Framework;
 
-Floor::Floor(const Utility::Transform& transform)
-    :GameObject3D(transform, Define::ModelType::Plane) {}
+Floor::Floor(const Utility::Transform& transform, IMainSceneMediator& mediator)
+    :GameObject3D(transform, mediator, Define::ModelType::Plane) {}
 
 Floor::~Floor() {}

@@ -11,7 +11,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Bullet(const Framework::Utility::Transform& transform);
+    Bullet(const Framework::Utility::Transform& transform, IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */

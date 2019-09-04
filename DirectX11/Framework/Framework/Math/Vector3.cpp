@@ -42,7 +42,7 @@ Vector3 Vector3::operator+(const Vector3 & a) const {
     return Vector3(x + a.x, y + a.y, z + a.z);
 }
 
-Vector3 Vector3::operator-(const Vector3 & a) const {
+Vector3 Vector3::operator-(const Vector3& a) const {
     return Vector3(x - a.x, y - a.y, z - a.z);
 }
 

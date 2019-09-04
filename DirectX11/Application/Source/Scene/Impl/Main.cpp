@@ -33,6 +33,7 @@
 
 using namespace Framework;
 namespace {
+std::shared_ptr<ImGUI::Text> mHitText;
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizerState;
 std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
 }
@@ -57,13 +58,13 @@ Main::Main() {
     fbx->getResource(Define::ModelType::Bullet)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
     fbx->getResource(Define::ModelType::Enemy)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
 
-    std::unique_ptr<GameObject> player = std::make_unique<Player>(Utility::Transform(), *this);
+    std::unique_ptr<Player> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Floor> floor = std::make_unique<Floor>(Utility::Transform(
         Math::Vector3(0, 0, 0),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(5, 1, 5)
-    ));
-    mManager = std::make_unique<GameObjectManager>(std::move(player), std::move(floor));
+        Math::Vector3(5, 1, 5)),
+        *this);
+    mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(floor));
     mManager->addWall(std::make_unique<Wall>(Utility::Transform(
         Math::Vector3(-10.0f, 0.0f, 0.0f),
         Math::Quaternion::createRotateAboutY(90.0f),
@@ -91,8 +92,8 @@ Main::Main() {
     mManager->addEnemy(std::make_unique<Enemy>(Utility::Transform(
         Math::Vector3(0, 0, 5),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(0.05f, 0.05f, 0.05f)
-    )));
+        Math::Vector3(0.05f, 0.05f, 0.05f)),
+        *this));
 
     // ラスタライザの設定
     D3D11_RASTERIZER_DESC rdc = {};
@@ -144,9 +145,9 @@ Graphics::PerspectiveCamera* Main::getMainCamera() {
 }
 
 void Main::shotBullet(const Utility::Transform& transform) {
-    mManager->addBullet(std::make_unique<Bullet>(transform));
+    mManager->addBullet(std::make_unique<Bullet>(transform, *this));
 }
 
-void Main::addDebugUI(std::unique_ptr<ImGUI::Window> window) {
-    mDebugUIs.emplace_back(std::move(window));
+void Main::addDebugUI(std::shared_ptr<ImGUI::Window> window) {
+    mDebugUIs.emplace_back(window);
 }

@@ -7,6 +7,7 @@ class Cube;
 } //Graphics 
 } //Framework 
 
+class Collider;
 class IMainSceneMediator;
 
 /**
@@ -25,7 +26,8 @@ public:
     ~Wall();
 
     virtual void draw() override;
+
+    Collider* getCollider() const { return mCollider.get(); }
 private:
-    std::unique_ptr<Framework::Graphics::Cube> mCube;
-    Framework::Utility::Transform mCubeTransform;
+    std::unique_ptr<Collider> mCollider;
 };

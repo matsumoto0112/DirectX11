@@ -21,5 +21,5 @@ public:
     */
     virtual void shotBullet(const Framework::Utility::Transform& transform) = 0;
 
-    virtual void addDebugUI(std::unique_ptr<Framework::ImGUI::Window> window) = 0;
+    virtual void addDebugUI(std::shared_ptr<Framework::ImGUI::Window> window) = 0;
 };

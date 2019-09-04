@@ -11,7 +11,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Enemy(const Framework::Utility::Transform& transform);
+    Enemy(const Framework::Utility::Transform& transform, IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */

@@ -42,10 +42,10 @@ public:
 
     virtual void shotBullet(const Framework::Utility::Transform& transform) override;
 
-    virtual void addDebugUI(std::unique_ptr<Framework::ImGUI::Window> window) override;
+    virtual void addDebugUI(std::shared_ptr<Framework::ImGUI::Window> window) override;
 private:
     std::unique_ptr<GameObjectManager> mManager;
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> mCamera;
 private:
-    std::vector<std::unique_ptr<Framework::ImGUI::Window>> mDebugUIs;
+    std::vector<std::shared_ptr<Framework::ImGUI::Window>> mDebugUIs;
 };

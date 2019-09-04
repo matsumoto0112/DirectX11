@@ -26,6 +26,8 @@
 #include "Source/Scene/Impl/MultiRenderTargetTest.h"
 #include "Source/Scene/Impl/AlphaBlendTest.h"
 #include "Source/Scene/Impl/Main.h"
+#include "Framework/Utility/Time.h"
+#include <atlstr.h>
 
 using namespace Framework;
 
@@ -65,6 +67,12 @@ private:
         mSceneManager->draw();
 
         mGameDevice.getRenderingManager()->drawEnd();
+
+        Utility::StringBuilder sb("");
+        float fps = Utility::Time::getInstance().CurrentFPS;
+        sb << fps;
+        SetWindowText(mGameDevice.getWindow().getHWND(), CString(sb.getStr().c_str()));
+
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void finalize() override {

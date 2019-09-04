@@ -160,6 +160,25 @@ Quaternion Quaternion::fromEular(const Math::Vector3& eular) {
     return res;
 }
 
+float Quaternion::getRotatAngle() const {
+    float thetaOver2 = std::acosf(w);
+    return thetaOver2 * 2.0f;
+}
+
+Vector3 Quaternion::getRotateAxis() const {
+    float sinThetaOver2Sq = 1.0f - w * w;
+    if (sinThetaOver2Sq <= 0.0f) {
+        return Vector3::RIGHT;
+    }
+
+    float oneOverSinThetaOver2 = 1.0f / MathUtility::sqrt(sinThetaOver2Sq);
+    return Vector3(
+        x * oneOverSinThetaOver2,
+        y * oneOverSinThetaOver2,
+        z * oneOverSinThetaOver2
+    );
+}
+
 Math::Quaternion Quaternion::conjugate(const Math::Quaternion& q) {
     return Math::Quaternion(-q.x, -q.y, -q.z, q.w);
 }

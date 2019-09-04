@@ -56,7 +56,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix3x3.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x3.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x4.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Quaternion.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Rect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\Vector2.cpp" />
@@ -112,6 +111,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -191,7 +191,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix3x3.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x3.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Matrix4x4.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Primitive2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Quaternion.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Rect.h" />
@@ -268,5 +267,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.h" />
   </ItemGroup>
 </Project>

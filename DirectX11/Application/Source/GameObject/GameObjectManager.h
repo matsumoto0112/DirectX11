@@ -3,6 +3,10 @@
 #include <vector>
 #include "Source/GameObject/GameObject.h"
 
+class IMainSceneMediator;
+class Player;
+class Wall;
+
 /**
 * @class GameObjectManager
 * @brief discription
@@ -14,20 +18,21 @@ public:
     /**
     * @brief コンストラクタ
     */
-    GameObjectManager(GameObjectPtr player, GameObjectPtr floor);
+    GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, GameObjectPtr floor);
     /**
     * @brief デストラクタ
     */
     ~GameObjectManager();
     void update();
     void draw();
-    void addWall(GameObjectPtr wall);
+    void addWall(std::unique_ptr<Wall> wall);
     void addBullet(GameObjectPtr bullet);
     void addEnemy(GameObjectPtr enemy);
 private:
-    GameObjectPtr mPlayer;
+    IMainSceneMediator& mMediator;
+    std::unique_ptr<Player> mPlayer;
     GameObjectPtr mFloor;
-    GameObjectList mWallList;
+    std::vector<std::unique_ptr<Wall>> mWallList;
     GameObjectList mBullets;
     GameObjectList mEnemy;
 };

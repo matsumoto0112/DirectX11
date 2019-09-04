@@ -86,5 +86,15 @@ struct Plane {
         :p(p), normal(normal) {}
 };
 
+/**
+* @struct OBB
+* @brief OBB
+*/
+struct OBB {
+    Vector3 center; //!< 中心座標
+    std::array<Vector3, 3> direct; //!< 方向ベクトル
+    Vector3 length; //!< 各軸の長さ
+};
+
 } //Math 
 } //Framework 
