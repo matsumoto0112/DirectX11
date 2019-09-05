@@ -5,7 +5,7 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Define/Window.h"
-#include "Source/GameObject/Bullet.h"
+#include "Source/GameObject/Bullet/Bullet.h"
 #include "Source/GameObject/Enemy/Enemy.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 

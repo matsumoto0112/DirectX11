@@ -1,10 +1,11 @@
 #pragma once
 #include <array>
 
+class Collider;
+class Collidable3DObject;
 class Floor;
 class IMainSceneMediator;
 class Wall;
-class Collider;
 
 /**
 * @class Field
@@ -14,16 +15,27 @@ class Field {
 public:
     /**
     * @brief コンストラクタ
+    * @param mediator メインシーン仲介者
     */
     Field(IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */
     virtual ~Field();
-    virtual void pushBackGameObject(Collider& collider);
+    /**
+    * @brief ゲームオブジェクトをフィールド内に押し戻す
+    * @param gameObject 処理するゲームオブジェクト
+    */
+    virtual void pushBackGameObject(Collidable3DObject& gameObject);
+    /**
+    * @brief フィールドの更新
+    */
     virtual void update();
+    /**
+    * @brief フィールドの描画処理
+    */
     virtual void draw();
 private:
-    std::array<std::unique_ptr<Wall>, 4> mWalls;
-    std::unique_ptr<Floor> mFloor;
+    std::array<std::unique_ptr<Wall>, 4> mWalls; //!< 壁
+    std::unique_ptr<Floor> mFloor; //!< 床
 };

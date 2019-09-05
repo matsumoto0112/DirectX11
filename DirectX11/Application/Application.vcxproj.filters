@@ -16,10 +16,11 @@
     <ClCompile Include="Source\GameObject\Wall.cpp" />
     <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\Floor.cpp" />
-    <ClCompile Include="Source\GameObject\Bullet.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\GameObject\Collider.cpp" />
     <ClCompile Include="Source\GameObject\Field.cpp" />
+    <ClCompile Include="Source\GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -41,10 +42,11 @@
     <ClInclude Include="Source\GameObject\Floor.h" />
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
-    <ClInclude Include="Source\GameObject\Bullet.h" />
     <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
     <ClInclude Include="Source\GameObject\Collider.h" />
     <ClInclude Include="Source\GameObject\Field.h" />
+    <ClInclude Include="Source\GameObject\Bullet\Bullet.h" />
+    <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

@@ -126,7 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Source\GameObject\Bullet.cpp" />
+    <ClCompile Include="Source\GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
     <ClCompile Include="Source\GameObject\Collider.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\GameObject\Field.cpp" />
@@ -148,7 +149,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\GameObject\Bullet.h" />
+    <ClInclude Include="Source\GameObject\Bullet\Bullet.h" />
+    <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
     <ClInclude Include="Source\GameObject\Collider.h" />
     <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
     <ClInclude Include="Source\GameObject\Field.h" />

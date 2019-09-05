@@ -27,22 +27,8 @@ Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::
 }
 
 Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator)
-    :GameObject3D(transform, mediator, Define::ModelType::Player),
-    mMediator(mediator),
-    mMoveSpeed(10.0f) {
-    mTransform.setRotate(Math::Quaternion::createRotateAboutY(-90.0f));
-    Utility::Transform colliderTransform = Utility::Transform(
-        Math::Vector3(0, 0.6f, 0),
-        Math::Quaternion::IDENTITY,
-        Math::Vector3(0.6f, 1.5f, 0.8f));
-    //Utility::Transform colliderTransform = Utility::Transform(
-    //    Math::Vector3(0, 0, 0),
-    //    Math::Quaternion::IDENTITY,
-    //    Math::Vector3(1, 1, 1));
-    colliderTransform.setParent(&mTransform);
-
-    mCollider = std::make_unique<Collider>(colliderTransform, this);
-}
+    :Collidable3DObject(transform, mediator, Define::ModelType::Player, createCollider()),
+    mMoveSpeed(10.0f) {}
 
 Player::~Player() {}
 
@@ -81,4 +67,14 @@ void Player::draw() {
 
 Collider* Player::getCollider() const {
     return mCollider.get();
+}
+
+std::unique_ptr<Collider> Player::createCollider() {
+    mTransform.setRotate(Math::Quaternion::createRotateAboutY(-90.0f));
+    Utility::Transform colliderTransform = Utility::Transform(
+        Math::Vector3(0, 0.6f, 0),
+        Math::Quaternion::IDENTITY,
+        Math::Vector3(0.6f, 1.5f, 0.8f));
+    colliderTransform.setParent(&mTransform);
+    return std::make_unique<Collider>(colliderTransform, this);
 }

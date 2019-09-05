@@ -1,8 +1,7 @@
 #pragma once
 #include "Framework/Math/3DPrimitive/Primitive3D.h"
+#include "Source/GameObject/Collidable3DObject.h"
 #include "Source/GameObject/GameObject3D.h"
-
-class Collider;
 
 /**
 * @class Wall
@@ -21,7 +20,7 @@ public:
     /**
     * @brief ゲームオブジェクトを壁の中に押し戻す
     */
-    void pushBackGameObject(Collider& collider);
+    void pushBackGameObject(Collidable3DObject& gameObject);
     virtual void draw() override;
 private:
     Framework::Math::Plane mPlane;

@@ -1,22 +1,13 @@
 #pragma once
 #include <memory>
 #include "Framework/Utility/Property.h"
-#include "Source/GameObject/GameObject3D.h"
-
-namespace Framework {
-namespace Graphics {
-class Cube;
-} //Graphics 
-} //Framework 
-
-class IMainSceneMediator;
-class Collider;
+#include "Source/GameObject/Collidable3DObject.h"
 
 /**
 * @class Player
 * @brief discription
 */
-class Player :public GameObject3D {
+class Player :public Collidable3DObject {
 public:
     /**
     * @brief コンストラクタ
@@ -34,8 +25,7 @@ public:
     virtual void draw() override;
 
     Collider* getCollider() const;
+    virtual std::unique_ptr<Collider> createCollider() override;
 private:
-    IMainSceneMediator& mMediator;
     float mMoveSpeed;
-    std::unique_ptr<Collider> mCollider;
 };

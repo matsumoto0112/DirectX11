@@ -32,7 +32,7 @@ void GameObjectManager::update() {
         enemy->update();
     }
 
-    mField->pushBackGameObject(*mPlayer->getCollider());
+    mField->pushBackGameObject(*mPlayer);
 }
 
 void GameObjectManager::draw() {

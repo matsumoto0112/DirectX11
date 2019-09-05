@@ -25,10 +25,10 @@ Field::Field(IMainSceneMediator& mediator) {
 
 Field::~Field() {}
 
-void Field::pushBackGameObject(Collider& collider) {
+void Field::pushBackGameObject(Collidable3DObject& gameObject) {
     for (auto&& wall : mWalls) {
         if (wall)
-            wall->pushBackGameObject(collider);
+            wall->pushBackGameObject(gameObject);
     }
 }
 

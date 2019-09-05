@@ -26,12 +26,12 @@ Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mediator)
 
 Wall::~Wall() {}
 
-void Wall::pushBackGameObject(Collider& collider) {
+void Wall::pushBackGameObject(Collidable3DObject& gameObject) {
     float len = 0.0f;
-    if (Utility::Collision::obb_plane(collider.getOBB(), mPlane, &len)) {
-        Math::Vector3 pos = collider.holder->getTransform().getPosition();
+    if (Utility::Collision::obb_plane(gameObject.getCollider()->getOBB(), mPlane, &len)) {
+        Math::Vector3 pos = gameObject.getTransform().getPosition();
         pos += len * mPlane.normal;
-        collider.holder->getTransformPtr()->setPosition(pos);
+        gameObject.getTransformPtr()->setPosition(pos);
     }
 }
 
