@@ -31,6 +31,7 @@ public:
     Framework::Math::OBB3D getOBB() const;
 
     void render();
+    Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
     Property<Framework::Utility::Transform> transform{ mTransform,[&](const Framework::Utility::Transform& tr) {mTransform = tr; },[&]() {return mTransform; } };
     Property<GameObject3D*> holder{ mHolder };
 private:

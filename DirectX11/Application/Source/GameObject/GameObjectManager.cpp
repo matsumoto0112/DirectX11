@@ -2,6 +2,7 @@
 #include "Framework/Utility/Collision.h"
 #include "Source/GameObject/Bullet/Bullet.h"
 #include "Source/GameObject/Collider.h"
+#include "Source/GameObject/Enemy/Enemy.h"
 #include "Source/GameObject/IMainSceneMediator.h"
 #include "Source/GameObject/Player.h"
 #include "Source/GameObject/Field.h"
@@ -29,12 +30,12 @@ void GameObjectManager::update() {
     mText->setText("NOHIT");
     for (auto&& bullet : mBullets) {
         bullet->update();
-        if (mPlayer->getColliderPtr()->getOBB().isCollide(bullet->getColliderPtr()->getOBB())) {
+    }
+    for (auto&& enemy : mEnemies) {
+        enemy->update();
+        if (mPlayer->getColliderPtr()->getOBB().isCollide(enemy->getColliderPtr()->getOBB())) {
             mText->setText(Utility::StringBuilder("HIT"));
         }
-    }
-    for (auto&& enemy : mEnemy) {
-        enemy->update();
     }
 
     mField->pushBackGameObject(*mPlayer);
@@ -46,7 +47,7 @@ void GameObjectManager::draw() {
     for (auto&& bullet : mBullets) {
         bullet->draw();
     }
-    for (auto&& enemy : mEnemy) {
+    for (auto&& enemy : mEnemies) {
         enemy->draw();
     }
 }
@@ -55,6 +56,6 @@ void GameObjectManager::addBullet(BulletPtr bullet) {
     mBullets.emplace_back(std::move(bullet));
 }
 
-void GameObjectManager::addEnemy(GameObjectPtr enemy) {
-    mEnemy.emplace_back(std::move(enemy));
+void GameObjectManager::addEnemy(EnemyPtr enemy) {
+    mEnemies.emplace_back(std::move(enemy));
 }

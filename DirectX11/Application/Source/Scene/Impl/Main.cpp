@@ -77,12 +77,14 @@ Main::Main() {
     ADD_CAMERA_POSITION_CHANGE_FIELD(X, x);
     ADD_CAMERA_POSITION_CHANGE_FIELD(Y, y);
     ADD_CAMERA_POSITION_CHANGE_FIELD(Z, z);
+    std::shared_ptr<ImGUI::Button> button = std::make_shared<ImGUI::Button>("RESET", [&]() {mCamera->setLookat(Math::Vector3::ZERO); });
+    window->addItem(button);
     addDebugUI(std::move(window));
 
     mManager->addEnemy(std::make_unique<Enemy>(Utility::Transform(
         Math::Vector3(0, 0, 5),
         Math::Quaternion::IDENTITY,
-        Math::Vector3(0.05f, 0.05f, 0.05f)),
+        Math::Vector3(1.0f, 1.0f, 1.0f)),
         *this));
 
     // ラスタライザの設定

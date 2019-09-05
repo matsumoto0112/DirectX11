@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Source/GameObject/GameObject3D.h"
+#include "Source/GameObject/Collidable3DObject.h"
 
 /**
 * @class Enemy
 * @brief 敵クラス
 */
-class Enemy : public GameObject3D {
+class Enemy : public Collidable3DObject {
 public:
     /**
     * @brief コンストラクタ
@@ -16,6 +16,7 @@ public:
     * @brief デストラクタ
     */
     ~Enemy();
+protected:
+    virtual std::unique_ptr<Collider> createCollider() override;
 private:
-
 };

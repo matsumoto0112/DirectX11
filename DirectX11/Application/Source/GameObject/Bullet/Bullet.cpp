@@ -5,24 +5,7 @@ using namespace Framework;
 
 Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator)
     :Collidable3DObject(transform, mediator, Define::ModelType::Bullet, createCollider()),
-    mSpeed(0.0f) {
-    std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Bullet");
-
-#define ADD(name,type) { \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, mCollider->transform.get().getScale().##type, [&](float val) { \
-        Math::Vector3 scale = mCollider->transform.get().getScale(); \
-        scale.##type = val; \
-        mCollider->holder->getTransformPtr()->setScale(scale); \
-    }); \
-    field->setMaxValue(1.0f); \
-    window->addItem(field); \
-    }
-
-    ADD(SCALE_X, x);
-    ADD(SCALE_Y, y);
-    ADD(SCALE_Z, z);
-    mMediator.addDebugUI(window);
-}
+    mSpeed(1.0f) {}
 
 Bullet::~Bullet() {}
 

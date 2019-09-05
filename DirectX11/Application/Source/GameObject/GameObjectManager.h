@@ -4,6 +4,7 @@
 #include "Source/GameObject/GameObject.h"
 
 class Bullet;
+class Enemy;
 class Field;
 class IMainSceneMediator;
 class Player;
@@ -18,6 +19,8 @@ class GameObjectManager {
     using GameObjectList = std::vector<GameObjectPtr>;
     using BulletPtr = std::unique_ptr<Bullet>;
     using BulletList = std::vector<BulletPtr>;
+    using EnemyPtr = std::unique_ptr<Enemy>;
+    using EnemyList = std::vector<EnemyPtr>;
 public:
     /**
     * @brief コンストラクタ
@@ -30,11 +33,11 @@ public:
     void update();
     void draw();
     void addBullet(BulletPtr bullet);
-    void addEnemy(GameObjectPtr enemy);
+    void addEnemy(EnemyPtr enemy);
 private:
     IMainSceneMediator& mMediator;
     std::unique_ptr<Player> mPlayer;
     std::unique_ptr<Field> mField;
     BulletList mBullets;
-    GameObjectList mEnemy;
+    EnemyList mEnemies;
 };
