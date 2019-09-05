@@ -4,46 +4,29 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Source/GameObject/IMainSceneMediator.h"
 #include "Source/GameObject/Collider.h"
+#include "Framework/Utility/Collision.h"
 
 using namespace Framework;
-#define ADD_POSITION_CHANGE_FIELD(name,type) {\
-    float def = mCubeTransform.getPosition().##type; \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
-        Math::Vector3 pos = mCubeTransform.getPosition(); \
-        pos.##type = val; \
-        mCubeTransform.setPosition(pos); \
-    }); \
-    field->setMinValue(-10.0f); \
-    field->setMaxValue(10.0f); \
-    window->addItem(field); \
-}
-#define ADD_SCALE_CHANGE_FIELD(name,type) {\
-    float def = mCubeTransform.getScale().##type; \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
-        Math::Vector3 scale = mCubeTransform.getScale(); \
-        scale.##type = val; \
-        mCubeTransform.setScale(scale); \
-    }); \
-    field->setMinValue(-10.0f); \
-    field->setMaxValue(10.0f); \
-    window->addItem(field); \
-}
 
+namespace {
+static const Math::Vector3 WALL_SCALE = Math::Vector3(1.0f, 5.0f, 10.0f);
+}
 
 Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mediator)
-    : GameObject3D(transform, mediator, Define::ModelType::Wall) {
-    Utility::Transform tr = Utility::Transform(
-        Math::Vector3(0, 0.0f, 0),
-        Math::Quaternion::IDENTITY,
-        Math::Vector3(10.0f, 5.0f, 1.0f)
-    );
-    tr.setParent(&mTransform);
-    mCollider = std::make_unique<Collider>(tr);
-}
+    : GameObject3D(transform, mediator, Define::ModelType::Wall),
+    mPlane(transform.getGlobalPostition() + WALL_SCALE * 0.5f, Math::Vector3::RIGHT) {}
 
 Wall::~Wall() {}
 
+void Wall::pushBackGameObject(Collider& collider) {
+    float len = 0.0f;
+    if (Utility::Collision::obb_plane(collider.getOBB(), mPlane, &len)) {
+        Math::Vector3 pos = collider.holder->getTransform().getPosition();
+        pos.x += len;
+        collider.holder->getTransformPtr()->setPosition(pos);
+    }
+}
+
 void Wall::draw() {
     GameObject3D::draw();
-    mCollider->render();
 }

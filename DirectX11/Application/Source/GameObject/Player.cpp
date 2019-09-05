@@ -41,7 +41,7 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     //    Math::Vector3(1, 1, 1));
     colliderTransform.setParent(&mTransform);
 
-    mCollider = std::make_unique<Collider>(colliderTransform);
+    mCollider = std::make_unique<Collider>(colliderTransform, this);
 }
 
 Player::~Player() {}

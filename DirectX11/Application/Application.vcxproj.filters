@@ -19,6 +19,7 @@
     <ClCompile Include="Source\GameObject\Bullet.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\GameObject\Collider.cpp" />
+    <ClCompile Include="Source\GameObject\Field.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Source\GameObject\Bullet.h" />
     <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
     <ClInclude Include="Source\GameObject\Collider.h" />
+    <ClInclude Include="Source\GameObject\Field.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

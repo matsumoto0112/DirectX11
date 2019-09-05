@@ -1,14 +1,8 @@
 #pragma once
+#include "Framework/Math/3DPrimitive/Primitive3D.h"
 #include "Source/GameObject/GameObject3D.h"
 
-namespace Framework {
-namespace Graphics {
-class Cube;
-} //Graphics 
-} //Framework 
-
 class Collider;
-class IMainSceneMediator;
 
 /**
 * @class Wall
@@ -24,10 +18,11 @@ public:
     * @brief デストラクタ
     */
     ~Wall();
-
+    /**
+    * @brief ゲームオブジェクトを壁の中に押し戻す
+    */
+    void pushBackGameObject(Collider& collider);
     virtual void draw() override;
-
-    Collider* getCollider() const { return mCollider.get(); }
 private:
-    std::unique_ptr<Collider> mCollider;
+    Framework::Math::Plane mPlane;
 };

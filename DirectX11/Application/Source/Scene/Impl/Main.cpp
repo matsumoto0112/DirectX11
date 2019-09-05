@@ -5,8 +5,6 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Define/Window.h"
-#include "Source/GameObject/Wall.h"
-#include "Source/GameObject/Floor.h"
 #include "Source/GameObject/Bullet.h"
 #include "Source/GameObject/Enemy/Enemy.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
@@ -14,6 +12,7 @@
 #include "Framework/Graphics/Renderer/3D/Cube.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
+#include "Source/GameObject/Field.h"
 
 #define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
     const float defValue  = mCamera->getPosition().##type; \
@@ -59,17 +58,8 @@ Main::Main() {
     fbx->getResource(Define::ModelType::Enemy)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
 
     std::unique_ptr<Player> player = std::make_unique<Player>(Utility::Transform(), *this);
-    std::unique_ptr<Floor> floor = std::make_unique<Floor>(Utility::Transform(
-        Math::Vector3(0, 0, 0),
-        Math::Quaternion::IDENTITY,
-        Math::Vector3(5, 1, 5)),
-        *this);
-    mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(floor));
-    mManager->addWall(std::make_unique<Wall>(Utility::Transform(
-        Math::Vector3(-10.0f, 0.0f, 0.0f),
-        Math::Quaternion::createRotateAboutY(90.0f),
-        Math::Vector3(1.0f, 1.0f, 1.0f)
-    ), *this));
+    std::unique_ptr<Field> field = std::make_unique<Field>(*this);
+    mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(field));
 
     mCamera = std::make_unique<Graphics::PerspectiveCamera>(Graphics::PerspectiveCamera::Info{
         Math::Vector3(0,10,-10),

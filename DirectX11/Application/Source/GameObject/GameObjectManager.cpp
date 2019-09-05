@@ -1,9 +1,9 @@
 #include "GameObjectManager.h"
+#include "Framework/Utility/Collision.h"
 #include "Source/GameObject/Collider.h"
 #include "Source/GameObject/IMainSceneMediator.h"
 #include "Source/GameObject/Player.h"
-#include "Source/GameObject/Wall.h"
-#include "Framework/Utility/Collision.h"
+#include "Source/GameObject/Field.h"
 
 using namespace Framework;
 
@@ -11,8 +11,8 @@ namespace {
 std::shared_ptr<ImGUI::Text> mText;
 }
 
-GameObjectManager::GameObjectManager(IMainSceneMediator & mediator, std::unique_ptr<Player> player, GameObjectPtr floor)
-    :mMediator(mediator), mPlayer(std::move(player)), mFloor(std::move(floor)) {
+GameObjectManager::GameObjectManager(IMainSceneMediator & mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
+    :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {
     std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Collision");
     mText = std::make_shared<ImGUI::Text>("Hit");
     window->addItem(mText);
@@ -20,7 +20,6 @@ GameObjectManager::GameObjectManager(IMainSceneMediator & mediator, std::unique_
 }
 
 GameObjectManager::~GameObjectManager() {
-    mWallList.clear();
     mBullets.clear();
 }
 
@@ -33,34 +32,18 @@ void GameObjectManager::update() {
         enemy->update();
     }
 
-    Math::Plane px(Math::Vector3(-5.0f, 0, 0), Math::Vector3::RIGHT);
-    float len = 0.0f;
-    if (Utility::Collision::obb_plane(mPlayer->getCollider()->getOBB(), px, &len)) {
-        Math::Vector3 pos = mPlayer->getTransform().getPosition();
-        pos.x += len;
-        mPlayer->getTransformPtr()->setPosition(pos);
-    }
+    mField->pushBackGameObject(*mPlayer->getCollider());
 }
 
 void GameObjectManager::draw() {
-    mFloor->draw();
+    mField->draw();
     mPlayer->draw();
     for (auto&& bullet : mBullets) {
         bullet->draw();
     }
-
-
     for (auto&& enemy : mEnemy) {
         enemy->draw();
     }
-
-    for (auto&& wall : mWallList) {
-        wall->draw();
-    }
-}
-
-void GameObjectManager::addWall(std::unique_ptr<Wall> wall) {
-    mWallList.emplace_back(std::move(wall));
 }
 
 void GameObjectManager::addBullet(GameObjectPtr bullet) {

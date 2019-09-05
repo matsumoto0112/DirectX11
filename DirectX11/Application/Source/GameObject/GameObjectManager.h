@@ -6,6 +6,7 @@
 class IMainSceneMediator;
 class Player;
 class Wall;
+class Field;
 
 /**
 * @class GameObjectManager
@@ -18,7 +19,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, GameObjectPtr floor);
+    GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field);
     /**
     * @brief デストラクタ
     */
@@ -31,8 +32,7 @@ public:
 private:
     IMainSceneMediator& mMediator;
     std::unique_ptr<Player> mPlayer;
-    GameObjectPtr mFloor;
-    std::vector<std::unique_ptr<Wall>> mWallList;
+    std::unique_ptr<Field> mField;
     GameObjectList mBullets;
     GameObjectList mEnemy;
 };

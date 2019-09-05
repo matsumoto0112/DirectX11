@@ -129,6 +129,7 @@
     <ClCompile Include="Source\GameObject\Bullet.cpp" />
     <ClCompile Include="Source\GameObject\Collider.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
+    <ClCompile Include="Source\GameObject\Field.cpp" />
     <ClCompile Include="Source\GameObject\Floor.cpp" />
     <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Source\GameObject\Bullet.h" />
     <ClInclude Include="Source\GameObject\Collider.h" />
     <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
+    <ClInclude Include="Source\GameObject\Field.h" />
     <ClInclude Include="Source\GameObject\Floor.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
