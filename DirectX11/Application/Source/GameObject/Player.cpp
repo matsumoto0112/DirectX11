@@ -31,7 +31,7 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     mMoveSpeed(10.0f) {}
 
 Player::~Player() {}
-
+bool flag = false;
 void Player::update() {
     const Input::Keyboard& key = Utility::getInputManager()->getKeyboard();
     Math::Vector3 movement = Math::Vector3::ZERO;
@@ -53,20 +53,12 @@ void Player::update() {
 
     mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
 
-    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left)) {
-        //Utility::Transform bullet = mTransform;
-        //bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
-        //mMediator.shotBullet(bullet);
+    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left) && !flag) {
+        Utility::Transform bullet = mTransform;
+        bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
+        mMediator.shotBullet(bullet);
+        flag = true;
     }
-}
-
-void Player::draw() {
-    GameObject3D::draw();
-    mCollider->render();
-}
-
-Collider* Player::getCollider() const {
-    return mCollider.get();
 }
 
 std::unique_ptr<Collider> Player::createCollider() {

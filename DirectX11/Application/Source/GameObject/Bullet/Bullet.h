@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Source/GameObject/GameObject3D.h"
+#include "Source/GameObject/Collidable3DObject.h"
 
 /**
 * @class Bullet
 * @brief discription
 */
-class Bullet : public GameObject3D {
+class Bullet : public Collidable3DObject {
 public:
     /**
     * @brief コンストラクタ
@@ -18,7 +18,8 @@ public:
     ~Bullet();
 
     virtual void update() override;
-
+protected:
+    virtual std::unique_ptr<Collider> createCollider() override;
 private:
     float mSpeed;
 };

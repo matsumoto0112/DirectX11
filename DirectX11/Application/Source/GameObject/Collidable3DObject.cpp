@@ -5,3 +5,8 @@ Collidable3DObject::Collidable3DObject(const Framework::Utility::Transform& tran
     :GameObject3D(transform, mediator, modelType), mCollider(std::move(collider)) {}
 
 Collidable3DObject::~Collidable3DObject() {}
+
+void Collidable3DObject::draw() {
+    GameObject3D::draw();
+    mCollider->render();
+}

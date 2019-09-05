@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "Framework/Utility/Collision.h"
+#include "Source/GameObject/Bullet/Bullet.h"
 #include "Source/GameObject/Collider.h"
 #include "Source/GameObject/IMainSceneMediator.h"
 #include "Source/GameObject/Player.h"
@@ -11,7 +12,7 @@ namespace {
 std::shared_ptr<ImGUI::Text> mText;
 }
 
-GameObjectManager::GameObjectManager(IMainSceneMediator & mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
+GameObjectManager::GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
     :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {
     std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Collision");
     mText = std::make_shared<ImGUI::Text>("Hit");
@@ -25,8 +26,12 @@ GameObjectManager::~GameObjectManager() {
 
 void GameObjectManager::update() {
     mPlayer->update();
+    mText->setText("NOHIT");
     for (auto&& bullet : mBullets) {
         bullet->update();
+        if (mPlayer->getColliderPtr()->getOBB().isCollide(bullet->getColliderPtr()->getOBB())) {
+            mText->setText(Utility::StringBuilder("HIT"));
+        }
     }
     for (auto&& enemy : mEnemy) {
         enemy->update();
@@ -46,7 +51,7 @@ void GameObjectManager::draw() {
     }
 }
 
-void GameObjectManager::addBullet(GameObjectPtr bullet) {
+void GameObjectManager::addBullet(BulletPtr bullet) {
     mBullets.emplace_back(std::move(bullet));
 }
 

@@ -21,10 +21,7 @@ public:
     * @brief XV
     */
     virtual void update() override;
-
-    virtual void draw() override;
-
-    Collider* getCollider() const;
+protected:
     virtual std::unique_ptr<Collider> createCollider() override;
 private:
     float mMoveSpeed;

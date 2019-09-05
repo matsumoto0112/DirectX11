@@ -28,7 +28,7 @@ Wall::~Wall() {}
 
 void Wall::pushBackGameObject(Collidable3DObject& gameObject) {
     float len = 0.0f;
-    if (Utility::Collision::obb_plane(gameObject.getCollider()->getOBB(), mPlane, &len)) {
+    if (Utility::Collision::obb_plane(gameObject.getColliderPtr()->getOBB(), mPlane, &len)) {
         Math::Vector3 pos = gameObject.getTransform().getPosition();
         pos += len * mPlane.normal;
         gameObject.getTransformPtr()->setPosition(pos);

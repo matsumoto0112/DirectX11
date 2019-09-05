@@ -3,10 +3,11 @@
 #include <vector>
 #include "Source/GameObject/GameObject.h"
 
+class Bullet;
+class Field;
 class IMainSceneMediator;
 class Player;
 class Wall;
-class Field;
 
 /**
 * @class GameObjectManager
@@ -15,6 +16,8 @@ class Field;
 class GameObjectManager {
     using GameObjectPtr = std::unique_ptr<GameObject>;
     using GameObjectList = std::vector<GameObjectPtr>;
+    using BulletPtr = std::unique_ptr<Bullet>;
+    using BulletList = std::vector<BulletPtr>;
 public:
     /**
     * @brief コンストラクタ
@@ -26,13 +29,12 @@ public:
     ~GameObjectManager();
     void update();
     void draw();
-    void addWall(std::unique_ptr<Wall> wall);
-    void addBullet(GameObjectPtr bullet);
+    void addBullet(BulletPtr bullet);
     void addEnemy(GameObjectPtr enemy);
 private:
     IMainSceneMediator& mMediator;
     std::unique_ptr<Player> mPlayer;
     std::unique_ptr<Field> mField;
-    GameObjectList mBullets;
+    BulletList mBullets;
     GameObjectList mEnemy;
 };

@@ -20,11 +20,11 @@ public:
     std::function<T()> get = nullptr;
 
     operator T() {
-        return get ? this->get() : r;
+        return get ? this->get() : this->r;
     }
 
     T operator ->() {
-        return get ? this->get() : r;
+        return get ? this->get() : this->r;
     }
 
     void operator =(const T v) {

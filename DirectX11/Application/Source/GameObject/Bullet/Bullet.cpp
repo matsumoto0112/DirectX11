@@ -4,9 +4,24 @@
 using namespace Framework;
 
 Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator)
-    :GameObject3D(transform, mediator, Define::ModelType::Bullet),
-    mSpeed(3.0f) {
+    :Collidable3DObject(transform, mediator, Define::ModelType::Bullet, createCollider()),
+    mSpeed(0.0f) {
+    std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Bullet");
 
+#define ADD(name,type) { \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, mCollider->transform.get().getScale().##type, [&](float val) { \
+        Math::Vector3 scale = mCollider->transform.get().getScale(); \
+        scale.##type = val; \
+        mCollider->holder->getTransformPtr()->setScale(scale); \
+    }); \
+    field->setMaxValue(1.0f); \
+    window->addItem(field); \
+    }
+
+    ADD(SCALE_X, x);
+    ADD(SCALE_Y, y);
+    ADD(SCALE_Z, z);
+    mMediator.addDebugUI(window);
 }
 
 Bullet::~Bullet() {}
@@ -18,4 +33,13 @@ void Bullet::update() {
     v.normalize();
     Math::Vector3 newPos = mTransform.getPosition() + v * mSpeed * Utility::Time::getInstance().DeltaTime;
     mTransform.setPosition(newPos);
+}
+
+std::unique_ptr<Collider> Bullet::createCollider() {
+    Utility::Transform transform(
+        Math::Vector3::ZERO,
+        Math::Quaternion::IDENTITY,
+        Math::Vector3(0.25f, 0.25f, 0.25f));
+    transform.setParent(&mTransform);
+    return std::make_unique<Collider>(transform, this);
 }

@@ -24,10 +24,19 @@ public:
     * @brief デストラクタ
     */
     virtual ~Collidable3DObject();
-
+    /**
+    * @brief 描画
+    */
+    virtual void draw() override;
+    /**
+    * @brief コライダーポインタを取得する
+    */
+    Collider* getColliderPtr() const { return mCollider.get(); }
+protected:
+    /**
+    * @brief コライダーを作成する
+    */
     virtual std::unique_ptr<Collider> createCollider() = 0;
-
-    Collider* getCollider() const { return mCollider.get(); }
 protected:
     std::unique_ptr<Collider> mCollider; //!< コライダー
 };
