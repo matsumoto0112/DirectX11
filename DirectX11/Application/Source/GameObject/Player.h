@@ -21,6 +21,7 @@ public:
     * @brief XV
     */
     virtual void update() override;
+    virtual void dispatch(Collidable3DObject* other) override;
 protected:
     virtual std::unique_ptr<Collider> createCollider() override;
 private:

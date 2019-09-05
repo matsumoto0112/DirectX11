@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Source/GameObject/Bullet/Bullet.h"
 
 using namespace Framework;
 
@@ -6,6 +7,14 @@ Enemy::Enemy(const Utility::Transform& transform, IMainSceneMediator& mediator)
     :Collidable3DObject(transform, mediator, Define::ModelType::Enemy, createCollider()) {}
 
 Enemy::~Enemy() {}
+
+void Enemy::dispatch(Collidable3DObject* other) {
+    other->hit(this);
+}
+
+void Enemy::hit(Bullet* other) {
+    mIsAlive = false;
+}
 
 std::unique_ptr<Collider> Enemy::createCollider() {
     Utility::Transform transform(
@@ -16,3 +25,4 @@ std::unique_ptr<Collider> Enemy::createCollider() {
     transform.setParent(&mTransform);
     return std::make_unique<Collider>(transform, this);
 }
+

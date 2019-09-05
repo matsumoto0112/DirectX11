@@ -3,6 +3,10 @@
 #include "Source/GameObject/GameObject3D.h"
 #include "Source/GameObject/Collider.h"
 
+class Player;
+class Bullet;
+class Enemy;
+
 /**
 * @class Collidable3DObject
 * @brief 衝突可能な3Dオブジェクト
@@ -32,11 +36,18 @@ public:
     * @brief コライダーポインタを取得する
     */
     Collider* getColliderPtr() const { return mCollider.get(); }
+
+    virtual void dispatch(Collidable3DObject* other) = 0;
+    virtual void hit(Player* other) {};
+    virtual void hit(Bullet* other) {};
+    virtual void hit(Enemy* other) {};
+    Property<bool> isAlive{ mIsAlive };
 protected:
     /**
     * @brief コライダーを作成する
     */
     virtual std::unique_ptr<Collider> createCollider() = 0;
 protected:
+    bool mIsAlive;
     std::unique_ptr<Collider> mCollider; //!< コライダー
 };

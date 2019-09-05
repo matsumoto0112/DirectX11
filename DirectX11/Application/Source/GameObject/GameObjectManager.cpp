@@ -9,17 +9,8 @@
 
 using namespace Framework;
 
-namespace {
-std::shared_ptr<ImGUI::Text> mText;
-}
-
 GameObjectManager::GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
-    :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {
-    std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Collision");
-    mText = std::make_shared<ImGUI::Text>("Hit");
-    window->addItem(mText);
-    mMediator.addDebugUI(window);
-}
+    :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {}
 
 GameObjectManager::~GameObjectManager() {
     mBullets.clear();
@@ -27,17 +18,25 @@ GameObjectManager::~GameObjectManager() {
 
 void GameObjectManager::update() {
     mPlayer->update();
-    mText->setText("NOHIT");
     for (auto&& bullet : mBullets) {
         bullet->update();
     }
     for (auto&& enemy : mEnemies) {
         enemy->update();
-        if (mPlayer->getColliderPtr()->getOBB().isCollide(enemy->getColliderPtr()->getOBB())) {
-            mText->setText(Utility::StringBuilder("HIT"));
+    }
+
+    for (auto&& bullet : mBullets) {
+        for (auto&& enemy : mEnemies) {
+            if (bullet->getColliderPtr()->getOBB().isCollide(enemy->getColliderPtr()->getOBB())) {
+                bullet->dispatch(enemy.get());
+                enemy->dispatch(bullet.get());
+            }
         }
     }
 
+    auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->isAlive; });
+    mEnemies.erase(removeIt, mEnemies.end());
+    
     mField->pushBackGameObject(*mPlayer);
 }
 

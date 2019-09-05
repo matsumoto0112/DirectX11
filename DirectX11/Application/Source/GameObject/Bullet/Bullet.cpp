@@ -26,3 +26,11 @@ std::unique_ptr<Collider> Bullet::createCollider() {
     transform.setParent(&mTransform);
     return std::make_unique<Collider>(transform, this);
 }
+
+void Bullet::dispatch(Collidable3DObject* other) {
+    other->hit(this);
+}
+
+void Bullet::hit(Enemy* other) {
+    mIsAlive = false;
+}

@@ -31,7 +31,7 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     mMoveSpeed(10.0f) {}
 
 Player::~Player() {}
-bool flag = false;
+
 void Player::update() {
     const Input::Keyboard& key = Utility::getInputManager()->getKeyboard();
     Math::Vector3 movement = Math::Vector3::ZERO;
@@ -53,12 +53,15 @@ void Player::update() {
 
     mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
 
-    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left) && !flag) {
+    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left)) {
         Utility::Transform bullet = mTransform;
         bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
         mMediator.shotBullet(bullet);
-        flag = true;
     }
+}
+
+void Player::dispatch(Collidable3DObject* other) {
+    other->hit(this);
 }
 
 std::unique_ptr<Collider> Player::createCollider() {
@@ -70,3 +73,4 @@ std::unique_ptr<Collider> Player::createCollider() {
     colliderTransform.setParent(&mTransform);
     return std::make_unique<Collider>(colliderTransform, this);
 }
+
