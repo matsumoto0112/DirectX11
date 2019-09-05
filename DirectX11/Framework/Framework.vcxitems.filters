@@ -112,6 +112,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -268,5 +269,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.h" />
   </ItemGroup>
 </Project>

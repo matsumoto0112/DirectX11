@@ -33,7 +33,7 @@ public:
 
     virtual void draw() override;
 
-    Collider* getCollider() const { return mCollider.get(); }
+    Collider* getCollider() const;
 private:
     IMainSceneMediator& mMediator;
     float mMoveSpeed;

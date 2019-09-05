@@ -8,7 +8,7 @@ struct OBB3D {
 public:
     Vector3 mPosition; //!< 位置
     std::array<Vector3, 3> mNormalDirect; //!< 各軸の方向ベクトル
-    Vector3 mLength;
+    Vector3 mLength; //!< 各軸の中心からの長さ
 public:
     /**
     * @brief デフォルトコンストラクタ
@@ -24,7 +24,7 @@ public:
         :mPosition(position), mNormalDirect(normal), mLength(length) {}
     /**
     * @brief 衝突しているか
-    * @param other 他のOBB
+    * @param other 他のOBB3D
     * @return 衝突していたらtrueを返す
     */
     bool isCollide(const OBB3D& other) const;

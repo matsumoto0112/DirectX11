@@ -18,6 +18,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IInstance.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\AABB3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\OBB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />

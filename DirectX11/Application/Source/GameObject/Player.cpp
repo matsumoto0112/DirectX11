@@ -77,3 +77,7 @@ void Player::draw() {
     GameObject3D::draw();
     mCollider->render();
 }
+
+Collider* Player::getCollider() const {
+    return mCollider.get();
+}

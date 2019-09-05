@@ -32,11 +32,31 @@ void GameObjectManager::update() {
         enemy->update();
     }
 
-    mText->setText("NoHit");
+    Utility::StringBuilder sb("NoHit\n");
     for (auto&& wall : mWallList) {
-        if (Math::AABB3D::intersect(mPlayer->getCollider()->getAABB(), wall->getCollider()->getAABB())) {
-            mText->setText("Hit");
+        if (mPlayer->getCollider()->getOBB().isCollide(wall->getCollider()->getOBB())) {
+            sb = Utility::StringBuilder("Hit");
         }
+        Math::OBB3D obb = mPlayer->getCollider()->getOBB();
+        sb << "OBB_POS:" << obb.mPosition << "\n";
+        sb << "PLAYER_POS:" << mPlayer->getCollider()->transform.get().getGlobalPostition() << "\n";
+        sb << "OBB_DIR[0]" << obb.mNormalDirect[0] << "\n";
+        sb << "OBB_DIR[1]" << obb.mNormalDirect[1] << "\n";
+        sb << "OBB_DIR[2]" << obb.mNormalDirect[2] << "\n";
+        sb << "PLAYER_ROT:" << mPlayer->getCollider()->transform.get().getGlobalRotate() << "\n";
+        sb << "OBB_SCALE" << obb.mLength << "\n";
+        sb << "PLAYER_SCL:" << mPlayer->getCollider()->transform.get().getGlobalScale() << "\n";
+        obb = wall->getCollider()->getOBB();
+        sb << obb.mPosition << "\n";
+        sb << "OBB2_POS:" << obb.mPosition << "\n";
+        sb << "WALL_POS:" << wall->getCollider()->transform.get().getGlobalPostition() << "\n";
+        sb << "OBB_DIR[0]" << obb.mNormalDirect[0] << "\n";
+        sb << "OBB_DIR[1]" << obb.mNormalDirect[1] << "\n";
+        sb << "OBB_DIR[2]" << obb.mNormalDirect[2] << "\n";
+        sb << "WALL_ROT:" << wall->getCollider()->transform.get().getGlobalRotate() << "\n";
+        sb << "OBB_SCALE" << obb.mLength << "\n";
+        sb << "WALL_SCL:" << wall->getCollider()->transform.get().getGlobalScale() << "\n";
+        mText->setText(sb.getStr());
     }
 }
 
