@@ -89,20 +89,20 @@ Quaternion Quaternion::operator*(const Quaternion& a) const {
 }
 
 Matrix4x4 Quaternion::toMatrix() const {
-    const float twoXX = 2 * x * x;
-    const float twoYY = 2 * y * y;
-    const float twoZZ = 2 * z * z;
-    const float twoXY = 2 * x * y;
-    const float twoYZ = 2 * y * z;
-    const float twoZX = 2 * z * x;
-    const float twoWX = 2 * w * x;
-    const float twoWY = 2 * w * y;
-    const float twoWZ = 2 * w * z;
+    const float twoXX = 2.0f * x * x;
+    const float twoYY = 2.0f * y * y;
+    const float twoZZ = 2.0f * z * z;
+    const float twoXY = 2.0f * x * y;
+    const float twoYZ = 2.0f * y * z;
+    const float twoZX = 2.0f * z * x;
+    const float twoWX = 2.0f * w * x;
+    const float twoWY = 2.0f * w * y;
+    const float twoWZ = 2.0f * w * z;
     return Matrix4x4
     (
-        1 - twoYY - twoZZ, twoXY + twoWZ, twoZX - twoWY, 0,
-        twoXY - twoWZ, 1 - twoXX - twoZZ, twoYZ + twoWX, 0,
-        twoZX + twoWY, twoYZ - twoWX, 1 - twoXX - twoYY, 0,
+        1.0f - twoYY - twoZZ,   twoXY + twoWZ,          twoZX - twoWY,          0,
+        twoXY - twoWZ,          1.0f - twoXX - twoZZ,   twoYZ + twoWX,          0,
+        twoZX + twoWY,          twoYZ - twoWX,          1.0f - twoXX - twoYY,   0,
         0, 0, 0, 1
     );
 }

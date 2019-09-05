@@ -30,6 +30,7 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     :GameObject3D(transform, mediator, Define::ModelType::Player),
     mMediator(mediator),
     mMoveSpeed(10.0f) {
+    mTransform.setRotate(Math::Quaternion::createRotateAboutY(-90.0f));
     Utility::Transform colliderTransform = Utility::Transform(
         Math::Vector3(0, 0.6f, 0),
         Math::Quaternion::IDENTITY,
@@ -67,9 +68,9 @@ void Player::update() {
     mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
 
     if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left)) {
-        Utility::Transform bullet = mTransform;
-        bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
-        mMediator.shotBullet(bullet);
+        //Utility::Transform bullet = mTransform;
+        //bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
+        //mMediator.shotBullet(bullet);
     }
 }
 

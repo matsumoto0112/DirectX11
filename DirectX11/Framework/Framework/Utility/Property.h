@@ -15,16 +15,16 @@ protected:
 template <class T>
 class Property {
 public:
-    T& t;
+    T& r;
     std::function<void(T value)> set = nullptr;
     std::function<T()> get = nullptr;
 
     operator T() {
-        return get ? this->get() : this->t;
+        return get ? this->get() : r;
     }
 
     T operator ->() {
-        return get ? this->get() : this->t;
+        return get ? this->get() : r;
     }
 
     void operator =(const T v) {
@@ -32,7 +32,7 @@ public:
             this->set(v);
         }
         else {
-            this->t = v;
+            r = v;
         }
     }
 };

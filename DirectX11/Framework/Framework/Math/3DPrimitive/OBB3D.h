@@ -28,7 +28,7 @@ public:
     * @return Õ“Ë‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
     */
     bool isCollide(const OBB3D& other) const;
-
+    float getLength(int elem) const;
     void setPosition(const Math::Vector3& position);
     void setNormal(int axis, const Math::Vector3& normal);
     void setLength(const Math::Vector3& length);

@@ -21,9 +21,8 @@ public:
     virtual ~GameObject() = default;
     virtual void update() {};
     virtual void draw() {};
-
-    ReadonlyProperty<Framework::Utility::Transform> transform{ mTransform };
+    Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
 protected:
     IMainSceneMediator& mMediator; //!< ƒƒCƒ“ƒV[ƒ“’‡‰îŽÒ
-    Framework::Utility::Transform mTransform;
+    PROPERTY(Framework::Utility::Transform, mTransform, Transform);
 };

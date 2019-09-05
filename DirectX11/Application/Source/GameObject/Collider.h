@@ -1,6 +1,6 @@
 #pragma once
-#include "Framework/Math/AABB3D.h"
-#include "Framework/Math/OBB3D.h"
+#include "Framework/Math/3DPrimitive/AABB3D.h"
+#include "Framework/Math/3DPrimitive/OBB3D.h"
 #include "Framework/Utility/Transform.h"
 #include "Framework/Utility/Property.h"
 
