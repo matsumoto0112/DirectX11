@@ -27,11 +27,16 @@ bool Collision::line_plane(const Line& line, const Plane& plane, Vector3* inters
 }
 
 bool Collision::obb_plane(const OBB3D& obb, const Plane& plane, float* len) {
+    //•½–Ê‚É‘Î‚·‚éOBB‚ÌË‰eü‚Ì’·‚³‚ğŒvZ
     float r = 0.0f;
     for (int i = 0; i < 3; i++) {
         r += MathUtility::abs(Vector3::dot(obb.mNormalDirect[i] * obb.getLength(i), plane.normal));
     }
+
+    //•½–Ê‚ÆOBB‚Æ‚Ì‹——£‚ğŒvZ
     float s = Vector3::dot((obb.mPosition - plane.p), plane.normal);
+
+    //–ß‚µ‹——£‚ğŒvZ
     if (len != nullptr) {
         if (s > 0) {
             *len = r - MathUtility::abs(s);
@@ -40,6 +45,8 @@ bool Collision::obb_plane(const OBB3D& obb, const Plane& plane, float* len) {
             *len = r + MathUtility::abs(s);
         }
     }
+
+    //Õ“Ë”»’è
     if (MathUtility::abs(s) - r < 0.0f) {
         return true;
     }

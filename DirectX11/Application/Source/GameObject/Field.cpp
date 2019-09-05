@@ -10,6 +10,11 @@ Field::Field(IMainSceneMediator& mediator) {
         Math::Quaternion::createRotateAboutY(90.0f),
         Math::Vector3(1.0f, 1.0f, 1.0f)),
         mediator);
+    mWalls[1] = std::make_unique<Wall>(Utility::Transform(
+        Math::Vector3(10.0f, 0.0f, 0.0f),
+        Math::Quaternion::createRotateAboutY(-90.0f),
+        Math::Vector3(1.0f, 1.0f, 1.0f)),
+        mediator);
 
     mFloor = std::make_unique<Floor>(Utility::Transform(
         Math::Vector3(0, 0, 0),
@@ -21,12 +26,19 @@ Field::Field(IMainSceneMediator& mediator) {
 Field::~Field() {}
 
 void Field::pushBackGameObject(Collider& collider) {
-    mWalls[0]->pushBackGameObject(collider);
+    for (auto&& wall : mWalls) {
+        if (wall)
+            wall->pushBackGameObject(collider);
+    }
 }
 
 void Field::update() {}
 
 void Field::draw() {
     mFloor->draw();
+    for (auto&& wall : mWalls) {
+        if (wall)
+            wall->draw();
+    }
     mWalls[0]->draw();
 }
