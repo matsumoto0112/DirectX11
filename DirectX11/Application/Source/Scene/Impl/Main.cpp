@@ -81,11 +81,19 @@ Main::Main() {
     window->addItem(button);
     addDebugUI(std::move(window));
 
-    mManager->addEnemy(std::make_unique<Enemy>(Utility::Transform(
-        Math::Vector3(0, 0, 5),
-        Math::Quaternion::IDENTITY,
-        Math::Vector3(1.0f, 1.0f, 1.0f)),
-        *this));
+    const int NUM = 12;
+    const float ANGLE = 360.0f / NUM;
+    for (int i = 0; i < NUM; i++) {
+        float x = Math::MathUtility::cos(ANGLE * i) * 5;
+        float z = Math::MathUtility::sin(ANGLE * i) * 5;
+        Utility::Transform tr(
+            Math::Vector3(x, 0, z),
+            Math::Quaternion::IDENTITY,
+            Math::Vector3(1.0f, 1.0f, 1.0f)
+        );
+        tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
+        mManager->addEnemy(std::make_unique<Enemy>(tr, *this));
+    }
 
     // ラスタライザの設定
     D3D11_RASTERIZER_DESC rdc = {};

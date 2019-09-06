@@ -34,9 +34,15 @@ void GameObjectManager::update() {
         }
     }
 
-    auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->isAlive; });
-    mEnemies.erase(removeIt, mEnemies.end());
-    
+    {
+        auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->isAlive; });
+        mEnemies.erase(removeIt, mEnemies.end());
+    }
+    {
+        auto removeIt = std::remove_if(mBullets.begin(), mBullets.end(), [](auto&& bullet) {return !bullet->isAlive; });
+        mBullets.erase(removeIt, mBullets.end());
+    }
+
     mField->pushBackGameObject(*mPlayer);
 }
 
