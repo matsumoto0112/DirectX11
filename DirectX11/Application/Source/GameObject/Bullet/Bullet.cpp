@@ -5,7 +5,7 @@ using namespace Framework;
 
 Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator)
     :Collidable3DObject(transform, mediator, Define::ModelType::Bullet, createCollider()),
-    mSpeed(1.0f) {}
+    mSpeed(10.0f) {}
 
 Bullet::~Bullet() {}
 

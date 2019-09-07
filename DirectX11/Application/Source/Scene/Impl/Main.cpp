@@ -81,20 +81,6 @@ Main::Main() {
     window->addItem(button);
     addDebugUI(std::move(window));
 
-    const int NUM = 12;
-    const float ANGLE = 360.0f / NUM;
-    for (int i = 0; i < NUM; i++) {
-        float x = Math::MathUtility::cos(ANGLE * i) * 5;
-        float z = Math::MathUtility::sin(ANGLE * i) * 5;
-        Utility::Transform tr(
-            Math::Vector3(x, 0, z),
-            Math::Quaternion::IDENTITY,
-            Math::Vector3(1.0f, 1.0f, 1.0f)
-        );
-        tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
-        mManager->addEnemy(std::make_unique<Enemy>(tr, *this));
-    }
-
     // ラスタライザの設定
     D3D11_RASTERIZER_DESC rdc = {};
     rdc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
@@ -114,9 +100,27 @@ Main::Main() {
 Main::~Main() {}
 
 void Main::load(Scene::Collecter& collecter) {}
+static int cnt = 0;
+static int num = 0;
 
 void Main::update() {
     mManager->update();
+    cnt++;
+    if (cnt == 15) {
+        cnt = 0;
+        const int NUM = 36;
+        const float ANGLE = 360.0f / NUM;
+        float x = Math::MathUtility::cos(ANGLE * num) * 5;
+        float z = Math::MathUtility::sin(ANGLE * num) * 5;
+        Utility::Transform tr(
+            Math::Vector3(x, 0, z),
+            Math::Quaternion::IDENTITY,
+            Math::Vector3(1.0f, 1.0f, 1.0f)
+        );
+        tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
+        mManager->addEnemy(std::make_unique<Enemy>(tr, *this));
+        num++;
+    }
 }
 
 bool Main::isEndScene() const {
@@ -149,5 +153,5 @@ void Main::shotBullet(const Utility::Transform& transform) {
 }
 
 void Main::addDebugUI(std::shared_ptr<ImGUI::Window> window) {
-    mDebugUIs.emplace_back(window);
+    //mDebugUIs.emplace_back(window);
 }

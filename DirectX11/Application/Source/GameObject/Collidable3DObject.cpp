@@ -8,6 +8,6 @@ Collidable3DObject::~Collidable3DObject() {}
 
 void Collidable3DObject::draw() {
     GameObject3D::draw();
-    mCollider->render();
+    //mCollider->render();
 }
 
