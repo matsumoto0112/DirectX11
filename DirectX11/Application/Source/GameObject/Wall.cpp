@@ -9,18 +9,18 @@
 using namespace Framework;
 
 namespace {
-static const Math::Vector3 WALL_SCALE = Math::Vector3(1.0f, 5.0f, 10.0f);
-static const Math::Vector3 HALF_WALL_SCALE = WALL_SCALE * 0.5f;
+static const float WALL_HALF_WIDTH = 0.5f;
 }
 
 Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mediator)
     : GameObject3D(transform, mediator, Define::ModelType::Wall),
     mPlane(transform.getGlobalPostition(),
         Math::Vector3::FORWORD *  transform.getGlobalRotate().toMatrix()) {
+    //•Ç•½–Ê‚ÌˆÊ’u‚ð“à‘¤‚É‚¸‚ç‚·
     const Math::Vector3 offset(
-        HALF_WALL_SCALE.x * mPlane.normal.x,
-        HALF_WALL_SCALE.y * mPlane.normal.y,
-        HALF_WALL_SCALE.z * mPlane.normal.z);
+        WALL_HALF_WIDTH * mPlane.normal.x,
+        WALL_HALF_WIDTH * mPlane.normal.y,
+        WALL_HALF_WIDTH * mPlane.normal.z);
     mPlane.p += offset;
 }
 
@@ -33,6 +33,10 @@ void Wall::pushBackGameObject(Collidable3DObject& gameObject) {
         pos += len * mPlane.normal;
         gameObject.getTransformPtr()->setPosition(pos);
     }
+}
+
+bool Wall::isHitGameObject(Collidable3DObject& gameObject) {
+    return Utility::Collision::obb_plane(gameObject.getColliderPtr()->getOBB(), mPlane, nullptr);
 }
 
 void Wall::draw() {

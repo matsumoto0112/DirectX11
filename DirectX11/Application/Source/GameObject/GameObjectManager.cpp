@@ -36,6 +36,15 @@ void GameObjectManager::update() {
         }
     }
 
+
+    mField->pushBackGameObject(*mPlayer);
+
+    for (auto&& bullet : mBullets) {
+        if (mField->isGameObjectOutOfArea(*bullet)) {
+            bullet->outOfArea();
+        }
+    }
+
     {
         auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->getIsAlive(); });
         mEnemies.erase(removeIt, mEnemies.end());
@@ -44,8 +53,6 @@ void GameObjectManager::update() {
         auto removeIt = std::remove_if(mBullets.begin(), mBullets.end(), [](auto&& bullet) {return !bullet->getIsAlive(); });
         mBullets.erase(removeIt, mBullets.end());
     }
-
-    mField->pushBackGameObject(*mPlayer);
 }
 
 void GameObjectManager::draw() {

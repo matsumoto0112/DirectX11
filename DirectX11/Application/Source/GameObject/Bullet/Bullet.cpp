@@ -16,6 +16,10 @@ void Bullet::update() {
     mTransform.setPosition(newPos);
 }
 
+void Bullet::outOfArea() {
+    mIsAlive = false;
+}
+
 std::unique_ptr<Collider> Bullet::createCollider() {
     Utility::Transform transform(
         Math::Vector3::ZERO,

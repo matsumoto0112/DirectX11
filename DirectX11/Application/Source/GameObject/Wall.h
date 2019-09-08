@@ -21,6 +21,7 @@ public:
     * @brief ゲームオブジェクトを壁の中に押し戻す
     */
     void pushBackGameObject(Collidable3DObject& gameObject);
+    bool isHitGameObject(Collidable3DObject& gameObject);
     virtual void draw() override;
 private:
     Framework::Math::Plane mPlane;

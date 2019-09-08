@@ -32,18 +32,6 @@ private:
     using InputManagerPtr = std::unique_ptr<Input::InputManager>;
 public:
     /**
-    * @brief メインウィンドウの取得
-    */
-    Window::Window& getWindow() const;
-    /**
-    * @brief グラフィックデバイスの取得
-    */
-    Graphics::RenderingManager* getRenderingManager() const;
-    /**
-    * @brief 入力管理デバイスの取得
-    */
-    Input::InputManager* getInputManager() const;
-    /**
     * @brief デバイスの更新
     */
     void update();
@@ -69,6 +57,20 @@ protected:
     * @brief デストラクタ
     */
     virtual ~GameDevice();
+public:
+    /**
+    * @brief メインウィンドウの取得
+    */
+    Window::Window* getWindow() const;
+    /**
+    * @brief グラフィックデバイスの取得
+    */
+    Graphics::RenderingManager* getRenderingManager() const;
+    /**
+    * @brief 入力管理デバイスの取得
+    */
+    Input::InputManager* getInputManager() const;
+
 private:
     WindowPtr mMainWindow; //!< メインウィンドウ
     RenderingManagerPtr mRenderingManager; //!< グラフィックデバイス

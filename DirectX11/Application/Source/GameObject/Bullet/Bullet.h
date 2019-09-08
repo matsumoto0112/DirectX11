@@ -18,7 +18,7 @@ public:
     ~Bullet();
 
     virtual void update() override;
-
+    virtual void outOfArea();
     virtual void dispatch(Collidable3DObject* other) override;
     virtual void hit(Enemy* other) override;
 protected:

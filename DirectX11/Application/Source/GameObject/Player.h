@@ -3,6 +3,8 @@
 #include "Framework/Utility/Property.h"
 #include "Source/GameObject/Collidable3DObject.h"
 
+class PlayerWeapon;
+
 /**
 * @class Player
 * @brief discription
@@ -26,4 +28,5 @@ protected:
     virtual std::unique_ptr<Collider> createCollider() override;
 private:
     float mMoveSpeed;
+    std::unique_ptr<PlayerWeapon> mWeapon;
 };

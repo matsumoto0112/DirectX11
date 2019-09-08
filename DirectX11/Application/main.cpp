@@ -40,16 +40,12 @@ private:
         if (!Game::init()) {
             return false;
         }
-        auto& window = mGameDevice.getWindow();
-        window.setProcedureEvent(new Window::DestroyProc());
-        window.setProcedureEvent(new Window::CloseProc());
+        auto window = mGameDevice.getWindow();
+        window->setProcedureEvent(new Window::DestroyProc());
+        window->setProcedureEvent(new Window::CloseProc());
 
         mSceneManager = std::make_unique<Scene::Manager>();
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
-        //mSceneManager->registerScene(Define::SceneType::DepthStencilTest, std::make_unique<DepthStencilTest>());
-        //mSceneManager->registerScene(Define::SceneType::MultiRenderTargetTest, std::make_unique<MultiRenderTargetTest>());
-        //mSceneManager->registerScene(Define::SceneType::ShadowMapTest, std::make_unique<ShadowMapTest>());
-        //mSceneManager->registerScene(Define::SceneType::AlphaTest, std::make_unique<AlphaBlendTest>());
         mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
         mSceneManager->loadScene(Define::SceneType::MainPlay);
 
@@ -71,7 +67,7 @@ private:
         Utility::StringBuilder sb("");
         float fps = Utility::Time::getInstance().getCurrentFPS();
         sb << fps;
-        SetWindowText(mGameDevice.getWindow().getHWND(), CString(sb.getStr().c_str()));
+        SetWindowText(mGameDevice.getWindow()->getHWND(), CString(sb.getStr().c_str()));
 
         ATLASSERT(_CrtCheckMemory());
     }

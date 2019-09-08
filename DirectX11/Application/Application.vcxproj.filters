@@ -17,6 +17,8 @@
     <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
+    <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
+    <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -40,6 +42,8 @@
     <ClInclude Include="Source\GameObject\Enemy\NormalEnemy.h" />
     <ClInclude Include="Source\GameObject\DebugMacro.h" />
     <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
+    <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
+    <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

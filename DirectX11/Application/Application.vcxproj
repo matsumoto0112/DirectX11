@@ -137,6 +137,8 @@
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\GameObject\Wall.cpp" />
+    <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
+    <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
@@ -159,6 +161,8 @@
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />
+    <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
+    <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />

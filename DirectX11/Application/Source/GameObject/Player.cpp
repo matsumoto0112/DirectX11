@@ -9,6 +9,7 @@
 #include "Framework/Utility/Collision.h"
 #include "Framework/Graphics/Renderer/3D/Cube.h"
 #include "Source/GameObject/Collider.h"
+#include "Source/GameObject/Weapon/SingleShotWeapon.h"
 
 using namespace Framework;
 
@@ -28,7 +29,13 @@ Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::
 
 Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator)
     :Collidable3DObject(transform, mediator, Define::ModelType::Player),
-    mMoveSpeed(10.0f) {}
+    mMoveSpeed(10.0f),
+    mWeapon(nullptr) {
+    Utility::Transform tr = mTransform;
+    tr.setPosition(tr.getPosition() + Math::Vector3(0, 1.1f, 0.0f));
+    tr.setParent(&mTransform);
+    mWeapon = std::make_unique<SingleShotWeapon>(tr, mMediator);
+}
 
 Player::~Player() {}
 
@@ -53,10 +60,8 @@ void Player::update() {
 
     mTransform.lookat(getMousePlanePosition(Utility::getInputManager()->getMouse().getMousePosition(), mMediator.getMainCamera()));
 
-    if (Utility::getInputManager()->getMouse().getMouseDown(Input::MouseButton::Left)) {
-        Utility::Transform bullet = mTransform;
-        bullet.setPosition(bullet.getPosition() + Math::Vector3(0, 1.10f, 0));
-        mMediator.shotBullet(bullet);
+    if (Utility::getInputManager()->getMouse().getMouse(Input::MouseButton::Left)) {
+        mWeapon->pullTrigger();
     }
 }
 

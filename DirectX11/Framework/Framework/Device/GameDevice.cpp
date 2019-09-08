@@ -10,8 +10,8 @@
 namespace Framework {
 namespace Device {
 
-Window::Window& GameDevice::getWindow() const {
-    return *mMainWindow;
+Window::Window* GameDevice::getWindow() const {
+    return mMainWindow.get();
 }
 
 Graphics::RenderingManager* GameDevice::getRenderingManager() const {

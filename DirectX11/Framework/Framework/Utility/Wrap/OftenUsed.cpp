@@ -6,7 +6,7 @@ namespace Framework {
 namespace Utility {
 
 HWND getMainHWND() {
-    return Device::GameDevice::getInstance().getWindow().getHWND();
+    return Device::GameDevice::getInstance().getWindow()->getHWND();
 }
 
 ImGUI::Manager* getImGUIManager() {
