@@ -37,11 +37,11 @@ void GameObjectManager::update() {
     }
 
     {
-        auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->isAlive; });
+        auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->getIsAlive(); });
         mEnemies.erase(removeIt, mEnemies.end());
     }
     {
-        auto removeIt = std::remove_if(mBullets.begin(), mBullets.end(), [](auto&& bullet) {return !bullet->isAlive; });
+        auto removeIt = std::remove_if(mBullets.begin(), mBullets.end(), [](auto&& bullet) {return !bullet->getIsAlive(); });
         mBullets.erase(removeIt, mBullets.end());
     }
 

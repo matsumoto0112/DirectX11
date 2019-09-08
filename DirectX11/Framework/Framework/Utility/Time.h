@@ -37,18 +37,16 @@ public:
     * @brief 決まったFPSを維持するために待機する
     */
     void wait();
-private: 
-    float mDeltaTime; //!< 差分時間
-    float mCurrentFPS; //!< 現在のFPS
+private:
     double mStartTime; //!< フレーム開始時間
     double mEndTime; //!< フレーム終了時間
     double mFreq; //!< 環境の周波数
     LARGE_INTEGER mCounter; //!< クロックカウント数
     float mFPS; //!< このゲームでのFPS
     FPS mFPSCounter; //!< FPS計測
-public:
-    Property<float> deltaTime;
-    Property<float> currentFPS;
+private:
+    PROPERTY_READONLY(float, mDeltaTime, DeltaTime);
+    PROPERTY_READONLY(float, mCurrentFPS, CurrentFPS);
 };
 
 } //Utility 

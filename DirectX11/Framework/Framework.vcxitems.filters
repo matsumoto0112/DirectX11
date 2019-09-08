@@ -220,7 +220,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Debug.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\FPS.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\HashCombine.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Random.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Singleton.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\StringBuilder.h" />
@@ -270,5 +269,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\Primitive3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
   </ItemGroup>
 </Project>

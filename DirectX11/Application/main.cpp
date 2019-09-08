@@ -69,7 +69,7 @@ private:
         mGameDevice.getRenderingManager()->drawEnd();
 
         Utility::StringBuilder sb("");
-        float fps = Utility::Time::getInstance().currentFPS;
+        float fps = Utility::Time::getInstance().getCurrentFPS();
         sb << fps;
         SetWindowText(mGameDevice.getWindow().getHWND(), CString(sb.getStr().c_str()));
 

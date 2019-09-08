@@ -34,6 +34,7 @@ private:
     PROPERTY(float, mValue, Value);
     PROPERTY(float, mMinValue, MinValue);
     PROPERTY(float, mMaxValue, MaxValue);
+private:
     CallFunc mCallFunc; //!< ’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éŠÖ”
 };
 

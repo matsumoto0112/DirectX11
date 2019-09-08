@@ -21,7 +21,7 @@ public:
     ~Camera();
 
     virtual void render();
-private:
+protected:
     PROPERTY(Math::Matrix4x4, mView, View);
     PROPERTY(Math::Matrix4x4, mProjection, Projection);
 };

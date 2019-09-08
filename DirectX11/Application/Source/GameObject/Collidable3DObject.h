@@ -43,13 +43,13 @@ public:
     virtual void hit(Player* other) {};
     virtual void hit(Bullet* other) {};
     virtual void hit(Enemy* other) {};
-    Property<bool> isAlive{ mIsAlive };
 protected:
     /**
     * @brief コライダーを作成する
     */
     virtual std::unique_ptr<Collider> createCollider() = 0;
 protected:
-    bool mIsAlive;
+    PROPERTY(bool, mIsAlive, IsAlive);
+protected:
     std::unique_ptr<Collider> mCollider; //!< コライダー
 };

@@ -217,6 +217,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Vertex\Vertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\Primitive3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.h" />
@@ -258,7 +259,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Text.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\ByteReader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Random.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\AbstractResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\FBXModelResourceStorage.h" />

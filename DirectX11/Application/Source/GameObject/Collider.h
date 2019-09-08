@@ -32,12 +32,9 @@ public:
 
     void render();
     Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
-    Property<Framework::Utility::Transform> transform;
-    /*{ mTransform,[&](const Framework::Utility::Transform& tr) {mTransform = tr; },[&]() {return mTransform; } };*/
-    Property<GameObject3D*> holder;
-    //{ mHolder };
 private:
-    GameObject3D* mHolder;
-    Framework::Utility::Transform mTransform;
+    PROPERTY(Framework::Utility::Transform, mTransform, Transform);
+    PROPERTY_POINTER(GameObject3D, mHolder, Holder);
+private:
     std::unique_ptr<Framework::Graphics::Cube> mCollisionRendererInstance;
 };

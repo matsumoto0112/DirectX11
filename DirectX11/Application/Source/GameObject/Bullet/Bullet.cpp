@@ -11,7 +11,7 @@ Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator
 Bullet::~Bullet() {}
 
 void Bullet::update() {
-    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mSpeed * Utility::Time::getInstance().getDeltaTime();
     Math::Vector3 newPos = mTransform.getPosition() + movement;
     mTransform.setPosition(newPos);
 }

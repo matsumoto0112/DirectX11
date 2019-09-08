@@ -15,7 +15,7 @@ void NormalEnemy::update() {    //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ðŒü‚­
     Player* player = mMediator.getPlayer();
     mTransform.lookat(player->getTransform().getGlobalPostition());
 
-    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mMoveSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mMoveSpeed * Utility::Time::getInstance().getDeltaTime();
     Math::Vector3 newPos = mTransform.getPosition() + movement;
     mTransform.setPosition(newPos);
 }

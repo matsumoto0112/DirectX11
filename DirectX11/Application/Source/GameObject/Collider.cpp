@@ -7,9 +7,7 @@ using namespace Framework;
 
 Collider::Collider(const Utility::Transform& transform, GameObject3D* holder)
     :mTransform(transform),
-    mHolder(holder),
-    transform(mTransform),
-    holder(mHolder) {
+    mHolder(holder) {
     mCollisionRendererInstance = std::make_unique<Graphics::Cube>();
 }
 

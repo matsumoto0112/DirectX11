@@ -12,11 +12,8 @@ namespace Math {
 */
 class AABB3D {
 private:
-    Vector3 mMin;
-    Vector3 mMax;
-public:
-    Property<Vector3> min{ mMin };
-    Property<Vector3> max{ mMax };
+    PROPERTY(Vector3, mMin, Min);
+    PROPERTY(Vector3, mMax, Max);
 public:
     /**
     * @brief デフォルトコンストラクタ
