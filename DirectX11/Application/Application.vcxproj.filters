@@ -47,6 +47,8 @@
     <ClInclude Include="Source\GameObject\Field.h" />
     <ClInclude Include="Source\GameObject\Bullet\Bullet.h" />
     <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
+    <ClInclude Include="Source\GameObject\Enemy\NormalEnemy.h" />
+    <ClInclude Include="Source\GameObject\DebugMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

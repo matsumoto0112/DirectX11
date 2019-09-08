@@ -149,7 +149,10 @@ public:
     * @brief ストリーム演算子
     */
     friend std::ostream& operator<<(std::ostream& os, const Math::Vector3& v);
-
+    /**
+    * @brief 各要素をかけたベクトルを返す
+    */
+    static Vector3 multiplyEashElement(const Vector3& v1, const Vector3& v2);
 };
 
 } //Math

@@ -11,14 +11,32 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Enemy(const Framework::Utility::Transform& transform, IMainSceneMediator& mediator);
+    Enemy(const Framework::Utility::Transform& transform,
+        const Framework::Graphics::Color4& enemyColor,
+        IMainSceneMediator& mediator);
     /**
     * @brief デストラクタ
     */
     ~Enemy();
+    virtual void initialize() override;
+    /**
+    * @brief 更新
+    */
+    virtual void update() override;
+    /**
+    * @brief ディスパッチ関数
+    */
     virtual void dispatch(Collidable3DObject* other) override;
+    /**
+    * @brief 弾との衝突時処理
+    */
     virtual void hit(Bullet* other) override;
+    /**
+    * @brief 描画
+    */
+    virtual void draw() override;
 protected:
     virtual std::unique_ptr<Collider> createCollider() override;
-private:
+protected:
+    Framework::Graphics::Color4 mEnemyColor;
 };

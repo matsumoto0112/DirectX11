@@ -123,6 +123,10 @@ Vector3 Vector3::cross(const Vector3& a, const Vector3& b) {
     return a.cross(b);
 }
 
+Vector3 Vector3::multiplyEashElement(const Vector3& v1, const Vector3& v2) {
+    return Math::Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+}
+
 Vector3 operator*(float a, const Vector3& v) {
     return v * a;
 }

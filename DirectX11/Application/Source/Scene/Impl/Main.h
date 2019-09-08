@@ -40,6 +40,7 @@ public:
 
     virtual Framework::Graphics::PerspectiveCamera* getMainCamera() override;
 
+    virtual Player * getPlayer() override;
     virtual void shotBullet(const Framework::Utility::Transform& transform) override;
 
     virtual void addDebugUI(std::shared_ptr<Framework::ImGUI::Window> window) override;

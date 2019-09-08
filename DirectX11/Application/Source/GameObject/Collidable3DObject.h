@@ -18,16 +18,18 @@ public:
     * @param transform トランスフォーム
     * @param mediator メインシーン仲介者
     * @param modelType モデルの種類
-    * @param collider コライダー
     */
     Collidable3DObject(const Framework::Utility::Transform& transform,
         IMainSceneMediator& mediator,
-        Define::ModelType modelType,
-        std::unique_ptr<Collider> collider);
+        Define::ModelType modelType);
     /**
     * @brief デストラクタ
     */
     virtual ~Collidable3DObject();
+    /**
+    * @brief 初期化
+    */
+    virtual void initialize() override;
     /**
     * @brief 描画
     */

@@ -19,6 +19,7 @@ public:
     * @brief デストラクタ
     */
     virtual ~GameObject() = default;
+    virtual void initialize() {};
     virtual void update() {};
     virtual void draw() {};
     Framework::Utility::Transform* getTransformPtr() { return &mTransform; }

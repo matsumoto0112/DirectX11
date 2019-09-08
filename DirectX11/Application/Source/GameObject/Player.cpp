@@ -27,7 +27,7 @@ Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::
 }
 
 Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator)
-    :Collidable3DObject(transform, mediator, Define::ModelType::Player, createCollider()),
+    :Collidable3DObject(transform, mediator, Define::ModelType::Player),
     mMoveSpeed(10.0f) {}
 
 Player::~Player() {}

@@ -21,6 +21,12 @@ Field::Field(IMainSceneMediator& mediator) {
         Math::Quaternion::IDENTITY,
         Math::Vector3(5, 1, 5)),
         mediator);
+
+    for (auto&& wall : mWalls) {
+        if (wall)
+            wall->initialize();
+    }
+    mFloor->initialize();
 }
 
 Field::~Field() {}

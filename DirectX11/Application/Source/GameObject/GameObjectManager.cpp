@@ -10,7 +10,9 @@
 using namespace Framework;
 
 GameObjectManager::GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
-    :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {}
+    :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {
+    mPlayer->initialize();
+}
 
 GameObjectManager::~GameObjectManager() {
     mBullets.clear();
@@ -58,9 +60,11 @@ void GameObjectManager::draw() {
 }
 
 void GameObjectManager::addBullet(BulletPtr bullet) {
+    bullet->initialize();
     mBullets.emplace_back(std::move(bullet));
 }
 
 void GameObjectManager::addEnemy(EnemyPtr enemy) {
+    enemy->initialize();
     mEnemies.emplace_back(std::move(enemy));
 }

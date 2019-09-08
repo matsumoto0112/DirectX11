@@ -152,7 +152,9 @@
     <ClInclude Include="Source\GameObject\Bullet\Bullet.h" />
     <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
     <ClInclude Include="Source\GameObject\Collider.h" />
+    <ClInclude Include="Source\GameObject\DebugMacro.h" />
     <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
+    <ClInclude Include="Source\GameObject\Enemy\NormalEnemy.h" />
     <ClInclude Include="Source\GameObject\Field.h" />
     <ClInclude Include="Source\GameObject\Floor.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />

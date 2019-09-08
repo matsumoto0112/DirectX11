@@ -13,6 +13,7 @@
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Source/GameObject/Field.h"
+#include "Framework/Utility/Random.h"
 
 #define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
     const float defValue  = mCamera->getPosition().##type; \
@@ -94,7 +95,6 @@ Main::Main() {
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
-
 }
 
 Main::~Main() {}
@@ -106,19 +106,20 @@ static int num = 0;
 void Main::update() {
     mManager->update();
     cnt++;
-    if (cnt == 15) {
+    if (cnt == 60) {
         cnt = 0;
         const int NUM = 36;
         const float ANGLE = 360.0f / NUM;
         float x = Math::MathUtility::cos(ANGLE * num) * 5;
         float z = Math::MathUtility::sin(ANGLE * num) * 5;
+        float s = Utility::Random::getInstance().range(1.0f, 2.0f);
         Utility::Transform tr(
             Math::Vector3(x, 0, z),
             Math::Quaternion::IDENTITY,
-            Math::Vector3(1.0f, 1.0f, 1.0f)
+            Math::Vector3(s, s, s)
         );
         tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
-        mManager->addEnemy(std::make_unique<Enemy>(tr, *this));
+        mManager->addEnemy(std::make_unique<Enemy>(tr, Graphics::Color4(0.0f, 0.0f, 1.0f, 1.0f), *this));
         num++;
     }
 }
@@ -153,5 +154,9 @@ void Main::shotBullet(const Utility::Transform& transform) {
 }
 
 void Main::addDebugUI(std::shared_ptr<ImGUI::Window> window) {
-    //mDebugUIs.emplace_back(window);
+    mDebugUIs.emplace_back(window);
+}
+
+Player* Main::getPlayer() {
+    return mManager->getPlayer();
 }

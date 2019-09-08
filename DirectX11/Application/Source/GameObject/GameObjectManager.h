@@ -34,6 +34,7 @@ public:
     void draw();
     void addBullet(BulletPtr bullet);
     void addEnemy(EnemyPtr enemy);
+    Player* getPlayer() const { return mPlayer.get(); }
 private:
     IMainSceneMediator& mMediator;
     std::unique_ptr<Player> mPlayer;
