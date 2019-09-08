@@ -18,11 +18,10 @@ public:
     * @brief デストラクタ
     */
     ~Enemy();
-    virtual void initialize() override;
     /**
-    * @brief 更新
+    * @brief 初期化処理
     */
-    virtual void update() override;
+    virtual void initialize() override;
     /**
     * @brief ディスパッチ関数
     */
@@ -36,7 +35,10 @@ public:
     */
     virtual void draw() override;
 protected:
+    /**
+    * @brief 自身のコライダーを作成する
+    */
     virtual std::unique_ptr<Collider> createCollider() override;
 protected:
-    Framework::Graphics::Color4 mEnemyColor;
+    Framework::Graphics::Color4 mColor; //!< 色
 };

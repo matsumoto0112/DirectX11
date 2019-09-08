@@ -6,7 +6,7 @@
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Define/Window.h"
 #include "Source/GameObject/Bullet/Bullet.h"
-#include "Source/GameObject/Enemy/Enemy.h"
+#include "Source/GameObject/Enemy/NormalEnemy.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 
 #include "Framework/Graphics/Renderer/3D/Cube.h"
@@ -91,7 +91,7 @@ Main::Main() {
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
-    bd.AlphaToCoverageEnable = FALSE;
+    bd.AlphaToCoverageEnable = TRUE;
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
@@ -119,7 +119,12 @@ void Main::update() {
             Math::Vector3(s, s, s)
         );
         tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
-        mManager->addEnemy(std::make_unique<Enemy>(tr, Graphics::Color4(0.0f, 0.0f, 1.0f, 1.0f), *this));
+        float r = Utility::Random::getInstance().range(0.0f, 1.0f);
+        float g = Utility::Random::getInstance().range(0.0f, 1.0f);
+        float b = Utility::Random::getInstance().range(0.0f, 1.0f);
+        float speed = Utility::Random::getInstance().range(0.1f, 3.0f);
+        NormalEnemy::Parameter parameter { Graphics::Color4(r,g,b,1.0f),speed };
+        mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
         num++;
     }
 }

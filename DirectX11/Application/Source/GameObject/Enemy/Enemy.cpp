@@ -11,26 +11,13 @@ Enemy::Enemy(const Utility::Transform& transform,
     const Graphics::Color4& enemyColor,
     IMainSceneMediator& mediator)
     : Collidable3DObject(transform, mediator, Define::ModelType::Enemy),
-    mEnemyColor(enemyColor) {}
+    mColor(enemyColor) {}
 
 
 Enemy::~Enemy() {}
 
 void Enemy::initialize() {
     Collidable3DObject::initialize();
-}
-
-void Enemy::update() {
-    //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ðŒü‚­
-    Player* player = mMediator.getPlayer();
-    mTransform.lookat(player->getTransform().getGlobalPostition());
-
-    Math::Quaternion q(0, 0, 1, 0);
-    Math::Quaternion r = Math::Quaternion::conjugate(mTransform.getRotate()) * q * mTransform.getRotate();
-    Math::Vector3 v(r.x, r.y, r.z);
-    v.normalize();
-    Math::Vector3 newPos = mTransform.getPosition() + v * 1.0f * Utility::Time::getInstance().DeltaTime;
-    mTransform.setPosition(newPos);
 }
 
 void Enemy::dispatch(Collidable3DObject* other) {
@@ -42,7 +29,7 @@ void Enemy::hit(Bullet* other) {
 }
 
 void Enemy::draw() {
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mEnemyColor);
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mColor);
     Collidable3DObject::draw();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
 }

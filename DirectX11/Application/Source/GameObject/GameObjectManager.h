@@ -30,10 +30,25 @@ public:
     * @brief デストラクタ
     */
     ~GameObjectManager();
+    /**
+    * @brief 更新
+    */
     void update();
+    /**
+    * @brief 描画
+    */
     void draw();
+    /**
+    * @brief 弾をゲームに追加する
+    */
     void addBullet(BulletPtr bullet);
+    /**
+    * @brief 敵をゲームに追加する
+    */
     void addEnemy(EnemyPtr enemy);
+    /**
+    * @brief プレイヤーポインタを取得する
+    */
     Player* getPlayer() const { return mPlayer.get(); }
 private:
     IMainSceneMediator& mMediator;

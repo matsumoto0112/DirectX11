@@ -21,6 +21,7 @@
     <ClCompile Include="Source\GameObject\Field.cpp" />
     <ClCompile Include="Source\GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
+    <ClCompile Include="Source\GameObject\Enemy\NormalEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
