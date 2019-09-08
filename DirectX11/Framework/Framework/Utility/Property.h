@@ -13,41 +13,41 @@ public: inline const type& get##funcName() const { return typeName; } \
 protected:
 
 template <class T>
-class Property {
+class PropertyBase {
+protected:
+    T& _value;
 public:
-    T& r;
-    std::function<void(T value)> set = nullptr;
-    std::function<T()> get = nullptr;
+    PropertyBase(T& value)
+        :_value(value) {}
+    PropertyBase(const PropertyBase& ref)
+        :_value(ref._value) {}
+    virtual ~PropertyBase() {};
 
-    operator T() {
-        return get ? this->get() : this->r;
-    }
-
-    T operator ->() {
-        return get ? this->get() : this->r;
-    }
-
-    void operator =(const T v) {
-        if (set) {
-            this->set(v);
-        }
-        else {
-            r = v;
-        }
+    PropertyBase<T>& operator =(const PropertyBase<T>& ref) {
+        this->_value = ref._value;
+        return *this;
     }
 };
 
+template<class T>
+struct GetterProperty {
+    static const T& get(const T& value) { return value; }
+};
+
 template <class T>
-class ReadonlyProperty {
+struct SetterProperty {
+    static void set(T& value, const T& var) { value = var; }
+};
+
+template <class T, class Getter = GetterProperty<T>, class Setter = SetterProperty<T>>
+class Property : public PropertyBase<T>, private Getter, private Setter {
 public:
-    T& t;
-    std::function<T()> get = nullptr;
+    Property(T& value) :PropertyBase<T>(value) {};
+    Property(const Property& ref) :PropertyBase<T>(ref) {};
+    virtual ~Property() {};
+public:
+    operator const T& () const { return this->get(this->_value); }
+    const T& operator ->() const { return this->get(this->_value); }
 
-    operator T() {
-        return get ? this->get() : this->t;
-    }
-
-    T operator ->() {
-        return get ? this->get() : this->t;
-    }
+    Property<T, Getter, Setter>& operator =(const T& var) { this->set(this->_value, var); return *this; };
 };

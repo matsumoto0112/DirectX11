@@ -14,7 +14,7 @@ void Bullet::update() {
     Math::Quaternion r = Math::Quaternion::conjugate(mTransform.getRotate()) * q * mTransform.getRotate();
     Math::Vector3 v(r.x, r.y, r.z);
     v.normalize();
-    Math::Vector3 newPos = mTransform.getPosition() + v * mSpeed * Utility::Time::getInstance().DeltaTime;
+    Math::Vector3 newPos = mTransform.getPosition() + v * mSpeed * Utility::Time::getInstance().deltaTime;
     mTransform.setPosition(newPos);
 }
 

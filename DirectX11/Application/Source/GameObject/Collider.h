@@ -32,8 +32,10 @@ public:
 
     void render();
     Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
-    Property<Framework::Utility::Transform> transform{ mTransform,[&](const Framework::Utility::Transform& tr) {mTransform = tr; },[&]() {return mTransform; } };
-    Property<GameObject3D*> holder{ mHolder };
+    Property<Framework::Utility::Transform> transform;
+    /*{ mTransform,[&](const Framework::Utility::Transform& tr) {mTransform = tr; },[&]() {return mTransform; } };*/
+    Property<GameObject3D*> holder;
+    //{ mHolder };
 private:
     GameObject3D* mHolder;
     Framework::Utility::Transform mTransform;

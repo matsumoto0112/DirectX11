@@ -47,8 +47,8 @@ private:
     float mFPS; //!< ‚±‚ÌƒQ[ƒ€‚Å‚ÌFPS
     FPS mFPSCounter; //!< FPSŒv‘ª
 public:
-    ReadonlyProperty<float> DeltaTime{ mDeltaTime };
-    ReadonlyProperty<float> CurrentFPS{ mCurrentFPS };
+    Property<float> deltaTime;
+    Property<float> currentFPS;
 };
 
 } //Utility 

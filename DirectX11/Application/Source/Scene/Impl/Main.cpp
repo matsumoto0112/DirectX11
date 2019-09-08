@@ -32,11 +32,6 @@
 }
 
 using namespace Framework;
-namespace {
-std::shared_ptr<ImGUI::Text> mHitText;
-Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizerState;
-std::unique_ptr<Graphics::AlphaBlend> mAlphaBlend;
-}
 
 Main::Main() {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
@@ -81,13 +76,6 @@ Main::Main() {
     std::shared_ptr<ImGUI::Button> button = std::make_shared<ImGUI::Button>("RESET", [&]() {mCamera->setLookat(Math::Vector3::ZERO); });
     window->addItem(button);
     addDebugUI(std::move(window));
-
-    // ラスタライザの設定
-    D3D11_RASTERIZER_DESC rdc = {};
-    rdc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rdc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-    rdc.FrontCounterClockwise = TRUE;
-    Utility::getDevice()->CreateRasterizerState(&rdc, &pRasterizerState);
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
@@ -135,7 +123,6 @@ bool Main::isEndScene() const {
 
 void Main::draw() {
     mAlphaBlend->set();
-    //Utility::getContext()->RSSetState(pRasterizerState.Get());
     mCamera->render();
     mManager->draw();
 

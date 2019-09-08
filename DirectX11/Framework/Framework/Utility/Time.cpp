@@ -6,7 +6,9 @@ namespace Framework {
 namespace Utility {
 
 Time::Time()
-    :mFPSCounter(10) {
+    :mFPSCounter(10),
+    deltaTime(mDeltaTime),
+    currentFPS(mCurrentFPS) {
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&mCounter);

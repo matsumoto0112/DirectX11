@@ -18,6 +18,6 @@ void NormalEnemy::update() {    //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚­
     Math::Quaternion r = Math::Quaternion::conjugate(mTransform.getRotate()) * q * mTransform.getRotate();
     Math::Vector3 v(r.x, r.y, r.z);
     v.normalize();
-    Math::Vector3 newPos = mTransform.getPosition() + v * mMoveSpeed * Utility::Time::getInstance().DeltaTime;
+    Math::Vector3 newPos = mTransform.getPosition() + v * mMoveSpeed * Utility::Time::getInstance().deltaTime;
     mTransform.setPosition(newPos);
 }
