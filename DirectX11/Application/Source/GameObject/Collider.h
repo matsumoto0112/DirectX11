@@ -34,7 +34,7 @@ public:
     Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
 private:
     PROPERTY(Framework::Utility::Transform, mTransform, Transform);
-    PROPERTY_POINTER(GameObject3D, mHolder, Holder);
+    PROPERTY_POINTER(GameObject3D*, mHolder, Holder);
 private:
     std::unique_ptr<Framework::Graphics::Cube> mCollisionRendererInstance;
 };
