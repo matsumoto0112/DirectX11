@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Framework/Utility/Time.h"
+#include "Source/GameObject/GameObjectUtil.h"
 
 using namespace Framework;
 
@@ -10,11 +11,8 @@ Bullet::Bullet(const Utility::Transform& transform, IMainSceneMediator& mediator
 Bullet::~Bullet() {}
 
 void Bullet::update() {
-    Math::Quaternion q(0, 0, 1, 0);
-    Math::Quaternion r = Math::Quaternion::conjugate(mTransform.getRotate()) * q * mTransform.getRotate();
-    Math::Vector3 v(r.x, r.y, r.z);
-    v.normalize();
-    Math::Vector3 newPos = mTransform.getPosition() + v * mSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 newPos = mTransform.getPosition() + movement;
     mTransform.setPosition(newPos);
 }
 

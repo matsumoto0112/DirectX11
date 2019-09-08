@@ -65,7 +65,6 @@ void Player::dispatch(Collidable3DObject* other) {
 }
 
 std::unique_ptr<Collider> Player::createCollider() {
-    mTransform.setRotate(Math::Quaternion::createRotateAboutY(-90.0f));
     Utility::Transform colliderTransform = Utility::Transform(
         Math::Vector3(0, 0.6f, 0),
         Math::Quaternion::IDENTITY,

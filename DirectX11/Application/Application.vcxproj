@@ -137,14 +137,9 @@
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\GameObject\Wall.cpp" />
-    <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
-    <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
+    <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -167,14 +162,9 @@
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
-    <ClInclude Include="Source\Scene\Impl\AlphaBlendTest.h" />
-    <ClInclude Include="Source\Scene\Impl\DepthStencilTest.h" />
     <ClInclude Include="Source\Scene\Impl\Main.h" />
-    <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
-    <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
-    <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
-    <ClInclude Include="Source\Scene\Impl\ShadowMapTest.h" />
     <ClInclude Include="Source\Scene\Impl\Title.h" />
+    <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

@@ -3,13 +3,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
-    <ClCompile Include="Source\Scene\Impl\DepthStencilTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\NormalLightingTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ShadowMapTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\MultiRenderTargetTest.cpp" />
-    <ClCompile Include="Source\Scene\Impl\AlphaBlendTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
@@ -22,19 +16,14 @@
     <ClCompile Include="Source\GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
     <ClCompile Include="Source\GameObject\Enemy\NormalEnemy.cpp" />
+    <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Scene\Impl\Title.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
-    <ClInclude Include="Source\Scene\Impl\DepthStencilTest.h" />
-    <ClInclude Include="Source\Scene\Impl\NormalLightingTest.h" />
-    <ClInclude Include="Source\Scene\Impl\ShadowMapTest.h" />
-    <ClInclude Include="Source\Scene\Impl\MultiRenderTargetTest.h" />
-    <ClInclude Include="Source\Scene\Impl\AlphaBlendTest.h" />
     <ClInclude Include="Source\Scene\Impl\Main.h" />
     <ClInclude Include="Source\GameObject\GameObjectManager.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
@@ -50,6 +39,7 @@
     <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
     <ClInclude Include="Source\GameObject\Enemy\NormalEnemy.h" />
     <ClInclude Include="Source\GameObject\DebugMacro.h" />
+    <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

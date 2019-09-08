@@ -1,6 +1,7 @@
 #include "NormalEnemy.h"
 #include "Source/GameObject/Player.h"
 #include "Framework/Utility/Time.h"
+#include "Source/GameObject/GameObjectUtil.h"
 
 using namespace Framework;
 
@@ -14,10 +15,7 @@ void NormalEnemy::update() {    //ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ðŒü‚­
     Player* player = mMediator.getPlayer();
     mTransform.lookat(player->getTransform().getGlobalPostition());
 
-    Math::Quaternion q(0, 0, 1, 0);
-    Math::Quaternion r = Math::Quaternion::conjugate(mTransform.getRotate()) * q * mTransform.getRotate();
-    Math::Vector3 v(r.x, r.y, r.z);
-    v.normalize();
-    Math::Vector3 newPos = mTransform.getPosition() + v * mMoveSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 movement = GameObjectUtil::calcurateForwordVector(mTransform) * mMoveSpeed * Utility::Time::getInstance().deltaTime;
+    Math::Vector3 newPos = mTransform.getPosition() + movement;
     mTransform.setPosition(newPos);
 }
