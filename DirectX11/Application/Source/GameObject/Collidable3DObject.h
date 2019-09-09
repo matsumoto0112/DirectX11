@@ -3,9 +3,10 @@
 #include "Source/GameObject/GameObject3D.h"
 #include "Source/GameObject/Collider.h"
 
-class Player;
 class Bullet;
 class Enemy;
+class Item;
+class Player;
 
 /**
 * @class Collidable3DObject
@@ -43,6 +44,7 @@ public:
     virtual void hit(Player* other) {};
     virtual void hit(Bullet* other) {};
     virtual void hit(Enemy* other) {};
+    virtual void hit(Item* other) {};
 protected:
     /**
     * @brief コライダーを作成する

@@ -4,6 +4,7 @@
 #include "Source/GameObject/Collider.h"
 #include "Source/GameObject/Enemy/Enemy.h"
 #include "Source/GameObject/IMainSceneMediator.h"
+#include "Source/GameObject/Item/Item.h"
 #include "Source/GameObject/Player.h"
 #include "Source/GameObject/Field.h"
 
@@ -26,6 +27,9 @@ void GameObjectManager::update() {
     for (auto&& enemy : mEnemies) {
         enemy->update();
     }
+    for (auto&& item : mItems) {
+        item->update();
+    }
 
     for (auto&& bullet : mBullets) {
         for (auto&& enemy : mEnemies) {
@@ -35,7 +39,6 @@ void GameObjectManager::update() {
             }
         }
     }
-
 
     mField->pushBackGameObject(*mPlayer);
 
@@ -64,6 +67,9 @@ void GameObjectManager::draw() {
     for (auto&& enemy : mEnemies) {
         enemy->draw();
     }
+    for (auto&& item : mItems) {
+        item->draw();
+    }
 }
 
 void GameObjectManager::addBullet(BulletPtr bullet) {
@@ -74,4 +80,9 @@ void GameObjectManager::addBullet(BulletPtr bullet) {
 void GameObjectManager::addEnemy(EnemyPtr enemy) {
     enemy->initialize();
     mEnemies.emplace_back(std::move(enemy));
+}
+
+void GameObjectManager::addItem(ItemPtr item) {
+    item->initialize();
+    mItems.emplace_back(std::move(item));
 }

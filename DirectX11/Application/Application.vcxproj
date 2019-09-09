@@ -136,6 +136,7 @@
     <ClCompile Include="Source\GameObject\FollowCamera.cpp" />
     <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="Source\GameObject\Item\Item.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\GameObject\Wall.cpp" />
     <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Source\GameObject\GameObject3D.h" />
     <ClInclude Include="Source\GameObject\GameObjectManager.h" />
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
+    <ClInclude Include="Source\GameObject\Item\Item.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />
     <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />

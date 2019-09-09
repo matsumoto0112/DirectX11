@@ -7,6 +7,7 @@ class Bullet;
 class Enemy;
 class Field;
 class IMainSceneMediator;
+class Item;
 class Player;
 class Wall;
 
@@ -21,6 +22,8 @@ class GameObjectManager {
     using BulletList = std::vector<BulletPtr>;
     using EnemyPtr = std::unique_ptr<Enemy>;
     using EnemyList = std::vector<EnemyPtr>;
+    using ItemPtr = std::unique_ptr<Item>;
+    using ItemList = std::vector<ItemPtr>;
 public:
     /**
     * @brief コンストラクタ
@@ -47,6 +50,10 @@ public:
     */
     void addEnemy(EnemyPtr enemy);
     /**
+    * @brief アイテムをゲームに追加する
+    */
+    void addItem(ItemPtr item);
+    /**
     * @brief プレイヤーポインタを取得する
     */
     Player* getPlayer() const { return mPlayer.get(); }
@@ -56,4 +63,5 @@ private:
     std::unique_ptr<Field> mField;
     BulletList mBullets;
     EnemyList mEnemies;
+    ItemList mItems;
 };

@@ -20,6 +20,7 @@
     <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
     <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
     <ClCompile Include="Source\GameObject\FollowCamera.cpp" />
+    <ClCompile Include="Source\GameObject\Item\Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
     <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
     <ClInclude Include="Source\GameObject\FollowCamera.h" />
+    <ClInclude Include="Source\GameObject\Item\Item.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

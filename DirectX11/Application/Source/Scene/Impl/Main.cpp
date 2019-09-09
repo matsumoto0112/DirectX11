@@ -15,22 +15,7 @@
 #include "Source/GameObject/Field.h"
 #include "Framework/Utility/Random.h"
 #include "Source/GameObject/FollowCamera.h"
-
-//#define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
-//    const float defValue  = mCamera->getPosition().##type; \
-//    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, defValue,[&](float val){ \
-//        Math::Vector3 pos = mCamera->getPosition(); \
-//        Math::Vector3 look = mCamera->getLookat(); \
-//        const float sub = pos.##type -  val; \
-//        look.##type -= sub ; \
-//        pos.##type= val ; \
-//        mCamera->setPosition(pos); \
-//        mCamera->setLookat(look); \
-//    }); \
-//    field ->setMinValue(-50.0f); \
-//    field->setMaxValue(50.0f); \
-//    window->addItem(field); \
-//}
+#include "Source/GameObject/Item/Item.h"
 
 using namespace Framework;
 
@@ -38,12 +23,10 @@ Main::Main() {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
     fbx->importResource(Define::ModelType::Player, Define::ModelName::PLAYER);
     fbx->importResource(Define::ModelType::Plane, Define::ModelName::PLANE);
-    fbx->importResource(Define::ModelType::Red, Define::ModelName::RED);
-    fbx->importResource(Define::ModelType::Blue, Define::ModelName::BLUE);
-    fbx->importResource(Define::ModelType::Green, Define::ModelName::GREEN);
     fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
     fbx->importResource(Define::ModelType::Bullet, Define::ModelName::BULLET);
     fbx->importResource(Define::ModelType::Enemy, Define::ModelName::ENEMY);
+    fbx->importResource(Define::ModelType::Item, Define::ModelName::ITEM);
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
@@ -53,6 +36,7 @@ Main::Main() {
     fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
     fbx->getResource(Define::ModelType::Bullet)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
     fbx->getResource(Define::ModelType::Enemy)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
+    fbx->getResource(Define::ModelType::Item)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
 
     std::unique_ptr<Player> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Field> field = std::make_unique<Field>(*this);
@@ -67,15 +51,6 @@ Main::Main() {
         0.1f,
         1000.0f },
         getPlayer()->getTransformPtr());
-    std::unique_ptr<ImGUI::Window> window = std::make_unique<ImGUI::Window>("Camera");
-
-
-    //ADD_CAMERA_POSITION_CHANGE_FIELD(X, x);
-    //ADD_CAMERA_POSITION_CHANGE_FIELD(Y, y);
-    //ADD_CAMERA_POSITION_CHANGE_FIELD(Z, z);
-    //std::shared_ptr<ImGUI::Button> button = std::make_shared<ImGUI::Button>("RESET", [&]() {mCamera->setLookat(Math::Vector3::ZERO); });
-    //window->addItem(button);
-    addDebugUI(std::move(window));
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
@@ -94,25 +69,20 @@ static int num = 0;
 void Main::update() {
     mManager->update();
     cnt++;
-    if (cnt == 60) {
+    if (cnt == 30) {
         cnt = 0;
         const int NUM = 36;
         const float ANGLE = 360.0f / NUM;
         float x = Math::MathUtility::cos(ANGLE * num) * 5;
         float z = Math::MathUtility::sin(ANGLE * num) * 5;
-        float s = Utility::Random::getInstance().range(1.0f, 2.0f);
+        float s = 0.25f;
         Utility::Transform tr(
-            Math::Vector3(x, 0, z),
+            Math::Vector3(x, 0.5f, z),
             Math::Quaternion::IDENTITY,
             Math::Vector3(s, s, s)
         );
-        tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
-        float r = Utility::Random::getInstance().range(0.0f, 1.0f);
-        float g = Utility::Random::getInstance().range(0.0f, 1.0f);
-        float b = Utility::Random::getInstance().range(0.0f, 1.0f);
-        float speed = Utility::Random::getInstance().range(0.1f, 3.0f);
-        NormalEnemy::Parameter parameter{ Graphics::Color4(r,g,b,1.0f),speed };
-        mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
+        //tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
+        mManager->addItem(std::make_unique<Item>(tr, *this));
         num++;
     }
 }
@@ -122,6 +92,7 @@ bool Main::isEndScene() const {
 }
 
 void Main::draw() {
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
     mCamera->render();
     mManager->draw();
