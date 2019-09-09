@@ -12,6 +12,7 @@ class PerspectiveCamera;
 } //Framework 
 
 class GameObjectManager;
+class FollowCamera;
 
 /**
 * @class Main
@@ -54,7 +55,7 @@ public:
     /**
     * @brief メインカメラを取得する
     */
-    virtual Framework::Graphics::PerspectiveCamera* getMainCamera() override;
+    virtual FollowCamera* getMainCamera() override;
     /**
     * @brief プレイヤーポインタを取得する
     */
@@ -69,7 +70,7 @@ public:
     virtual void addDebugUI(std::shared_ptr<Framework::ImGUI::Window> window) override;
 private:
     std::unique_ptr<GameObjectManager> mManager;
-    std::unique_ptr<Framework::Graphics::PerspectiveCamera> mCamera;
+    std::unique_ptr<FollowCamera> mCamera;
     std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 private:
     std::vector<std::shared_ptr<Framework::ImGUI::Window>> mDebugUIs;

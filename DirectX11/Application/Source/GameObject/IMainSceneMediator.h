@@ -1,6 +1,6 @@
 #pragma once
-#include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Utility/Transform.h"
+#include "Source/GameObject/FollowCamera.h"
 
 class Player;
 
@@ -17,7 +17,7 @@ public:
     /**
     * @brief メインカメラを取得する
     */
-    virtual Framework::Graphics::PerspectiveCamera* getMainCamera() = 0;
+    virtual FollowCamera* getMainCamera() = 0;
     /**
     * @brief プレイヤーポインタを取得する
     */

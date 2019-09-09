@@ -14,22 +14,23 @@
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Source/GameObject/Field.h"
 #include "Framework/Utility/Random.h"
+#include "Source/GameObject/FollowCamera.h"
 
-#define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
-    const float defValue  = mCamera->getPosition().##type; \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, defValue,[&](float val){ \
-        Math::Vector3 pos = mCamera->getPosition(); \
-        Math::Vector3 look = mCamera->getLookat(); \
-        const float sub = pos.##type -  val; \
-        look.##type -= sub ; \
-        pos.##type= val ; \
-        mCamera->setPosition(pos); \
-        mCamera->setLookat(look); \
-    }); \
-    field ->setMinValue(-50.0f); \
-    field->setMaxValue(50.0f); \
-    window->addItem(field); \
-}
+//#define ADD_CAMERA_POSITION_CHANGE_FIELD(name,type) { \
+//    const float defValue  = mCamera->getPosition().##type; \
+//    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, defValue,[&](float val){ \
+//        Math::Vector3 pos = mCamera->getPosition(); \
+//        Math::Vector3 look = mCamera->getLookat(); \
+//        const float sub = pos.##type -  val; \
+//        look.##type -= sub ; \
+//        pos.##type= val ; \
+//        mCamera->setPosition(pos); \
+//        mCamera->setLookat(look); \
+//    }); \
+//    field ->setMinValue(-50.0f); \
+//    field->setMaxValue(50.0f); \
+//    window->addItem(field); \
+//}
 
 using namespace Framework;
 
@@ -57,24 +58,23 @@ Main::Main() {
     std::unique_ptr<Field> field = std::make_unique<Field>(*this);
     mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(field));
 
-    mCamera = std::make_unique<Graphics::PerspectiveCamera>(Graphics::PerspectiveCamera::Info{
+    mCamera = std::make_unique<FollowCamera>(Graphics::PerspectiveCamera::Info{
         Math::Vector3(0,10,-10),
         Math::Vector3::ZERO,
         Math::Vector3::UP,
         45.0f,
         Define::Window::getSize(),
         0.1f,
-        1000.0f
-        });
-
+        1000.0f },
+        getPlayer()->getTransformPtr());
     std::unique_ptr<ImGUI::Window> window = std::make_unique<ImGUI::Window>("Camera");
 
 
-    ADD_CAMERA_POSITION_CHANGE_FIELD(X, x);
-    ADD_CAMERA_POSITION_CHANGE_FIELD(Y, y);
-    ADD_CAMERA_POSITION_CHANGE_FIELD(Z, z);
-    std::shared_ptr<ImGUI::Button> button = std::make_shared<ImGUI::Button>("RESET", [&]() {mCamera->setLookat(Math::Vector3::ZERO); });
-    window->addItem(button);
+    //ADD_CAMERA_POSITION_CHANGE_FIELD(X, x);
+    //ADD_CAMERA_POSITION_CHANGE_FIELD(Y, y);
+    //ADD_CAMERA_POSITION_CHANGE_FIELD(Z, z);
+    //std::shared_ptr<ImGUI::Button> button = std::make_shared<ImGUI::Button>("RESET", [&]() {mCamera->setLookat(Math::Vector3::ZERO); });
+    //window->addItem(button);
     addDebugUI(std::move(window));
 
     D3D11_BLEND_DESC bd;
@@ -111,7 +111,7 @@ void Main::update() {
         float g = Utility::Random::getInstance().range(0.0f, 1.0f);
         float b = Utility::Random::getInstance().range(0.0f, 1.0f);
         float speed = Utility::Random::getInstance().range(0.1f, 3.0f);
-        NormalEnemy::Parameter parameter { Graphics::Color4(r,g,b,1.0f),speed };
+        NormalEnemy::Parameter parameter{ Graphics::Color4(r,g,b,1.0f),speed };
         mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
         num++;
     }
@@ -137,7 +137,7 @@ Define::SceneType Main::next() {
     return Define::SceneType();
 }
 
-Graphics::PerspectiveCamera* Main::getMainCamera() {
+FollowCamera* Main::getMainCamera() {
     return mCamera.get();
 }
 

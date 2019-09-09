@@ -36,28 +36,33 @@ public:
     /**
     * @brief デストラクタ
     */
-    ~PerspectiveCamera();
+    virtual ~PerspectiveCamera();
+    /**
+    * @brief カメラの視点の設定
+    */
     virtual void setPosition(const Math::Vector3& position);
+    /**
+    * @brief カメラの視点の取得
+    */
     virtual const Math::Vector3& getPosition() const;
+    /**
+    * @brief カメラの注視点の設定
+    */
     virtual void setLookat(const Math::Vector3& lookat);
+    /**
+    * @brief カメラの注視点の取得
+    */
     virtual const Math::Vector3& getLookat() const;
+    /**
+    * @brief カメラの上方向ベクトルの設定
+    */
     virtual void setUpVector(const Math::Vector3& up);
+    /**
+    * @brief カメラの上方向ベクトルの取得
+    */
     virtual const Math::Vector3& getUpVector() const;
-    /**
-    * @brief スクリーン座標からワールド座標に変換する
-    * @param pos 変換したい座標
-    * @param z 射影空間でのZ値
-    */
-    Math::Vector3 screenToWorldPosition(const Math::Vector2& pos, float z) const;
-    /**
-    * @brief スクリーン座標からワールド座標に変換する
-    * @param pos 変換したい座標
-    * @param z 射影空間でのZ値
-    * @param screenSize スクリーンの大きさ
-    */
-    Math::Vector3 screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize) const;
 private:
-    Info mInfo;
+    Info mInfo; //!< カメラ情報
 };
 
 } //Graphics 

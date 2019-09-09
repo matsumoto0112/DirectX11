@@ -39,8 +39,7 @@ Field::Field(IMainSceneMediator& mediator) {
         mediator);
 
     for (auto&& wall : mWalls) {
-        if (wall)
-            wall->initialize();
+        wall->initialize();
     }
     mFloor->initialize();
 }
@@ -67,8 +66,6 @@ void Field::update() {}
 void Field::draw() {
     mFloor->draw();
     for (auto&& wall : mWalls) {
-        if (wall)
-            wall->draw();
+        wall->draw();
     }
-    mWalls[0]->draw();
 }

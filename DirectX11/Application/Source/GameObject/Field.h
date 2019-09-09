@@ -27,6 +27,9 @@ public:
     * @param gameObject 処理するゲームオブジェクト
     */
     virtual void pushBackGameObject(Collidable3DObject& gameObject);
+    /**
+    * @brief ゲームオブジェクトがゲームエリアの範囲外にあるか
+    */
     virtual bool isGameObjectOutOfArea(Collidable3DObject& gameObject);
     /**
     * @brief フィールドの更新

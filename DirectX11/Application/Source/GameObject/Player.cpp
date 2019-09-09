@@ -15,7 +15,7 @@ using namespace Framework;
 
 namespace {
 //マウスの座標を平面上の座標に変換する
-Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const Graphics::PerspectiveCamera* camera) {
+Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const FollowCamera* camera) {
     Math::Vector3 nearPos = camera->screenToWorldPosition(mouse, 0.0f);
     Math::Vector3 farPos = camera->screenToWorldPosition(mouse, 1.0f);
     Math::Vector3 pos;
