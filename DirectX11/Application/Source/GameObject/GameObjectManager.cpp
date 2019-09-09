@@ -9,6 +9,13 @@
 #include "Source/GameObject/Field.h"
 
 using namespace Framework;
+namespace {
+template <class T>
+void eraseGameObjectIfNotAlive(std::vector<T>& list) {
+    auto removeIt = std::remove_if(list.begin(), list.end(), [](auto&& obj) {return !obj->getIsAlive(); });
+    list.erase(removeIt, list.end());
+}
+}
 
 GameObjectManager::GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
     :mMediator(mediator), mPlayer(std::move(player)), mField(std::move(field)) {
@@ -40,6 +47,13 @@ void GameObjectManager::update() {
         }
     }
 
+    for (auto&& item : mItems) {
+        if (item->getColliderPtr()->getOBB().isCollide(mPlayer->getColliderPtr()->getOBB())) {
+            item->dispatch(mPlayer.get());
+            mPlayer->dispatch(item.get());
+        }
+    }
+
     mField->pushBackGameObject(*mPlayer);
 
     for (auto&& bullet : mBullets) {
@@ -48,14 +62,9 @@ void GameObjectManager::update() {
         }
     }
 
-    {
-        auto removeIt = std::remove_if(mEnemies.begin(), mEnemies.end(), [](auto&& enemy) {return !enemy->getIsAlive(); });
-        mEnemies.erase(removeIt, mEnemies.end());
-    }
-    {
-        auto removeIt = std::remove_if(mBullets.begin(), mBullets.end(), [](auto&& bullet) {return !bullet->getIsAlive(); });
-        mBullets.erase(removeIt, mBullets.end());
-    }
+    eraseGameObjectIfNotAlive(mEnemies);
+    eraseGameObjectIfNotAlive(mBullets);
+    eraseGameObjectIfNotAlive(mItems);
 }
 
 void GameObjectManager::draw() {

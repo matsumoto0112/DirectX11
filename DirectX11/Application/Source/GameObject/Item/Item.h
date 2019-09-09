@@ -16,9 +16,17 @@ public:
     */
     ~Item();
     /**
+    * @brief 更新
+    */
+    virtual void update() override;
+    /**
     * @brief ディスパッチ関数
     */
     virtual void dispatch(Collidable3DObject* other) override;
+    /**
+    * @brief プレイヤーとの衝突時処理
+    */
+    virtual void hit(Player* other) override;
     /**
     * @brief コライダーを作成する
     */
