@@ -15,7 +15,7 @@ class OrthographicCamera : public Camera {
 public:
     /**
     * @brief コンストラクタ
-    * @param size
+    * @param size 画面サイズ
     */
     OrthographicCamera(const Math::Vector2& size);
     /**

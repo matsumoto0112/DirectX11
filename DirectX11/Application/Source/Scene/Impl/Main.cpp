@@ -16,8 +16,21 @@
 #include "Framework/Utility/Random.h"
 #include "Source/GameObject/FollowCamera.h"
 #include "Source/GameObject/Item/Item.h"
+#include "Framework/Graphics/Camera/OrthographicCamera.h"
+#include "Framework/Graphics/Sprite/Sprite2D.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
+#include "Framework/Graphics/Texture/TextureLoader.h"
+#include "Framework/Define/Path.h"
+#include "Framework/Graphics/Render/RenderTarget.h"
+#include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 
 using namespace Framework;
+
+namespace {
+std::unique_ptr<Graphics::OrthographicCamera> mOrthographicCamera;
+std::unique_ptr<Graphics::Sprite2D> mSprite;
+std::unique_ptr<Graphics::RenderTarget> mRTV;
+}
 
 Main::Main() {
     auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
@@ -62,6 +75,16 @@ Main::Main() {
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
+
+    mOrthographicCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    std::shared_ptr<Graphics::TextureBuffer> texBuffer =
+        std::make_shared<Graphics::TextureBuffer>(
+            Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(Define::Window::WIDTH, Define::Window::HEIGHT));
+    mRTV = std::make_unique<Graphics::RenderTarget>(texBuffer, Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
+        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, Define::Window::WIDTH, Define::Window::HEIGHT)),
+        Graphics::SRVFlag::Use);
+    mRTV->createDepthStencilView();
+    mSprite = std::make_unique<Graphics::Sprite2D>(mRTV->getRenderTargetTexture());
 }
 
 Main::~Main() {}
@@ -99,10 +122,28 @@ bool Main::isEndScene() const {
 }
 
 void Main::draw() {
+    ID3D11RenderTargetView* backView;
+    ID3D11DepthStencilView* backDepthStencil;
+    D3D11_VIEWPORT backViewport;
+    UINT backViewNum = 1;
+
+    Utility::getContext()->RSGetViewports(&backViewNum, &backViewport);
+    Utility::getContext()->OMGetRenderTargets(1, &backView, &backDepthStencil);
+
+    mRTV->set();
+    mRTV->clear();
+
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
     mCamera->render();
     mManager->draw();
+
+    Utility::getContext()->OMSetRenderTargets(1, &backView, backDepthStencil);
+    Utility::getContext()->RSSetViewports(backViewNum, &backViewport);
+
+    mOrthographicCamera->render();
+    mSprite->setTexture(mRTV->getRenderTargetTexture(), false);
+    mSprite->draw();
 
     for (auto&& window : mDebugUIs) {
         window->draw();

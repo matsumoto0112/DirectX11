@@ -13,7 +13,5 @@ float4 main(ps_input input) : SV_TARGET
 {
     float4 o = tex.Sample(samLinear, input.uv);
     o *= color;
-    //αが0未満なら描画しない（アルファテスト）
-    clip(o.a - EPSILON);
     return o;
 }

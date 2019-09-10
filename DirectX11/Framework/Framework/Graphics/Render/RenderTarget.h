@@ -70,6 +70,7 @@ private:
     DepthStencilViewPtr mDepthStencilView; //!< 深度・ステンシルビュー
     ViewportPtr mViewport; //!< ビューポート
     TexturePtr mTexture; //!< レンダーターゲットのテクスチャ
+private:
     PROPERTY(Color4, mClearColor, ClearColor);
     PROPERTY(bool, mEnableDepthStencil, EnableDepthStencil);
 };
