@@ -52,5 +52,10 @@ void RenderingManager::drawEnd() {
     mGraphicsDevice->drawEnd();
 }
 
+void RenderingManager::setBackbuffer() {
+    mRenderTarget->clear();
+    mRenderTarget->set();
+}
+
 } //Graphics 
 } //Framework 

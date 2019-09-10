@@ -122,14 +122,6 @@ bool Main::isEndScene() const {
 }
 
 void Main::draw() {
-    ID3D11RenderTargetView* backView;
-    ID3D11DepthStencilView* backDepthStencil;
-    D3D11_VIEWPORT backViewport;
-    UINT backViewNum = 1;
-
-    Utility::getContext()->RSGetViewports(&backViewNum, &backViewport);
-    Utility::getContext()->OMGetRenderTargets(1, &backView, &backDepthStencil);
-
     mRTV->set();
     mRTV->clear();
 
@@ -137,9 +129,7 @@ void Main::draw() {
     mAlphaBlend->set();
     mCamera->render();
     mManager->draw();
-
-    Utility::getContext()->OMSetRenderTargets(1, &backView, backDepthStencil);
-    Utility::getContext()->RSSetViewports(backViewNum, &backViewport);
+    Utility::getRenderingManager()->setBackbuffer();
 
     mOrthographicCamera->render();
     mSprite->setTexture(mRTV->getRenderTargetTexture(), false);

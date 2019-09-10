@@ -60,6 +60,10 @@ public:
     * @brief ImGUI管理者の取得
     */
     ImGUI::Manager* getImGUIManager() const { return mImGUIManager.get(); }
+    /**
+    * @brief バックバッファをコンテキストにセットする
+    */
+    void setBackbuffer();
 private:
     Math::Vector2 mScreenSize;
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
