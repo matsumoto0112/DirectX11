@@ -36,6 +36,10 @@ public:
     */
     virtual void update();
     /**
+    * @brief 壁の描画
+    */
+    virtual void drawWall();
+    /**
     * @brief フィールドの描画処理
     */
     virtual void draw();

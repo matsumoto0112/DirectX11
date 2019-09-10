@@ -63,9 +63,13 @@ bool Field::isGameObjectOutOfArea(Collidable3DObject& gameObject) {
 
 void Field::update() {}
 
-void Field::draw() {
-    mFloor->draw();
+void Field::drawWall() {
     for (auto&& wall : mWalls) {
         wall->draw();
     }
+}
+
+void Field::draw() {
+    mFloor->draw();
+    drawWall();
 }

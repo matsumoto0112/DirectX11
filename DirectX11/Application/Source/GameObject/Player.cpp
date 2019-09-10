@@ -39,13 +39,6 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     tr.setPosition(tr.getPosition() + Math::Vector3(0, 1.1f, 0.0f));
     tr.setParent(&mTransform);
     mWeapon = std::make_unique<SingleShotWeapon>(tr, mMediator);
-
-    std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Player_DEBUG");
-    mHP = std::make_shared<ImGUI::FloatField>("HP", MAX_HP, [&](float val) {});
-    mHP->setMinValue(0.0f);
-    mHP->setMaxValue(100.0f);
-    window->addItem(mHP);
-    mMediator.addDebugUI(window);
 }
 
 Player::~Player() {}
@@ -80,9 +73,7 @@ void Player::dispatch(Collidable3DObject* other) {
     other->hit(this);
 }
 
-void Player::hit(Enemy* other) {
-    mHP->setValue(mHP->getValue() - DAMAGE);
-}
+void Player::hit(Enemy* other) {}
 
 std::unique_ptr<Collider> Player::createCollider() {
     Utility::Transform colliderTransform = Utility::Transform(

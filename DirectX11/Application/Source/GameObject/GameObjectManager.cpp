@@ -91,8 +91,13 @@ void GameObjectManager::update() {
     eraseGameObjectIfNotAlive(mItems);
 }
 
-void GameObjectManager::draw() {
-    mField->draw();
+void GameObjectManager::draw(int phase) {
+    if (phase == 0) {
+        mField->drawWall();
+    }
+    else {
+        mField->draw();
+    }
     mPlayer->draw();
     for (auto&& bullet : mBullets) {
         bullet->draw();

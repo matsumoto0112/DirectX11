@@ -1,5 +1,6 @@
 #include "../Utility/ShaderDefine.hlsli"
-Texture2D tex : register(t0);
+Texture2D tex : register(t2);
+Texture2D tex2 : register(t1);
 SamplerState samLinear : register(s0);
 
 struct ps_input
@@ -17,7 +18,7 @@ float4 main(ps_input input) : SV_TARGET
     texCoord.x = (1.0f + input.ShadowMapTex.x / input.ShadowMapTex.w) * 0.5f;
     texCoord.y = (1.0f - input.ShadowMapTex.y / input.ShadowMapTex.w) * 0.5f;
 
-    float z = tex.Sample(samLinear, texCoord).x;
+    float z = tex2.Sample(samLinear, texCoord).x;
     if (zValue > z + 0.005f)
     {
         input.color.rgb *= 0.5f;

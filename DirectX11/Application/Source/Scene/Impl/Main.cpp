@@ -35,6 +35,11 @@ std::unique_ptr<Graphics::Sprite2D> mSprite;
 std::unique_ptr<Graphics::RenderTarget> mRTV;
 std::shared_ptr<Framework::Graphics::DirectionalLight> mDirectionalLight;
 std::shared_ptr<Framework::Graphics::PointLight> mPointLight;
+Math::Vector3 lightPos;
+Math::Vector3 lightLookat;
+Math::Matrix4x4 lightView;
+Math::Matrix4x4 lightProj;
+
 
 void setDefaultPixelShader(ModelList& list) {
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
@@ -115,23 +120,50 @@ Main::Main() {
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
 
     mOrthographicCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    const int WIDTH = 2048;
+    const int HEIGHT = 2048;
     std::shared_ptr<Graphics::TextureBuffer> texBuffer =
         std::make_shared<Graphics::TextureBuffer>(
-            Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(Define::Window::WIDTH, Define::Window::HEIGHT));
+            Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(WIDTH, HEIGHT));
     mRTV = std::make_unique<Graphics::RenderTarget>(texBuffer, Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
-        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, Define::Window::WIDTH, Define::Window::HEIGHT)),
+        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, WIDTH, HEIGHT)),
         Graphics::SRVFlag::Use);
     mRTV->createDepthStencilView();
     mSprite = std::make_unique<Graphics::Sprite2D>(mRTV->getRenderTargetTexture());
 
-    mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
-        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mPointLight = Utility::getLightManager()->addPointLight(Define::PointLightType::LeftTopFloor,
-        Math::Vector3(0.0f, 0.0f, 0.0),
-        Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f),
-        5.0f,
-        0.0f);
+    const float lightScale = 1.5f;
+    lightPos = Math::Vector3(lightScale * -30, lightScale * 30, lightScale * 00);
+    lightLookat = Math::Vector3(0, -0, 0);
 
+    std::shared_ptr<ImGUI::Window> mUIWindow = std::make_shared<ImGUI::Window>("Light");
+
+#define ADD_LIGHT_POSITION_CHANGE_SLIDER(name,type) {\
+    float def = lightPos.##type; \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
+        lightPos.##type = val; \
+        }); \
+    field->setMinValue(-500.0f); \
+    field->setMaxValue(500.0f); \
+    mUIWindow->addItem(field); \
+    }
+
+#define ADD_LIGHT_LOOKAT_CHANGE_SLIDER(name,type) {\
+    float def = lightLookat.##type; \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, def, [&](float val) { \
+        lightLookat.##type = val; \
+        }); \
+    field->setMinValue(-500.0f); \
+    field->setMaxValue(500.0f); \
+    mUIWindow->addItem(field); \
+    }
+
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(PX, x);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(PY, y);
+    ADD_LIGHT_POSITION_CHANGE_SLIDER(PZ, z);
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LX, x);
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LY, y);
+    ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LZ, z);
+    addDebugUI(mUIWindow);
 }
 
 Main::~Main() {}
@@ -170,8 +202,14 @@ bool Main::isEndScene() const {
 
 void Main::draw() {
     //出力先を変更
+    mRTV->setClearColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mRTV->set();
     mRTV->clear();
+
+    D3D11_BLEND_DESC desc = mAlphaBlend->getCurrentBlendStateDesc();
+    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
+    mAlphaBlend->setBlendStateFromDesc(desc);
+    mAlphaBlend->set();
 
     //Z値をテクスチャに出力するシェーダーに変更
     auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
@@ -182,17 +220,39 @@ void Main::draw() {
     //オブジェクトを描画
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
-    mCamera->render();
-    mManager->draw();
+    Math::ViewInfo v{
+        lightPos, lightLookat, Math::Vector3::UP
+    };
+    lightView = Math::Matrix4x4::createView(v);
+    Math::ProjectionInfo p{
+        40.0f,Math::Vector2(1,1), 0.1f, 100.0f
+    };
+    lightProj = Math::Matrix4x4::createProjection(p);
+
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
+
+    //mCamera->render();
+    mManager->draw(0);
+
+    desc = mAlphaBlend->getCurrentBlendStateDesc();
+    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
+    mAlphaBlend->setBlendStateFromDesc(desc);
+    mAlphaBlend->set();
 
     //出力先をバックバッファに変更
     Utility::getRenderingManager()->setBackbuffer(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-
-    //Z値テクスチャを描画する
-    mOrthographicCamera->render();
-    mSprite->setTexture(mRTV->getRenderTargetTexture(), false);
-    mSprite->draw();
+    mRTV->getRenderTargetTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
+    setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
+    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
+    mAlphaBlend->set();
+    mCamera->render();
+    Graphics::LightMatrixCBufferStruct lm;
+    lm.view = Math::Matrix4x4::transposition(lightView);
+    lm.proj = Math::Matrix4x4::transposition(lightProj);
+    Utility::getConstantBufferManager()->setStruct(lm);
+    mManager->draw(1);
 
     //元の設定に戻す
     setDefaultPixelShader(mGameModels);

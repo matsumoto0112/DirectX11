@@ -40,7 +40,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    void draw();
+    void draw(int phase = 0);
     /**
     * @brief ’e‚ğƒQ[ƒ€‚É’Ç‰Á‚·‚é
     */

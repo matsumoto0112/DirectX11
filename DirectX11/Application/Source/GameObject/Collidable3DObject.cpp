@@ -12,6 +12,6 @@ void Collidable3DObject::initialize() {
 
 void Collidable3DObject::draw() {
     GameObject3D::draw();
-    mCollider->render();
+    //mCollider->render();
 }
 
