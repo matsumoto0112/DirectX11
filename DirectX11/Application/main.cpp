@@ -58,7 +58,7 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        mGameDevice.getRenderingManager()->drawBegin(Graphics::Color4::WHITE);
+        mGameDevice.getRenderingManager()->drawBegin();
 
         mSceneManager->draw();
 

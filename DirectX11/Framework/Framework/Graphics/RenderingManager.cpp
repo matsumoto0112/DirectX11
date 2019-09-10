@@ -36,9 +36,12 @@ void RenderingManager::initialize() {
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 }
 
-void RenderingManager::drawBegin(const Color4& clearColor) {
+void RenderingManager::changeRenderTargetColor(const Color4& color) {
+    mRenderTarget->setClearColor(color);
+}
+
+void RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    mRenderTarget->setClearColor(clearColor);
     mRenderTarget->clear();
     mRenderTarget->set();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);
@@ -52,8 +55,7 @@ void RenderingManager::drawEnd() {
     mGraphicsDevice->drawEnd();
 }
 
-void RenderingManager::setBackbuffer(const Color4& clearColor) {
-    mRenderTarget->setClearColor(clearColor);
+void RenderingManager::setBackbuffer() {
     mRenderTarget->clear();
     mRenderTarget->set();
 }

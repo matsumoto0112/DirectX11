@@ -24,6 +24,7 @@
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 #include "Framework/Graphics/Shader/Effect.h"
+#include "Framework/Graphics/Render/ZTexCreater.h"
 
 using namespace Framework;
 
@@ -39,7 +40,7 @@ Math::Vector3 lightPos;
 Math::Vector3 lightLookat;
 Math::Matrix4x4 lightView;
 Math::Matrix4x4 lightProj;
-
+std::unique_ptr<Graphics::ZTexCreater> mZTexCreater;
 
 void setDefaultPixelShader(ModelList& list) {
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
@@ -120,8 +121,8 @@ Main::Main() {
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
 
     mOrthographicCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
-    const int WIDTH = 2048;
-    const int HEIGHT = 2048;
+    const int WIDTH = 4096;
+    const int HEIGHT = 4096;
     std::shared_ptr<Graphics::TextureBuffer> texBuffer =
         std::make_shared<Graphics::TextureBuffer>(
             Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(WIDTH, HEIGHT));
@@ -130,6 +131,11 @@ Main::Main() {
         Graphics::SRVFlag::Use);
     mRTV->createDepthStencilView();
     mSprite = std::make_unique<Graphics::Sprite2D>(mRTV->getRenderTargetTexture());
+
+    std::shared_ptr<Graphics::Effect> outputZShader = std::make_shared<Graphics::Effect>(
+        vs->getResource(Define::VertexShaderType::Output_Z),
+        ps->getResource(Define::PixelShaderType::Output_Z));
+    mZTexCreater = std::make_unique<Graphics::ZTexCreater>(4096, 4096, outputZShader);
 
     const float lightScale = 1.5f;
     lightPos = Math::Vector3(lightScale * -30, lightScale * 30, lightScale * 00);
@@ -241,7 +247,7 @@ void Main::draw() {
     mAlphaBlend->set();
 
     //出力先をバックバッファに変更
-    Utility::getRenderingManager()->setBackbuffer(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getRenderingManager()->setBackbuffer();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mRTV->getRenderTargetTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
     setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));

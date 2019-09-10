@@ -4,6 +4,7 @@
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/GraphicsDevice.h"
 #include "Framework/Graphics/Light/LightManager.h"
+#include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace ImGUI {
@@ -37,9 +38,13 @@ public:
     */
     void initialize();
     /**
+    * @brief レンダーターゲットの背景色を変更する
+    */
+    void changeRenderTargetColor(const Color4& color);
+    /**
     * @brief 描画開始
     */
-    void drawBegin(const Color4& clearColor);
+    void drawBegin();
     /**
     * @brief 描画終了
     */
@@ -63,7 +68,7 @@ public:
     /**
     * @brief バックバッファをコンテキストにセットする
     */
-    void setBackbuffer(const Graphics::Color4& clearColor);
+    void setBackbuffer();
 private:
     Math::Vector2 mScreenSize;
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
@@ -73,6 +78,9 @@ private:
     std::unique_ptr<RenderTarget> mRenderTarget; //!< レンダーターゲット
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理
+private:
+    PROPERTY_ORIGINAL_GETTER_SETTER(Color4, mColor, BackColor, [&]() {return mColor; }, [&](const Color4& col) {
+        mColor = col; changeRenderTargetColor(col); }); //!< 背景色
 };
 
 } //Graphics 
