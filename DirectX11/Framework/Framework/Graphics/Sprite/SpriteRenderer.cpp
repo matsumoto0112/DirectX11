@@ -4,11 +4,10 @@
 #include "Framework/Graphics/Buffer/VertexAndIndexBuffer.h"
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Graphics/Renderer/2D/QuadInstance.h"
+#include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
-#include "Framework/Graphics/Shader/PixelShader.h"
-#include "Framework/Graphics/Shader/VertexShader.h"
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
@@ -19,8 +18,9 @@ namespace Graphics {
 
 SpriteRenderer::SpriteRenderer() {
     mVIBuffer = std::make_unique<QuadInstance>();
-    mVertexShader = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D);
-    mPixelShader = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D);
+    mEffect = std::make_shared<Effect>(
+        Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
+        Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
 }
@@ -29,20 +29,22 @@ SpriteRenderer::~SpriteRenderer() {}
 
 void SpriteRenderer::draw(Sprite2D* sprite) {
     //IRenderModeChanger* renderModeChanger = Utility::getRenderingManager()->getRenderModeChanger();
-
     ////前回の描画設定を一時的に保存
     //CullMode preCullMode = renderModeChanger->getCullMode();
     //FillMode preFillMode = renderModeChanger->getFillMode();
-
     ////描画設定
     //renderModeChanger->setRenderMode(CullMode::Back, FillMode::Solid);
+    //前の描画設定に戻す
+    //renderModeChanger->setRenderMode(preCullMode, preFillMode);
+    draw(sprite, mEffect);
+}
 
+void SpriteRenderer::draw(Sprite2D * sprite, std::shared_ptr<Effect> effect) {
     //コンスタントバッファの取得
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 
-    //頂点・ピクセルシェーダ
-    mVertexShader->set();
-    mPixelShader->set();
+    //エフェクト
+    effect->set();
 
     //テクスチャデータ
     sprite->getTexture()->setData(ShaderInputType::Pixel, 0);
@@ -60,9 +62,6 @@ void SpriteRenderer::draw(Sprite2D* sprite) {
     cmanager->send();
     //描画
     mVIBuffer->render();
-
-    //前の描画設定に戻す
-    //renderModeChanger->setRenderMode(preCullMode, preFillMode);
 }
 
 void SpriteRenderer::draw(Sprite3D* sprite) {
@@ -79,9 +78,7 @@ void SpriteRenderer::draw(Sprite3D* sprite) {
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 
     //頂点・ピクセルシェーダ
-    mVertexShader->set();
-    mPixelShader->set();
-
+    mEffect->set();
     //テクスチャデータ
     sprite->getTexture()->setData(ShaderInputType::Pixel, 0);
     mSampler->setData(ShaderInputType::Pixel, 0);

@@ -5,12 +5,11 @@
 
 namespace Framework {
 namespace Graphics {
+class Effect;
 class GraphicsDeviceManager;
 class Sprite2D;
 class Sprite3D;
 class QuadInstance;
-class VertexShader;
-class PixelShader;
 class Sampler;
 
 /**
@@ -34,14 +33,19 @@ public:
     */
     void draw(Sprite2D* sprite);
     /**
+    * @brief スプライトを独自シェーダーで描画する
+    * @param sprite 描画するスプライト
+    * @param effect 使用するエフェクト
+    */
+    void draw(Sprite2D* sprite, std::shared_ptr<Effect> effect);
+    /**
     * @brief 3Dスプライトをビルボードで描画
     * @param sprite 描画するスプライト
     */
     void draw(Sprite3D* sprite);
 private:
     std::shared_ptr<QuadInstance> mVIBuffer; //!< 頂点・インデックスバッファ
-    std::shared_ptr<VertexShader> mVertexShader; //!< 頂点シェーダー
-    std::shared_ptr<PixelShader> mPixelShader; //!< ピクセルシェーダー
+    std::shared_ptr<Effect> mEffect; //!< エフェクト
     std::unique_ptr<Sampler> mSampler; //!< サンプラー
 };
 

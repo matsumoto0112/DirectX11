@@ -17,6 +17,7 @@ enum class PixelShaderType {
     Model_Shadow,
     Model_Diffuse_Split4Color,
     OutPot_Color,
+    Texture2D_Inversion,
 };
 
 /**
@@ -35,6 +36,7 @@ public:
     static const std::string MODEL_SHADOW; //!< Z値を出力
     static const std::string MODEL_DIFFUSE_SPLIT4COLOR; //!< 色を4つに分割して出力する
     static const std::string OUTPUT_COLOR; //!< 色のみを出力する
+    static const std::string TEXTURE2D_INVERSION; //!< 2Dテクスチャを色反転して出力
 };
 
 } //Define 

@@ -23,6 +23,7 @@
 #include "Framework/Define/Path.h"
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
+#include "Framework/Graphics/Shader/Effect.h"
 
 using namespace Framework;
 
@@ -43,6 +44,7 @@ Main::Main() {
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
+    ps->importResource(Define::PixelShaderType::Texture2D_Inversion, Define::PixelShaderName::TEXTURE2D_INVERSION);
 
     fbx->getResource(Define::ModelType::Plane)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
     fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
@@ -133,7 +135,10 @@ void Main::draw() {
 
     mOrthographicCamera->render();
     mSprite->setTexture(mRTV->getRenderTargetTexture(), false);
-    mSprite->draw();
+    std::shared_ptr<Graphics::Effect> effect = std::make_shared<Graphics::Effect>(
+        Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
+        Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D_Inversion));
+    mSprite->draw(effect);
 
     for (auto&& window : mDebugUIs) {
         window->draw();

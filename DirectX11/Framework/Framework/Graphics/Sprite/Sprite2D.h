@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
-#include "Framework/Math/Rect.h"
 #include "Framework/Graphics/Color4.h"
 #include "Framework/Math/Matrix4x4.h"
+#include "Framework/Math/Rect.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
+class Effect;
 class Texture;
 
 /**
@@ -41,6 +42,10 @@ public:
     * @brief 描画する
     */
     virtual void draw();
+    /**
+    * @brief 独自エフェクトで描画する
+    */
+    virtual void draw(std::shared_ptr<Effect> effect);
     /**
     * @brief ピボットの設定
     * @param pivot ピボットの場所

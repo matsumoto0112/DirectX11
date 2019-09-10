@@ -33,6 +33,10 @@ void Sprite2D::draw() {
     SpriteRenderer::getInstance().draw(this);
 }
 
+void Sprite2D::draw(std::shared_ptr<Effect> effect) {
+    SpriteRenderer::getInstance().draw(this, effect);
+}
+
 void Sprite2D::setPivot(const Math::Vector2& pivot, PivotBase base) {
     //©•ª‚ğŠî€‚Æ‚·‚éê‡
     if (base == PivotBase::Local) {
