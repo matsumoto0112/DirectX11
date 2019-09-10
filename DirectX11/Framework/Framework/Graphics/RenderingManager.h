@@ -63,7 +63,7 @@ public:
     /**
     * @brief バックバッファをコンテキストにセットする
     */
-    void setBackbuffer();
+    void setBackbuffer(const Graphics::Color4& clearColor);
 private:
     Math::Vector2 mScreenSize;
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス

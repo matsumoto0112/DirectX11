@@ -52,7 +52,8 @@ void RenderingManager::drawEnd() {
     mGraphicsDevice->drawEnd();
 }
 
-void RenderingManager::setBackbuffer() {
+void RenderingManager::setBackbuffer(const Color4& clearColor) {
+    mRenderTarget->setClearColor(clearColor);
     mRenderTarget->clear();
     mRenderTarget->set();
 }

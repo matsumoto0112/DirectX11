@@ -28,9 +28,36 @@
 using namespace Framework;
 
 namespace {
+using ModelList = std::unordered_map<Define::PixelShaderType, std::vector< std::shared_ptr<Graphics::Model>>>;
+ModelList mGameModels;
 std::unique_ptr<Graphics::OrthographicCamera> mOrthographicCamera;
 std::unique_ptr<Graphics::Sprite2D> mSprite;
 std::unique_ptr<Graphics::RenderTarget> mRTV;
+
+void setDefaultPixelShader(ModelList& list) {
+    auto ps = Utility::ResourceManager::getInstance().getPixelShader();
+    for (auto&& modelSet : list) {
+        for (auto&& model : modelSet.second) {
+            model->setPixelShader(ps->getResource(modelSet.first));
+        }
+    }
+}
+
+void setVertexShader(ModelList& list, std::shared_ptr<Graphics::VertexShader> vs) {
+    for (auto&& modelSet : list) {
+        for (auto&& model : modelSet.second) {
+            model->setVertexShader(vs);
+        }
+    }
+}
+
+void setPixelShader(ModelList& list, std::shared_ptr<Graphics::PixelShader> ps) {
+    for (auto&& modelSet : list) {
+        for (auto&& model : modelSet.second) {
+            model->setPixelShader(ps);
+        }
+    }
+}
 }
 
 Main::Main() {
@@ -42,16 +69,21 @@ Main::Main() {
     fbx->importResource(Define::ModelType::Enemy, Define::ModelName::ENEMY);
     fbx->importResource(Define::ModelType::Item, Define::ModelName::ITEM);
 
+    auto vs = Utility::ResourceManager::getInstance().getVertexShader();
+    vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
+
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
     ps->importResource(Define::PixelShaderType::Texture2D_Inversion, Define::PixelShaderName::TEXTURE2D_INVERSION);
+    ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
 
-    fbx->getResource(Define::ModelType::Plane)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Bullet)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
-    fbx->getResource(Define::ModelType::Enemy)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
-    fbx->getResource(Define::ModelType::Item)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
+    mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Plane));
+    mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Wall));
+    mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Player));
+    mGameModels[Define::PixelShaderType::Model_NoTexture].emplace_back(fbx->getResource(Define::ModelType::Bullet));
+    mGameModels[Define::PixelShaderType::Model_NoTexture].emplace_back(fbx->getResource(Define::ModelType::Enemy));
+    mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Item));
+    setDefaultPixelShader(mGameModels);
 
     std::unique_ptr<Player> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Field> field = std::make_unique<Field>(*this);
@@ -127,18 +159,24 @@ void Main::draw() {
     mRTV->set();
     mRTV->clear();
 
+    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
+    auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Z);
+    setVertexShader(mGameModels, vs);
+    setPixelShader(mGameModels, ps);
+
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
     mCamera->render();
     mManager->draw();
-    Utility::getRenderingManager()->setBackbuffer();
+    Utility::getRenderingManager()->setBackbuffer(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
 
     mOrthographicCamera->render();
     mSprite->setTexture(mRTV->getRenderTargetTexture(), false);
-    std::shared_ptr<Graphics::Effect> effect = std::make_shared<Graphics::Effect>(
-        Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
-        Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D_Inversion));
-    mSprite->draw(effect);
+    mSprite->draw();
+
+    setDefaultPixelShader(mGameModels);
+    setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
 
     for (auto&& window : mDebugUIs) {
         window->draw();
