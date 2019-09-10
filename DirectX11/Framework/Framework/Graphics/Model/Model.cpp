@@ -50,6 +50,22 @@ void Model::draw(const Utility::Transform& transform) {
     }
 }
 
+std::vector<std::shared_ptr<VertexShader>> Model::getVertexShader() const {
+    std::vector<std::shared_ptr<VertexShader>> res(mMeshes.size());
+    for (int i = 0; i < mMeshes.size(); i++) {
+        res[i] = mMeshes[i]->mVShader;
+    }
+    return res;
+}
+
+std::vector<std::shared_ptr<PixelShader>> Model::getPixelShader() const {
+    std::vector<std::shared_ptr<PixelShader>> res(mMeshes.size());
+    for (int i = 0; i < mMeshes.size(); i++) {
+        res[i] = mMeshes[i]->mPShader;
+    }
+    return res;
+}
+
 void Model::setVertexShader(std::shared_ptr<VertexShader> vshader, const std::vector<int>& indices) {
     //変更するメッシュのインデックスがあればそれを利用する
     if (indices.size() > 0) {
@@ -64,6 +80,14 @@ void Model::setVertexShader(std::shared_ptr<VertexShader> vshader, const std::ve
     }
 }
 
+void Model::setVertexShader(const std::vector<std::shared_ptr<VertexShader>>& vshaders) {
+    MY_ASSERTION(vshaders.size() != mMeshes.size(),
+        "シェーダー配列が不正な値です");
+    for (int i = 0; i < mMeshes.size(); i++) {
+        mMeshes[i]->mVShader = vshaders[i];
+    }
+}
+
 void Model::setPixelShader(std::shared_ptr<PixelShader> pshader, const std::vector<int>& indices) {
     //変更するメッシュのインデックスがあればそれを利用する
     if (indices.size() > 0) {
@@ -75,6 +99,14 @@ void Model::setPixelShader(std::shared_ptr<PixelShader> pshader, const std::vect
     //なければすべてのシェーダーを変える
     for (auto&& mesh : mMeshes) {
         mesh->mPShader = pshader;
+    }
+}
+
+void Model::setPixelShader(const std::vector<std::shared_ptr<PixelShader>>& pshaders) {
+    MY_ASSERTION(pshaders.size() != mMeshes.size(),
+        "シェーダー配列が不正な値です");
+    for (int i = 0; i < mMeshes.size(); i++) {
+        mMeshes[i]->mPShader = pshaders[i];
     }
 }
 

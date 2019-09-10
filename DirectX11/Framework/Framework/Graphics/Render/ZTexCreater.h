@@ -3,6 +3,7 @@
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Math/Matrix4x4.h"
+#include "Framework/Utility/Transform.h"
 
 namespace Framework {
 namespace Graphics {
@@ -37,8 +38,12 @@ public:
     * @brief 出力終了
     */
     void end();
-
-    void draw(Model* model);
+    /**
+    * @brief 出力処理
+    * @param model 対象となるモデル
+    * @param transform 対象となるモデルのトランスフォーム
+    */
+    void output(Model* model, const Utility::Transform& tranform);
 private:
     std::shared_ptr<Effect> mEffect;
     std::shared_ptr<Texture> mTexture;

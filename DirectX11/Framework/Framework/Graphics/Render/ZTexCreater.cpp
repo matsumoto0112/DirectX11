@@ -36,8 +36,17 @@ void ZTexCreater::end() {
     Utility::getRenderingManager()->setBackbuffer();
 }
 
-void ZTexCreater::draw(Model* model) {
+void ZTexCreater::output(Model* model, const Utility::Transform& tranform) {
+    std::vector<std::shared_ptr<VertexShader>> vshaders = model->getVertexShader();
+    std::vector<std::shared_ptr<PixelShader>> pshaders = model->getPixelShader();
 
+    model->setVertexShader(mEffect->getVertexShader());
+    model->setPixelShader(mEffect->getPixelShader());
+
+    model->draw(tranform);
+
+    model->setVertexShader(vshaders);
+    model->setPixelShader(pshaders);
 }
 
 } //Graphics 

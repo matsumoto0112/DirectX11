@@ -70,8 +70,38 @@ public:
     * @brief 描画する
     */
     virtual void draw(const Utility::Transform& transform);
+    /**
+    * @brief メッシュごとの頂点シェーダーを取得する
+    */
+    std::vector<std::shared_ptr<VertexShader>> getVertexShader() const;
+    /**
+    * @brief メッシュごとのピクセルシェーダーを取得する
+    */
+    std::vector<std::shared_ptr<PixelShader>> getPixelShader() const;
+    /**
+    * @brief 頂点シェーダーを設定する
+    * @param vshader 頂点シェーダー
+    * @param indices 設定するメッシュ番号
+    * @details indicesが何もなければすべてのメッシュに適用する
+    */
     void setVertexShader(std::shared_ptr<VertexShader> vshader, const std::vector<int>& indices = {});
+    /**
+    * @brief 頂点シェーダーを設定する
+    * @param vshaders 頂点シェーダーリスト
+    */
+    void setVertexShader(const std::vector<std::shared_ptr<VertexShader>>& vshaders);
+    /**
+    * @brief ピクセルシェーダーを設定する
+    * @param pshader ピクセルシェーダー
+    * @param indices 設定するメッシュ番号
+    * @details indicesが何もなければすべてのメッシュに適用する
+    */
     void setPixelShader(std::shared_ptr<PixelShader> pshader, const std::vector<int>& indices = {});
+    /**
+    * @brief ピクセルシェーダーを設定する
+    * @param vshaders ピクセルシェーダーリスト
+    */
+    void setPixelShader(const std::vector<std::shared_ptr<PixelShader>>& pshaders);
 protected:
     std::vector<std::unique_ptr<Mesh>> mMeshes; //!< メッシュリスト
     std::vector<std::unique_ptr<Material>> mMaterials; //!< マテリアルリスト
