@@ -24,6 +24,7 @@ public:
     */
     virtual void update() override;
     virtual void dispatch(Collidable3DObject* other) override;
+    virtual void hit(Enemy* other) override;
 protected:
     virtual std::unique_ptr<Collider> createCollider() override;
 private:

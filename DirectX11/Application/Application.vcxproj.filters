@@ -48,6 +48,9 @@
     <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
     <ClInclude Include="Source\GameObject\FollowCamera.h" />
     <ClInclude Include="Source\GameObject\Item\Item.h" />
+    <ClInclude Include="Source\GameObject\UI\UIBoard.h" />
+    <ClInclude Include="Source\GameObject\UI\IItem.h" />
+    <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

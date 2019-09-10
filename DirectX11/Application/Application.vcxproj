@@ -165,6 +165,9 @@
     <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
     <ClInclude Include="Source\GameObject\Item\Item.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
+    <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
+    <ClInclude Include="Source\GameObject\UI\IItem.h" />
+    <ClInclude Include="Source\GameObject\UI\UIBoard.h" />
     <ClInclude Include="Source\GameObject\Wall.h" />
     <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
     <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />

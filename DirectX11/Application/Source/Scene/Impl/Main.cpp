@@ -75,14 +75,17 @@ void Main::update() {
         const float ANGLE = 360.0f / NUM;
         float x = Math::MathUtility::cos(ANGLE * num) * 5;
         float z = Math::MathUtility::sin(ANGLE * num) * 5;
-        float s = 0.25f;
+        float s = 1.0f;
         Utility::Transform tr(
-            Math::Vector3(x, 0.5f, z),
+            Math::Vector3(x, 0.0f, z),
             Math::Quaternion::IDENTITY,
             Math::Vector3(s, s, s)
         );
-        //tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
-        mManager->addItem(std::make_unique<Item>(tr, *this));
+        tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
+        NormalEnemy::Parameter parameter;
+        parameter.color = Graphics::Color4(1.0f, 1.0f, 0.0f, 1.0f);
+        parameter.moveSpeed = 3.0f;
+        mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
         num++;
     }
 }

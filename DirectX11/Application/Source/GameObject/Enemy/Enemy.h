@@ -26,6 +26,8 @@ public:
     * @brief ディスパッチ関数
     */
     virtual void dispatch(Collidable3DObject* other) override;
+
+    virtual void hit(Player* other) override;
     /**
     * @brief 弾との衝突時処理
     */

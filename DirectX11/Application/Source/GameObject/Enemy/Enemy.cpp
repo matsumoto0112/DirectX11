@@ -24,6 +24,10 @@ void Enemy::dispatch(Collidable3DObject* other) {
     other->hit(this);
 }
 
+void Enemy::hit(Player* other) {
+    mIsAlive = false;
+}
+
 void Enemy::hit(Bullet* other) {
     mIsAlive = false;
 }

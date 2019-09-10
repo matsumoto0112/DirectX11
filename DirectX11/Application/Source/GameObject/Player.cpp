@@ -14,6 +14,10 @@
 using namespace Framework;
 
 namespace {
+constexpr int MAX_HP = 100;
+constexpr int DAMAGE = 20;
+
+std::shared_ptr<ImGUI::FloatField> mHP;
 //マウスの座標を平面上の座標に変換する
 Math::Vector3 getMousePlanePosition(const Math::Vector2& mouse, const FollowCamera* camera) {
     Math::Vector3 nearPos = camera->screenToWorldPosition(mouse, 0.0f);
@@ -35,6 +39,13 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     tr.setPosition(tr.getPosition() + Math::Vector3(0, 1.1f, 0.0f));
     tr.setParent(&mTransform);
     mWeapon = std::make_unique<SingleShotWeapon>(tr, mMediator);
+
+    std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Player_DEBUG");
+    mHP = std::make_shared<ImGUI::FloatField>("HP", MAX_HP, nullptr);
+    mHP->setMinValue(0.0f);
+    mHP->setMaxValue(100.0f);
+    window->addItem(mHP);
+    mMediator.addDebugUI(window);
 }
 
 Player::~Player() {}
@@ -67,6 +78,10 @@ void Player::update() {
 
 void Player::dispatch(Collidable3DObject* other) {
     other->hit(this);
+}
+
+void Player::hit(Enemy* other) {
+    mHP->setValue(mHP->getValue() - DAMAGE);
 }
 
 std::unique_ptr<Collider> Player::createCollider() {

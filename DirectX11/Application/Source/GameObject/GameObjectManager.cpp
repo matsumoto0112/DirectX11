@@ -47,6 +47,13 @@ void GameObjectManager::update() {
         }
     }
 
+    for (auto&& enemy : mEnemies) {
+        if (enemy->getColliderPtr()->getOBB().isCollide(mPlayer->getColliderPtr()->getOBB())) {
+            enemy->dispatch(mPlayer.get());
+            mPlayer->dispatch(enemy.get());
+        }
+    }
+
     for (auto&& item : mItems) {
         if (item->getColliderPtr()->getOBB().isCollide(mPlayer->getColliderPtr()->getOBB())) {
             item->dispatch(mPlayer.get());
