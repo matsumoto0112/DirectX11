@@ -13,38 +13,38 @@ Framework::Math::Vector3 getLine(const Framework::Math::Matrix4x4& mat, int line
 
 namespace Framework {
 namespace Graphics {
-PerspectiveCamera::PerspectiveCamera(const Info& info)
-    :Camera(Math::Matrix4x4::createView(info.position, info.lookat, info.up),
-        Math::Matrix4x4::createProjection(info.fov, info.screen.x, info.screen.y, info.near, info.far))
-    , mInfo(info) {}
+PerspectiveCamera::PerspectiveCamera(const Math::ViewInfo& view, const Math::ProjectionInfo& proj)
+    :Camera(Math::Matrix4x4::createView(view),
+        Math::Matrix4x4::createProjection(proj))
+    , mViewInfo(view), mProjInfo(proj) {}
 
 PerspectiveCamera::~PerspectiveCamera() {}
 
 void PerspectiveCamera::setPosition(const Math::Vector3& position) {
-    mInfo.position = position;
-    mView.setUpView(mInfo.position, mInfo.lookat, mInfo.up);
+    mViewInfo.eye = position;
+    mView.setUpView(mViewInfo);
 }
 
 const Math::Vector3& PerspectiveCamera::getPosition() const {
-    return mInfo.position;
+    return mViewInfo.eye;
 }
 
 void PerspectiveCamera::setLookat(const Math::Vector3& lookat) {
-    mInfo.lookat = lookat;
-    mView.setUpView(mInfo.position, mInfo.lookat, mInfo.up);
+    mViewInfo.at = lookat;
+    mView.setUpView(mViewInfo);
 }
 
 const Math::Vector3& PerspectiveCamera::getLookat() const {
-    return mInfo.lookat;
+    return mViewInfo.at;
 }
 
 void PerspectiveCamera::setUpVector(const Math::Vector3& up) {
-    mInfo.up = up;
-    mView.setUpView(mInfo.position, mInfo.lookat, mInfo.up);
+    mViewInfo.up = up;
+    mView.setUpView(mViewInfo);
 }
 
 const Math::Vector3& PerspectiveCamera::getUpVector() const {
-    return mInfo.up;
+    return mViewInfo.up;
 }
 
 } //Graphics 

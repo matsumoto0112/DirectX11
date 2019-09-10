@@ -16,23 +16,9 @@ namespace Graphics {
 class PerspectiveCamera : public Camera {
 public:
     /**
-    * @struct Info
-    * @brief カメラの情報定義
-    */
-    struct Info {
-        Math::Vector3 position; //!< カメラ座標
-        Math::Vector3 lookat; //!< カメラ注視点
-        Math::Vector3 up; //!< カメラ上方向
-        float fov; //!< 視野角（度）
-        Math::Vector2 screen; //!< スクリーンの大きさ
-        float near; //!< 最近点
-        float far; //!< 最遠点
-    };
-public:
-    /**
     * @brief コンストラクタ
     */
-    PerspectiveCamera(const Info& info);
+    PerspectiveCamera(const Math::ViewInfo& view, const Math::ProjectionInfo& proj);
     /**
     * @brief デストラクタ
     */
@@ -62,7 +48,8 @@ public:
     */
     virtual const Math::Vector3& getUpVector() const;
 private:
-    Info mInfo; //!< カメラ情報
+    Math::ViewInfo mViewInfo; //!< ビュー行列情報
+    Math::ProjectionInfo mProjInfo; //!< プロジェクション行列情報
 };
 
 } //Graphics 

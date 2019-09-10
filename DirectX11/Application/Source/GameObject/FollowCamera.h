@@ -11,7 +11,8 @@ public:
     /**
     * @brief コンストラクタ
     */
-    FollowCamera(const Framework::Graphics::PerspectiveCamera::Info& info,
+    FollowCamera(const Framework::Math::ViewInfo& viewInfo,
+        const Framework::Math::ProjectionInfo& projInfo,
         Framework::Utility::Transform* targetTransform);
     /**
     * @brief デストラクタ

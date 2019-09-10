@@ -2,13 +2,29 @@
 
 #include <array>
 #include <ostream>
+#include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"
+
 namespace Framework {
 namespace Math {
 
-class Vector2;
 class Matrix3x3;
 class Quaternion;
+
+struct ViewInfo {
+public:
+    Vector3 eye;
+    Vector3 at;
+    Vector3 up;
+};
+
+struct ProjectionInfo {
+public:
+    float fov;
+    Vector2 screen;
+    float nearZ;
+    float farZ;
+};
 
 /**
 * @class Matrix4x4
@@ -257,39 +273,27 @@ public:
 
     /**
     * @brief ビュー行列の作成
-    * @param eye 視点
-    * @param at 注視点
-    * @param up カメラの上方向
+    * @param info ビュー行列情報
     */
-    static Matrix4x4 createView(const Vector3& eye, const Vector3& at, const Vector3& up);
+    static Matrix4x4 createView(const ViewInfo& info);
 
     /**
     * @brief ビュー行列のセットアップ
-    * @param eye 視点
-    * @param at 注視点
-    * @param up カメラの上方向
+    * @param info ビュー行列情報
     */
-    Matrix4x4& setUpView(const Vector3& eye, const Vector3& at, const Vector3& up);
+    Matrix4x4& setUpView(const ViewInfo& info);
 
     /**
     * @brief プロジェクション行列の作成
-    * @param fovY 視野角(度)
-    * @param screenX スクリーンの幅
-    * @param screenY スクリーンの高さ
-    * @param nearZ 最近点
-    * @param farZ 最遠点
+    * @param info プロジェクション行列情報
     */
-    static Matrix4x4 createProjection(float fovY, float screenX, float screenY, float nearZ, float farZ);
+    static Matrix4x4 createProjection(const ProjectionInfo& info);
 
     /**
     * @brief プロジェクション行列のセットアップ
-    * @param fovY 視野角(度)
-    * @param screenX スクリーンの幅
-    * @param screenY スクリーンの高さ
-    * @param nearZ 最近点
-    * @param farZ 最遠点
+    * @param info プロジェクション行列情報
     */
-    Matrix4x4& setProjection(float fovY, float screenX, float screenY, float nearZ, float farZ);
+    Matrix4x4& setProjection(const ProjectionInfo& info);
     /**
     * @brief 平行移動成分の取得
     */

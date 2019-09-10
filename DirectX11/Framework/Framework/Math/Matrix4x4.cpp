@@ -322,43 +322,43 @@ Matrix4x4& Matrix4x4::scale(const Vector3& s) {
     return *this;
 }
 
-Matrix4x4 Matrix4x4::createView(const Vector3& eye, const Vector3& at, const Vector3& up) {
-    const Vector3 zaxis = (at - eye).getNormal();
-    const Vector3 xaxis = up.cross(zaxis).getNormal();
+Matrix4x4 Matrix4x4::createView(const ViewInfo& info) {
+    const Vector3 zaxis = (info.at - info.eye).getNormal();
+    const Vector3 xaxis = info.up.cross(zaxis).getNormal();
     const Vector3 yaxis = zaxis.cross(xaxis);
     return  Matrix4x4
     (
         xaxis.x, yaxis.x, zaxis.x, 0.0f,
         xaxis.y, yaxis.y, zaxis.y, 0.0f,
         xaxis.z, yaxis.z, zaxis.z, 0.0f,
-        -xaxis.dot(eye), -yaxis.dot(eye), -zaxis.dot(eye), 1.0f
+        -xaxis.dot(info.eye), -yaxis.dot(info.eye), -zaxis.dot(info.eye), 1.0f
     );
 }
 
-Matrix4x4& Matrix4x4::setUpView(const Vector3& eye, const Vector3& at, const Vector3& up) {
-    *this = createView(eye, at, up);
+Matrix4x4 & Matrix4x4::setUpView(const ViewInfo& info) {
+    *this = createView(info);
     return *this;
 }
 
-Matrix4x4 Matrix4x4::createProjection(float fovY, float screenX, float screenY, float nearZ, float farZ) {
-    const float yScale = MathUtility::cot(fovY / 2.0f);
-    const float xScale = screenY * yScale / screenX;
-    float subZ = farZ - nearZ;
+Matrix4x4 Matrix4x4::createProjection(const ProjectionInfo& info) {
+    const float yScale = MathUtility::cot(info.fov / 2.0f);
+    const float xScale = info.screen.y * yScale / info.screen.x;
+    float subZ = info.farZ - info.nearZ;
     return Matrix4x4
     (
         xScale, 0, 0, 0,
         0, yScale, 0, 0,
-        0, 0, farZ / subZ, 1.0f,
-        0, 0, -nearZ * farZ / subZ, 0
+        0, 0, info.farZ / subZ, 1.0f,
+        0, 0, -info.nearZ * info.farZ / subZ, 0
     );
 }
 
-Matrix4x4& Matrix4x4::setProjection(float fovY, float screenX, float screenY, float nearZ, float farZ) {
-    *this = createProjection(fovY, screenX, screenY, nearZ, farZ);
+Matrix4x4& Matrix4x4::setProjection(const ProjectionInfo & info) {
+    *this = createProjection(info);
     return *this;
 }
 
-Math::Vector3 Matrix4x4::getTranslate() const{
+Math::Vector3 Matrix4x4::getTranslate() const {
     return Math::Vector3(m[3][0], m[3][1], m[3][2]);
 }
 

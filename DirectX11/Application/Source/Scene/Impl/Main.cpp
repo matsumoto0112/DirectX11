@@ -42,14 +42,18 @@ Main::Main() {
     std::unique_ptr<Field> field = std::make_unique<Field>(*this);
     mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(field));
 
-    mCamera = std::make_unique<FollowCamera>(Graphics::PerspectiveCamera::Info{
+    Math::ViewInfo v{
         Math::Vector3(0,10,-10),
         Math::Vector3::ZERO,
-        Math::Vector3::UP,
+        Math::Vector3::UP
+    };
+    Math::ProjectionInfo p{
         45.0f,
         Define::Window::getSize(),
         0.1f,
-        1000.0f },
+        1000.0f
+    };
+    mCamera = std::make_unique<FollowCamera>(v, p,
         getPlayer()->getTransformPtr());
 
     D3D11_BLEND_DESC bd;
