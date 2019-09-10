@@ -33,6 +33,8 @@ ModelList mGameModels;
 std::unique_ptr<Graphics::OrthographicCamera> mOrthographicCamera;
 std::unique_ptr<Graphics::Sprite2D> mSprite;
 std::unique_ptr<Graphics::RenderTarget> mRTV;
+std::shared_ptr<Framework::Graphics::DirectionalLight> mDirectionalLight;
+std::shared_ptr<Framework::Graphics::PointLight> mPointLight;
 
 void setDefaultPixelShader(ModelList& list) {
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
@@ -71,11 +73,13 @@ Main::Main() {
 
     auto vs = Utility::ResourceManager::getInstance().getVertexShader();
     vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
+    vs->importResource(Define::VertexShaderType::Model_Shadow, Define::VertexShaderName::MODEL_SHADOW);
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
     ps->importResource(Define::PixelShaderType::Texture2D_Inversion, Define::PixelShaderName::TEXTURE2D_INVERSION);
     ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
+    ps->importResource(Define::PixelShaderType::Model_Shadow, Define::PixelShaderName::MODEL_SHADOW);
 
     mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Plane));
     mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Wall));
@@ -119,6 +123,15 @@ Main::Main() {
         Graphics::SRVFlag::Use);
     mRTV->createDepthStencilView();
     mSprite = std::make_unique<Graphics::Sprite2D>(mRTV->getRenderTargetTexture());
+
+    mDirectionalLight = Utility::getLightManager()->addDirectionalLight(Define::DirectionalLightType::Default,
+        Math::Vector3(0.0f, -1.0f, 1.0f), Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    mPointLight = Utility::getLightManager()->addPointLight(Define::PointLightType::LeftTopFloor,
+        Math::Vector3(0.0f, 0.0f, 0.0),
+        Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f),
+        5.0f,
+        0.0f);
+
 }
 
 Main::~Main() {}
@@ -156,28 +169,36 @@ bool Main::isEndScene() const {
 }
 
 void Main::draw() {
+    //出力先を変更
     mRTV->set();
     mRTV->clear();
 
+    //Z値をテクスチャに出力するシェーダーに変更
     auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
     auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Z);
     setVertexShader(mGameModels, vs);
     setPixelShader(mGameModels, ps);
 
+    //オブジェクトを描画
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
     mCamera->render();
     mManager->draw();
+
+    //出力先をバックバッファに変更
     Utility::getRenderingManager()->setBackbuffer(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
 
+    //Z値テクスチャを描画する
     mOrthographicCamera->render();
     mSprite->setTexture(mRTV->getRenderTargetTexture(), false);
     mSprite->draw();
 
+    //元の設定に戻す
     setDefaultPixelShader(mGameModels);
     setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
 
+    //UIウィンドウ
     for (auto&& window : mDebugUIs) {
         window->draw();
     }

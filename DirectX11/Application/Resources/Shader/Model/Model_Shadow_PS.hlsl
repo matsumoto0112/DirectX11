@@ -1,15 +1,6 @@
 #include "../Utility/ShaderDefine.hlsli"
 Texture2D tex : register(t0);
-SamplerState samLinear = sampler_state // サンプラーステート
-{
-    texture = (texShadowMap);
-    AddressU = CLAMP;
-    AddressV = CLAMP;
-    AddressW = CLAMP;
-    MIPFILTER = LINEAR;
-    MINFILTER = LINEAR;
-    MAGFILTER = LINEAR;
-};
+SamplerState samLinear : register(s0);
 
 struct ps_input
 {
