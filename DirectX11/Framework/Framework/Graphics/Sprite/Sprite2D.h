@@ -4,6 +4,7 @@
 #include "Framework/Math/Rect.h"
 #include "Framework/Graphics/Color4.h"
 #include "Framework/Math/Matrix4x4.h"
+#include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
@@ -41,40 +42,6 @@ public:
     */
     virtual void draw();
     /**
-    * @brief 座標の設定
-    */
-    void setPosition(const Math::Vector2& position);
-    /**
-    * @brief 座標の取得
-    */
-    const Math::Vector2& getPosition() const;
-    void setZOrder(float z);
-    float getZOrder() const;
-    /**
-    * @brief 回転の設定
-    */
-    void setRotate(float rotate);
-    /**
-    * @brief 回転の取得
-    */
-    float getRotate() const;
-    /**
-    * @brief スケーリングの設定
-    */
-    void setScale(const Math::Vector2& scale);
-    /**
-    * @brief スケーリングの取得
-    */
-    const Math::Vector2& getScale() const;
-    /**
-    * @brief コンテンツの大きさの設定
-    */
-    void setContentSize(const Math::Vector2& size);
-    /**
-    * @brief コンテンツの大きさの取得
-    */
-    const Math::Vector2& getContentSize() const;
-    /**
     * @brief ピボットの設定
     * @param pivot ピボットの場所
     * @param base 何を基準に設定するか
@@ -90,14 +57,6 @@ public:
     */
     Math::Vector2 getPivot(PivotBase base) const;
     /**
-    * @brief 色の設定
-    */
-    void setColor(const Color4& color);
-    /**
-    * @brief 色の取得
-    */
-    const Color4& getColor() const;
-    /**
     * @brief アルファ値の設定
     * @param alpha アルファ値(0.0～1.0)
     */
@@ -107,27 +66,6 @@ public:
     * @return 現在のアルファ値(0.0～1.0)
     */
     float getAlpha() const;
-
-    /**
-    * @brief テクスチャの矩形の設定
-    * @param r 矩形情報
-    * @detail r.left uvの左座標(0～1)
-              r.top uvの上座標(0～1)
-              r.width uvの幅(0～1)
-              r.height uvの高さ(0～1)
-              を設定する
-    */
-    void setSrcRect(const Rect& r);
-    /**
-    * @brief テクスチャの矩形の取得
-    * @return 矩形情報を返す
-    * @detail r.left uvの左座標(0～1)
-              r.top uvの上座標(0～1)
-              r.width uvの幅(0～1)
-              r.height uvの高さ(0～1)
-              を取得する
-    */
-    const Rect& getSrcRect() const;
     /**
     * @brief モデル変換行列
     * @return モデル変換行列を返す(scale * rotate * translate)
@@ -145,14 +83,16 @@ public:
     void setTexture(std::shared_ptr<Texture> texture, bool resize);
 protected:
     std::shared_ptr<Texture> mTexture;
-    Math::Vector2 mPosition;
-    float mZOrder;
-    float mRotate;
-    Math::Vector2 mScale;
-    Math::Vector2 mContentSize;
+protected:
+    PROPERTY(Math::Vector2, mPosition, Position);
+    PROPERTY(float, mZOrder, ZOrder);
+    PROPERTY(float, mRotate, Rotate);
+    PROPERTY(Math::Vector2, mScale, Scale);
+    PROPERTY(Math::Vector2, mContentSize, ContentSize);
+    PROPERTY(Color4, mColor, Color);
+    PROPERTY(Rect, mSrcRect, SrcRect);
+protected:
     Math::Vector2 mPivot;
-    Color4 mColor;
-    Rect mSrcRect;
 };
 } //Graphics 
 } //Framework 
