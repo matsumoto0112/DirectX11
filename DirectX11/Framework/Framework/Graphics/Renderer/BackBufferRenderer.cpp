@@ -3,6 +3,7 @@
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Define/Window.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
+#include "Framework/Graphics/Sprite/SpriteRenderer.h"
 
 namespace Framework {
 namespace Graphics {
@@ -22,16 +23,17 @@ BackBufferRenderer::BackBufferRenderer() {
 BackBufferRenderer::~BackBufferRenderer() {}
 
 void BackBufferRenderer::render(std::shared_ptr<Sprite2D> sprite) {
-    sprite->draw();
+    SpriteRenderer::getInstance().draw(sprite.get());
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Sprite3D> sprite) {
-    sprite->draw();
+    SpriteRenderer::getInstance().draw(sprite.get());
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Model> model, const Utility::Transform& transform) {
     model->draw(transform);
 }
+
 void BackBufferRenderer::begin() {
     mRenderTarget->setClearColor(mBackColor);
     mRenderTarget->set();
@@ -39,6 +41,11 @@ void BackBufferRenderer::begin() {
 }
 
 void BackBufferRenderer::end() {}
+
+std::shared_ptr<Texture> BackBufferRenderer::getRenderedTexture() const {
+    MY_ASSERTION(false, "BackBufferRendererクラスのgetRenderedTextureを呼ばないでください。バックバッファはテクスチャを生成できません。");
+    throw std::exception("don't call");
+}
 
 } //Graphics 
 } //Framework 

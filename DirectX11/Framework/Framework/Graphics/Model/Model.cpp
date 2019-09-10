@@ -81,7 +81,7 @@ void Model::setVertexShader(std::shared_ptr<VertexShader> vshader, const std::ve
 }
 
 void Model::setVertexShader(const std::vector<std::shared_ptr<VertexShader>>& vshaders) {
-    MY_ASSERTION(vshaders.size() != mMeshes.size(),
+    MY_ASSERTION(vshaders.size() == mMeshes.size(),
         "シェーダー配列が不正な値です");
     for (int i = 0; i < mMeshes.size(); i++) {
         mMeshes[i]->mVShader = vshaders[i];
@@ -103,7 +103,7 @@ void Model::setPixelShader(std::shared_ptr<PixelShader> pshader, const std::vect
 }
 
 void Model::setPixelShader(const std::vector<std::shared_ptr<PixelShader>>& pshaders) {
-    MY_ASSERTION(pshaders.size() != mMeshes.size(),
+    MY_ASSERTION(pshaders.size() == mMeshes.size(),
         "シェーダー配列が不正な値です");
     for (int i = 0; i < mMeshes.size(); i++) {
         mMeshes[i]->mPShader = pshaders[i];

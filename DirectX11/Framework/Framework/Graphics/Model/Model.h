@@ -68,6 +68,8 @@ public:
     virtual ~Model();
     /**
     * @brief •`‰æ‚·‚é
+    * @details IRendererƒNƒ‰ƒX‚©‚çŒÄ‚Î‚ê‚é
+    ‚»‚êˆÈŠO‚Ìó‹µ‚ÅŒÄ‚Î‚ê‚é‚Æ•`‰æ‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢‚±‚Æ‚ª‚ ‚é
     */
     virtual void draw(const Utility::Transform& transform);
     /**

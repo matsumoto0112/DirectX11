@@ -57,9 +57,12 @@ public:
     * @details スプライトは対象外なので普通の描画をする
     */
     virtual void render(std::shared_ptr<Sprite3D> sprite) override;
+    /**
+    * @brief 描画したターゲットのテクスチャを取得する
+    */
+    virtual std::shared_ptr<Texture> getRenderedTexture() const override;
 private:
     std::shared_ptr<Effect> mEffect;
-    std::shared_ptr<Texture> mTexture;
     std::unique_ptr<RenderTarget> mRenderTarget;
 };
 

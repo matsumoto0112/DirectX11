@@ -99,7 +99,6 @@ void GameObjectManager::update() {
 
 void GameObjectManager::draw(Graphics::IRenderer* renderer) {
     //‰e‚Ì•`‰æŽž‚Í°‚ð•`‰æ‚µ‚½‚­‚È‚¢
-    //mField->drawWall(renderer);
     mField->draw(renderer);
     mPlayer->draw(renderer);
     for (auto&& bullet : mBullets) {

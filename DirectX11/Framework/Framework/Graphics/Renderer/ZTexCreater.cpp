@@ -7,7 +7,8 @@
 namespace Framework {
 namespace Graphics {
 
-ZTexCreater::ZTexCreater(UINT width, UINT height, std::shared_ptr<Effect> effect) {
+ZTexCreater::ZTexCreater(UINT width, UINT height, std::shared_ptr<Effect> effect)
+    :mEffect(effect) {
     std::shared_ptr<Graphics::TextureBuffer> texBuffer =
         std::make_shared<Graphics::TextureBuffer>(
             Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(width, height));
@@ -30,9 +31,12 @@ void ZTexCreater::setProjectionMatrix(const Math::Matrix4x4& proj) {
 
 void ZTexCreater::begin() {
     mRenderTarget->set();
+    mRenderTarget->clear();
 }
 
-void ZTexCreater::end() {}
+void ZTexCreater::end() {
+    //mRenderTarget->reset();
+}
 
 void ZTexCreater::render(std::shared_ptr<Model> model, const Utility::Transform& tranform) {
     std::vector<std::shared_ptr<VertexShader>> vshaders = model->getVertexShader();
@@ -53,6 +57,10 @@ void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) 
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite3D> sprite) {
     sprite->draw();
+}
+
+std::shared_ptr<Texture> ZTexCreater::getRenderedTexture() const {
+    return mRenderTarget->getRenderTargetTexture();
 }
 
 

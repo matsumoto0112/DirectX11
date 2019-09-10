@@ -196,7 +196,7 @@ void Main::update() {
         );
         tr.lookat(Math::Vector3(0.0f, 0.0f, 0.0f));
         NormalEnemy::Parameter parameter;
-        parameter.color = Graphics::Color4(1.0f, 1.0f, 0.0f, 1.0f);
+        parameter.color = Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f);
         parameter.moveSpeed = 3.0f;
         mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
         num++;
@@ -225,7 +225,6 @@ void Main::draw(Graphics::IRenderer* renderer) {
     //setPixelShader(mGameModels, ps);
 
     ////オブジェクトを描画
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     //mAlphaBlend->set();
     //Math::ViewInfo v{
     //    lightPos, lightLookat, Math::Vector3::UP
@@ -264,9 +263,40 @@ void Main::draw(Graphics::IRenderer* renderer) {
     ////元の設定に戻す
     //setDefaultPixelShader(mGameModels);
     //setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
+
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
+    //Z値を出力する
+    mZTexCreater->begin();
+    Math::ViewInfo v{
+        lightPos, lightLookat, Math::Vector3::UP
+    };
+    lightView = Math::Matrix4x4::createView(v);
+    Math::ProjectionInfo p{
+        40.0f,Math::Vector2(1,1), 0.1f, 100.0f
+    };
+    lightProj = Math::Matrix4x4::createProjection(p);
+
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
+    mManager->draw(mZTexCreater.get());
+    mZTexCreater->end();
+
+    renderer->begin();
+    //影の描画をする
+    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
+    setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
+    //Z値を出力したテクスチャをセットする
+    mZTexCreater->getRenderedTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
     mCamera->render();
+    Graphics::LightMatrixCBufferStruct lm;
+    lm.view = Math::Matrix4x4::transposition(lightView);
+    lm.proj = Math::Matrix4x4::transposition(lightProj);
+    Utility::getConstantBufferManager()->setStruct(lm);
+
     mManager->draw(renderer);
+    renderer->end();
+
     //UIウィンドウ
     for (auto&& window : mDebugUIs) {
         window->draw();

@@ -58,6 +58,10 @@ public:
     */
     void set();
     /**
+    * @brief レンダーターゲットをコンテキストから解放する
+    */
+    void reset();
+    /**
     * @brief レンダーターゲットをクリアする
     */
     void clear();

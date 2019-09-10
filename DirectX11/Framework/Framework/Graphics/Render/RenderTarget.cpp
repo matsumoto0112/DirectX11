@@ -82,6 +82,11 @@ void RenderTarget::set() {
     mViewport->set();
 }
 
+void RenderTarget::reset() {
+    ID3D11RenderTargetView* rtv[1]{ nullptr };
+    Utility::getContext()->OMSetRenderTargets(1, rtv, nullptr);
+}
+
 void RenderTarget::clear() {
     mRenderTargetView->clear(mClearColor);
     if (mEnableDepthStencil && mDepthStencilView) {
