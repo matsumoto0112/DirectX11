@@ -38,7 +38,3 @@ void Wall::pushBackGameObject(Collidable3DObject& gameObject) {
 bool Wall::isHitGameObject(Collidable3DObject& gameObject) {
     return Utility::Collision::obb_plane(gameObject.getColliderPtr()->getOBB(), mPlane, nullptr);
 }
-
-void Wall::draw() {
-    GameObject3D::draw();
-}

@@ -26,10 +26,6 @@ public:
     * @brief ゲームオブジェクトが自身に衝突しているか
     */
     bool isHitGameObject(Collidable3DObject& gameObject);
-    /**
-    * @brief 描画
-    */
-    virtual void draw() override;
 private:
     Framework::Math::Plane mPlane; //!< 平面
 };

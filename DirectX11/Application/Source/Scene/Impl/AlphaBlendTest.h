@@ -35,7 +35,7 @@ public:
     virtual void load(Framework::Scene::Collecter& collecter) override;
     virtual void update() override;
     virtual bool isEndScene() const override;
-    virtual void draw() override;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
     virtual void end() override;
     virtual Define::SceneType next() override;
 private:

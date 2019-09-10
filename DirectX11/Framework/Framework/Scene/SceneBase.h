@@ -4,6 +4,9 @@
 #include "Framework/Define/SceneType.h"
 
 namespace Framework {
+namespace Graphics {
+class IRenderer;
+} //Graphics 
 namespace Scene {
 class Collecter;
 
@@ -31,9 +34,9 @@ public:
     */
     virtual bool isEndScene() const = 0;
     /**
-    * v•`‰æ
+    * @brief •`‰æ
     */
-    virtual void draw() = 0;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) = 0;
     /**
     * @brief ƒV[ƒ“‚ÌI—¹ˆ—
     */

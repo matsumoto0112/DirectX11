@@ -22,7 +22,7 @@ public:
     /**
     * @brief 描画する
     */
-    virtual void draw() override;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
 protected:
     std::shared_ptr<Framework::Graphics::Model> mModel; //!< モデルデータ
 };

@@ -1,6 +1,13 @@
 #pragma once
 #include <array>
 
+namespace Framework {
+namespace Graphics {
+class IRenderer;
+class ZTexCreater;
+} //Graphics
+} //Framework 
+
 class Collider;
 class Collidable3DObject;
 class Floor;
@@ -38,11 +45,15 @@ public:
     /**
     * @brief 壁の描画
     */
-    virtual void drawWall();
+    virtual void drawWall(Framework::Graphics::IRenderer* renderer);
     /**
     * @brief フィールドの描画処理
     */
-    virtual void draw();
+    virtual void draw(Framework::Graphics::IRenderer* renderer);
+    /**
+    * @brief フィールドの描画処理
+    */
+    virtual void draw(Framework::Graphics::ZTexCreater* renderer);
 private:
     std::array<std::unique_ptr<Wall>, 4> mWalls; //!< 壁
     std::unique_ptr<Floor> mFloor; //!< 床

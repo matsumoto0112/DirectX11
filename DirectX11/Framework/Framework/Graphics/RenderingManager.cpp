@@ -8,6 +8,7 @@
 #include "Framework/Graphics/Render/Viewport.h"
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
+#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
 
 namespace Framework {
 namespace Graphics {
@@ -23,28 +24,16 @@ void RenderingManager::initialize() {
     mLightManager = std::make_unique<LightManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
-    mRenderTarget = std::make_unique<RenderTarget>(
-        mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer(),
-        std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, mScreenSize.x, mScreenSize.y)),
-        SRVFlag::NoUse);
-    mRenderTarget->createDepthStencilView(
-        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(
-            static_cast<UINT>(mScreenSize.x),
-            static_cast<UINT>(mScreenSize.y)),
-        DepthStencilDesc::getDefaultDepthStencilViewDesc());
-
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
+
+    mBackBufferRenderer = std::make_unique<BackBufferRenderer>();
 }
 
-void RenderingManager::changeRenderTargetColor(const Color4& color) {
-    mRenderTarget->setClearColor(color);
-}
-
-void RenderingManager::drawBegin() {
+IRenderer* RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    mRenderTarget->clear();
-    mRenderTarget->set();
+    mBackBufferRenderer->begin();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);
+    return mBackBufferRenderer.get();
 }
 
 void RenderingManager::drawEnd() {
@@ -53,11 +42,6 @@ void RenderingManager::drawEnd() {
 
     //•`‰æ‚ÌÅIˆ—‚ðs‚¤ 
     mGraphicsDevice->drawEnd();
-}
-
-void RenderingManager::setBackbuffer() {
-    mRenderTarget->clear();
-    mRenderTarget->set();
 }
 
 } //Graphics 

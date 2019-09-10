@@ -4,6 +4,7 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Source/Scene/Data/TitleData.h"
 #include "Framework/Define/Window.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
 
 using namespace Framework;
 
@@ -22,13 +23,13 @@ bool Title::isEndScene() const {
     return false;
 }
 
-void Title::draw() {
+void Title::draw(Framework::Graphics::IRenderer* renderer) {
     Math::Matrix4x4 proj = Math::Matrix4x4::createOrthographic(Define::Window::getSize());
     Math::Matrix4x4 view = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, proj);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, view);
 
-    mTitleStr->draw();
+    //renderer->render(mTitleStr);
 }
 
 void Title::end() {}

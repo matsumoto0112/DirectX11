@@ -43,7 +43,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw() override;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
     /**
     * @brief I—¹ˆ—
     */

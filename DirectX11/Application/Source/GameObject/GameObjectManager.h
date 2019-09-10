@@ -3,6 +3,12 @@
 #include <vector>
 #include "Source/GameObject/GameObject.h"
 
+namespace Framework {
+namespace Graphics {
+class IRenderer;
+} //Graphics
+} //Framework 
+
 class Bullet;
 class Enemy;
 class Field;
@@ -13,7 +19,7 @@ class Wall;
 
 /**
 * @class GameObjectManager
-* @brief discription
+* @brief ゲームオブジェクト管理者
 */
 class GameObjectManager {
     using GameObjectPtr = std::unique_ptr<GameObject>;
@@ -37,6 +43,11 @@ public:
     * @brief 更新
     */
     void update();
+    /**
+    * @brief 描画
+    * @param renderer 描画デバイス
+    */
+    void draw(Framework::Graphics::IRenderer* renderer);
     /**
     * @brief 描画
     */

@@ -10,8 +10,8 @@ void Collidable3DObject::initialize() {
     mCollider = createCollider();
 }
 
-void Collidable3DObject::draw() {
-    GameObject3D::draw();
+void Collidable3DObject::draw(Framework::Graphics::IRenderer* renderer) {
+    GameObject3D::draw(renderer);
     //mCollider->render();
 }
 

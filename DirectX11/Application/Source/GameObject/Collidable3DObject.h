@@ -34,7 +34,7 @@ public:
     /**
     * @brief 描画
     */
-    virtual void draw() override;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
     /**
     * @brief コライダーポインタを取得する
     */

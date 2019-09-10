@@ -27,6 +27,7 @@
 #include "Source/Scene/Impl/AlphaBlendTest.h"
 #include "Source/Scene/Impl/Main.h"
 #include "Framework/Utility/Time.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
 #include <atlstr.h>
 
 using namespace Framework;
@@ -58,9 +59,10 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        mGameDevice.getRenderingManager()->drawBegin();
-
-        mSceneManager->draw();
+        Graphics::IRenderer* renderer = mGameDevice.getRenderingManager()->drawBegin();
+        renderer->setBackColor(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+        renderer->begin();
+        mSceneManager->draw(renderer);
 
         mGameDevice.getRenderingManager()->drawEnd();
 

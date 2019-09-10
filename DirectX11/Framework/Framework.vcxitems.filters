@@ -113,7 +113,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\ZTexCreater.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\ZTexCreater.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -271,6 +272,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\Primitive3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\ZTexCreater.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IRenderer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\ZTexCreater.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />
   </ItemGroup>
 </Project>

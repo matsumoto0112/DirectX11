@@ -14,6 +14,7 @@ namespace Graphics {
 class AlphaBlend;
 class RenderTarget;
 class Sampler;
+class IRenderer;
 
 /**
 * @class RenderingManager
@@ -38,13 +39,11 @@ public:
     */
     void initialize();
     /**
-    * @brief レンダーターゲットの背景色を変更する
-    */
-    void changeRenderTargetColor(const Color4& color);
-    /**
     * @brief 描画開始
+    * @return バックバッファの描画デバイス
+    * @details 描画時はこのレンダラーを通すと出力される
     */
-    void drawBegin();
+    IRenderer* drawBegin();
     /**
     * @brief 描画終了
     */
@@ -65,22 +64,15 @@ public:
     * @brief ImGUI管理者の取得
     */
     ImGUI::Manager* getImGUIManager() const { return mImGUIManager.get(); }
-    /**
-    * @brief バックバッファをコンテキストにセットする
-    */
-    void setBackbuffer();
 private:
     Math::Vector2 mScreenSize;
+    std::unique_ptr<IRenderer> mBackBufferRenderer; //!< バックバッファ描画デバイス
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<LightManager> mLightManager; //!< ライト管理
     std::unique_ptr<AlphaBlend> mAlphaBlend; //!< アルファブレンド
-    std::unique_ptr<RenderTarget> mRenderTarget; //!< レンダーターゲット
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理
-private:
-    PROPERTY_ORIGINAL_GETTER_SETTER(Color4, mColor, BackColor, [&]() {return mColor; }, [&](const Color4& col) {
-        mColor = col; changeRenderTargetColor(col); }); //!< 背景色
 };
 
 } //Graphics 

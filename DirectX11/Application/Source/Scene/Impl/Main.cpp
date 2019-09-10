@@ -24,7 +24,8 @@
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 #include "Framework/Graphics/Shader/Effect.h"
-#include "Framework/Graphics/Render/ZTexCreater.h"
+#include "Framework/Graphics/Renderer/ZTexCreater.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
 
 using namespace Framework;
 
@@ -206,64 +207,66 @@ bool Main::isEndScene() const {
     return false;
 }
 
-void Main::draw() {
-    //出力先を変更
-    mRTV->setClearColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mRTV->set();
-    mRTV->clear();
+void Main::draw(Graphics::IRenderer* renderer) {
+    ////出力先を変更
+    //mRTV->setClearColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mRTV->set();
+    //mRTV->clear();
 
-    D3D11_BLEND_DESC desc = mAlphaBlend->getCurrentBlendStateDesc();
-    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    mAlphaBlend->setBlendStateFromDesc(desc);
-    mAlphaBlend->set();
+    //D3D11_BLEND_DESC desc = mAlphaBlend->getCurrentBlendStateDesc();
+    //desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
+    //mAlphaBlend->setBlendStateFromDesc(desc);
+    //mAlphaBlend->set();
 
-    //Z値をテクスチャに出力するシェーダーに変更
-    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
-    auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Z);
-    setVertexShader(mGameModels, vs);
-    setPixelShader(mGameModels, ps);
+    ////Z値をテクスチャに出力するシェーダーに変更
+    //auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
+    //auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Z);
+    //setVertexShader(mGameModels, vs);
+    //setPixelShader(mGameModels, ps);
 
-    //オブジェクトを描画
+    ////オブジェクトを描画
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    mAlphaBlend->set();
-    Math::ViewInfo v{
-        lightPos, lightLookat, Math::Vector3::UP
-    };
-    lightView = Math::Matrix4x4::createView(v);
-    Math::ProjectionInfo p{
-        40.0f,Math::Vector2(1,1), 0.1f, 100.0f
-    };
-    lightProj = Math::Matrix4x4::createProjection(p);
+    //mAlphaBlend->set();
+    //Math::ViewInfo v{
+    //    lightPos, lightLookat, Math::Vector3::UP
+    //};
+    //lightView = Math::Matrix4x4::createView(v);
+    //Math::ProjectionInfo p{
+    //    40.0f,Math::Vector2(1,1), 0.1f, 100.0f
+    //};
+    //lightProj = Math::Matrix4x4::createProjection(p);
 
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
 
+    ////mCamera->render();
+    //mManager->draw(0);
+
+    //desc = mAlphaBlend->getCurrentBlendStateDesc();
+    //desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
+    //mAlphaBlend->setBlendStateFromDesc(desc);
+    //mAlphaBlend->set();
+
+    ////出力先をバックバッファに変更
+    ////Utility::getRenderingManager()->setBackbuffer();
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    //mRTV->getRenderTargetTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
+    //setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
+    //setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
+    //mAlphaBlend->set();
     //mCamera->render();
-    mManager->draw(0);
+    //Graphics::LightMatrixCBufferStruct lm;
+    //lm.view = Math::Matrix4x4::transposition(lightView);
+    //lm.proj = Math::Matrix4x4::transposition(lightProj);
+    //Utility::getConstantBufferManager()->setStruct(lm);
+    //mManager->draw(1);
 
-    desc = mAlphaBlend->getCurrentBlendStateDesc();
-    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    mAlphaBlend->setBlendStateFromDesc(desc);
-    mAlphaBlend->set();
-
-    //出力先をバックバッファに変更
-    Utility::getRenderingManager()->setBackbuffer();
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    mRTV->getRenderTargetTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
-    setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
-    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
+    ////元の設定に戻す
+    //setDefaultPixelShader(mGameModels);
+    //setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
     mAlphaBlend->set();
     mCamera->render();
-    Graphics::LightMatrixCBufferStruct lm;
-    lm.view = Math::Matrix4x4::transposition(lightView);
-    lm.proj = Math::Matrix4x4::transposition(lightProj);
-    Utility::getConstantBufferManager()->setStruct(lm);
-    mManager->draw(1);
-
-    //元の設定に戻す
-    setDefaultPixelShader(mGameModels);
-    setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
-
+    mManager->draw(renderer);
     //UIウィンドウ
     for (auto&& window : mDebugUIs) {
         window->draw();

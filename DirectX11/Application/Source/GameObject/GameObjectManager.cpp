@@ -10,6 +10,9 @@
 
 using namespace Framework;
 namespace {
+/**
+* @brief 生存していないゲームオブジェクトを削除する
+*/
 template <class T>
 void eraseGameObjectIfNotAlive(std::vector<T>& list) {
     auto removeIt = std::remove_if(list.begin(), list.end(), [](auto&& obj) {return !obj->getIsAlive(); });
@@ -44,6 +47,9 @@ void solveCollideObjectToList(T* gameObject, std::vector<T2>& list) {
     }
 }
 
+/**
+* @brief リストと1ゲームオブジェクトの衝突を解決する
+*/
 template<class T, class T2>
 void solveCollideBothList(std::vector<T>& list1, std::vector<T2>& list2) {
     for (auto&& obj1 : list1) {
@@ -91,24 +97,23 @@ void GameObjectManager::update() {
     eraseGameObjectIfNotAlive(mItems);
 }
 
-void GameObjectManager::draw(int phase) {
-    if (phase == 0) {
-        mField->drawWall();
-    }
-    else {
-        mField->draw();
-    }
-    mPlayer->draw();
+void GameObjectManager::draw(Graphics::IRenderer* renderer) {
+    //影の描画時は床を描画したくない
+    //mField->drawWall(renderer);
+    mField->draw(renderer);
+    mPlayer->draw(renderer);
     for (auto&& bullet : mBullets) {
-        bullet->draw();
+        bullet->draw(renderer);
     }
     for (auto&& enemy : mEnemies) {
-        enemy->draw();
+        enemy->draw(renderer);
     }
     for (auto&& item : mItems) {
-        item->draw();
+        item->draw(renderer);
     }
 }
+
+void GameObjectManager::draw(int phase) {}
 
 void GameObjectManager::addBullet(BulletPtr bullet) {
     bullet->initialize();

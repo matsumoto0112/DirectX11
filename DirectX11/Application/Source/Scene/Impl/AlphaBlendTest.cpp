@@ -123,7 +123,7 @@ bool AlphaBlendTest::isEndScene() const {
     return false;
 }
 
-void AlphaBlendTest::draw() {
+void AlphaBlendTest::draw(Graphics::IRenderer* renderer) {
     mAlphaBlend->set();
     {
         Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mObj1Color);

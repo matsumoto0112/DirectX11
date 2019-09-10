@@ -10,6 +10,6 @@ GameObject3D::GameObject3D(const Utility::Transform& transform, IMainSceneMediat
 
 GameObject3D::~GameObject3D() {}
 
-void GameObject3D::draw() {
-    mModel->draw(mTransform);
+void GameObject3D::draw(Framework::Graphics::IRenderer* renderer) {
+    renderer->render(mModel, mTransform);
 }

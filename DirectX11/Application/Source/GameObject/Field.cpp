@@ -1,6 +1,7 @@
 #include "Field.h"
 #include "Source/GameObject/Wall.h"
 #include "Source/GameObject/Floor.h"
+#include "Framework/Graphics/Renderer/ZTexCreater.h"
 
 using namespace Framework;
 namespace {
@@ -63,13 +64,17 @@ bool Field::isGameObjectOutOfArea(Collidable3DObject& gameObject) {
 
 void Field::update() {}
 
-void Field::drawWall() {
+void Field::drawWall(Framework::Graphics::IRenderer* renderer) {
     for (auto&& wall : mWalls) {
-        wall->draw();
+        wall->draw(renderer);
     }
 }
 
-void Field::draw() {
-    mFloor->draw();
-    drawWall();
+void Field::draw(Framework::Graphics::IRenderer* renderer) {
+    mFloor->draw(renderer);
+    drawWall(renderer);
+}
+
+void Field::draw(Framework::Graphics::ZTexCreater* renderer) {
+    drawWall(renderer);
 }

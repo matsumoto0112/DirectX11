@@ -32,9 +32,9 @@ void Enemy::hit(Bullet* other) {
     mIsAlive = false;
 }
 
-void Enemy::draw() {
+void Enemy::draw(Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, mColor);
-    Collidable3DObject::draw();
+    Collidable3DObject::draw(renderer);
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4::WHITE);
 }
 

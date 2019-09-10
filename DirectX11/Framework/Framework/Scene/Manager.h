@@ -5,6 +5,9 @@
 #include "Framework/Define/SceneType.h"
 
 namespace Framework {
+namespace Graphics {
+class IRenderer;
+} //Graphics 
 namespace Scene {
 class SceneBase;
 class Collecter;
@@ -33,7 +36,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    void draw();
+    void draw(Graphics::IRenderer* renderer);
     /**
     * @brief ƒV[ƒ“‚Ì“o˜^
     * @param type ƒV[ƒ“‚Ìí—Ş
