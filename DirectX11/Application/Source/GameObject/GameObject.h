@@ -25,5 +25,6 @@ public:
     Framework::Utility::Transform* getTransformPtr() { return &mTransform; }
 protected:
     IMainSceneMediator& mMediator; //!< ƒƒCƒ“ƒV[ƒ“’‡‰îŽÒ
+protected:
     PROPERTY(Framework::Utility::Transform, mTransform, Transform);
 };

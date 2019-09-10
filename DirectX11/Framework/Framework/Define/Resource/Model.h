@@ -7,6 +7,7 @@ namespace Define {
 * @brief ƒ‚ƒfƒ‹‚ÌŽí—Þ’è‹`
 */
 enum class ModelType {
+    NONE,
     Plane,
     Wall,
     Player,

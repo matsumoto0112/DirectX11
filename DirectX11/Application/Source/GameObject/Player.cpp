@@ -41,7 +41,7 @@ Player::Player(const Utility::Transform& transform, IMainSceneMediator& mediator
     mWeapon = std::make_unique<SingleShotWeapon>(tr, mMediator);
 
     std::shared_ptr<ImGUI::Window> window = std::make_shared<ImGUI::Window>("Player_DEBUG");
-    mHP = std::make_shared<ImGUI::FloatField>("HP", MAX_HP, nullptr);
+    mHP = std::make_shared<ImGUI::FloatField>("HP", MAX_HP, [&](float val) {});
     mHP->setMinValue(0.0f);
     mHP->setMaxValue(100.0f);
     window->addItem(mHP);

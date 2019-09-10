@@ -4,6 +4,7 @@ using namespace Framework;
 
 GameObject3D::GameObject3D(const Utility::Transform& transform, IMainSceneMediator& mediator, Define::ModelType modelType)
     :GameObject(transform, mediator) {
+    if (modelType == Define::ModelType::NONE) return;
     mModel = Utility::ResourceManager::getInstance().getFBXModel()->getResource(modelType);
 }
 

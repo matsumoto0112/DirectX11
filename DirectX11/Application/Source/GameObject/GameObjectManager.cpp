@@ -15,6 +15,42 @@ void eraseGameObjectIfNotAlive(std::vector<T>& list) {
     auto removeIt = std::remove_if(list.begin(), list.end(), [](auto&& obj) {return !obj->getIsAlive(); });
     list.erase(removeIt, list.end());
 }
+
+/**
+* @brief コライダー同士が衝突しているか
+*/
+bool isHitCollider(Collider* col1, Collider* col2) {
+    return col1->getOBB().isCollide(col2->getOBB());
+}
+
+/**
+* @brief リストとゲームオブジェクトの衝突を解決
+*/
+template<class T, class T2>
+void solveCollideObjectToList(T* gameObject, std::vector<T2>& list) {
+    //ゲームオブジェクトのコライダーが有効か調べる
+    Collider* gameObjectCollider = gameObject->getColliderPtr();
+    if (!gameObjectCollider->getEnable())return;
+    for (auto&& obj : list) {
+        //リストのオブジェクトのコライダーが有効か調べる
+        Collider* objCollider = obj->getColliderPtr();
+        if (!objCollider->getEnable())continue;
+
+        //コライダーが衝突していたらディスパッチする
+        if (isHitCollider(gameObjectCollider, objCollider)) {
+            gameObject->dispatch(obj.get());
+            obj->dispatch(gameObject);
+        }
+    }
+}
+
+template<class T, class T2>
+void solveCollideBothList(std::vector<T>& list1, std::vector<T2>& list2) {
+    for (auto&& obj1 : list1) {
+        if (!obj1->getColliderPtr()->getEnable())continue;
+        solveCollideObjectToList(obj1.get(), list2);
+    }
+}
 }
 
 GameObjectManager::GameObjectManager(IMainSceneMediator& mediator, std::unique_ptr<Player> player, std::unique_ptr<Field> field)
@@ -38,28 +74,9 @@ void GameObjectManager::update() {
         item->update();
     }
 
-    for (auto&& bullet : mBullets) {
-        for (auto&& enemy : mEnemies) {
-            if (bullet->getColliderPtr()->getOBB().isCollide(enemy->getColliderPtr()->getOBB())) {
-                bullet->dispatch(enemy.get());
-                enemy->dispatch(bullet.get());
-            }
-        }
-    }
-
-    for (auto&& enemy : mEnemies) {
-        if (enemy->getColliderPtr()->getOBB().isCollide(mPlayer->getColliderPtr()->getOBB())) {
-            enemy->dispatch(mPlayer.get());
-            mPlayer->dispatch(enemy.get());
-        }
-    }
-
-    for (auto&& item : mItems) {
-        if (item->getColliderPtr()->getOBB().isCollide(mPlayer->getColliderPtr()->getOBB())) {
-            item->dispatch(mPlayer.get());
-            mPlayer->dispatch(item.get());
-        }
-    }
+    solveCollideBothList(mBullets, mEnemies);
+    solveCollideObjectToList(mPlayer.get(), mEnemies);
+    solveCollideObjectToList(mPlayer.get(), mItems);
 
     mField->pushBackGameObject(*mPlayer);
 

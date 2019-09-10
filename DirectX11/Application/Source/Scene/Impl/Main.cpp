@@ -54,7 +54,7 @@ Main::Main() {
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
-    bd.AlphaToCoverageEnable = TRUE;
+    bd.AlphaToCoverageEnable = FALSE;
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
