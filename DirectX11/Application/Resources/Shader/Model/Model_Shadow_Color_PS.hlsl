@@ -22,15 +22,18 @@ float cmp(float z, float threshold)
 
 float4 main(ps_input input) : SV_TARGET
 {
-    float4 o = input.color;
-    o *= color;
     float zValue = input.ShadowMapTex.z / input.ShadowMapTex.w;
-   
+
     float2 texCoord;
     texCoord.x = (1.0f + input.ShadowMapTex.x / input.ShadowMapTex.w) * 0.5f;
     texCoord.y = (1.0f - input.ShadowMapTex.y / input.ShadowMapTex.w) * 0.5f;
 
     float z = tex2.Sample(samLinear, texCoord).x;
-    o.rgb = lerp(SHADOW_COLOR, o.rgb, cmp(zValue, z + 0.005f));
-    return o;
+    if (zValue > z + 0.005f)
+    {
+        input.color.rgb *= 0.5f;
+    }
+    input.color.rgb *= color;
+    input.color.a = color.a;
+    return input.color;
 }
