@@ -6,6 +6,9 @@ static const int MAX_BONES = 256; //最大ボーン数
 
 static const float EPSILON = 1e-6; //誤差
 
+static const float4 LIGHT_COLOR = float4(255.0f / 255, 165.0f / 255, 0.0f / 255, 1.0f);
+static const float3 SHADOW_COLOR = float3(0.0f, 0.0f, 0.0f);
+
 //ワールド・ビュー・プロジェクション行列
 //2D時はviewに-(カメラの座標)の行列が入ってくる
 struct MVPMatrix

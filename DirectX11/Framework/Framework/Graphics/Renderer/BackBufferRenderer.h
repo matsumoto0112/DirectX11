@@ -45,6 +45,10 @@ public:
     * @param transform 描画するモデルのトランスフォーム
     */
     virtual void render(std::shared_ptr<Model> model, const Utility::Transform & transform) override;
+    /**
+    * @brief 描画したターゲットのテクスチャを取得する
+    * @details バックバッファのテクスチャは取得できないのでエラーとなる
+    */
     virtual std::shared_ptr<Texture> getRenderedTexture() const override;
 private:
     std::unique_ptr<RenderTarget> mRenderTarget; //!< レンダーターゲット

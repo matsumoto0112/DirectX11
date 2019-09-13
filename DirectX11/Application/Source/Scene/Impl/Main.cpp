@@ -26,6 +26,7 @@
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Renderer/ZTexCreater.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Texture/Sampler.h"
 
 using namespace Framework;
 
@@ -42,6 +43,7 @@ Math::Vector3 lightLookat;
 Math::Matrix4x4 lightView;
 Math::Matrix4x4 lightProj;
 std::unique_ptr<Graphics::ZTexCreater> mZTexCreater;
+std::unique_ptr<Graphics::Sampler> mSampler;
 
 void setDefaultPixelShader(ModelList& list) {
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
@@ -81,12 +83,15 @@ Main::Main() {
     auto vs = Utility::ResourceManager::getInstance().getVertexShader();
     vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
     vs->importResource(Define::VertexShaderType::Model_Shadow, Define::VertexShaderName::MODEL_SHADOW);
+    vs->importResource(Define::VertexShaderType::Model_Shadow_Diffuse, Define::VertexShaderName::MODEL_SHADOW_DIFFUSE);
 
     auto ps = Utility::ResourceManager::getInstance().getPixelShader();
     ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
     ps->importResource(Define::PixelShaderType::Texture2D_Inversion, Define::PixelShaderName::TEXTURE2D_INVERSION);
     ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
     ps->importResource(Define::PixelShaderType::Model_Shadow, Define::PixelShaderName::MODEL_SHADOW);
+    ps->importResource(Define::PixelShaderType::Model_Shadow_Diffuse, Define::PixelShaderName::MODEL_SHADOW_DIFFUSE);
+    ps->importResource(Define::PixelShaderType::Model_Shadow_Color, Define::PixelShaderName::MODEL_SHADOW_COLOR);
 
     mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Plane));
     mGameModels[Define::PixelShaderType::Model_Diffuse].emplace_back(fbx->getResource(Define::ModelType::Wall));
@@ -142,6 +147,25 @@ Main::Main() {
     lightPos = Math::Vector3(lightScale * -30, lightScale * 30, lightScale * 00);
     lightLookat = Math::Vector3(0, -0, 0);
 
+    Microsoft::WRL::ComPtr<ID3D11SamplerState> sam;
+    D3D11_SAMPLER_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+    desc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+    desc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+    desc.BorderColor[0] = 1.0f;
+    desc.BorderColor[1] = 1.0f;
+    desc.BorderColor[2] = 1.0f;
+    desc.BorderColor[3] = 1.0f;
+    desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+    desc.Filter = D3D11_FILTER::D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    desc.MaxAnisotropy = 1;
+    desc.MipLODBias = 0;
+    desc.MinLOD = -FLT_MAX;
+    desc.MaxLOD = FLT_MAX;
+    Utility::getDevice()->CreateSamplerState(&desc, &sam);
+    mSampler = std::make_unique<Graphics::Sampler>(sam);
+
     std::shared_ptr<ImGUI::Window> mUIWindow = std::make_shared<ImGUI::Window>("Light");
 
 #define ADD_LIGHT_POSITION_CHANGE_SLIDER(name,type) {\
@@ -176,14 +200,13 @@ Main::Main() {
 Main::~Main() {}
 
 void Main::load(Scene::Collecter& collecter) {}
-static int cnt = 0;
-static int num = 0;
+
+bool flag = false;
 
 void Main::update() {
     mManager->update();
-    cnt++;
-    if (cnt == 30) {
-        cnt = 0;
+    if (!flag) {
+        int num = 0;
         const int NUM = 36;
         const float ANGLE = 360.0f / NUM;
         float x = Math::MathUtility::cos(ANGLE * num) * 5;
@@ -199,7 +222,7 @@ void Main::update() {
         parameter.color = Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f);
         parameter.moveSpeed = 3.0f;
         mManager->addEnemy(std::make_unique<NormalEnemy>(tr, parameter, *this));
-        num++;
+        flag = true;
     }
 }
 
@@ -208,62 +231,6 @@ bool Main::isEndScene() const {
 }
 
 void Main::draw(Graphics::IRenderer* renderer) {
-    ////出力先を変更
-    //mRTV->setClearColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    //mRTV->set();
-    //mRTV->clear();
-
-    //D3D11_BLEND_DESC desc = mAlphaBlend->getCurrentBlendStateDesc();
-    //desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    //mAlphaBlend->setBlendStateFromDesc(desc);
-    //mAlphaBlend->set();
-
-    ////Z値をテクスチャに出力するシェーダーに変更
-    //auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Output_Z);
-    //auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Z);
-    //setVertexShader(mGameModels, vs);
-    //setPixelShader(mGameModels, ps);
-
-    ////オブジェクトを描画
-    //mAlphaBlend->set();
-    //Math::ViewInfo v{
-    //    lightPos, lightLookat, Math::Vector3::UP
-    //};
-    //lightView = Math::Matrix4x4::createView(v);
-    //Math::ProjectionInfo p{
-    //    40.0f,Math::Vector2(1,1), 0.1f, 100.0f
-    //};
-    //lightProj = Math::Matrix4x4::createProjection(p);
-
-    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
-    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
-
-    ////mCamera->render();
-    //mManager->draw(0);
-
-    //desc = mAlphaBlend->getCurrentBlendStateDesc();
-    //desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    //mAlphaBlend->setBlendStateFromDesc(desc);
-    //mAlphaBlend->set();
-
-    ////出力先をバックバッファに変更
-    ////Utility::getRenderingManager()->setBackbuffer();
-    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    //mRTV->getRenderTargetTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
-    //setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
-    //setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
-    //mAlphaBlend->set();
-    //mCamera->render();
-    //Graphics::LightMatrixCBufferStruct lm;
-    //lm.view = Math::Matrix4x4::transposition(lightView);
-    //lm.proj = Math::Matrix4x4::transposition(lightProj);
-    //Utility::getConstantBufferManager()->setStruct(lm);
-    //mManager->draw(1);
-
-    ////元の設定に戻す
-    //setDefaultPixelShader(mGameModels);
-    //setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model));
-
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mAlphaBlend->set();
     //Z値を出力する
@@ -282,10 +249,19 @@ void Main::draw(Graphics::IRenderer* renderer) {
     mManager->draw(mZTexCreater.get());
     mZTexCreater->end();
 
+    auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
     renderer->begin();
+    mSampler->setData(Graphics::ShaderInputType::Pixel, 1);
     //影の描画をする
-    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
     setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
+    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow_Color));
+
+    ////ディフューズテクスチャを使用するオブジェクトはシェーダをディフューズ用に変更する
+    //for (auto&& model : mGameModels[Define::PixelShaderType::Model_Diffuse]) {
+    //    model->setVertexShader(Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow_Diffuse));
+    //    model->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow_Diffuse));
+    //}
+
     //Z値を出力したテクスチャをセットする
     mZTexCreater->getRenderedTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
     mCamera->render();

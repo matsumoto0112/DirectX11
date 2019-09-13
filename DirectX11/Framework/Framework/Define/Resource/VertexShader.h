@@ -13,6 +13,7 @@ enum class VertexShaderType {
     Output_Z,
     Model_Shadow,
     Only_Position,
+    Model_Shadow_Diffuse,
 };
 
 /**
@@ -27,6 +28,7 @@ public:
     static const std::string OUTPUT_Z; //!< Z値を出力
     static const std::string MODEL_SHADOW;
     static const std::string ONLY_POSITION; //!< 座標のみを出力する
+    static const std::string MODEL_SHADOW_DIFFUSE; //!< ディフューズテクスチャあり影ありモデル
 };
 
 } //Define 

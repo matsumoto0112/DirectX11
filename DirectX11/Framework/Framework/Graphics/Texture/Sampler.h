@@ -41,7 +41,7 @@ public:
     * @param addressMode UV座標範囲外時の処理方法
     * @param filterMode サンプリング時のフィルタリング方法
     */
-    Sampler( TextureAddressMode addressMode, TextureFilterMode filterMode);
+    Sampler(TextureAddressMode addressMode, TextureFilterMode filterMode);
     /**
     * @brief コンストラクタ
     * @param sampler サンプラー
