@@ -69,6 +69,14 @@ void setPixelShader(ModelList& list, std::shared_ptr<Graphics::PixelShader> ps) 
         }
     }
 }
+
+struct LIGHT {
+    Math::Matrix4x4 lightView;
+    Math::Matrix4x4 lightProj;
+    Math::Vector3 lightPosition;
+    float dummy;
+};
+std::unique_ptr<Graphics::ConstantBuffer<LIGHT>> mConstantBuffer;
 }
 
 Main::Main() {
@@ -147,24 +155,7 @@ Main::Main() {
     lightPos = Math::Vector3(lightScale * -30, lightScale * 30, lightScale * 00);
     lightLookat = Math::Vector3(0, -0, 0);
 
-    Microsoft::WRL::ComPtr<ID3D11SamplerState> sam;
-    D3D11_SAMPLER_DESC desc;
-    ZeroMemory(&desc, sizeof(desc));
-    desc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-    desc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-    desc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-    desc.BorderColor[0] = 1.0f;
-    desc.BorderColor[1] = 1.0f;
-    desc.BorderColor[2] = 1.0f;
-    desc.BorderColor[3] = 1.0f;
-    desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
-    desc.Filter = D3D11_FILTER::D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-    desc.MaxAnisotropy = 1;
-    desc.MipLODBias = 0;
-    desc.MinLOD = -FLT_MAX;
-    desc.MaxLOD = FLT_MAX;
-    Utility::getDevice()->CreateSamplerState(&desc, &sam);
-    mSampler = std::make_unique<Graphics::Sampler>(sam);
+    mSampler = std::make_unique<Graphics::Sampler>(Graphics::TextureAddressMode::Clamp, Graphics::TextureFilterMode::MinMagMipLinear);
 
     std::shared_ptr<ImGUI::Window> mUIWindow = std::make_shared<ImGUI::Window>("Light");
 
@@ -195,6 +186,8 @@ Main::Main() {
     ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LY, y);
     ADD_LIGHT_LOOKAT_CHANGE_SLIDER(LZ, z);
     addDebugUI(mUIWindow);
+
+    mConstantBuffer = std::make_unique<Graphics::ConstantBuffer<LIGHT>>(Graphics::ShaderInputType::Vertex, 10);
 }
 
 Main::~Main() {}
@@ -235,40 +228,38 @@ void Main::draw(Graphics::IRenderer* renderer) {
     mAlphaBlend->set();
     //Z値を出力する
     mZTexCreater->begin();
-    Math::ViewInfo v{
-        lightPos, lightLookat, Math::Vector3::UP
-    };
-    lightView = Math::Matrix4x4::createView(v);
-    Math::ProjectionInfo p{
-        40.0f,Math::Vector2(1,1), 0.1f, 100.0f
-    };
-    lightProj = Math::Matrix4x4::createProjection(p);
 
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, lightView);
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, lightProj);
+    LIGHT l;
+    l.lightPosition = Math::Vector3(-10, 10, 0.0f);
+    l.lightView = Math::Matrix4x4::createView({ l.lightPosition,Math::Vector3::ZERO,Math::Vector3::UP });
+    l.lightProj = Math::Matrix4x4::createProjection({ 45.0f,Math::Vector2(1.0f,1.0f),0.1f,300.0f });
+
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::View, l.lightView);
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::Projection, l.lightProj);
+
+    //Z値を出力する描画
     mManager->draw(mZTexCreater.get());
     mZTexCreater->end();
 
-    auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
+    //本レンダリング開始
     renderer->begin();
+    auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
+
+    //Clampサンプラーセット
     mSampler->setData(Graphics::ShaderInputType::Pixel, 1);
+
     //影の描画をする
     setVertexShader(mGameModels, Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow));
-    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow_Color));
-
-    ////ディフューズテクスチャを使用するオブジェクトはシェーダをディフューズ用に変更する
-    //for (auto&& model : mGameModels[Define::PixelShaderType::Model_Diffuse]) {
-    //    model->setVertexShader(Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model_Shadow_Diffuse));
-    //    model->setPixelShader(Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow_Diffuse));
-    //}
+    setPixelShader(mGameModels, Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Model_Shadow));
 
     //Z値を出力したテクスチャをセットする
     mZTexCreater->getRenderedTexture()->setData(Graphics::ShaderInputType::Pixel, 1);
     mCamera->render();
-    Graphics::LightMatrixCBufferStruct lm;
-    lm.view = Math::Matrix4x4::transposition(lightView);
-    lm.proj = Math::Matrix4x4::transposition(lightProj);
-    Utility::getConstantBufferManager()->setStruct(lm);
+
+    l.lightProj.transpose();
+    l.lightView.transpose();
+    mConstantBuffer->setBuffer(l);
+    mConstantBuffer->sendBuffer();
 
     mManager->draw(renderer);
     renderer->end();

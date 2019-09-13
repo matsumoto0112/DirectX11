@@ -101,15 +101,15 @@ void GameObjectManager::draw(Graphics::IRenderer* renderer) {
     //‰e‚Ì•`‰æ‚Í°‚ğ•`‰æ‚µ‚½‚­‚È‚¢
     mField->draw(renderer);
     mPlayer->draw(renderer);
-    for (auto&& bullet : mBullets) {
-        bullet->draw(renderer);
-    }
-    for (auto&& enemy : mEnemies) {
-        enemy->draw(renderer);
-    }
-    for (auto&& item : mItems) {
-        item->draw(renderer);
-    }
+    //for (auto&& bullet : mBullets) {
+    //    bullet->draw(renderer);
+    //}
+    //for (auto&& enemy : mEnemies) {
+    //    enemy->draw(renderer);
+    //}
+    //for (auto&& item : mItems) {
+    //    item->draw(renderer);
+    //}
 }
 
 void GameObjectManager::draw(int phase) {}

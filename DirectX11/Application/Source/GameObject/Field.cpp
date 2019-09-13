@@ -73,10 +73,11 @@ void Field::drawWall(Framework::Graphics::IRenderer* renderer) {
 void Field::draw(Framework::Graphics::IRenderer* renderer) {
     //rendererがZ値を出力するレンダラーの場合、壁のみを描画する
     if (dynamic_cast<Framework::Graphics::ZTexCreater*>(renderer) != nullptr) {
-        drawWall(renderer);
+        mFloor->draw(renderer);
+        //drawWall(renderer);
     }
     else {
         mFloor->draw(renderer);
-        drawWall(renderer);
+        //drawWall(renderer);
     }
 }
