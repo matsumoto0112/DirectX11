@@ -11,7 +11,7 @@ namespace Graphics {
 BackBufferRenderer::BackBufferRenderer() {
     mRenderTarget = std::make_unique<RenderTarget>(
         Utility::getRenderingManager()->getGraphicsDevice()->getDirectX11GraphicsDevice()->getBackBuffer(),
-        std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, Define::Window::WIDTH, Define::Window::HEIGHT)),
+        std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, static_cast<float>(Define::Window::WIDTH), static_cast<float>(Define::Window::HEIGHT))),
         SRVFlag::NoUse);
     mRenderTarget->createDepthStencilView(
         Graphics::DepthStencilDesc::getDefaultTexture2DDesc(
@@ -27,7 +27,8 @@ void BackBufferRenderer::render(std::shared_ptr<Sprite2D> sprite) {
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Sprite3D> sprite) {
-    SpriteRenderer::getInstance().draw(sprite.get());
+    MY_ASSERTION(mCurrentPerspectiveCamera, "パースペクティブカメラが存在しません");
+    SpriteRenderer::getInstance().draw(sprite.get(), *mCurrentPerspectiveCamera);
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Model> model, const Utility::Transform& transform) {

@@ -18,8 +18,7 @@ Math::Matrix4x4 createViewIgnoreWorldOffset(const Math::ViewInfo& view) {
 FollowCamera::FollowCamera(const Framework::Math::ViewInfo& viewInfo,
     const Framework::Math::ProjectionInfo& projInfo,
     Framework::Utility::Transform* targetTransform)
-    :Camera(Math::Matrix4x4::createView(viewInfo),
-        Math::Matrix4x4::createProjection(projInfo)),
+    :PerspectiveCamera(viewInfo, projInfo),
     mCameraTransform(Utility::Transform()) {
     mLocalMatrix = createViewIgnoreWorldOffset(viewInfo);
     mCameraTransform.setParent(targetTransform);

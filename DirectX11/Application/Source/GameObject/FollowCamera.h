@@ -6,7 +6,7 @@
 * @class FollowCamera
 * @brief プレイヤーを追尾するカメラ
 */
-class FollowCamera : public Framework::Graphics::Camera {
+class FollowCamera : public Framework::Graphics::PerspectiveCamera {
 public:
     /**
     * @brief コンストラクタ

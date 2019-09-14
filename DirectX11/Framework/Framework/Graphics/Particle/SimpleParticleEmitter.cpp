@@ -1,4 +1,5 @@
 #include "SimpleParticleEmitter.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
 
 namespace Framework {
 namespace Graphics {
@@ -9,20 +10,33 @@ SimpleParticleEmitter::SimpleParticleEmitter(std::shared_ptr<Particle> origin)
     mDuration(5.0f),
     mEmitInterval(1.0f),
     mIntervalTimer(mEmitInterval),
-    mOnceEmitNum(10.0f),
-    mTime(mDuration) {}
+    mOnceEmitNum(10),
+    mRemainingTime(mDuration) {}
 
 SimpleParticleEmitter::~SimpleParticleEmitter() {}
 
+void SimpleParticleEmitter::init() {
+    mIsAlive = true;
+    mRemainingTime = mDuration;
+    mParticles.clear();
+}
+
 void SimpleParticleEmitter::simulate(float delta) {
+    //発生しているパーティクルを更新する
     for (auto&& particle : mParticles) {
         particle->simulate(delta);
     }
+
+    //生存していなければ終了
     if (!mIsAlive)return;
-    mTime -= delta;
-    if (mTime < 0) {
+
+    //残り時間がもうなければ終了する
+    mRemainingTime -= delta;
+    if (mRemainingTime < 0) {
         mIsAlive = false;
     }
+
+    //粒子発生タイミングになったら発生させる
     mIntervalTimer -= delta;
     if (mIntervalTimer < 0) {
         mIntervalTimer = mEmitInterval;
@@ -30,12 +44,11 @@ void SimpleParticleEmitter::simulate(float delta) {
             mParticles.emplace_back(mOrigin->clone());
         }
     }
-
 }
 
-void SimpleParticleEmitter::draw() {
+void SimpleParticleEmitter::draw(IRenderer* renderer) {
     for (auto&& particle : mParticles) {
-        particle->draw();
+        particle->draw(renderer);
     }
 }
 

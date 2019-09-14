@@ -18,6 +18,8 @@ public:
     * @brief デストラクタ
     */
     ~Wall();
+
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
     /**
     * @brief ゲームオブジェクトを壁の中に押し戻す
     */

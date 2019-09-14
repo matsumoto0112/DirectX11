@@ -29,7 +29,7 @@ Field::Field(IMainSceneMediator& mediator) {
         mWalls[i] = std::make_unique<Wall>(Utility::Transform(
             pos,
             Math::Quaternion::createRotateAboutY(rot),
-            Math::Vector3(5.0f, 1.0f, 1.0f)),
+            Math::Vector3(5.0f, 10.0f, 1.0f)),
             mediator);
     }
 
@@ -73,11 +73,10 @@ void Field::drawWall(Framework::Graphics::IRenderer* renderer) {
 void Field::draw(Framework::Graphics::IRenderer* renderer) {
     //rendererがZ値を出力するレンダラーの場合、壁のみを描画する
     if (dynamic_cast<Framework::Graphics::ZTexCreater*>(renderer) != nullptr) {
-        mFloor->draw(renderer);
-        //drawWall(renderer);
+        drawWall(renderer);
     }
     else {
         mFloor->draw(renderer);
-        //drawWall(renderer);
+        drawWall(renderer);
     }
 }

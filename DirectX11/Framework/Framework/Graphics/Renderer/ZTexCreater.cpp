@@ -3,6 +3,7 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Graphics/Sprite/SpriteRenderer.h"
 
 namespace Framework {
 namespace Graphics {
@@ -56,7 +57,7 @@ void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) 
 }
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite3D> sprite) {
-    sprite->draw();
+    SpriteRenderer::getInstance().draw(sprite.get(),*mCurrentPerspectiveCamera);
 }
 
 std::shared_ptr<Texture> ZTexCreater::getRenderedTexture() const {

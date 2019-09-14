@@ -26,6 +26,16 @@ Wall::Wall(const Utility::Transform& transform, IMainSceneMediator& mediator)
 
 Wall::~Wall() {}
 
+void Wall::draw(Framework::Graphics::IRenderer* renderer) {
+    const float sx = mTransform.getGlobalScale().x;
+    const float sy = mTransform.getGlobalScale().y;
+    Math::Rect uv{ 0.0f,0.0f,sx,sy };
+    Utility::getConstantBufferManager()->setRect(Graphics::ConstantBufferParameterType::UV, uv);
+    GameObject3D::draw(renderer);
+    uv = Math::Rect(0, 0, 1, 1);
+    Utility::getConstantBufferManager()->setRect(Graphics::ConstantBufferParameterType::UV, uv);
+}
+
 void Wall::pushBackGameObject(Collidable3DObject& gameObject) {
     float len = 0.0f;
     if (Utility::Collision::obb_plane(gameObject.getColliderPtr()->getOBB(), mPlane, &len)) {

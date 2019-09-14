@@ -12,6 +12,12 @@
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Graphics/Camera/PerspectiveCamera.h"
+#include <d3d11.h>
+
+namespace  {
+Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
+} 
 
 namespace Framework {
 namespace Graphics {
@@ -23,23 +29,25 @@ SpriteRenderer::SpriteRenderer() {
         Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
+
+    D3D11_RASTERIZER_DESC rasterizerDesc;
+    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDesc.DepthClipEnable = FALSE;
+    rasterizerDesc.MultisampleEnable = FALSE;
+    rasterizerDesc.DepthBiasClamp = 0;
+    rasterizerDesc.SlopeScaledDepthBias = 0;
+    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
 }
 
 SpriteRenderer::~SpriteRenderer() {}
 
 void SpriteRenderer::draw(Sprite2D* sprite) {
-    //IRenderModeChanger* renderModeChanger = Utility::getRenderingManager()->getRenderModeChanger();
-    ////前回の描画設定を一時的に保存
-    //CullMode preCullMode = renderModeChanger->getCullMode();
-    //FillMode preFillMode = renderModeChanger->getFillMode();
-    ////描画設定
-    //renderModeChanger->setRenderMode(CullMode::Back, FillMode::Solid);
-    //前の描画設定に戻す
-    //renderModeChanger->setRenderMode(preCullMode, preFillMode);
     draw(sprite, mEffect);
 }
 
-void SpriteRenderer::draw(Sprite2D * sprite, std::shared_ptr<Effect> effect) {
+void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
     //コンスタントバッファの取得
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 
@@ -64,38 +72,36 @@ void SpriteRenderer::draw(Sprite2D * sprite, std::shared_ptr<Effect> effect) {
     mVIBuffer->render();
 }
 
-void SpriteRenderer::draw(Sprite3D* sprite) {
-    //IRenderModeChanger* renderModeChanger = Utility::getRenderingManager()->getRenderModeChanger();
-
-    ////前回の描画設定を一時的に保存
-    //CullMode preCullMode = renderModeChanger->getCullMode();
-    //FillMode preFillMode = renderModeChanger->getFillMode();
-
-    ////描画設定
-    //renderModeChanger->setRenderMode(CullMode::None, FillMode::Solid);
-
+void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera& camera) {
+    Utility::getContext()->RSSetState(ras.Get());
     //コンスタントバッファの取得
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 
-    //頂点・ピクセルシェーダ
+    //エフェクト
     mEffect->set();
+
     //テクスチャデータ
     sprite->getTexture()->setData(ShaderInputType::Pixel, 0);
     mSampler->setData(ShaderInputType::Pixel, 0);
 
-    //PerspectiveCamera& currentCamera = Utility::getCameraManager()->getCurrentCamera<PerspectiveCamera>();
+    auto bill = [](const Math::Vector3& billPos, const Math::Vector3& targetPos, const Math::Vector3& up) {
+        Math::Matrix4x4 mat = Math::Matrix4x4::createView({ targetPos,billPos,up });
+        mat = Math::Matrix4x4::inverse(mat);
+        mat.m[3][0] = 0;
+        mat.m[3][1] = 0;
+        mat.m[3][2] = 0;
+        return mat;
+    };
 
-    //auto gtBillBoardMatrix = [](PerspectiveCamera& camera) {
-    //    Math::Matrix4x4 mat = camera.getView();
-    //    mat = Math::Matrix4x4::inverse(mat);
-    //    mat.m[3][0] = 0.0f;
-    //    mat.m[3][1] = 0.0f;
-    //    mat.m[3][2] = 0.0f;
-    //    return mat;
-    //};
-
-    //Math::Matrix4x4 mat = gtBillBoardMatrix(currentCamera);
-    //cmanager->setMatrix(ConstantBufferParameterType::World, sprite->createBillboardMatrix(mat));
+    Math::Matrix4x4 billboardRotation = bill(
+        sprite->getPosition(),
+        camera.getPosition(),
+        camera.getUpVector());
+    Math::Matrix4x4 world = billboardRotation;
+    world.m[3][0] = sprite->getPosition().x;
+    world.m[3][1] = sprite->getPosition().y;
+    world.m[3][2] = sprite->getPosition().z;
+    cmanager->setMatrix(ConstantBufferParameterType::World, world);
 
     //UV情報の設定
     cmanager->setRect(ConstantBufferParameterType::UV, sprite->getSrcRect());
@@ -106,9 +112,7 @@ void SpriteRenderer::draw(Sprite3D* sprite) {
     cmanager->send();
     //描画
     mVIBuffer->render();
-
-    ////前の描画設定に戻す
-    //renderModeChanger->setRenderMode(preCullMode, preFillMode);
 }
+
 } //Graphics 
 } //Framework 

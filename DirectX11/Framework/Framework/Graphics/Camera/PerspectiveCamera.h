@@ -47,7 +47,7 @@ public:
     * @brief カメラの上方向ベクトルの取得
     */
     virtual const Math::Vector3& getUpVector() const;
-private:
+protected:
     Math::ViewInfo mViewInfo; //!< ビュー行列情報
     Math::ProjectionInfo mProjInfo; //!< プロジェクション行列情報
 };

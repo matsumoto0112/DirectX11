@@ -11,6 +11,7 @@ class Sprite2D;
 class Sprite3D;
 class QuadInstance;
 class Sampler;
+class PerspectiveCamera;
 
 /**
 * @class SpriteRenderer
@@ -42,7 +43,7 @@ public:
     * @brief 3Dスプライトをビルボードで描画
     * @param sprite 描画するスプライト
     */
-    void draw(Sprite3D* sprite);
+    void draw(Sprite3D* sprite, const PerspectiveCamera& camera);
 private:
     std::shared_ptr<QuadInstance> mVIBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<Effect> mEffect; //!< エフェクト

@@ -14,10 +14,6 @@ Sprite3D::Sprite3D(std::shared_ptr<Texture> texture)
 
 Sprite3D::~Sprite3D() {}
 
-void Sprite3D::draw() {
-    SpriteRenderer::getInstance().draw(this);
-}
-
 Math::Matrix4x4 Sprite3D::createBillboardMatrix(const Math::Matrix4x4& invView) const {
     Math::Matrix4x4 scale(Math::Matrix4x4::createScale(mScale));
     Math::Matrix4x4 rotate(Math::Matrix4x4::createRotationZ(0.0f));

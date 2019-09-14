@@ -31,8 +31,6 @@ QuadInstance::QuadInstance()
 QuadInstance::~QuadInstance() {}
 
 void QuadInstance::render() {
-    //Device::GameDevice::getInstance().getGraphicsDevice().getConstantBufferManager().setMatrix(
-    //    ConstantBufferParameterType::World, mTransform.createSRTMatrix());
     mBuffer->render();
 }
 

@@ -5,6 +5,7 @@
 
 namespace Framework {
 namespace Graphics {
+class IRenderer;
 
 /**
 * @class Particle
@@ -14,22 +15,31 @@ class Particle {
 public:
     /**
     * @brief コンストラクタ
+    * @param 使用するスプライト
     */
     Particle(std::shared_ptr<Sprite3D> sprite);
     /**
     * @brief デストラクタ
     */
     virtual ~Particle();
+    /**
+    * @brief シミュレートする
+    */
     virtual void simulate(float delta);
-    virtual void draw();
+    /**
+    * @brief 描画
+    */
+    virtual void draw(IRenderer* renderer);
+    /**
+    * @brief 複製する
+    */
     std::unique_ptr<Particle> clone();
 private:
-    std::shared_ptr<Sprite3D> mSprite;
-private:
-    PROPERTY(bool, mIsAlive, Alive);
-    PROPERTY(Math::Vector3, mPosition, Position);
-    PROPERTY(Math::Vector3, mVelocity, Velocity);
-    PROPERTY(float, mLifeTime, LifeTime);
+    PROPERTY(bool, mIsAlive, IsAlive); //!< 生存しているか
+    PROPERTY_POINTER(std::shared_ptr<Sprite3D>, mSprite, Sprite); //!< 使っているスプライト
+    PROPERTY(Math::Vector3, mPosition, Position); //!< 座標
+    PROPERTY(Math::Vector3, mVelocity, Velocity); //!< 速度
+    PROPERTY(float, mLifeTime, LifeTime); //!< 生存時間
 };
 
 } //Graphics 
