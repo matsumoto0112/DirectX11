@@ -7,40 +7,66 @@
 namespace Framework {
 namespace Utility {
 
-template <class ResourceEnum, class ResourceType>
+/**
+* @class AbstractResourceStorage
+* @brief 抽象リソースストレージ
+* @tparam ResourceType リソースの種類を判別する型
+* @tparam ResourceData リソースデータクラス
+*/
+template <class ResourceType, class ResourceData>
 class AbstractResourceStorage {
 public:
+    /**
+    * @brief デストラクタ
+    */
     virtual ~AbstractResourceStorage() = default;
-    virtual void importResource(ResourceEnum type, const std::string& filepath) = 0;
-    void removeResource(ResourceEnum type);
-    std::shared_ptr<ResourceType> getResource(ResourceEnum type);
-    bool exist(ResourceEnum type);
+    /**
+    * @brief リソースをインポートする
+    * @param type リソースの種類
+    * @param filepath ファイルへのパス
+    */
+    virtual void importResource(ResourceType type, const std::string& filepath) = 0;
+    /**
+    * @brief リソースを削除する
+    */
+    virtual void removeResource(ResourceType type);
+    /**
+    * @brief リソースを取得する
+    */
+    virtual std::shared_ptr<ResourceData> getResource(ResourceType type);
+    /**
+    * @brief リソースが既に存在しているか
+    */
+    bool isExist(ResourceType type);
+    /**
+    * @brief リソースをクリアする
+    */
     void clear();
 protected:
-    std::unordered_map<ResourceEnum, std::shared_ptr<ResourceType>> mResources;
+    std::unordered_map<ResourceType, std::shared_ptr<ResourceData>> mResources; //!< リソースマップ
 };
 
-template<class ResourceEnum, class ResourceType>
-inline void AbstractResourceStorage<ResourceEnum, ResourceType>::removeResource(ResourceEnum type) {
+template<class ResourceType, class ResourceData>
+inline void AbstractResourceStorage<ResourceType, ResourceData>::removeResource(ResourceType type) {
     MY_ASSERTION(mResources.find(type) != mResources.end(),
         "未登録のリソースが削除されようとしました");
     mResources.erase(type);
 }
 
-template<class ResourceEnum, class ResourceType>
-inline std::shared_ptr<ResourceType> AbstractResourceStorage<ResourceEnum, ResourceType>::getResource(ResourceEnum type) {
+template<class ResourceType, class ResourceData>
+inline std::shared_ptr<ResourceData> AbstractResourceStorage<ResourceType, ResourceData>::getResource(ResourceType type) {
     MY_ASSERTION(mResources.find(type) != mResources.end(),
         "未登録のリソースが呼ばれました");
     return mResources[type];
 }
 
-template <class ResourceEnum, class ResourceType>
-inline bool AbstractResourceStorage<ResourceEnum, ResourceType>::exist(ResourceEnum type) {
+template <class ResourceType, class ResourceData>
+inline bool AbstractResourceStorage<ResourceType, ResourceData>::isExist(ResourceType type) {
     return mResources.find(type) != mResources.end();
 }
 
-template<class ResourceEnum, class ResourceType>
-inline void AbstractResourceStorage<ResourceEnum, ResourceType>::clear() {
+template<class ResourceType, class ResourceData>
+inline void AbstractResourceStorage<ResourceType, ResourceData>::clear() {
     mResources.clear();
 }
 

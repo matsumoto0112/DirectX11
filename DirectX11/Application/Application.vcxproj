@@ -142,6 +142,7 @@
     <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
     <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
+    <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -175,6 +176,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\Main.h" />
+    <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Scene\Impl\Title.h" />
     <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
     <ClInclude Include="stdafx.h" />

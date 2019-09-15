@@ -4,13 +4,11 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 
 namespace Framework {
-
 namespace Utility {
 
 ResourceInitializeOnStart::ResourceInitializeOnStart(ResourceManager& resourceManager) {
 #define LOAD_VS(TYPE,NAME) resourceManager.getVertexShader()->importResource((TYPE), (NAME))
 #define LOAD_PS(TYPE,NAME) resourceManager.getPixelShader()->importResource((TYPE), (NAME))
-
 
     LOAD_VS(Define::VertexShaderType::Texture2D, Define::VertexShaderName::TEXTURE2D);
     LOAD_VS(Define::VertexShaderType::Model_Lighting, Define::VertexShaderName::MODEL_LIGHTING);

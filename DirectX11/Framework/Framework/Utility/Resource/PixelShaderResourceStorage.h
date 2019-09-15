@@ -4,13 +4,25 @@
 #include "Framework/Utility/Resource/AbstractResourceStorage.h"
 
 namespace Framework {
-
 namespace Utility {
 
+/**
+* @class PixelShaderResourceStorage
+* @brief ピクセルシェーダストレージ
+*/
 class PixelShaderResourceStorage : public AbstractResourceStorage<Define::PixelShaderType, Graphics::PixelShader> {
 public:
+    /**
+    * @brief コンストラクタ
+    */
     PixelShaderResourceStorage();
+    /**
+    * @brief デストラクタ
+    */
     ~PixelShaderResourceStorage();
+    /**
+    * @brief リソースをインポートする
+    */
     virtual void importResource(Define::PixelShaderType type, const std::string& filepath) override;
 };
 

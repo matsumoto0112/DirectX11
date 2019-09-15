@@ -1,5 +1,6 @@
 #include "SimpleParticleEmitter.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Utility/Random.h"
 
 namespace Framework {
 namespace Graphics {
@@ -41,7 +42,9 @@ void SimpleParticleEmitter::simulate(float delta) {
     if (mIntervalTimer < 0) {
         mIntervalTimer = mEmitInterval;
         for (int i = 0; i < mOnceEmitNum; i++) {
-            mParticles.emplace_back(mOrigin->clone());
+            auto particle = mOrigin->clone();
+            particle->setVelocity(Math::Vector3(Utility::Random::getInstance().range(-5.0f, 5.0f), 1.0f, 0.0f));
+            mParticles.emplace_back(std::move(particle));
         }
     }
 }

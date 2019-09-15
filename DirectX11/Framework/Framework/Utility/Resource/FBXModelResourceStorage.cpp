@@ -2,7 +2,6 @@
 #include "Framework/Graphics/Model/FBXLoader.h"
 
 namespace Framework {
-
 namespace Utility {
 
 Utility::FBXModelResourceStorage::FBXModelResourceStorage()
@@ -11,7 +10,7 @@ Utility::FBXModelResourceStorage::FBXModelResourceStorage()
 Utility::FBXModelResourceStorage::~FBXModelResourceStorage() {}
 
 void Utility::FBXModelResourceStorage::importResource(Define::ModelType type, const std::string& filepath) {
-    if (exist(type))return;
+    if (isExist(type))return;
     mResources.emplace(type, mFBXLoader->load(filepath));
 
 }

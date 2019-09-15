@@ -8,13 +8,32 @@
 namespace Framework {
 namespace Utility {
 
+/**
+* @class ResourceManager
+* @brief リソース管理
+*/
 class ResourceManager : public Singleton<ResourceManager> {
 public:
-    ~ResourceManager();
+    /**
+    * @brief デストラクタ
+    */
+    virtual ~ResourceManager();
+    /**
+    * @brief 頂点シェーダ管理者の取得
+    */
     VertexShaderResourceStorage* getVertexShader() { return mVertexShaders.get(); }
+    /**
+    * @brief ピクセルシェーダ管理者の取得
+    */
     PixelShaderResourceStorage* getPixelShader() { return mPixelShaders.get(); }
+    /**
+    * @brief FBXモデル管理者の取得
+    */
     FBXModelResourceStorage* getFBXModel() { return mFBXModel.get(); }
 protected:
+    /**
+    * @brief コンストラクタ
+    */
     ResourceManager();
 private:
     std::unique_ptr<VertexShaderResourceStorage> mVertexShaders;

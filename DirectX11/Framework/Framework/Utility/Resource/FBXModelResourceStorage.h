@@ -11,13 +11,26 @@ class FBXLoader;
 
 namespace Utility {
 
+/**
+* @class FBXModelResourceStorage
+* @brief FBXモデルストレージ
+*/
 class FBXModelResourceStorage : public AbstractResourceStorage<Define::ModelType, Graphics::Model> {
 public:
+    /**
+    * @brief コンストラクタ
+    */
     FBXModelResourceStorage();
+    /**
+    * @brief デストラクタ
+    */
     ~FBXModelResourceStorage();
+    /**
+    * @brief リソースをインポートする
+    */
     virtual void importResource(Define::ModelType type, const std::string& filepath) override;
 private:
-    std::unique_ptr<Graphics::FBXLoader> mFBXLoader;
+    std::unique_ptr<Graphics::FBXLoader> mFBXLoader; //!< FBX読み込み
 };
 
 } //Utility 

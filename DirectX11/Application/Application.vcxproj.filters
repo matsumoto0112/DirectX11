@@ -21,6 +21,7 @@
     <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
     <ClCompile Include="Source\GameObject\FollowCamera.cpp" />
     <ClCompile Include="Source\GameObject\Item\Item.cpp" />
+    <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Source\GameObject\UI\UIBoard.h" />
     <ClInclude Include="Source\GameObject\UI\IItem.h" />
     <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
+    <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

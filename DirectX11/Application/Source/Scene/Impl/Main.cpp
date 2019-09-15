@@ -89,7 +89,7 @@ Main::Main() {
 
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
-    bd.AlphaToCoverageEnable = FALSE;
+    bd.AlphaToCoverageEnable = TRUE;
     bd.IndependentBlendEnable = FALSE;
     bd.RenderTarget[0] = Graphics::AlphaBlendSetting::getAlignmentBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(bd);
@@ -101,7 +101,6 @@ Main::Main() {
     spr = std::make_shared<Graphics::Sprite3D>(
         Graphics::TextureLoader().load(Define::Path::getInstance().texture() + "smoke.png"));
     std::shared_ptr<Graphics::Particle> particle = std::make_unique<Graphics::Particle>(spr);
-    particle->setVelocity(Math::Vector3(0, 1, 0));
     mParticleEmitter = std::make_unique<Graphics::SimpleParticleEmitter>(particle);
     mParticleEmitter->setDuration(100.0f);
     mParticleEmitter->init();
