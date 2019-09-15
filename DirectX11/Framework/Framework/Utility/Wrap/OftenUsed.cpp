@@ -29,5 +29,9 @@ Input::InputManager* getInputManager() {
     return Device::GameDevice::getInstance().getInputManager();
 }
 
+Utility::ResourceManager* getResourceManager() {
+    return &Utility::ResourceManager::getInstance();
+}
+
 } //Graphics 
 } //Framework 

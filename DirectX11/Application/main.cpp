@@ -23,6 +23,7 @@
 #include "Source/Scene/Impl/Main.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Source/Scene/Impl/ParticleTest.h"
 #include <atlstr.h>
 
 using namespace Framework;
@@ -43,7 +44,8 @@ private:
         mSceneManager = std::make_unique<Scene::Manager>();
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
-        mSceneManager->loadScene(Define::SceneType::MainPlay);
+        mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
+        mSceneManager->loadScene(Define::SceneType::ParticleTest);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

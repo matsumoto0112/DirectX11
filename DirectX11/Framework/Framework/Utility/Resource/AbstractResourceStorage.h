@@ -33,11 +33,11 @@ public:
     /**
     * @brief リソースを取得する
     */
-    virtual std::shared_ptr<ResourceData> getResource(ResourceType type);
+    virtual std::shared_ptr<ResourceData> getResource(ResourceType type) const;
     /**
     * @brief リソースが既に存在しているか
     */
-    bool isExist(ResourceType type);
+    bool isExist(ResourceType type) const;
     /**
     * @brief リソースをクリアする
     */
@@ -54,14 +54,14 @@ inline void AbstractResourceStorage<ResourceType, ResourceData>::removeResource(
 }
 
 template<class ResourceType, class ResourceData>
-inline std::shared_ptr<ResourceData> AbstractResourceStorage<ResourceType, ResourceData>::getResource(ResourceType type) {
+inline std::shared_ptr<ResourceData> AbstractResourceStorage<ResourceType, ResourceData>::getResource(ResourceType type) const {
     MY_ASSERTION(mResources.find(type) != mResources.end(),
         "未登録のリソースが呼ばれました");
-    return mResources[type];
+    return mResources.at(type);
 }
 
 template <class ResourceType, class ResourceData>
-inline bool AbstractResourceStorage<ResourceType, ResourceData>::isExist(ResourceType type) {
+inline bool AbstractResourceStorage<ResourceType, ResourceData>::isExist(ResourceType type) const {
     return mResources.find(type) != mResources.end();
 }
 

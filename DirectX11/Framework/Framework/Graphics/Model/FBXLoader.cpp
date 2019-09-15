@@ -9,6 +9,7 @@
 #include "Framework/Graphics/Model/Motion.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
+#include "Framework/Utility/HashCombine.h"
 
 namespace {
 static const Framework::Math::Vector3 DefaultNormal(0.0f, 0.0f, 1.0f);
@@ -18,9 +19,9 @@ static const Framework::Graphics::Color4 DefaultColor(1.0f, 1.0f, 1.0f, 1.0f);
 Framework::Graphics::Color4 convertFromFbxDouble(const FbxDouble3& value, double mult) {
     Framework::Graphics::Color4 result;
     //if (mult != 1) {
-        result.r = (float)(value[0] * mult);
-        result.g = (float)(value[1] * mult);
-        result.b = (float)(value[2] * mult);
+    result.r = (float)(value[0] * mult);
+    result.g = (float)(value[1] * mult);
+    result.b = (float)(value[2] * mult);
     //}
     result.a = 1.0f;
     return result;
@@ -257,7 +258,7 @@ std::unique_ptr<Mesh> FBXLoader::loadMesh(FbxMesh* mesh) {
     result->mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, indices,
         PrimitiveTopology::TriangleList);
 
-    Utility::ResourceManager& resManager = Utility::ResourceManager::getInstance();
+    const Utility::ResourceManager& resManager = Utility::ResourceManager::getInstance();
 
     result->mVShader = resManager.getVertexShader()->getResource(Define::VertexShaderType::Model);
     result->mPShader = resManager.getPixelShader()->getResource(Define::PixelShaderType::Model);
@@ -631,15 +632,16 @@ void FBXLoader::loadMaterialFromProperty(const std::string& texPath,
             name += ".jpg";
         }
 
+        std::shared_ptr<Texture> tex = mTexLoader->load(texPath + name);
         switch (type) {
         case Graphics::FBXLoader::PropertyType::Ambient:
-            result.mAmbientMap = mTexLoader->load(texPath + name);
+            result.mAmbientMap = tex;
             break;
         case Graphics::FBXLoader::PropertyType::Diffuse:
-            result.mDiffuseMap = mTexLoader->load(texPath + name);
+            result.mDiffuseMap = tex;
             break;
         case Graphics::FBXLoader::PropertyType::Specular:
-            result.mSpecularMap = mTexLoader->load(texPath + name);
+            result.mSpecularMap = tex;
             break;
         }
     }
