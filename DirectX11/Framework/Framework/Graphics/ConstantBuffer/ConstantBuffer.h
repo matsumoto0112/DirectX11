@@ -109,6 +109,8 @@ inline std::function<void(void)> Graphics::ConstantBuffer<T>::createSendBufferFu
         return [&, slotNumber]()->void {Utility::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
     case ShaderInputType::Pixel:
         return [&, slotNumber]()->void {Utility::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+    case ShaderInputType::Compute:
+        return [&, slotNumber]()->void {Utility::getContext()->CSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
     case ShaderInputType::VertexAndPixel:
         return [&, slotNumber]()->void {
             Utility::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());

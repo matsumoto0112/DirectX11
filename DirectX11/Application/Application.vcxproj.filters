@@ -80,8 +80,10 @@
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Compute\TestCompute.hlsl" />
+    <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
+    <None Include="Resources\Shader\Compute\ComputeShaderDefine.hlsli" />
   </ItemGroup>
 </Project>

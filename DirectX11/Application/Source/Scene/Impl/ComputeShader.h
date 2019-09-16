@@ -2,6 +2,14 @@
 #include <memory>
 #include "Framework/Scene/SceneBase.h"
 
+namespace Framework {
+namespace Graphics {
+class AlphaBlend;
+class OrthographicCamera;
+class PerspectiveCamera;
+} //Graphics 
+} //Framework 
+
 /**
 * @class ComputeShader
 * @brief コンピュートシェーダテストシーン
@@ -41,4 +49,7 @@ public:
     */
     virtual Define::SceneType next() override;
 private:
+    std::unique_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
+    std::unique_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
+    std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 };

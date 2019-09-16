@@ -9,6 +9,7 @@ namespace Graphics {
 enum class ShaderInputType {
     Vertex, //!< 頂点シェーダのみ
     Pixel, //!< ピクセルシェーダのみ
+    Compute,
     VertexAndPixel, //頂点・ピクセルシェーダ両方
 };
 

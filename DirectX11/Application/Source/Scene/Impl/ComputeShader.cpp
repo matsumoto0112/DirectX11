@@ -2,6 +2,16 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
+#include "Framework/Graphics/Sprite/Sprite3D.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Define/Window.h"
+#include "Framework/Graphics/Render/AlphaBlendSetting.h"
+#include "Framework/Graphics/Render/AlphaBlend.h"
+#include "Framework/Graphics/Camera/PerspectiveCamera.h"
+#include "Framework/Graphics/Camera/OrthographicCamera.h"
+#include "Framework/Utility/Time.h"
+#include "Framework/Utility/Random.h"
+#include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 
 using namespace Framework;
 
@@ -9,123 +19,119 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-struct InputBuffer {
-    int i;
+static const int COUNT = 256;
+struct Particle {
+    bool alive;
+    float lifeTime;
+    Math::Vector3 position;
+    Math::Vector3 velocity;
 };
 
-struct OutputBuffer {
-    int i;
+struct GlobalData {
+    int seed;
+    float deltaTime;
+    int dummy;
+    int dummy2;
 };
 
 std::unique_ptr<Graphics::ComputeShader> mComputeShader;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBuffer;
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mComputeBufferSRV;
-Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBuffer2;
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mComputeBufferSRV2;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBufferResult;
 Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mComputeBufferResultUAV;
-}
+Microsoft::WRL::ComPtr<ID3D11Buffer> mResulrBuffer;
+std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB;
+std::shared_ptr<Graphics::Sprite3D> mSprite;
 
-ComputeShader::ComputeShader() {
-    mWindow = std::make_unique<ImGUI::Window>("Compute Shader Test");
-    mText = std::make_shared<ImGUI::Text>("Test");
-    mWindow->addItem(mText);
-
-    mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/TestCompute");
-
-    const int ELEM_SIZE = 16 * 16;
-    InputBuffer inputBuffer[ELEM_SIZE], inputBuffer2[ELEM_SIZE];
-    for (int i = 0; i < ELEM_SIZE; i++) {
-        inputBuffer[i].i = i;
-        inputBuffer2[i].i = ELEM_SIZE - i * 2;
-    }
-    HRESULT hr;
-
+void createSRV(int elemSize, int count, void* particle) {
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+    desc.ByteWidth = count * elemSize;
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-    desc.ByteWidth = sizeof(InputBuffer) * ELEM_SIZE;
-    desc.StructureByteStride = sizeof(InputBuffer);
+    desc.StructureByteStride = elemSize;
 
     D3D11_SUBRESOURCE_DATA sub;
-    ZeroMemory(&sub, sizeof(sub));
-    sub.pSysMem = inputBuffer;
+    sub.pSysMem = particle;
 
-    hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer);
-
-    sub.pSysMem = inputBuffer2;
-    hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer2);
-
-    hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mComputeBufferResult);
+    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     ZeroMemory(&srvDesc, sizeof(srvDesc));
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
     srvDesc.BufferEx.FirstElement = 0;
-
-    if (desc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS) {
-        srvDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-        srvDesc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
-        srvDesc.BufferEx.NumElements = desc.ByteWidth / 4;
-    }
-    else if (desc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_STRUCTURED) {
-        srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-        srvDesc.BufferEx.NumElements = desc.ByteWidth / desc.StructureByteStride;
-    }
+    srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+    srvDesc.BufferEx.NumElements = count;
 
     hr = Utility::getDevice()->CreateShaderResourceView(mComputeBuffer.Get(), &srvDesc, &mComputeBufferSRV);
-    hr = Utility::getDevice()->CreateShaderResourceView(mComputeBuffer2.Get(), &srvDesc, &mComputeBufferSRV2);
+}
 
+void createUAV(int elemSize, int count) {
+    D3D11_BUFFER_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+    desc.ByteWidth = elemSize * count;
+    desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+    desc.StructureByteStride = elemSize;
+
+    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mComputeBufferResult);
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
     uavDesc.Buffer.FirstElement = 0;
-
-    if (desc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS) {
-        uavDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-        uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
-        uavDesc.Buffer.NumElements = desc.ByteWidth / 4;
-    }
-    else if (desc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_STRUCTURED) {
-        uavDesc.Format = DXGI_FORMAT_UNKNOWN;
-        uavDesc.Buffer.NumElements = desc.ByteWidth / desc.StructureByteStride;
-    }
+    uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+    uavDesc.Buffer.NumElements = count;
 
     hr = Utility::getDevice()->CreateUnorderedAccessView(mComputeBufferResult.Get(), &uavDesc, &mComputeBufferResultUAV);
+}
+}
 
-    Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
+ComputeShader::ComputeShader() {
+    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+        Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
+        Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
 
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srvs[2]{ mComputeBufferSRV,mComputeBufferSRV2 };
-    Utility::getContext()->CSSetShaderResources(0, 2, srvs[0].GetAddressOf());
+    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    {
+        D3D11_BLEND_DESC desc;
+        desc.AlphaToCoverageEnable = FALSE;
+        desc.IndependentBlendEnable = FALSE;
+        desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getAddBlendDesc();
+        mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(desc);
+    }
 
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), nullptr);
+    mWindow = std::make_unique<ImGUI::Window>("Compute Shader Test");
+    mText = std::make_shared<ImGUI::Text>("Test");
+    mWindow->addItem(mText);
 
-    Utility::getContext()->Dispatch(1, 1, 1);
+    mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/SimpleParticle");
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer> resultBuffer;
+    Particle particle[COUNT];
+    for (int i = 0; i < COUNT; i++) {
+        particle[i].alive = true;
+        particle[i].lifeTime = 10.0f;
+        particle[i].position = Math::Vector3(0, -2, 0);
+        particle[i].velocity = Math::Vector3(0, 1.0f / 60.0f, 0);
+    }
+
+    HRESULT hr;
+
+    createSRV(sizeof(Particle), COUNT, &particle[0]);
+    createUAV(sizeof(Particle), COUNT);
+
+    D3D11_BUFFER_DESC desc;
     mComputeBuffer->GetDesc(&desc);
     desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
     desc.Usage = D3D11_USAGE_STAGING;
     desc.BindFlags = 0;
     desc.MiscFlags = 0;
 
-    hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &resultBuffer);
-    Utility::getContext()->CopyResource(resultBuffer.Get(), mComputeBufferResult.Get());
+    hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mResulrBuffer);
 
-    D3D11_MAPPED_SUBRESOURCE mappedSub;
-    ZeroMemory(&mappedSub, sizeof(mappedSub));
+    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
+    mSprite = std::make_shared<Graphics::Sprite3D>(Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke));
 
-    OutputBuffer* result;
-
-    hr = Utility::getContext()->Map(resultBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
-    result = static_cast<OutputBuffer*>(mappedSub.pData);
-    Utility::getContext()->Unmap(resultBuffer.Get(), 0);
-    Utility::StringBuilder sb("");
-    for (int i = 0; i < 16; i++) {
-        sb << result[i].i << "\n";
-    }
-    mText->setText(sb);
+    mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
 }
 
 ComputeShader::~ComputeShader() {}
@@ -133,13 +139,50 @@ ComputeShader::~ComputeShader() {}
 
 void ComputeShader::load(Scene::Collecter& collecter) {}
 
-void ComputeShader::update() {}
+void ComputeShader::update() {
+
+    Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
+
+    Utility::getContext()->CSSetShaderResources(0, 1, mComputeBufferSRV.GetAddressOf());
+
+    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), nullptr);
+    GlobalData global;
+    global.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mCB->setBuffer(global);
+    mCB->sendBuffer();
+    Utility::getContext()->Dispatch(1, 1, 1);
+
+    Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
+}
 
 bool ComputeShader::isEndScene() const {
     return false;
 }
 
 void ComputeShader::draw(Graphics::IRenderer* renderer) {
+    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    mAlphaBlend->set();
+    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
+    m3DCamera->render();
+    D3D11_MAPPED_SUBRESOURCE mappedSub;
+    ZeroMemory(&mappedSub, sizeof(mappedSub));
+    Particle* result;
+    HRESULT hr = Utility::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
+    result = reinterpret_cast<Particle*>(mappedSub.pData);
+    Utility::getContext()->Unmap(mResulrBuffer.Get(), 0);
+    
+    Particle p[COUNT];
+    for (int i = 0; i < COUNT; i++) {
+        p[i] = result[i];
+    }  
+
+
+    for (int i = 0; i < COUNT; i++) {
+        if (!result[i].alive)continue;
+        mSprite->setPosition(result[i].position);
+        renderer->render(mSprite);
+    }
+
     mWindow->draw();
 }
 
