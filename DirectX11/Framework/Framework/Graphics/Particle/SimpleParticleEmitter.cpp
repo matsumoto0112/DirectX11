@@ -42,9 +42,7 @@ void SimpleParticleEmitter::simulate(float delta) {
     if (mIntervalTimer < 0) {
         mIntervalTimer = mEmitInterval;
         for (int i = 0; i < mOnceEmitNum; i++) {
-            auto particle = mOrigin->clone();
-            particle->setVelocity(Math::Vector3(Utility::Random::getInstance().range(-5.0f, 5.0f), 1.0f, 0.0f));
-            mParticles.emplace_back(std::move(particle));
+            mParticles.emplace_back(std::move(mOrigin->clone()));
         }
     }
 }

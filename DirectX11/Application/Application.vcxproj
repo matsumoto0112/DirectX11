@@ -141,6 +141,7 @@
     <ClCompile Include="Source\GameObject\Wall.cpp" />
     <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
     <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
+    <ClCompile Include="Source\Particle\SmokeParticleEmitter.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Source\GameObject\Wall.h" />
     <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
     <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
+    <ClInclude Include="Source\Particle\SmokeParticleEmitter.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />

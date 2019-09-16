@@ -82,6 +82,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_draw.cpp" />
@@ -228,8 +229,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\Primitive3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Range.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_impl_dx11.h" />

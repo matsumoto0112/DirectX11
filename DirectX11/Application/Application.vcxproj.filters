@@ -22,6 +22,7 @@
     <ClCompile Include="Source\GameObject\FollowCamera.cpp" />
     <ClCompile Include="Source\GameObject\Item\Item.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
+    <ClCompile Include="Source\Particle\SmokeParticleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="Source\GameObject\UI\IItem.h" />
     <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
+    <ClInclude Include="Source\Particle\SmokeParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />

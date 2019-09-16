@@ -32,6 +32,9 @@ int Game::run() {
     if (!init()) {
         return -1;
     }
+    Utility::Time::getInstance().init(mFPS);
+    Utility::Time::getInstance().startFrame();
+    Utility::Time::getInstance().endFrame();
     MSG msg = {};
     //ƒƒCƒ“ƒ‹[ƒv
     while (true) {

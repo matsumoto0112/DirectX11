@@ -13,6 +13,13 @@ Particle::Particle(std::shared_ptr<Sprite3D> sprite)
 
 Particle::~Particle() {}
 
+void Particle::init(Particle* origin) {
+    mPosition = origin->getPosition();
+    mVelocity = origin->getVelocity();
+    mLifeTime = origin->getLifeTime();;
+    mIsAlive = true;
+}
+
 void Particle::simulate(float delta) {
     if (!mIsAlive)return;
     mPosition += mVelocity * delta;

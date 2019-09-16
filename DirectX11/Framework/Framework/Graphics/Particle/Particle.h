@@ -23,6 +23,10 @@ public:
     */
     virtual ~Particle();
     /**
+    * @brief 初期化処理
+    */
+    virtual void init(Particle* origin);
+    /**
     * @brief シミュレートする
     */
     virtual void simulate(float delta);

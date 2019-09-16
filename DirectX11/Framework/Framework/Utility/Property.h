@@ -13,6 +13,17 @@ public: inline void set ## funcName(const type& val) {typeName = val;} \
 public: inline const type& get ## funcName() const{ return (typeName);}
 
 /**
+* @def PROPERTY_GETREF
+* @brief 変数宣言とプロパティ化
+* @details 変数のアクセス修飾子は直前のものが使用される
+getterは参照を返す
+*/
+#define PROPERTY_GETREF(type,typeName,funcName) \
+type typeName; \
+public: inline void set ## funcName(const type& val) {typeName = val;} \
+public: inline type& get ## funcName() { return (typeName);}
+
+/**
 * @def PROPERTY_POINTER
 * @brief ポインタ変数宣言とプロパティ化
 * @details 変数のアクセス修飾子は直前のものが使用される

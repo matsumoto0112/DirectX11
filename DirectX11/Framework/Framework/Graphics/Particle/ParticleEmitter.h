@@ -34,6 +34,10 @@ public:
     * @brief 描画
     */
     virtual void draw(IRenderer* renderer) = 0;
+    /**
+    * @brief 現在のパーティクルの数を取得
+    */
+    int getParticleNum() const { return mParticles.size(); }
 protected:
     std::shared_ptr<Particle> mOrigin; //!< 複製元のパーティクル
     std::list<std::unique_ptr<Particle>> mParticles; //!< 発生したパーティクルリスト

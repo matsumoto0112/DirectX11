@@ -44,10 +44,9 @@ public:
     void setColor(const Color4& color) { mColor = color; }
     const Math::Rect& getSrcRect() const { return mSrcRect; }
     void setSrcRect(const Math::Rect& rect) { mSrcRect = rect; }
-
     Math::Matrix4x4 createBillboardMatrix(const Math::Matrix4x4& invView) const;
-
-    Math::Matrix4x4 createBillboardRotation(const Math::Vector3& billPos, const Math::Vector3& targetPos, const Math::Vector3& up = Math::Vector3::UP);
+    void setAlpha(float alpha);
+    float getAlpha() const;
 private:
     std::shared_ptr<Texture> mTexture;
     Math::Vector3 mPosition;

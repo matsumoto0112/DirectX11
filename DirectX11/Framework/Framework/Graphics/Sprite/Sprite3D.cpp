@@ -25,5 +25,14 @@ Math::Matrix4x4 Sprite3D::createBillboardMatrix(const Math::Matrix4x4& invView) 
     return world;
 }
 
+void Sprite3D::setAlpha(float alpha) {
+    mColor.a = alpha;
+}
+
+float Sprite3D::getAlpha() const {
+    return mColor.a;
+}
+
+
 } //Graphics 
 } //Framework 
