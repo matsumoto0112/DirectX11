@@ -20,6 +20,8 @@ struct OutputBuffer {
 std::unique_ptr<Graphics::ComputeShader> mComputeShader;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBuffer;
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mComputeBufferSRV;
+Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBuffer2;
+Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mComputeBufferSRV2;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBufferResult;
 Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mComputeBufferResultUAV;
 }
@@ -31,9 +33,12 @@ ComputeShader::ComputeShader() {
 
     mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/TestCompute");
 
-    const int ELEM_SIZE = 1;
-    InputBuffer inputBuffer[ELEM_SIZE];
-    inputBuffer[0].i = 5;
+    const int ELEM_SIZE = 16 * 16;
+    InputBuffer inputBuffer[ELEM_SIZE], inputBuffer2[ELEM_SIZE];
+    for (int i = 0; i < ELEM_SIZE; i++) {
+        inputBuffer[i].i = i;
+        inputBuffer2[i].i = ELEM_SIZE - i * 2;
+    }
     HRESULT hr;
 
     D3D11_BUFFER_DESC desc;
@@ -48,6 +53,9 @@ ComputeShader::ComputeShader() {
     sub.pSysMem = inputBuffer;
 
     hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer);
+
+    sub.pSysMem = inputBuffer2;
+    hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer2);
 
     hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mComputeBufferResult);
 
@@ -67,6 +75,7 @@ ComputeShader::ComputeShader() {
     }
 
     hr = Utility::getDevice()->CreateShaderResourceView(mComputeBuffer.Get(), &srvDesc, &mComputeBufferSRV);
+    hr = Utility::getDevice()->CreateShaderResourceView(mComputeBuffer2.Get(), &srvDesc, &mComputeBufferSRV2);
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
@@ -86,7 +95,10 @@ ComputeShader::ComputeShader() {
     hr = Utility::getDevice()->CreateUnorderedAccessView(mComputeBufferResult.Get(), &uavDesc, &mComputeBufferResultUAV);
 
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
-    Utility::getContext()->CSSetShaderResources(0, 1, mComputeBufferSRV.GetAddressOf());
+
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srvs[2]{ mComputeBufferSRV,mComputeBufferSRV2 };
+    Utility::getContext()->CSSetShaderResources(0, 2, srvs[0].GetAddressOf());
+
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), nullptr);
 
     Utility::getContext()->Dispatch(1, 1, 1);
@@ -109,7 +121,11 @@ ComputeShader::ComputeShader() {
     hr = Utility::getContext()->Map(resultBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
     result = static_cast<OutputBuffer*>(mappedSub.pData);
     Utility::getContext()->Unmap(resultBuffer.Get(), 0);
-    mText->setText(Utility::StringBuilder("") << result[0].i);
+    Utility::StringBuilder sb("");
+    for (int i = 0; i < 16; i++) {
+        sb << result[i].i << "\n";
+    }
+    mText->setText(sb);
 }
 
 ComputeShader::~ComputeShader() {}
