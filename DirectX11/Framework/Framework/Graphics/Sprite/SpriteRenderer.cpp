@@ -39,6 +39,7 @@ SpriteRenderer::SpriteRenderer() {
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Utility::getContext()->RSSetState(ras.Get());
 }
 
 SpriteRenderer::~SpriteRenderer() {}

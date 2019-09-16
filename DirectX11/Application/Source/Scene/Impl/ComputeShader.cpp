@@ -14,6 +14,7 @@
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
 #include "Framework/Graphics/Render/RenderTarget.h"
+#include "Framework/Graphics/Shader/GeometoryShader.h"
 
 using namespace Framework;
 
@@ -21,9 +22,8 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-static const int COUNT = 256;
+static const int COUNT = 1024 * 1;
 struct Particle {
-    bool alive;
     float lifeTime;
     Math::Vector3 position;
     Math::Vector3 velocity;
@@ -42,27 +42,34 @@ Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mComputeBufferResultUAV;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mResulrBuffer;
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB;
 std::shared_ptr<Graphics::Sprite3D> mSprite;
+std::unique_ptr<Graphics::GeometoryShader> mGS;
+std::unique_ptr<Graphics::VertexShader> mVS;
+std::unique_ptr<Graphics::PixelShader> mPS;
+Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 
 void createUAV(int elemSize, int count, Particle* particle) {
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
-    desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+    desc.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
     desc.ByteWidth = elemSize * count;
-    desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+    desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
     desc.StructureByteStride = elemSize;
 
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = particle;
 
     HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBufferResult);
+    MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
     uavDesc.Buffer.FirstElement = 0;
-    uavDesc.Format = DXGI_FORMAT_UNKNOWN;
-    uavDesc.Buffer.NumElements = count;
+    uavDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+    uavDesc.Buffer.NumElements = sizeof(Particle) * count / sizeof(int);
+    uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
 
     hr = Utility::getDevice()->CreateUnorderedAccessView(mComputeBufferResult.Get(), &uavDesc, &mComputeBufferResultUAV);
+    MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 }
 }
 
@@ -88,13 +95,15 @@ ComputeShader::ComputeShader() {
 
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
-        particle[i].alive = true;
         float life = Utility::Random::getInstance().range(5.0f, 10.0f);
         particle[i].lifeTime = life;
+        //particle[i].lifeTime = 13;
+
         particle[i].position = Math::Vector3(0, -2, 0);
         float x = Utility::Random::getInstance().range(-3.0f, 3.0f);
         float y = Utility::Random::getInstance().range(0.5f, 2.0f);
         particle[i].velocity = Math::Vector3(x, y, 0);
+        //particle[i].velocity = Math::Vector3(17, 19, 23);
     }
 
     HRESULT hr;
@@ -109,11 +118,35 @@ ComputeShader::ComputeShader() {
     desc.MiscFlags = 0;
 
     hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mResulrBuffer);
+    MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
     mSprite = std::make_shared<Graphics::Sprite3D>(Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke));
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
+
+    mGS = std::make_unique<Graphics::GeometoryShader>("SimpleParticleGS");
+    mPS = std::make_unique<Graphics::PixelShader>("2D/Texture2D_PS");
+
+    const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
+    {
+        { "IN_TIME",    0, DXGI_FORMAT_R32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "IN_VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    };
+    mVS = std::make_unique<Graphics::VertexShader>("2D/NoActionVS", layouts);
+
+    D3D11_RASTERIZER_DESC rasterizerDesc;
+    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDesc.DepthClipEnable = FALSE;
+    rasterizerDesc.MultisampleEnable = FALSE;
+    rasterizerDesc.DepthBiasClamp = 0;
+    rasterizerDesc.SlopeScaledDepthBias = 0;
+    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Utility::getContext()->RSSetState(ras.Get());
+
 }
 
 ComputeShader::~ComputeShader() {}
@@ -125,14 +158,16 @@ void ComputeShader::update() {
 
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), nullptr);
+    UINT count = 256;
+    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
     Utility::getContext()->Dispatch(1, 1, 1);
-
-    Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
+    ID3D11UnorderedAccessView* nullUAV = nullptr;
+    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+    //Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
 }
 
 bool ComputeShader::isEndScene() const {
@@ -140,29 +175,39 @@ bool ComputeShader::isEndScene() const {
 }
 
 void ComputeShader::draw(Graphics::IRenderer* renderer) {
+    Utility::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     renderer->setCurrentPerspectiveCamera(m3DCamera.get());
     m3DCamera->render();
-    D3D11_MAPPED_SUBRESOURCE mappedSub;
-    ZeroMemory(&mappedSub, sizeof(mappedSub));
-    Particle* result;
-    HRESULT hr = Utility::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
-    result = reinterpret_cast<Particle*>(mappedSub.pData);
-    Utility::getContext()->Unmap(mResulrBuffer.Get(), 0);
+    mVS->set();
+    mGS->set();
+    mPS->set();
+    UINT stride = sizeof(Particle);
+    UINT offset = 0;
+    mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
+    Utility::getConstantBufferManager()->send();
+    Utility::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    Utility::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    Utility::getContext()->Draw(COUNT, 0);
 
-    Particle p[COUNT];
-    for (int i = 0; i < COUNT; i++) {
-        p[i] = result[i];
-    }
+    ID3D11Buffer* nullBuf = nullptr;
+    Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
+    //D3D11_MAPPED_SUBRESOURCE mappedSub;
+    //ZeroMemory(&mappedSub, sizeof(mappedSub));
+    //Particle* result;
+    //HRESULT hr = Utility::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
+    //result = reinterpret_cast<Particle*>(mappedSub.pData);
+    //Utility::getContext()->Unmap(mResulrBuffer.Get(), 0);
 
-    for (int i = 0; i < COUNT; i++) {
-        if (!result[i].alive)continue;
-        mSprite->setPosition(result[i].position);
-        renderer->render(mSprite);
-    }
+    //for (int i = 0; i < COUNT; i++) {
+    //    if (!result[i].alive)continue;
+    //    mSprite->setPosition(result[i].position);
+    //    renderer->render(mSprite);
+    //}
 
     mWindow->draw();
 }

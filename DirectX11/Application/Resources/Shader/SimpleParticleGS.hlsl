@@ -2,7 +2,7 @@
 
 struct GSInput
 {
-    float4 pos : POSITION;
+    float4 pos : SV_POSITION;
 };
 
 struct PSInput

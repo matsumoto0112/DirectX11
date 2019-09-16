@@ -120,6 +120,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -287,5 +288,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Range.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShaderData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShaderData.h" />
   </ItemGroup>
 </Project>

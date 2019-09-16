@@ -111,10 +111,18 @@ inline std::function<void(void)> Graphics::ConstantBuffer<T>::createSendBufferFu
         return [&, slotNumber]()->void {Utility::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
     case ShaderInputType::Compute:
         return [&, slotNumber]()->void {Utility::getContext()->CSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+    case ShaderInputType::Geometory:
+        return [&, slotNumber]()->void {Utility::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
     case ShaderInputType::VertexAndPixel:
         return [&, slotNumber]()->void {
             Utility::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
             Utility::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+        };
+    case ShaderInputType::All:
+        return [&, slotNumber]()->void {
+            Utility::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+            Utility::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+            Utility::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
         };
     default:
         MY_ASSERTION(false, "–¢’è‹`‚ÌShaderInputType‚ª‘I‘ğ‚³‚ê‚Ü‚µ‚½B");

@@ -18,10 +18,14 @@ class VertexShader : public ShaderBase {
 public:
     /**
     * @brief コンストラクタ
-    * @param graphicsDevice グラフィックデバイス
     * @param filename シェーダファイル名
     */
     VertexShader(const std::string& name);
+    /**
+    * @brief コンストラクタ
+    * @param filename シェーダファイル名
+    */
+    VertexShader(const std::string& name, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayouts);
     /**
     * @brief デストラクタ
     */

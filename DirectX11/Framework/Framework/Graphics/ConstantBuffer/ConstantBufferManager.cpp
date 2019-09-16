@@ -68,7 +68,7 @@ StructType s = buffer->getData();\
 s.##Parameter = value;\
 buffer->setBuffer(s);})
 
-    mMVPCBuffer = std::make_unique<ConstantBuffer<MVPMatrixCBufferStruct>>(ShaderInputType::VertexAndPixel, 0);
+    mMVPCBuffer = std::make_unique<ConstantBuffer<MVPMatrixCBufferStruct>>(ShaderInputType::All, 0);
     mMatrixBufferManager->add(ConstantBufferParameterType::World,
         MY_SETBUFFER_FUNC(Math::Matrix4x4, MVPMatrixCBufferStruct, mMVPCBuffer, world));
     mMatrixBufferManager->add(ConstantBufferParameterType::View,

@@ -22,6 +22,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\ZTexCreater.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
@@ -140,6 +141,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\ZTexCreater.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShaderData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.h" />

@@ -12,6 +12,24 @@ VertexShader::VertexShader(const std::string& name)
     create(name);
 }
 
+VertexShader::VertexShader(const std::string& name, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayouts)
+    : ShaderBase(), mShaderData(std::make_unique<VertexShaderData>()) {
+    ID3D11Device* device = Utility::getDevice();
+    //ファイルパスの作成
+    const std::string filepath = Define::Path::getInstance().shader() + name + ".cso";
+    //シェーダファイルの読み込み
+    std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
+    const UINT shaderSize = shaderData.size();
+
+    //シェーダファイル作成
+    HRESULT hr = device->CreateVertexShader(shaderData.data(), shaderSize, nullptr, &mShaderData->mVertexShader);
+    MY_ASSERTION(SUCCEEDED(hr), "VertexShader作成失敗\n" + filepath);
+    hr = device->CreateInputLayout(inputLayouts.data(), inputLayouts.size(),
+        shaderData.data(), shaderSize, &mShaderData->mInputLayout);
+    MY_ASSERTION(SUCCEEDED(hr), "InputLayout作成失敗");
+
+}
+
 VertexShader::~VertexShader() {}
 
 void VertexShader::create(const std::string& name) {

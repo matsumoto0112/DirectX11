@@ -10,7 +10,9 @@ enum class ShaderInputType {
     Vertex, //!< 頂点シェーダのみ
     Pixel, //!< ピクセルシェーダのみ
     Compute,
+    Geometory,
     VertexAndPixel, //頂点・ピクセルシェーダ両方
+    All,
 };
 
 } //Graphics 
