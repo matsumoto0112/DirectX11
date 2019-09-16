@@ -18,6 +18,7 @@ enum class SceneType {
     ShadowMapTest,
     MultiRenderTargetTest,
     AlphaTest,
+    ComputeShader,
 };
 
 } //Define 

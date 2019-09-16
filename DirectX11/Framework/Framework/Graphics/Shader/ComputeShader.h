@@ -2,7 +2,7 @@
 
 #include <string>
 #include "Framework/Graphics/Shader/ShaderBase.h"
-#include "Framework/Graphics/Shader/PixelShaderData.h"
+#include "Framework/Graphics/Shader/ComputeShaderData.h"
 
 namespace Framework {
 namespace Graphics {
@@ -10,17 +10,17 @@ namespace Graphics {
 * @class PixelShader
 * @brief ピクセルシェーダ
 */
-class PixelShader : public ShaderBase {
+class ComputeShader : public ShaderBase {
 public:
     /**
     * @brief コンストラクタ
     * @param filename シェーダファイル名
     */
-    PixelShader(const std::string& filename);
+    ComputeShader(const std::string& filename);
     /**
     * @brief デストラクタ
     */
-    ~PixelShader();
+    ~ComputeShader();
     /**
     * @brief ピクセルシェーダのセット
     */
@@ -31,8 +31,8 @@ private:
     * @param name シェーダファイル名
     */
     void create(const std::string& name);
-private:
-    std::unique_ptr<PixelShaderData> mShaderData; //!< シェーダーのデータ
+public:
+    std::unique_ptr<ComputeShaderData> mShaderData; //!< シェーダーのデータ
 };
 
 } //Graphics 

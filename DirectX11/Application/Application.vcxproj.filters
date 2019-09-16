@@ -23,6 +23,7 @@
     <ClCompile Include="Source\GameObject\Item\Item.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Particle\SmokeParticleEmitter.cpp" />
+    <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Particle\SmokeParticleEmitter.h" />
+    <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -77,6 +79,7 @@
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Color_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Compute\TestCompute.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

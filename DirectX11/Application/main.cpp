@@ -24,7 +24,7 @@
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Source/Scene/Impl/ParticleTest.h"
-#include <atlstr.h>
+#include "Source/Scene/Impl/ComputeShader.h"
 
 using namespace Framework;
 
@@ -45,7 +45,8 @@ private:
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
         mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
-        mSceneManager->loadScene(Define::SceneType::ParticleTest);
+        mSceneManager->registerScene(Define::SceneType::ComputeShader, std::make_unique<ComputeShader>());
+        mSceneManager->loadScene(Define::SceneType::ComputeShader);
 
         mFPSWindow = std::make_unique<ImGUI::Window>("FPS");
         mFPSText = std::make_shared<ImGUI::Text>("60");
