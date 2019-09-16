@@ -45,7 +45,7 @@ private:
         //mSceneManager->registerScene(Define::SceneType::Title, std::make_unique<Title>());
         mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
         mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
-        mSceneManager->loadScene(Define::SceneType::ParticleTest);
+        mSceneManager->loadScene(Define::SceneType::MainPlay);
 
         ATLASSERT(_CrtCheckMemory());
         return true;
@@ -58,6 +58,7 @@ private:
     virtual void draw() override {
         Graphics::IRenderer* renderer = mGameDevice.getRenderingManager()->drawBegin();
         //renderer->setBackColor(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+        
         renderer->begin();
         mSceneManager->draw(renderer);
 

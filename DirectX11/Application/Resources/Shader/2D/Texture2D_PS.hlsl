@@ -13,6 +13,6 @@ float4 main(ps_input input) : SV_TARGET
 {
     float4 o = tex.Sample(samLinear, input.uv);
     o *= color;
-    clip(o.a);
+    clip(o.a - EPSILON);
     return o;
 }

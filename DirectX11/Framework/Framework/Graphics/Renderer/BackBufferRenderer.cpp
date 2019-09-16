@@ -14,10 +14,10 @@ BackBufferRenderer::BackBufferRenderer() {
         std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f, static_cast<float>(Define::Window::WIDTH), static_cast<float>(Define::Window::HEIGHT))),
         SRVFlag::NoUse);
     mRenderTarget->createDepthStencilView(
-        Graphics::DepthStencilDesc::getDefaultTexture2DDesc(
+        Graphics::DepthStencilDesc::getMSAATexture2DDesc(
             Define::Window::WIDTH,
             Define::Window::HEIGHT),
-        DepthStencilDesc::getDefaultDepthStencilViewDesc());
+        DepthStencilDesc::getMSAADepthStencilViewDesc());
 }
 
 BackBufferRenderer::~BackBufferRenderer() {}
