@@ -30,7 +30,7 @@ using namespace Framework;
 
 class MyGame : public Game {
 public:
-    MyGame() :Game(Math::Vector2((float)Define::Window::WIDTH, (float)Define::Window::HEIGHT)) {};
+    MyGame() :Game(Math::Vector2((float)Define::Window::WIDTH, (float)Define::Window::HEIGHT), false) {};
     ~MyGame() {};
 private:
     virtual bool init() override {
@@ -47,6 +47,9 @@ private:
         mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
         mSceneManager->loadScene(Define::SceneType::ParticleTest);
 
+        mFPSWindow = std::make_unique<ImGUI::Window>("FPS");
+        mFPSText = std::make_shared<ImGUI::Text>("60");
+        mFPSWindow->addItem(mFPSText);
         ATLASSERT(_CrtCheckMemory());
         return true;
     }
@@ -58,17 +61,16 @@ private:
     virtual void draw() override {
         Graphics::IRenderer* renderer = mGameDevice.getRenderingManager()->drawBegin();
         //renderer->setBackColor(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-        
+
         renderer->begin();
         mSceneManager->draw(renderer);
 
+
+        mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
+
+        //mFPSWindow->draw();
+
         mGameDevice.getRenderingManager()->drawEnd();
-
-        Utility::StringBuilder sb("");
-        float fps = Utility::Time::getInstance().getCurrentFPS();
-        sb << fps;
-        SetWindowText(mGameDevice.getWindow()->getHWND(), CString(sb.getStr().c_str()));
-
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void finalize() override {
@@ -76,6 +78,8 @@ private:
     }
 private:
     std::unique_ptr<Scene::Manager> mSceneManager;
+    std::unique_ptr<ImGUI::Window> mFPSWindow;
+    std::shared_ptr<ImGUI::Text> mFPSText;
 };
 
 int main() {

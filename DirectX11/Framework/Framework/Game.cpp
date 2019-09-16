@@ -32,9 +32,13 @@ int Game::run() {
     if (!init()) {
         return -1;
     }
+
+    //タイマーの初期化をここでする
+    //リソースの読み込みなどで時間がかかっているため
     Utility::Time::getInstance().init(mFPS);
     Utility::Time::getInstance().startFrame();
     Utility::Time::getInstance().endFrame();
+
     MSG msg = {};
     //メインループ
     while (true) {
@@ -66,7 +70,6 @@ bool Game::init() {
     Utility::ResourceManager& resManager = Utility::ResourceManager::getInstance();
     (void)Utility::ResourceInitializeOnStart(resManager);
     mGameDevice.initialize();
-    Utility::Time::getInstance().init(mFPS);
     return true;
 }
 

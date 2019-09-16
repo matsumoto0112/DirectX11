@@ -8,7 +8,7 @@ namespace Framework {
 namespace ImGUI {
 
 Manager::Manager() {
-#ifdef _DEBUG
+//#ifdef _DEBUG
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -18,7 +18,7 @@ Manager::Manager() {
     MY_ASSERTION(success, "ImGUI‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
     success = ImGui_ImplDX11_Init(Utility::getDevice(), Utility::getContext());
     MY_ASSERTION(success, "ImGUI‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
-#endif // DEBUG
+//#endif // DEBUG
 }
 
 Manager::~Manager() {

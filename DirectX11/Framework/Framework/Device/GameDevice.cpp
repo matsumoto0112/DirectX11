@@ -46,7 +46,7 @@ GameDevice::GameDevice() {
         screenSize,
         Math::Vector2(0, 0),
         Define::Window::TITLE,
-        true);
+        false);
 
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
         mMainWindow->getHWND(),
