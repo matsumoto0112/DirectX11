@@ -20,7 +20,6 @@ cbuffer GlobalData : register(b0)
     float deltaTime;
 };
 
-StructuredBuffer<Particle> input0 : register(t0);
 RWStructuredBuffer<Particle> output0 : register(u0);
 
 void resetParticle(int index)
@@ -35,9 +34,8 @@ void resetParticle(int index)
 
 void updateParticle(int index)
 {
-    output0[index] = input0[index];
-    output0[index].position = input0[index].position + input0[index].velocity;
-    output0[index].lifeTime = input0[index].lifeTime - deltaTime;
+    output0[index].position += output0[index].velocity * deltaTime;
+    output0[index].lifeTime -= deltaTime;
     if (output0[index].lifeTime <= 0.0f)
     {
         output0[index].alive = false;
@@ -50,7 +48,7 @@ void updateParticle(int index)
     int index = input.dispatch.x;
 
     //パーティクル生存中
-    if (input0[index].alive)
+    if (output0[index].alive)
     {
         updateParticle(index);
     }

@@ -12,6 +12,8 @@
 #include "Framework/Utility/Time.h"
 #include "Framework/Utility/Random.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
+#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
+#include "Framework/Graphics/Render/RenderTarget.h"
 
 using namespace Framework;
 
@@ -35,38 +37,13 @@ struct GlobalData {
 };
 
 std::unique_ptr<Graphics::ComputeShader> mComputeShader;
-Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBuffer;
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mComputeBufferSRV;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBufferResult;
 Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mComputeBufferResultUAV;
 Microsoft::WRL::ComPtr<ID3D11Buffer> mResulrBuffer;
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB;
 std::shared_ptr<Graphics::Sprite3D> mSprite;
 
-void createSRV(int elemSize, int count, void* particle) {
-    D3D11_BUFFER_DESC desc;
-    ZeroMemory(&desc, sizeof(desc));
-    desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
-    desc.ByteWidth = count * elemSize;
-    desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-    desc.StructureByteStride = elemSize;
-
-    D3D11_SUBRESOURCE_DATA sub;
-    sub.pSysMem = particle;
-
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBuffer);
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    ZeroMemory(&srvDesc, sizeof(srvDesc));
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
-    srvDesc.BufferEx.FirstElement = 0;
-    srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-    srvDesc.BufferEx.NumElements = count;
-
-    hr = Utility::getDevice()->CreateShaderResourceView(mComputeBuffer.Get(), &srvDesc, &mComputeBufferSRV);
-}
-
-void createUAV(int elemSize, int count) {
+void createUAV(int elemSize, int count, Particle* particle) {
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
@@ -74,7 +51,10 @@ void createUAV(int elemSize, int count) {
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
     desc.StructureByteStride = elemSize;
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mComputeBufferResult);
+    D3D11_SUBRESOURCE_DATA sub;
+    sub.pSysMem = particle;
+
+    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBufferResult);
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
@@ -109,18 +89,20 @@ ComputeShader::ComputeShader() {
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
         particle[i].alive = true;
-        particle[i].lifeTime = 10.0f;
+        float life = Utility::Random::getInstance().range(5.0f, 10.0f);
+        particle[i].lifeTime = life;
         particle[i].position = Math::Vector3(0, -2, 0);
-        particle[i].velocity = Math::Vector3(0, 1.0f / 60.0f, 0);
+        float x = Utility::Random::getInstance().range(-3.0f, 3.0f);
+        float y = Utility::Random::getInstance().range(0.5f, 2.0f);
+        particle[i].velocity = Math::Vector3(x, y, 0);
     }
 
     HRESULT hr;
 
-    createSRV(sizeof(Particle), COUNT, &particle[0]);
-    createUAV(sizeof(Particle), COUNT);
+    createUAV(sizeof(Particle), COUNT, &particle[0]);
 
     D3D11_BUFFER_DESC desc;
-    mComputeBuffer->GetDesc(&desc);
+    mComputeBufferResult->GetDesc(&desc);
     desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
     desc.Usage = D3D11_USAGE_STAGING;
     desc.BindFlags = 0;
@@ -143,8 +125,6 @@ void ComputeShader::update() {
 
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
-    Utility::getContext()->CSSetShaderResources(0, 1, mComputeBufferSRV.GetAddressOf());
-
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), nullptr);
     GlobalData global;
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
@@ -160,6 +140,7 @@ bool ComputeShader::isEndScene() const {
 }
 
 void ComputeShader::draw(Graphics::IRenderer* renderer) {
+    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     renderer->setCurrentPerspectiveCamera(m3DCamera.get());
@@ -170,11 +151,11 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     HRESULT hr = Utility::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
     result = reinterpret_cast<Particle*>(mappedSub.pData);
     Utility::getContext()->Unmap(mResulrBuffer.Get(), 0);
-    
+
     Particle p[COUNT];
     for (int i = 0; i < COUNT; i++) {
         p[i] = result[i];
-    }  
+    }
 
 
     for (int i = 0; i < COUNT; i++) {
