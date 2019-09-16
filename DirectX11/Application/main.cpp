@@ -69,7 +69,7 @@ private:
 
         mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
 
-        //mFPSWindow->draw();
+        mFPSWindow->draw();
 
         mGameDevice.getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
