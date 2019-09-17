@@ -67,7 +67,8 @@ void resetParticle(int index)
     float life = getRandom() * 5.0f;
     particles.Store(index + LIFETIME_OFFSET, asuint(life));
 
-    float px = getRandom() * 10.0f - 5.0f;
+    //float px = getRandom() * 10.0f - 5.0f;
+    float px = getRandom() * 0.8f;
     float py = getRandom() * 6.0f - 3.0f - 1.5f;;
     float pz = 0.0f;
     particles.Store3(index + POSITION_OFFSET, asuint(float3(px, py, pz)));
@@ -77,10 +78,15 @@ void resetParticle(int index)
     float vz = 0.0f;
     particles.Store3(index + VELOCITY_OFFSET, asuint(float3(vx, vy, vz)));
 
-    float r = getRandom();
-    float g = getRandom();
-    float b = getRandom();
-    float a = 0.3f;
+    //float r = getRandom();
+    //float g = getRandom();
+    //float b = getRandom();
+   
+    float r = getRandom() * 0.4f + 0.2f;
+    float g = getRandom() * 0.3f + 0.1f;
+    float b = 0.0f;
+    float a = 0.1f;
+
     particles.Store4(index + COLOR_OFFSET, asuint(float4(r, g, b, a)));
 };
 
@@ -100,10 +106,11 @@ void updateParticle(int index)
 void main(const CSInput input)
 {
     const uint index = input.dispatch.z * DISPATCH_X * THREAD_X * DISPATCH_Y * THREAD_Y
-    + input.dispatch.y * DISPATCH_X * THREAD_X
-    + input.dispatch.x;
+        + input.dispatch.y * DISPATCH_X * THREAD_X
+        + input.dispatch.x;
 
     const uint addr = index * SIZEOF_PARTICLE;
+
     if (isAlive(addr))
     {
         updateParticle(addr);

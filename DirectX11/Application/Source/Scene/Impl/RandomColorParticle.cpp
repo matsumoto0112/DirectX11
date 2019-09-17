@@ -52,7 +52,7 @@ std::unique_ptr<Graphics::GeometoryShader> mGS;
 std::unique_ptr<Graphics::VertexShader> mVS;
 std::unique_ptr<Graphics::PixelShader> mPS;
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
-std::unique_ptr<Utility::Timer> timer;
+std::unique_ptr<Utility::Timer> mTimer;
 
 template<class T>
 void createSRV(int elemSize, int count, T* tArray,
@@ -181,8 +181,8 @@ RandomColorParticle::RandomColorParticle() {
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
 
-    timer = std::make_unique<Utility::Timer>(1.0f);
-    timer->init();
+    mTimer = std::make_unique<Utility::Timer>(10.0f);
+    mTimer->init();
 }
 
 RandomColorParticle::~RandomColorParticle() {}
@@ -190,7 +190,7 @@ RandomColorParticle::~RandomColorParticle() {}
 void RandomColorParticle::load(Framework::Scene::Collecter& collecter) {}
 
 void RandomColorParticle::update() {
-    timer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance().getDeltaTime());
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
     //UAVのセット
@@ -202,7 +202,7 @@ void RandomColorParticle::update() {
 
     //グローバルデータのセット
     GlobalData global;
-    global.emit = timer->isTime() ? 0 : 1;
+    global.emit = mTimer->isTime() ? 0 : 1;
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
