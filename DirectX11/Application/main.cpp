@@ -69,10 +69,11 @@ private:
         mSceneManager->draw(renderer);
 
 
-        mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
+        //mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
 
-        mFPSWindow->draw();
+        //mFPSWindow->draw();
 
+        SetWindowText(mGameDevice.getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
         mGameDevice.getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
     }

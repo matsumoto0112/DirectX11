@@ -33,7 +33,7 @@ float4 main(ps_input input) : SV_TARGET
     {
         input.color.rgb *= 0.5f;
     }
-    input.color.rgb *= color;
+    input.color.rgb *= color.rgb;
     input.color.a = color.a;
     return input.color;
 }

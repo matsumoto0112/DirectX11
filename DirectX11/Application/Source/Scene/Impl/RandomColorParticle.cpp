@@ -247,7 +247,7 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     ID3D11Buffer* nullBuf = nullptr;
     Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
-    mWindow->draw();
+    //mWindow->draw();
 }
 
 void RandomColorParticle::end() {}

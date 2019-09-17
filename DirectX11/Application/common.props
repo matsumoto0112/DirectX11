@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <FxCompile>
-      <ShaderModel>4.1</ShaderModel>
+      <ShaderModel>5.0</ShaderModel>
       <ObjectFileOutput>$(OutDir)\cso\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
