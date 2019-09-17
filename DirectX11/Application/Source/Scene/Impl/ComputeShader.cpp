@@ -22,7 +22,9 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-static const int COUNT = 1024 * 1;
+static constexpr int SX = 16, SY = 16;
+static constexpr int X = 4, Y = 1;
+static constexpr int COUNT = SX * SY * X * Y;
 struct Particle {
     float lifeTime;
     Math::Vector3 position;
@@ -96,7 +98,7 @@ ComputeShader::ComputeShader() {
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
         float life = Utility::Random::getInstance().range(5.0f, 10.0f);
-        particle[i].lifeTime = life;
+        particle[i].lifeTime = 0;
         //particle[i].lifeTime = 13;
 
         particle[i].position = Math::Vector3(0, -2, 0);
@@ -161,10 +163,11 @@ void ComputeShader::update() {
     UINT count = 256;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
+    global.seed = Utility::Random::getInstance().range(0, INT_MAX / 2);
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
-    Utility::getContext()->Dispatch(1, 1, 1);
+    Utility::getContext()->Dispatch(X, Y, 1);
     ID3D11UnorderedAccessView* nullUAV = nullptr;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
     //Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
@@ -186,6 +189,7 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     mPS->set();
     UINT stride = sizeof(Particle);
     UINT offset = 0;
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.05f));
     mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
     Utility::getConstantBufferManager()->send();
