@@ -22,20 +22,23 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-static constexpr int SX = 16, SY = 16;
-static constexpr int X = 4, Y = 1;
-static constexpr int COUNT = SX * SY * X * Y;
+static constexpr int THREAD_X = 16, THREAD_Y = 16;
+static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
+static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 struct Particle {
     float lifeTime;
     Math::Vector3 position;
     Math::Vector3 velocity;
+    Graphics::Color4 color;
+    int seed;
 };
 
 struct GlobalData {
-    int seed;
+    //int seed;
     float deltaTime;
     int dummy;
     int dummy2;
+    int dummy3;
 };
 
 std::unique_ptr<Graphics::ComputeShader> mComputeShader;
@@ -97,15 +100,17 @@ ComputeShader::ComputeShader() {
 
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
-        float life = Utility::Random::getInstance().range(5.0f, 10.0f);
-        particle[i].lifeTime = 0;
-        //particle[i].lifeTime = 13;
+        //float life = Utility::Random::getInstance().range(5.0f, 10.0f);
+        //particle[i].lifeTime = -1;
+        ////particle[i].lifeTime = 13;
 
-        particle[i].position = Math::Vector3(0, -2, 0);
-        float x = Utility::Random::getInstance().range(-3.0f, 3.0f);
-        float y = Utility::Random::getInstance().range(0.5f, 2.0f);
-        particle[i].velocity = Math::Vector3(x, y, 0);
+        //particle[i].position = Math::Vector3(0, -2, 0);
+        //float x = Utility::Random::getInstance().range(-3.0f, 3.0f);
+        //float y = Utility::Random::getInstance().range(0.5f, 2.0f);
+        //particle[i].velocity = Math::Vector3(x, y, 0);
+        //par
         //particle[i].velocity = Math::Vector3(17, 19, 23);
+        particle[i].seed = Utility::Random::getInstance().range(0, (int)(INT_MAX / 2));
     }
 
     HRESULT hr;
@@ -128,13 +133,15 @@ ComputeShader::ComputeShader() {
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
 
     mGS = std::make_unique<Graphics::GeometoryShader>("SimpleParticleGS");
-    mPS = std::make_unique<Graphics::PixelShader>("2D/Texture2D_PS");
+    mPS = std::make_unique<Graphics::PixelShader>("2D/Texture2D_Color_PS");
 
     const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
     {
         { "IN_TIME",    0, DXGI_FORMAT_R32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "IN_VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "IN_SEED", 0, DXGI_FORMAT_R32_SINT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     mVS = std::make_unique<Graphics::VertexShader>("2D/NoActionVS", layouts);
 
@@ -163,13 +170,15 @@ void ComputeShader::update() {
     UINT count = 256;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
-    global.seed = Utility::Random::getInstance().range(0, INT_MAX / 2);
+    //global.seed = Utility::Random::getInstance().range(0, (int)(INT_MAX / 2));
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
-    Utility::getContext()->Dispatch(X, Y, 1);
+    Utility::getContext()->Dispatch(DISPATCH_X, DISPATCH_Y, 1);
     ID3D11UnorderedAccessView* nullUAV = nullptr;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+
+    //mText->setText(Utility::StringBuilder("") << global.seed);
     //Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
 }
 
@@ -189,7 +198,7 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     mPS->set();
     UINT stride = sizeof(Particle);
     UINT offset = 0;
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.05f));
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
     Utility::getConstantBufferManager()->send();

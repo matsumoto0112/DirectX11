@@ -83,6 +83,7 @@
     <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
     <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />
+    <FxCompile Include="Resources\Shader\2D\Texture2D_Color_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -3,12 +3,14 @@
 struct GSInput
 {
     float4 pos : SV_POSITION;
+    float4 color : COLOR;
 };
 
 struct PSInput
 {
     float4 pos : SV_POSITION;
     float2 uv : TEXCOORD0;
+    float4 col : COLOR;
 };
 
 [maxvertexcount(6)]
@@ -24,6 +26,7 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> output)
     m = mul(m, mat.proj);
 
     PSInput o;
+    o.col = input[0].color;
     o.pos = mul(pos[0], m);
     o.uv = float2(0.0f, 0.0f);
     output.Append(o);
