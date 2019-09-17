@@ -22,7 +22,7 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-static constexpr int THREAD_X = 16, THREAD_Y = 16;
+static constexpr int THREAD_X = 8, THREAD_Y = 8;
 static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 struct Particle {
@@ -155,7 +155,6 @@ ComputeShader::ComputeShader() {
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
-
 }
 
 ComputeShader::~ComputeShader() {}

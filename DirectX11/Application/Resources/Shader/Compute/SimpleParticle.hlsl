@@ -1,7 +1,7 @@
 #include "ComputeShaderDefine.hlsli"
 
-#define SIZE_X 16
-#define SIZE_Y 16
+#define SIZE_X 8
+#define SIZE_Y 8
 #define SIZE_Z 1
 
 #define DISPATCH_X 8
