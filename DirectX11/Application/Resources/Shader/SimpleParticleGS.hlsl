@@ -17,12 +17,14 @@ struct PSInput
 void main(point GSInput input[1], inout TriangleStream<PSInput> output)
 {
     float4 pos[4];
-    pos[0] = input[0].pos + float4(0.5f, 0.5f, 0.0f, 0.0f);
-    pos[1] = input[0].pos + float4(-0.5f, 0.5f, 0.0f, 0.0f);
-    pos[2] = input[0].pos + float4(-0.5f, -0.5f, 0.0f, 0.0f);
-    pos[3] = input[0].pos + float4(0.5f, -0.5f, 0.0f, 0.0f);
+    pos[0] = float4(0.5f, 0.5f, 0.0f, 1.0f);
+    pos[1] = float4(-0.5f, 0.5f, 0.0f, 1.0f);
+    pos[2] = float4(-0.5f, -0.5f, 0.0f, 1.0f);
+    pos[3] = float4(0.5f, -0.5f, 0.0f, 1.0f);
 
-    float4x4 m = mul(mat.world, mat.view);
+    float4x4 world = mat.world;
+    world._m30_m31_m32 = input[0].pos.xyz;
+    float4x4 m = mul(world, mat.view);
     m = mul(m, mat.proj);
 
     PSInput o;

@@ -234,7 +234,8 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mGS->set();
     mPS->set();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
+    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.5f, 1.0f));
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
     UINT stride = sizeof(Particle);
