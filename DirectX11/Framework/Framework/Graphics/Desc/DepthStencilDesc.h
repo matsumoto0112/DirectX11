@@ -59,15 +59,15 @@ public:
 * @param width テクスチャの幅
 * @param height テクスチャの高さ
 */
-    static constexpr D3D11_TEXTURE2D_DESC getMSAATexture2DDesc(UINT width, UINT height) {
+    static D3D11_TEXTURE2D_DESC getMSAATexture2DDesc(UINT width, UINT height) {
         D3D11_TEXTURE2D_DESC desc{};
         desc.Width = width;
         desc.Height = height;
         desc.MipLevels = 1;
         desc.ArraySize = 1;
         desc.Format = DefaultFormat;
-        desc.SampleDesc.Count = Define::MultiSampleQuarity::Count;
-        desc.SampleDesc.Quality = Define::MultiSampleQuarity::Quarity;
+        desc.SampleDesc.Count = Define::MultiSampleQuarity::getInstance().RealCount;
+        desc.SampleDesc.Quality = Define::MultiSampleQuarity::getInstance().RealQuarity;
         desc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
         desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         desc.CPUAccessFlags = 0;

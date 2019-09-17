@@ -38,7 +38,7 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
 
     DXGI_SAMPLE_DESC MSAA;
     //MAX_MULTISAMPLE_COUNTから2の累乗ごとに下がっていって使用できるMSAAを探す
-    for (int i = MAX_MULTISAMPLE_COUNT; i >= 0; i /= 2) {
+    for (int i = Define::MultiSampleQuarity::Count; i >= 0; i /= 2) {
         UINT quarity;
         if (SUCCEEDED(mDevice->CheckMultisampleQualityLevels(DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT, i, &quarity))) {
             MSAA.Count = i;
@@ -46,9 +46,6 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
             break;
         }
     }
-
-    MSAA.Count = 1;
-    MSAA.Quality = 0;
 
     //インターフェース取得
     Microsoft::WRL::ComPtr<IDXGIDevice1> dxgi;
@@ -100,8 +97,7 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
         return;
     }
 
-    Define::MultiSampleQuarity::Count = MSAA.Count;
-    Define::MultiSampleQuarity::Quarity = MSAA.Quality;
+    Define::MultiSampleQuarity::getInstance().setMultiSample(MSAA.Count, MSAA.Quality);
     //mDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(mDebug.GetAddressOf()));
 }
 
