@@ -25,6 +25,7 @@
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Source/Scene/Impl/ParticleTest.h"
 #include "Source/Scene/Impl/ComputeShader.h"
+#include "Source/Scene/Impl/RandomColorParticle.h"
 
 using namespace Framework;
 
@@ -46,7 +47,8 @@ private:
         mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
         mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
         mSceneManager->registerScene(Define::SceneType::ComputeShader, std::make_unique<ComputeShader>());
-        mSceneManager->loadScene(Define::SceneType::ComputeShader);
+        mSceneManager->registerScene(Define::SceneType::RandomColorParticle, std::make_unique<RandomColorParticle>());
+        mSceneManager->loadScene(Define::SceneType::RandomColorParticle);
 
         mFPSWindow = std::make_unique<ImGUI::Window>("FPS");
         mFPSText = std::make_shared<ImGUI::Text>("60");

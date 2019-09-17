@@ -4,7 +4,6 @@ struct Particle
     float3 position : POSITION;
     float3 velocity : IN_VELOCITY;
     float4 color : COLOR;
-    int seed : IN_SEED;
 };
 
 struct VSOutput

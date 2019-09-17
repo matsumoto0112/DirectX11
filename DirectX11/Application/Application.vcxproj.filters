@@ -24,6 +24,7 @@
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Particle\SmokeParticleEmitter.cpp" />
     <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
+    <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -57,6 +58,7 @@
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Particle\SmokeParticleEmitter.h" />
     <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
+    <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -84,6 +86,7 @@
     <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\Texture2D_Color_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Compute\RandomParticle.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -19,6 +19,7 @@ enum class SceneType {
     MultiRenderTargetTest,
     AlphaTest,
     ComputeShader,
+    RandomColorParticle,
 };
 
 } //Define 
