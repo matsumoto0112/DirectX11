@@ -22,8 +22,8 @@ namespace {
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 
-static constexpr int THREAD_X = 8, THREAD_Y = 8;
-static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
+static constexpr int THREAD_X = 4, THREAD_Y = 4;
+static constexpr int DISPATCH_X = 4, DISPATCH_Y = 4;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 struct Particle {
     float lifeTime;

@@ -27,6 +27,7 @@ struct Particle
 cbuffer GlobalData : register(b0)
 {
     float deltaTime; //!< ‘OƒtƒŒ[ƒ€‚©‚ç‚Ì·•ªŽžŠÔ
+    int emit; //!< ¶¬‚·‚é‚© 1‚È‚ç¶¬‚·‚é
 };
 
 StructuredBuffer<float> randomTable : register(t0);
@@ -63,7 +64,7 @@ float3 getVelocity(int index)
 
 void resetParticle(int index)
 {
-    float life = getRandom() * 10.0f;
+    float life = getRandom() * 5.0f;
     particles.Store(index + LIFETIME_OFFSET, asuint(life));
 
     float px = getRandom() * 10.0f - 5.0f;
@@ -79,7 +80,7 @@ void resetParticle(int index)
     float r = getRandom();
     float g = getRandom();
     float b = getRandom();
-    float a = 0.1f;
+    float a = 0.3f;
     particles.Store4(index + COLOR_OFFSET, asuint(float4(r, g, b, a)));
 };
 
@@ -87,20 +88,27 @@ void resetParticle(int index)
 void updateParticle(int index)
 {
     particles.Store3(index + POSITION_OFFSET, asuint(getPosition(index) + getVelocity(index) * deltaTime));
-    particles.Store(index + LIFETIME_OFFSET, asuint(getLifeTime(index) - deltaTime));
+    float life = getLifeTime(index) - deltaTime;
+    particles.Store(index + LIFETIME_OFFSET, asuint(life));
+    if (life <= 0)
+    {
+        particles.Store(index + COLOR_OFFSET + 12, asuint(0.0f));
+    }
 };
 
 [numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
 void main(const CSInput input)
 {
-    const uint index = input.dispatch.z * DISPATCH_X * THREAD_X * DISPATCH_Y * THREAD_Y + input.dispatch.y * DISPATCH_X * THREAD_X + input.dispatch.x;
-    const uint addr = index * SIZEOF_PARTICLE;
+    const uint index = input.dispatch.z * DISPATCH_X * THREAD_X * DISPATCH_Y * THREAD_Y
+    + input.dispatch.y * DISPATCH_X * THREAD_X
+    + input.dispatch.x;
 
+    const uint addr = index * SIZEOF_PARTICLE;
     if (isAlive(addr))
     {
         updateParticle(addr);
     }
-    else
+    else if (emit == 1)
     {
         resetParticle(addr);
     }

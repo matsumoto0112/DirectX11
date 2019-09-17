@@ -15,13 +15,11 @@
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Shader/GeometoryShader.h"
+#include "Framework/Utility/Timer.h"
 
 using namespace Framework;
 
 namespace {
-std::unique_ptr<ImGUI::Window> mWindow;
-std::shared_ptr<ImGUI::Text> mText;
-
 static constexpr int THREAD_X = 16, THREAD_Y = 16;
 static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
@@ -36,7 +34,7 @@ struct Particle {
 
 struct GlobalData {
     float deltaTime;
-    int dummy;
+    int emit;
     int dummy2;
     int dummy3;
 };
@@ -54,6 +52,7 @@ std::unique_ptr<Graphics::GeometoryShader> mGS;
 std::unique_ptr<Graphics::VertexShader> mVS;
 std::unique_ptr<Graphics::PixelShader> mPS;
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
+std::unique_ptr<Utility::Timer> timer;
 
 template<class T>
 void createSRV(int elemSize, int count, T* tArray,
@@ -132,16 +131,14 @@ RandomColorParticle::RandomColorParticle() {
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
 
-    //GUIウィンドウ
-    mWindow = std::make_unique<ImGUI::Window>("Compute Shader Test");
-    mText = std::make_shared<ImGUI::Text>("Test");
-    mWindow->addItem(mText);
-
     //コンピュートシェーダ作成
     mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/RandomParticle");
 
     //パーティクルのデータ作成
     Particle particle[COUNT];
+    for (int i = 0; i < COUNT; i++) {
+        particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Graphics::Color4::WHITE };
+    }
     HRESULT hr;
 
     float randomTable[RANDOM_MAX];
@@ -177,12 +174,15 @@ RandomColorParticle::RandomColorParticle() {
     ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
     rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    rasterizerDesc.DepthClipEnable = FALSE;
+    rasterizerDesc.DepthClipEnable = TRUE;
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
+
+    timer = std::make_unique<Utility::Timer>(1.0f);
+    timer->init();
 }
 
 RandomColorParticle::~RandomColorParticle() {}
@@ -190,6 +190,7 @@ RandomColorParticle::~RandomColorParticle() {}
 void RandomColorParticle::load(Framework::Scene::Collecter& collecter) {}
 
 void RandomColorParticle::update() {
+    timer->update(Utility::Time::getInstance().getDeltaTime());
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
     //UAVのセット
@@ -201,6 +202,7 @@ void RandomColorParticle::update() {
 
     //グローバルデータのセット
     GlobalData global;
+    global.emit = timer->isTime() ? 0 : 1;
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
@@ -246,8 +248,6 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     //頂点バッファを解放する
     ID3D11Buffer* nullBuf = nullptr;
     Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
-
-    //mWindow->draw();
 }
 
 void RandomColorParticle::end() {}

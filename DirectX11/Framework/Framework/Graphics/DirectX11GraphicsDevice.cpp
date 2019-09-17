@@ -47,6 +47,9 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
         }
     }
 
+    MSAA.Count = 1;
+    MSAA.Quality = 0;
+
     //インターフェース取得
     Microsoft::WRL::ComPtr<IDXGIDevice1> dxgi;
     hr = mDevice->QueryInterface(__uuidof(IDXGIDevice1), (void**)&dxgi);
