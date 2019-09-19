@@ -1,4 +1,4 @@
-#include "RandomColorParticle.h"
+#include "BlackholeParticle.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
@@ -129,9 +129,7 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 }
 
-
-RandomColorParticle::RandomColorParticle() {
-    //カメラの初期化
+BlackholeParticle::BlackholeParticle() {    //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
@@ -217,11 +215,11 @@ RandomColorParticle::RandomColorParticle() {
     mGlobal.center = Math::Vector3(0.0f, 0.0f, 0.0f);
 }
 
-RandomColorParticle::~RandomColorParticle() {}
+BlackholeParticle::~BlackholeParticle() {}
 
-void RandomColorParticle::load(Framework::Scene::Collecter& collecter) {}
+void BlackholeParticle::load(Framework::Scene::Collecter & collecter) {}
 
-void RandomColorParticle::update() {
+void BlackholeParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
     Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
@@ -249,12 +247,11 @@ void RandomColorParticle::update() {
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
 }
 
-bool RandomColorParticle::isEndScene() const {
+bool BlackholeParticle::isEndScene() const {
     return false;
 }
 
-void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
-    //事前準備
+void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //事前準備
     Utility::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -287,8 +284,8 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mWindow->draw();
 }
 
-void RandomColorParticle::end() {}
+void BlackholeParticle::end() {}
 
-Define::SceneType RandomColorParticle::next() {
+Define::SceneType BlackholeParticle::next() {
     return Define::SceneType();
 }

@@ -22,7 +22,7 @@ public:
     */
     ~ComputeShader();
     /**
-    * @brief ピクセルシェーダのセット
+    * @brief コンピュートシェーダのセット
     */
     void set();
 private:

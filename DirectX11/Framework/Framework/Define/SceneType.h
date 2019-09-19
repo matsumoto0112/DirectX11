@@ -20,6 +20,7 @@ enum class SceneType {
     AlphaTest,
     ComputeShader,
     RandomColorParticle,
+    BlackholeParticle,
 };
 
 } //Define 

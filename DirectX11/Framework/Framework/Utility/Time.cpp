@@ -8,7 +8,8 @@ namespace Utility {
 Time::Time()
     :mFPSCounter(10),
     mDeltaTime(0.0f),
-    mCurrentFPS(0.0f) {
+    mCurrentFPS(0.0f),
+    mTime(0.0f) {
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&mCounter);
@@ -18,6 +19,7 @@ Time::Time()
 Time::~Time() {}
 
 void Time::init(float fps) {
+    mTime = 0.0f;
     mFPS = fps;
 }
 
@@ -25,6 +27,7 @@ void Time::startFrame() {
     QueryPerformanceCounter(&mCounter);
     double time = (double)mCounter.QuadPart * 1000.0 / mFreq;
     mDeltaTime = static_cast<float>(time - mStartTime) / 1000;
+    mTime += mDeltaTime;
     mStartTime = time;
 }
 

@@ -45,6 +45,7 @@ private:
     float mFPS; //!< ‚±‚ÌƒQ[ƒ€‚Å‚ÌFPS
     FPS mFPSCounter; //!< FPSŒv‘ª
 private:
+    PROPERTY_READONLY(float, mTime, Time);
     PROPERTY_READONLY(float, mDeltaTime, DeltaTime);
     PROPERTY_READONLY(float, mCurrentFPS, CurrentFPS);
 };

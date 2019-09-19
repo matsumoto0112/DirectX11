@@ -26,6 +26,7 @@
 #include "Source/Scene/Impl/ParticleTest.h"
 #include "Source/Scene/Impl/ComputeShader.h"
 #include "Source/Scene/Impl/RandomColorParticle.h"
+#include "Source/Scene/Impl/BlackholeParticle.h"
 
 using namespace Framework;
 
@@ -48,7 +49,8 @@ private:
         mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
         mSceneManager->registerScene(Define::SceneType::ComputeShader, std::make_unique<ComputeShader>());
         mSceneManager->registerScene(Define::SceneType::RandomColorParticle, std::make_unique<RandomColorParticle>());
-        mSceneManager->loadScene(Define::SceneType::RandomColorParticle);
+        mSceneManager->registerScene(Define::SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+        mSceneManager->loadScene(Define::SceneType::BlackholeParticle);
 
         mFPSWindow = std::make_unique<ImGUI::Window>("FPS");
         mFPSText = std::make_shared<ImGUI::Text>("60");
