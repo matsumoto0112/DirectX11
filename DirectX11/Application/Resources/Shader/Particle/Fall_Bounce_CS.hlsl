@@ -35,8 +35,9 @@ cbuffer GlobalData : register(b0)
 StructuredBuffer<float> randomTable : register(t0);
 RWByteAddressBuffer particles : register(u0);
 RWByteAddressBuffer randomSeed : register(u1);
+groupshared int emitNum = 0;
 
-static const float MaxAlpha = 0.5f;
+static const float MaxAlpha = 0.3f;
 
 float getRandom()
 {
@@ -126,24 +127,30 @@ void resetParticle(int index)
 
 void updateParticle(int index)
 {
+    //移動処理
     float3 vel = getVelocity(index);
     float3 pos = getPosition(index) + vel * deltaTime;
     particles.Store3(index + POSITION_OFFSET, asuint(pos));
     vel.y -= gravity * deltaTime;
+    //地面より下に行ったら速度を反転させ、勢いを減らす
     if (pos.y < -3 && vel.y < 0)
     {
         vel.y *= -1;
+        vel *= 0.8f;
     }
     vel.y = clamp(vel.y, -8.0f, 8.0f);
 
     particles.Store3(index + VELOCITY_OFFSET, asuint(vel));
 
-    particles.Store(index + LIFETIME_OFFSET, asuint(getLifeTime(index) - deltaTime));
-
+    //生存時間管理
     float life = getLifeTime(index);
+    life = clamp(life - deltaTime, 0, life);
+    particles.Store(index + LIFETIME_OFFSET, asuint(life));
+
+    //残り1秒を切ったら透明になる
     float t = floor(life) == 0 ? life : 1;
     float alpha = lerp(0.0f, MaxAlpha, t);
-    particles.Store(index + COLOR_OFFSET + 4 * 3, asuint(life));
+    particles.Store(index + COLOR_OFFSET + 4 * 3, asuint(alpha));
 };
 
 [numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
@@ -155,12 +162,17 @@ void main(const CSInput input)
 
     const uint addr = index * PARTICLE_SIZE;
 
+    AllMemoryBarrierWithGroupSync();
     if (getLifeTime(addr) > 0)
     {
         updateParticle(addr);
     }
     else
     {
-        resetParticle(addr);
+        if (emitNum < 1)
+        {
+            resetParticle(addr);
+            emitNum++;
+        }
     }
 }
