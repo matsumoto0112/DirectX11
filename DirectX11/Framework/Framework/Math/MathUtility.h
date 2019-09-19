@@ -101,11 +101,13 @@ public:
     /**
     * @brief 最大値の取得
     */
-    static float mymax(const std::initializer_list<float>& param);
+    template <class T>
+    static float mymax(const std::initializer_list<T>& param);
     /**
     * @brief 最小値の取得
-    */
-    static float mymin(const std::initializer_list<float>& param);
+    */ 
+    template <class T>
+    static float mymin(const std::initializer_list<T>& param);
 };
 
 /**
@@ -127,6 +129,16 @@ inline T MathUtility::lerp(const T& a, const T& b, float t) {
     //0～1にクランプ
     t = clamp(t, 0.0f, 1.0f);
     return a * (1.0f - t) + b * t;
+}
+
+template<class T>
+inline float MathUtility::mymax(const std::initializer_list<T>& param) {
+    return std::max(param);
+}
+
+template<class T>
+inline float MathUtility::mymin(const std::initializer_list<T>& param) {
+    return std::min(param);
 }
 
 } //Math

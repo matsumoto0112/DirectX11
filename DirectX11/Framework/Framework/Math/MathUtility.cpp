@@ -49,14 +49,5 @@ float MathUtility::toDegree(float rad) {
 float MathUtility::abs(float X) {
     return fabsf(X);
 }
-
-float MathUtility::mymax(const std::initializer_list<float>& param) {
-    return std::max(param);
-}
-
-float MathUtility::mymin(const std::initializer_list<float>& param) {
-    return std::min(param);
-}
-
 } //Math 
 } //Framework 

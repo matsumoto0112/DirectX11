@@ -21,7 +21,7 @@ using namespace Framework;
 
 namespace {
 static constexpr int THREAD_X = 16, THREAD_Y = 16;
-static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
+static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
 
@@ -32,18 +32,9 @@ struct Particle {
     Graphics::Color4 color;
 };
 
-struct Blackhole {
-    Math::Vector3 position;
-    float radius;
-    float theta;
-    Graphics::Color4 color;
-};
-
 struct GlobalData {
-    int emit;
-    float time;
     float deltaTime;
-    Math::Vector3 center;
+    int emit;
     float dummy[2];
 };
 
@@ -86,7 +77,7 @@ void createSRV(int elemSize, int count, T* tArray,
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
     srvDesc.BufferEx.FirstElement = 0;
     srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-    srvDesc.BufferEx.NumElements = count;
+    srvDesc.BufferEx.NumElements = desc.ByteWidth / 4;
 
     hr = Utility::getDevice()->CreateShaderResourceView(buffer.Get(), &srvDesc, &srv);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
@@ -113,7 +104,7 @@ void createUAV(int elemSize, int count, T* particle,
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
     uavDesc.Buffer.FirstElement = 0;
     uavDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-    uavDesc.Buffer.NumElements = sizeof(T) * count / sizeof(int);
+    uavDesc.Buffer.NumElements = desc.ByteWidth / 4;
     uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
 
     hr = Utility::getDevice()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, &uav);
@@ -142,12 +133,13 @@ RandomColorParticle::RandomColorParticle() {
     mAlphaBlend = createAlphaBlend();
 
     //コンピュートシェーダ作成
-    mComputeShader = std::make_unique<Graphics::ComputeShader>("Particle/Blackhole_CS");
+    Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
+    mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/RandomParticle", info);
 
     //パーティクルのデータ作成
-    Blackhole particle[COUNT];
+    Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
-        particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
+        //particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
     }
     HRESULT hr;
 
@@ -158,7 +150,7 @@ RandomColorParticle::RandomColorParticle() {
 
     int randomSeed[1]{ 0 };
     createSRV(sizeof(float), RANDOM_MAX, &randomTable[0], mRandomTableBuffer, mRandomTableSRV);
-    createUAV(sizeof(Blackhole), COUNT, &particle[0], mComputeBufferResult, mComputeBufferResultUAV);
+    createUAV(sizeof(Particle), COUNT, &particle[0], mComputeBufferResult, mComputeBufferResultUAV);
     createUAV(sizeof(int), 1, &randomSeed[0], mRandomSeedBuffer, mRandomSeedUAV);
 
     //テクスチャ読み込み
@@ -170,22 +162,15 @@ RandomColorParticle::RandomColorParticle() {
     mGS = std::make_unique<Graphics::GeometoryShader>("SimpleParticleGS");
     mPS = std::make_unique<Graphics::PixelShader>("2D/Texture2D_Color_PS");
 
-    //const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
-    //{
-    //    { "IN_TIME",    0, DXGI_FORMAT_R32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "IN_VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //};
-
     const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
     {
+        { "IN_TIME",    0, DXGI_FORMAT_R32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_RADIUS",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_THETA",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "IN_VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
-    mVS = std::make_unique<Graphics::VertexShader>("Particle/Blackhole_VS", layouts);
+
+    mVS = std::make_unique<Graphics::VertexShader>("2D/NoActionVS", layouts);
 
     //ラスタライザ作成
     D3D11_RASTERIZER_DESC rasterizerDesc;
@@ -204,17 +189,6 @@ RandomColorParticle::RandomColorParticle() {
 
     mGlobal.emit = 1;
     mWindow = std::make_unique<ImGUI::Window>("Brackhole");
-
-#define CENTER_CHANGE_FIELD(name,type) { \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, 0.0f, [&](float val) {mGlobal.center.##type = val; }); \
-        field->setMinValue(-100.0f); \
-        field->setMaxValue(100.0f); \
-        mWindow ->addItem(field); \
-    }
-
-    CENTER_CHANGE_FIELD(X, x);
-    CENTER_CHANGE_FIELD(Y, y);
-    mGlobal.center = Math::Vector3(0.0f, 0.0f, 0.0f);
 }
 
 RandomColorParticle::~RandomColorParticle() {}
@@ -223,16 +197,15 @@ void RandomColorParticle::load(Framework::Scene::Collecter& collecter) {}
 
 void RandomColorParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
-    Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
 
     //UAVのセット
     UINT count = 256;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> uavs[2] = { mComputeBufferResultUAV,mRandomSeedUAV };
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
-
+    //Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> uavs[2] = { mComputeBufferResultUAV,mRandomSeedUAV };
+    //Utility::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
+    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
+    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mRandomSeedUAV.GetAddressOf(), &count);
     Utility::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
 
-    mGlobal.time = Utility::Time::getInstance().getTime();
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
 
     //グローバルデータのセット
@@ -242,7 +215,7 @@ void RandomColorParticle::update() {
     mGlobal.emit = 0;
 
     //実行
-    Utility::getContext()->Dispatch(DISPATCH_X, DISPATCH_Y, 1);
+    mComputeShader->set();
 
     //UAVの解放
     ID3D11UnorderedAccessView* nullUAV = nullptr;
@@ -268,11 +241,11 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mGS->set();
     mPS->set();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
+    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    UINT stride = sizeof(Blackhole);
+    UINT stride = sizeof(Particle);
     UINT offset = 0;
     //頂点バッファをセットする
     //パーティクルのバッファをそのまま渡す

@@ -21,16 +21,9 @@ using namespace Framework;
 
 namespace {
 static constexpr int THREAD_X = 16, THREAD_Y = 16;
-static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
+static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-
-struct Particle {
-    float lifeTime;
-    Math::Vector3 position;
-    Math::Vector3 velocity;
-    Graphics::Color4 color;
-};
 
 struct Blackhole {
     Math::Vector3 position;
@@ -48,13 +41,7 @@ struct GlobalData {
 };
 
 std::unique_ptr<Graphics::ComputeShader> mComputeShader; //!< コンピュートシェーダ
-Microsoft::WRL::ComPtr<ID3D11Buffer> mComputeBufferResult; //!< パーティクル用バッファ
-Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mComputeBufferResultUAV; //!< パーティクル用UAV
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
-Microsoft::WRL::ComPtr<ID3D11Buffer> mRandomTableBuffer; //!< 乱数テーブルバッファ
-Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mRandomTableSRV; //!< 乱数テーブルリソース
-Microsoft::WRL::ComPtr<ID3D11Buffer> mRandomSeedBuffer; //!< 乱数シードバッファ
-Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mRandomSeedUAV; //!< 乱数シードUAV
 std::shared_ptr<Graphics::Texture> mTexture;
 std::unique_ptr<Graphics::GeometoryShader> mGS;
 std::unique_ptr<Graphics::VertexShader> mVS;
@@ -86,7 +73,7 @@ void createSRV(int elemSize, int count, T* tArray,
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
     srvDesc.BufferEx.FirstElement = 0;
     srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-    srvDesc.BufferEx.NumElements = count;
+    srvDesc.BufferEx.NumElements = elemSize * count / sizeof(int);
 
     hr = Utility::getDevice()->CreateShaderResourceView(buffer.Get(), &srvDesc, &srv);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
@@ -113,7 +100,7 @@ void createUAV(int elemSize, int count, T* particle,
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
     uavDesc.Buffer.FirstElement = 0;
     uavDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-    uavDesc.Buffer.NumElements = sizeof(T) * count / sizeof(int);
+    uavDesc.Buffer.NumElements = elemSize * count / sizeof(int);
     uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
 
     hr = Utility::getDevice()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, &uav);
@@ -140,24 +127,25 @@ BlackholeParticle::BlackholeParticle() {    //カメラの初期化
     mAlphaBlend = createAlphaBlend();
 
     //コンピュートシェーダ作成
-    mComputeShader = std::make_unique<Graphics::ComputeShader>("Particle/Blackhole_CS");
+    Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
+    mComputeShader = std::make_unique<Graphics::ComputeShader>("Particle/Blackhole_CS", info);
 
     //パーティクルのデータ作成
-    Blackhole particle[COUNT];
+    std::vector<Blackhole> particle(COUNT);
     for (int i = 0; i < COUNT; i++) {
         particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
     }
-    HRESULT hr;
 
-    float randomTable[RANDOM_MAX];
+    std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
 
-    int randomSeed[1]{ 0 };
-    createSRV(sizeof(float), RANDOM_MAX, &randomTable[0], mRandomTableBuffer, mRandomTableSRV);
-    createUAV(sizeof(Blackhole), COUNT, &particle[0], mComputeBufferResult, mComputeBufferResultUAV);
-    createUAV(sizeof(int), 1, &randomSeed[0], mRandomSeedBuffer, mRandomSeedUAV);
+    std::vector<int> randomSeed{ 0 };
+
+    mComputeShader->addSRV(0, randomTable);
+    mComputeShader->addUAVEnableVertexBuffer(0, particle, 0);
+    mComputeShader->addUAV(1, randomSeed);
 
     //テクスチャ読み込み
     Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
@@ -167,14 +155,6 @@ BlackholeParticle::BlackholeParticle() {    //カメラの初期化
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mGS = std::make_unique<Graphics::GeometoryShader>("SimpleParticleGS");
     mPS = std::make_unique<Graphics::PixelShader>("2D/Texture2D_Color_PS");
-
-    //const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
-    //{
-    //    { "IN_TIME",    0, DXGI_FORMAT_R32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "IN_VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    //};
 
     const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
     {
@@ -221,14 +201,6 @@ void BlackholeParticle::load(Framework::Scene::Collecter & collecter) {}
 
 void BlackholeParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
-    Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
-
-    //UAVのセット
-    UINT count = 256;
-    Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> uavs[2] = { mComputeBufferResultUAV,mRandomSeedUAV };
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
-
-    Utility::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
 
     mGlobal.time = Utility::Time::getInstance().getTime();
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
@@ -240,11 +212,7 @@ void BlackholeParticle::update() {
     mGlobal.emit = 0;
 
     //実行
-    Utility::getContext()->Dispatch(DISPATCH_X, DISPATCH_Y, 1);
-
-    //UAVの解放
-    ID3D11UnorderedAccessView* nullUAV = nullptr;
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+    mComputeShader->set();
 }
 
 bool BlackholeParticle::isEndScene() const {
@@ -269,17 +237,11 @@ void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //事
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    UINT stride = sizeof(Blackhole);
-    UINT offset = 0;
-    //頂点バッファをセットする
-    //パーティクルのバッファをそのまま渡す
-    Utility::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    mComputeShader->setToVertexBuffer();
     Utility::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
     Utility::getContext()->Draw(COUNT, 0);
 
-    //頂点バッファを解放する
-    ID3D11Buffer* nullBuf = nullptr;
-    Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
+    mComputeShader->clearVertexBuffer();
 
     mWindow->draw();
 }

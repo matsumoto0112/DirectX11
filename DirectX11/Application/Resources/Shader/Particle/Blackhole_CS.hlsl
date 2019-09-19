@@ -4,8 +4,8 @@
 #define THREAD_Y (16)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (1)
-#define DISPATCH_Y (1)
+#define DISPATCH_X (8)
+#define DISPATCH_Y (8)
 #define DISPATCH_Z (1)
 
 #define RANDOM_MAX 65535
@@ -82,7 +82,7 @@ void updateParticle(int index)
     sincos(theta, y, x);
     x *= getRadius(index);
     y *= getRadius(index);
-    particles.Store3(index + POSITION_OFFSET, asuint(float3(x, y, 0.0f)));
+    particles.Store3(index + POSITION_OFFSET, asuint(float3(0.0f, 1.0f, 0.0f) + float3(x, y, 0.0f)));
     particles.Store(index + THETA_OFFSET, asuint(theta));
 };
 

@@ -96,7 +96,8 @@ ComputeShader::ComputeShader() {
     mText = std::make_shared<ImGUI::Text>("Test");
     mWindow->addItem(mText);
 
-    mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/SimpleParticle");
+    Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
+    mComputeShader = std::make_unique<Graphics::ComputeShader>("Compute/SimpleParticle", info);
 
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
@@ -163,9 +164,6 @@ ComputeShader::~ComputeShader() {}
 void ComputeShader::load(Scene::Collecter& collecter) {}
 
 void ComputeShader::update() {
-
-    Utility::getContext()->CSSetShader(mComputeShader->mShaderData->mComputeShader.Get(), nullptr, 0);
-
     UINT count = 256;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
@@ -173,7 +171,9 @@ void ComputeShader::update() {
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
-    Utility::getContext()->Dispatch(DISPATCH_X, DISPATCH_Y, 1);
+
+    mComputeShader->set();
+
     ID3D11UnorderedAccessView* nullUAV = nullptr;
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
 
