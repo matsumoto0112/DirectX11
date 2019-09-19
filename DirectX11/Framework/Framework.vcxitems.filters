@@ -121,6 +121,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\IItem.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Text.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />

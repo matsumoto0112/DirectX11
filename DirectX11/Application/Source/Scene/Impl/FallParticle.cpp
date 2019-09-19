@@ -1,4 +1,4 @@
-#include "BlackholeParticle.h"
+#include "FallParticle.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
@@ -21,23 +21,22 @@
 using namespace Framework;
 
 namespace {
-static constexpr int THREAD_X = 16, THREAD_Y = 4;
-static constexpr int DISPATCH_X = 1, DISPATCH_Y = 8;
+static constexpr int THREAD_X = 16, THREAD_Y = 16;
+static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
 
-struct Blackhole {
+struct Particle {
+    float lifeTime;
     Math::Vector3 position;
-    float radius;
-    float theta;
+    Math::Vector3 velocity;
     Graphics::Color4 color;
 };
 
 struct GlobalData {
-    int emit;
-    float time;
     float deltaTime;
-    float dummy[1];
+    float gravity;
+    float dummy[2];
 };
 
 std::unique_ptr<Graphics::GPUParticle> mGPUParticle; //!< パーティクル
@@ -54,9 +53,7 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     return std::make_unique<Graphics::AlphaBlend>(desc);
 }
 }
-
-BlackholeParticle::BlackholeParticle() {
-    //カメラの初期化
+FallParticle::FallParticle() {    //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
@@ -69,12 +66,12 @@ BlackholeParticle::BlackholeParticle() {
 
     //コンピュートシェーダ作成
     Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-    auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Blackhole_CS", info);
+    auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Fall_CS", info);
 
     //パーティクルのデータ作成
-    std::vector<Blackhole> particle(COUNT);
+    std::vector<Particle> particle(COUNT);
     for (int i = 0; i < COUNT; i++) {
-        particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
+        particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Graphics::Color4::WHITE };
     }
     cs->addUAVEnableVertexBuffer(0, particle, 0);
 
@@ -97,12 +94,12 @@ BlackholeParticle::BlackholeParticle() {
 
     const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
     {
-        { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_RADIUS",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_THETA",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "IN_LIFETIME",0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "POSITION",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "IN_VELOCITY",0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR",      0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
-    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Blackhole_VS", layouts);
+    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Fall_VS", layouts);
 
     mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
         Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
@@ -126,34 +123,30 @@ BlackholeParticle::BlackholeParticle() {
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
-
-    mGlobal.emit = 1;
 }
 
-BlackholeParticle::~BlackholeParticle() {}
+FallParticle::~FallParticle() {}
 
-void BlackholeParticle::load(Framework::Scene::Collecter & collecter) {}
+void FallParticle::load(Framework::Scene::Collecter& collecter) {}
 
-void BlackholeParticle::update() {
+void FallParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
 
-    mGlobal.time = Utility::Time::getInstance().getTime();
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.gravity = 9.8f;
 
     //グローバルデータのセット
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    mGlobal.emit = 0;
-
     mGPUParticle->simulate();
 }
 
-bool BlackholeParticle::isEndScene() const {
+bool FallParticle::isEndScene() const {
     return false;
 }
 
-void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //事前準備
+void FallParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -162,15 +155,15 @@ void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //事
     m3DCamera->render();
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
+    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
     mGPUParticle->draw();
 }
 
-void BlackholeParticle::end() {}
+void FallParticle::end() {}
 
-Define::SceneType BlackholeParticle::next() {
+Define::SceneType FallParticle::next() {
     return Define::SceneType();
 }

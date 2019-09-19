@@ -21,6 +21,7 @@ enum class SceneType {
     ComputeShader,
     RandomColorParticle,
     BlackholeParticle,
+    FallParticle,
 };
 
 } //Define 

@@ -26,6 +26,7 @@
     <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
     <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
     <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
     <ClInclude Include="Source\Scene\Impl\BlackholeParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -91,6 +93,8 @@
     <FxCompile Include="Resources\Shader\Compute\RandomParticle.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Blackhole_CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Blackhole_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall_CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall_VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -1,11 +1,11 @@
 #include "../Compute/ComputeShaderDefine.hlsli"
 
-#define THREAD_X (4)
+#define THREAD_X (16)
 #define THREAD_Y (4)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (4)
-#define DISPATCH_Y (4)
+#define DISPATCH_X (1)
+#define DISPATCH_Y (8)
 #define DISPATCH_Z (1)
 
 #define RANDOM_MAX 65535
