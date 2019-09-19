@@ -28,8 +28,16 @@
 #include "Source/Scene/Impl/RandomColorParticle.h"
 #include "Source/Scene/Impl/BlackholeParticle.h"
 #include "Source/Scene/Impl/FallParticle.h"
+#include "Source/Scene/Impl/FallBounceParticle.h"
 
 using namespace Framework;
+
+#define ADD_SCENE_JUMP_BUTTON(name,type){ \
+    std::shared_ptr<ImGUI::Button> btn = std::make_shared<ImGUI::Button>(#type,[&](){ \
+        mSceneManager->loadScene(type); \
+    }); \
+    mSceneJumpWindow->addItem(btn); \
+}
 
 class MyGame : public Game {
 public:
@@ -49,13 +57,18 @@ private:
         //mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
         //mSceneManager->registerScene(Define::SceneType::ComputeShader, std::make_unique<ComputeShader>());
         //mSceneManager->registerScene(Define::SceneType::RandomColorParticle, std::make_unique<RandomColorParticle>());
-        //mSceneManager->registerScene(Define::SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-        mSceneManager->registerScene(Define::SceneType::FallParticle, std::make_unique<FallParticle>());
-        mSceneManager->loadScene(Define::SceneType::FallParticle);
 
-        mFPSWindow = std::make_unique<ImGUI::Window>("FPS");
-        mFPSText = std::make_shared<ImGUI::Text>("60");
-        mFPSWindow->addItem(mFPSText);
+        using Define::SceneType;
+        mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+        mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
+        mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
+        mSceneManager->loadScene(SceneType::FallBounceParticle);
+
+        mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
+        ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
+        ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
+        ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
+
         ATLASSERT(_CrtCheckMemory());
         return true;
     }
@@ -66,16 +79,10 @@ private:
     }
     virtual void draw() override {
         Graphics::IRenderer* renderer = mGameDevice.getRenderingManager()->drawBegin();
-        //renderer->setBackColor(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-
         renderer->begin();
         mSceneManager->draw(renderer);
 
-
-        //mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
-
-        //mFPSWindow->draw();
-
+        mSceneJumpWindow->draw();
         SetWindowText(mGameDevice.getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
         mGameDevice.getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
@@ -85,8 +92,7 @@ private:
     }
 private:
     std::unique_ptr<Scene::Manager> mSceneManager;
-    std::unique_ptr<ImGUI::Window> mFPSWindow;
-    std::shared_ptr<ImGUI::Text> mFPSText;
+    std::unique_ptr<ImGUI::Window> mSceneJumpWindow;
 };
 
 int main() {

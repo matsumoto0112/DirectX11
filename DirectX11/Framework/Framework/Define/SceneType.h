@@ -22,6 +22,7 @@ enum class SceneType {
     RandomColorParticle,
     BlackholeParticle,
     FallParticle,
+    FallBounceParticle,
 };
 
 } //Define 
