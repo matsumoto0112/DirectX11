@@ -4,6 +4,7 @@
 #include <vector>
 #include "Framework/Graphics/Shader/ShaderBase.h"
 #include "Framework/Graphics/Shader/ComputeShaderData.h"
+#include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
@@ -107,9 +108,10 @@ private:
     * @param name シェーダファイル名
     */
     void create(const std::string& name);
-public:
+private:
+    PROPERTY_READONLY(Info, mInfo, Info); //!< コンピュートシェーダ情報
+private:
     std::unique_ptr<ComputeShaderData> mShaderData; //!< シェーダーのデータ
-    Info mInfo; //!< コンピュートシェーダ情報
     std::vector<SRV> mSRVs; //!< シェーダリソースビュー配列
     std::vector<UAV> mUAVs; //!< アンオーダードアクセスビュー配列
     std::vector<VertexBuffer> mVertexBuffers; //!< 頂点バッファ配列

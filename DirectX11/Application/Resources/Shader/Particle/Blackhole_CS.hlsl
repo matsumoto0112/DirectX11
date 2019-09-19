@@ -1,11 +1,11 @@
 #include "../Compute/ComputeShaderDefine.hlsli"
 
-#define THREAD_X (16)
-#define THREAD_Y (16)
+#define THREAD_X (4)
+#define THREAD_Y (4)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (8)
-#define DISPATCH_Y (8)
+#define DISPATCH_X (4)
+#define DISPATCH_Y (4)
 #define DISPATCH_Z (1)
 
 #define RANDOM_MAX 65535
@@ -29,8 +29,6 @@ cbuffer GlobalData : register(b0)
     int emit;
     float time; //!< ゲーム経過時間
     float deltaTime; //!< 前フレームからの差分時間
-    float3 center; //!< 中心座標
-    float2 dummy;
 };
 
 StructuredBuffer<float> randomTable : register(t0);
@@ -82,7 +80,7 @@ void updateParticle(int index)
     sincos(theta, y, x);
     x *= getRadius(index);
     y *= getRadius(index);
-    particles.Store3(index + POSITION_OFFSET, asuint(float3(0.0f, 1.0f, 0.0f) + float3(x, y, 0.0f)));
+    particles.Store3(index + POSITION_OFFSET, asuint(float3(x, y, 0.0f)));
     particles.Store(index + THETA_OFFSET, asuint(theta));
 };
 

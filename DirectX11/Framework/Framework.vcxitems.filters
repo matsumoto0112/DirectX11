@@ -290,5 +290,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\ImGUI.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Text.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
   </ItemGroup>
 </Project>
