@@ -25,6 +25,7 @@ static constexpr int THREAD_X = 16, THREAD_Y = 16;
 static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
+const int NUM = 6;
 
 struct Particle {
     float lifeTime;
@@ -42,7 +43,7 @@ struct GlobalData {
     float dummy[1];
 };
 
-std::unique_ptr<Graphics::GPUParticle> mGPUParticle; //!< パーティクル
+std::vector<std::unique_ptr<Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
@@ -69,25 +70,12 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
     mAlphaBlend = createAlphaBlend();
 
 
-    //コンピュートシェーダ作成
-    Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-    auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Fall_Bounce_CS", info);
-
-    //パーティクルのデータ作成
-    std::vector<Particle> particle(COUNT);
-    for (int i = 0; i < COUNT; i++) {
-        particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Math::Vector3::ZERO, Graphics::Color4::WHITE };
-    }
-    cs->addUAVEnableVertexBuffer(0, particle, 0);
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
-    cs->addSRV(0, randomTable);
 
-    std::vector<int> randomSeed{ 0 };
-    cs->addUAV(1, randomSeed);
 
 
     //テクスチャ読み込み
@@ -107,12 +95,30 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
     };
     auto vs = std::make_shared<Graphics::VertexShader>("Particle/Fall_Bounce_VS", layouts);
 
-    mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
-        Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
-        cs,
-        vs,
-        ps,
-        gs);
+    for (int i = 0; i < NUM; i++) {
+        //コンピュートシェーダ作成
+        Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
+        auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Fall_Bounce_CS", info);
+
+        //パーティクルのデータ作成
+        std::vector<Particle> particle(COUNT);
+        for (int i = 0; i < COUNT; i++) {
+            particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Math::Vector3::ZERO, Graphics::Color4::WHITE };
+        }
+        cs->addUAVEnableVertexBuffer(0, particle, 0);
+
+        cs->addSRV(0, randomTable);
+        std::vector<int> randomSeed{ Utility::Random::getInstance().range(0,RANDOM_MAX) };
+
+        cs->addUAV(1, randomSeed);
+
+        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
+            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
+            cs,
+            vs,
+            ps,
+            gs));
+    }
 
 
     //ラスタライザ作成
@@ -156,7 +162,9 @@ void FallBounceParticle::update() {
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    mGPUParticle->simulate();
+    for (int i = 0; i < mGPUParticle.size(); i++) {
+        mGPUParticle[i]->simulate();
+    }
 }
 
 bool FallBounceParticle::isEndScene() const {
@@ -176,7 +184,9 @@ void FallBounceParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    mGPUParticle->draw();
+    for (int i = 0; i < mGPUParticle.size(); i++) {
+        mGPUParticle[i]->draw();
+    }
 
     mWindow->draw();
 }
