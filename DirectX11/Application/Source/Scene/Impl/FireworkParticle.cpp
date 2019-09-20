@@ -49,6 +49,8 @@ Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
 std::unique_ptr<ImGUI::Window> mWindow;
+std::shared_ptr<ImGUI::Text> mText;
+int mNum;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -134,6 +136,9 @@ FireworkParticle::FireworkParticle() {    //カメラの初期化
 
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
+    mText = std::make_shared<ImGUI::Text>("");
+    mWindow->addItem(mText);
+
 #define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
     std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){\
         type = val; \
@@ -143,11 +148,7 @@ FireworkParticle::FireworkParticle() {    //カメラの初期化
         field->setMaxValue(max); \
     }
 
-    //ADD_CHANGE_CENTER_FIELD(X, mEmitParameter.center.x, -30.0f, 30.0f);
-    //ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y, -30.0f, 30.0f);
-    //ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z, -30.0f, 30.0f);
-    //ADD_CHANGE_CENTER_FIELD(R, mRadius, -50.0f, 50.0f);
-    //ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
+    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
 FireworkParticle::~FireworkParticle() {}
@@ -163,18 +164,18 @@ void FireworkParticle::update() {
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    for (size_t i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mNum; i++) {
         if (i % 2 == 0) {
             //グローバルデータのセット
             mGlobal.pos1 = Math::Vector3(-30, 0, 0);
             mGlobal.vel = Math::Vector3(5, 0, 0);
-            mGlobal.color = Graphics::Color4(255.0f / 255.0f, 170.0f / 255.0f, 0.0f, 0.1f);
+            mGlobal.color = Graphics::Color4(117.0f / 255.0f, 51.0f / 255.0f, 222.0f / 255.0f, 0.1f);
         }
         else {
             //グローバルデータのセット
             mGlobal.pos1 = Math::Vector3(30, 0, 0);
             mGlobal.vel = Math::Vector3(-5, 0, 0);
-            mGlobal.color = Graphics::Color4(255.0f / 255.0f, 170.0f / 255.0f, 0.0f, 0.1f);
+            mGlobal.color = Graphics::Color4(245.0f / 255.0f, 164.0f / 255.0f, 66.0f / 255.0f, 0.1f);
         }
         mCB->setBuffer(mGlobal);
         mCB->sendBuffer();
@@ -200,10 +201,11 @@ void FireworkParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (size_t i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mNum; i++) {
         mGPUParticle[i]->draw();
     }
 
+    mText->setText(Utility::StringBuilder("") << mNum * COUNT);
     mWindow->draw();
 }
 

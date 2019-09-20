@@ -25,7 +25,7 @@ static constexpr int THREAD_X = 32, THREAD_Y = 32;
 static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 128;
+const int NUM = 256;
 
 struct Particle {
     float lifeTime;
@@ -55,6 +55,7 @@ std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
 EmitParameter mEmitParameter;
 std::unique_ptr<ImGUI::Window> mWindow;
+std::shared_ptr<ImGUI::Text> mText;
 float mAngle;
 float mRadius;
 int mNum;
@@ -157,6 +158,8 @@ SpotInstancerParticle::SpotInstancerParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
         field->setMaxValue(max); \
     }
 
+    mText = std::make_shared<ImGUI::Text>("");
+    mWindow->addItem(mText);
     ADD_CHANGE_CENTER_FIELD(X, mEmitParameter.center.x, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z, -30.0f, 30.0f);
@@ -214,6 +217,7 @@ void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
         mGPUParticle[i]->draw();
     }
 
+    mText->setText(Utility::StringBuilder("") << mNum * THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y);
     mWindow->draw();
 }
 

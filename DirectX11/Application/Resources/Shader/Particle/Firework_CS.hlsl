@@ -53,7 +53,7 @@ float getLifeTime(int index)
 float getRandomLifeTime()
 {
     static const float minLifeTime = 5.0f;
-    static const float maxLifeTime = 15.0f;
+    static const float maxLifeTime = 7.0f;
     return randomRange(minLifeTime, maxLifeTime);
 }
 

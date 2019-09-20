@@ -4,8 +4,8 @@
 #define THREAD_Y (32)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (8)
-#define DISPATCH_Y (8)
+#define DISPATCH_X (2)
+#define DISPATCH_Y (2)
 #define DISPATCH_Z (1)
 
 struct FallParticle

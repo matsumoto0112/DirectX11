@@ -22,10 +22,10 @@ using namespace Framework;
 
 namespace {
 static constexpr int THREAD_X = 32, THREAD_Y = 32;
-static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
+static constexpr int DISPATCH_X = 2, DISPATCH_Y = 2;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 4;
+static constexpr int NUM = 128;
 
 struct Particle {
     float lifeTime;
@@ -51,6 +51,8 @@ Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
 std::unique_ptr<ImGUI::Window> mWindow;
+std::shared_ptr<ImGUI::Text> mText;
+int mNum;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -140,16 +142,21 @@ FallBounceRotateParticle::FallBounceRotateParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
 
+    mNum = 1;
+
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
-#define ADD_CHANGE_CENTER_FIELD(name,type) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){mGlobal.center.##type = val;});\
+    mText = std::make_shared<ImGUI::Text>("");
+    mWindow->addItem(mText);
+#define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){type = val;});\
         mWindow->addItem(field); \
-        field->setMinValue(-30.0f); \
-        field->setMaxValue(30.0f); \
+        field->setMinValue(min); \
+        field->setMaxValue(max); \
     }
-    ADD_CHANGE_CENTER_FIELD(X, x);
-    ADD_CHANGE_CENTER_FIELD(Y, y);
-    ADD_CHANGE_CENTER_FIELD(Z, z);
+    ADD_CHANGE_CENTER_FIELD(X, mGlobal.center.x, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(Y, mGlobal.center.y, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(Z, mGlobal.center.z, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
 FallBounceRotateParticle::~FallBounceRotateParticle() {}
@@ -166,7 +173,7 @@ void FallBounceRotateParticle::update() {
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    for (int i = 0; i < mGPUParticle.size(); i++) {
+    for (int i = 0; i < mNum; i++) {
         mGPUParticle[i]->simulate();
     }
 }
@@ -188,10 +195,11 @@ void FallBounceRotateParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (int i = 0; i < mGPUParticle.size(); i++) {
+    for (int i = 0; i < mNum; i++) {
         mGPUParticle[i]->draw();
     }
 
+    mText->setText(Utility::StringBuilder("") << mNum * COUNT);
     mWindow->draw();
 }
 
