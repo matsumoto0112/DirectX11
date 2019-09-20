@@ -30,6 +30,7 @@
 #include "Source/Scene/Impl/FallParticle.h"
 #include "Source/Scene/Impl/FallBounceParticle.h"
 #include "Source/Scene/Impl/FallBounceRotateParticle.h"
+#include "Source/Scene/Impl/SpotInstancerParticle.h"
 
 using namespace Framework;
 
@@ -64,7 +65,8 @@ private:
         mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
         mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
         mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
-        mSceneManager->loadScene(SceneType::FallBounceRotateParticle);
+        mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
+        mSceneManager->loadScene(SceneType::SpotInstancerParticle);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);

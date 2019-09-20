@@ -9,6 +9,11 @@ float getRandom()
     return randomTable[addr % RANDOM_MAX];
 }
 
+float randomRange(float low, float high)
+{
+    return low + getRandom() * (high - low);
+}
+
 struct CSInput
 {
     uint3 groupThread : SV_GroupThreadID;

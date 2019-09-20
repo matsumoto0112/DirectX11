@@ -30,11 +30,6 @@ cbuffer GlobalData : register(b0)
 
 RWByteAddressBuffer particles : register(u1);
 
-float randomRange(float low, float high)
-{
-    return low + getRandom() * (high - low);
-}
-
 float3 getPosition(int index)
 {
     return asfloat(particles.Load3(index + POSITION_OFFSET));

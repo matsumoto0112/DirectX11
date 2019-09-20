@@ -35,11 +35,6 @@ RWByteAddressBuffer particles : register(u1);
 
 static const float MaxAlpha = 1.0f;
 
-float randomRange(float low, float high)
-{
-    return low + getRandom() * (high - low);
-}
-
 float3 getPosition(int index)
 {
     return asfloat(particles.Load3(index + POSITION_OFFSET));
