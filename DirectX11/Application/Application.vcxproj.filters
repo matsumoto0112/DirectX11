@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceRotateParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\SpotInstancerParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\FireworkParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -69,6 +70,7 @@
     <ClInclude Include="Source\Scene\Impl\FallBounceParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceRotateParticle.h" />
     <ClInclude Include="Source\Scene\Impl\SpotInstancerParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\FireworkParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -110,6 +112,9 @@
     <FxCompile Include="Resources\Shader\Particle\SpotInstancer_CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\SpotInstancer_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\SpotInstancer_GS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firework_CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firework_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firework_GS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
