@@ -25,7 +25,7 @@ static constexpr int THREAD_X = 32, THREAD_Y = 32;
 static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 1;
+const int NUM = 128;
 
 struct Particle {
     float lifeTime;
@@ -57,6 +57,7 @@ EmitParameter mEmitParameter;
 std::unique_ptr<ImGUI::Window> mWindow;
 float mAngle;
 float mRadius;
+int mNum;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -147,19 +148,20 @@ SpotInstancerParticle::SpotInstancerParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     mRadius = 10.0f;
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
-#define ADD_CHANGE_CENTER_FIELD(name,type) {\
+#define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
     std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){\
         type = val; \
     }); \
         mWindow->addItem(field); \
-        field->setMinValue(-30.0f); \
-        field->setMaxValue(30.0f); \
+        field->setMinValue(min); \
+        field->setMaxValue(max); \
     }
 
-    ADD_CHANGE_CENTER_FIELD(X, mEmitParameter.center.x);
-    ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y);
-    ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z);
-    ADD_CHANGE_CENTER_FIELD(R, mRadius);
+    ADD_CHANGE_CENTER_FIELD(X, mEmitParameter.center.x, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z, -30.0f, 30.0f);
+    ADD_CHANGE_CENTER_FIELD(R, mRadius, -50.0f, 50.0f);
+    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
 SpotInstancerParticle::~SpotInstancerParticle() {}
@@ -182,7 +184,7 @@ void SpotInstancerParticle::update() {
     mCB->sendBuffer();
     mEmitParameter.emitTargetIndex = (mEmitParameter.emitTargetIndex + 1) % (THREAD_X * THREAD_Y);
 
-    for (size_t i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mNum; i++) {
         mAngle += 360.0f  * Utility::Time::getInstance().getDeltaTime();
         mEmitParameter.spot = calc();
         mEmitCB->setBuffer(mEmitParameter);
@@ -208,7 +210,7 @@ void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (size_t i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mNum; i++) {
         mGPUParticle[i]->draw();
     }
 
