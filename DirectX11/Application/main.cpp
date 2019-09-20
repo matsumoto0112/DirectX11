@@ -29,11 +29,12 @@
 #include "Source/Scene/Impl/BlackholeParticle.h"
 #include "Source/Scene/Impl/FallParticle.h"
 #include "Source/Scene/Impl/FallBounceParticle.h"
+#include "Source/Scene/Impl/FallBounceRotateParticle.h"
 
 using namespace Framework;
 
 #define ADD_SCENE_JUMP_BUTTON(name,type){ \
-    std::shared_ptr<ImGUI::Button> btn = std::make_shared<ImGUI::Button>(#type,[&](){ \
+    std::shared_ptr<ImGUI::Button> btn = std::make_shared<ImGUI::Button>(#name,[&](){ \
         mSceneManager->loadScene(type); \
     }); \
     mSceneJumpWindow->addItem(btn); \
@@ -62,12 +63,14 @@ private:
         mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
         mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
         mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
-        mSceneManager->loadScene(SceneType::FallBounceParticle);
+        mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
+        mSceneManager->loadScene(SceneType::FallBounceRotateParticle);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
         ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
         ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
+        ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

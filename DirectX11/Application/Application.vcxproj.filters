@@ -28,6 +28,7 @@
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\FallBounceRotateParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Source\Scene\Impl\BlackholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\FallBounceRotateParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -101,6 +103,9 @@
     <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\CubeParticle_GS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\CubeParticle_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_GS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

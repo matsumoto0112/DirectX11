@@ -145,6 +145,7 @@
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\FallBounceRotateParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Source\Scene\Impl\BlackholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\FallBounceRotateParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\Main.h" />
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
@@ -374,6 +376,32 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_GS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
