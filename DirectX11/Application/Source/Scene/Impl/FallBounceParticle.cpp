@@ -25,7 +25,7 @@ static constexpr int THREAD_X = 16, THREAD_Y = 16;
 static constexpr int DISPATCH_X = 8, DISPATCH_Y = 8;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 6;
+const int NUM = 12;
 
 struct Particle {
     float lifeTime;
@@ -125,7 +125,7 @@ FallBounceParticle::FallBounceParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
     rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rasterizerDesc.DepthClipEnable = TRUE;
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;

@@ -30,17 +30,14 @@ cbuffer GlobalData : register(b0)
 {
     float deltaTime; //!< 前フレームからの差分時間
     float gravity; //!< 毎秒かかる重力
-    //float d1[2];
     float3 center;
-    //float d2[1];
 };
 
 StructuredBuffer<float> randomTable : register(t0);
 RWByteAddressBuffer particles : register(u0);
 RWByteAddressBuffer randomSeed : register(u1);
-groupshared int emitNum = 0;
 
-static const float MaxAlpha = 0.3f;
+static const float MaxAlpha = 1.0f;
 
 float getRandom()
 {
@@ -78,15 +75,9 @@ float getRandomLifeTime()
 
 float3 getRandomPosition()
 {
-    static const float3 MinInitPosition = float3(-5.0f, 3.0f, -5.0f);
-    static const float3 MaxInitPosition = float3(5.0f, 3.0f, 5.0f);
-
-    //float x = randomRange(MinInitPosition.x, MaxInitPosition.x);
-    //float y = randomRange(MinInitPosition.y, MaxInitPosition.y);
-    //float z = randomRange(MinInitPosition.z, MaxInitPosition.z);
-    float x = randomRange(0, 0);
-    float y = randomRange(3, 3);
-    float z = randomRange(0, 0);
+    float x = randomRange(-1, 1);
+    float y = randomRange(-1, 1);
+    float z = randomRange(-1, 1);
 
     return float3(x, y, z) + center;
 }
@@ -132,7 +123,7 @@ void updateParticle(int index)
 {
     //移動処理
     float3 vel = getVelocity(index);
-    float3 pos = getPosition(index)  + vel * deltaTime;
+    float3 pos = getPosition(index) + vel * deltaTime;
     particles.Store3(index + POSITION_OFFSET, asuint(pos));
     vel.y -= gravity * deltaTime;
     //地面より下に行ったら速度を反転させ、勢いを減らす
@@ -172,10 +163,6 @@ void main(const CSInput input)
     }
     else
     {
-        if (emitNum < 1)
-        {
-            resetParticle(addr);
-            emitNum++;
-        }
+        resetParticle(addr);
     }
 }
