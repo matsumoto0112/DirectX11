@@ -37,7 +37,9 @@ struct Particle {
 struct GlobalData {
     float deltaTime;
     float gravity;
-    float dummy[2];
+    float d[2];
+    Math::Vector3 center;
+    float dummy[1];
 };
 
 std::unique_ptr<Graphics::GPUParticle> mGPUParticle; //!< パーティクル
@@ -45,6 +47,7 @@ std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
+std::unique_ptr<ImGUI::Window> mWindow;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -126,6 +129,17 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
+
+    mWindow = std::make_unique<ImGUI::Window>("Parameter");
+#define ADD_CHANGE_CENTER_FIELD(name,type) {\
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){mGlobal.center.##type = val;});\
+        mWindow->addItem(field); \
+        field->setMinValue(-10.0f); \
+        field->setMaxValue(10.0f); \
+    }
+    ADD_CHANGE_CENTER_FIELD(X, x);
+    ADD_CHANGE_CENTER_FIELD(Y, y);
+    ADD_CHANGE_CENTER_FIELD(Z, z);
 }
 
 FallBounceParticle::~FallBounceParticle() {}
@@ -163,6 +177,8 @@ void FallBounceParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->send();
 
     mGPUParticle->draw();
+
+    mWindow->draw();
 }
 
 void FallBounceParticle::end() {}

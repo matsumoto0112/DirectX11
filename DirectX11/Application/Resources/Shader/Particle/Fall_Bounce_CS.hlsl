@@ -30,6 +30,9 @@ cbuffer GlobalData : register(b0)
 {
     float deltaTime; //!< 前フレームからの差分時間
     float gravity; //!< 毎秒かかる重力
+    //float d1[2];
+    float3 center;
+    //float d2[1];
 };
 
 StructuredBuffer<float> randomTable : register(t0);
@@ -85,7 +88,7 @@ float3 getRandomPosition()
     float y = randomRange(3, 3);
     float z = randomRange(0, 0);
 
-    return float3(x, y, z);
+    return float3(x, y, z) + center;
 }
 
 float3 getRandomVelocity()
@@ -129,7 +132,7 @@ void updateParticle(int index)
 {
     //移動処理
     float3 vel = getVelocity(index);
-    float3 pos = getPosition(index) + vel * deltaTime;
+    float3 pos = getPosition(index)  + vel * deltaTime;
     particles.Store3(index + POSITION_OFFSET, asuint(pos));
     vel.y -= gravity * deltaTime;
     //地面より下に行ったら速度を反転させ、勢いを減らす
