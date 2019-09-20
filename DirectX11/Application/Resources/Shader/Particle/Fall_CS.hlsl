@@ -8,8 +8,6 @@
 #define DISPATCH_Y (8)
 #define DISPATCH_Z (1)
 
-#define RANDOM_MAX 65535
-
 struct FallParticle
 {
     float lifeTime; //!< ¶‘¶ŽžŠÔ
@@ -30,16 +28,7 @@ cbuffer GlobalData : register(b0)
     float gravity; //!< –ˆ•b‚©‚©‚éd—Í
 };
 
-StructuredBuffer<float> randomTable : register(t0);
-RWByteAddressBuffer particles : register(u0);
-RWByteAddressBuffer randomSeed : register(u1);
-
-float getRandom()
-{
-    uint addr;
-    randomSeed.InterlockedAdd(0, 1, addr);
-    return randomTable[addr % RANDOM_MAX];
-}
+RWByteAddressBuffer particles : register(u1);
 
 float randomRange(float low, float high)
 {

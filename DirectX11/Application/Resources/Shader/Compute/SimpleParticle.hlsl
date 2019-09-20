@@ -30,7 +30,7 @@ cbuffer GlobalData : register(b0)
     float deltaTime;
 };
 
-RWByteAddressBuffer output0 : register(u0);
+RWByteAddressBuffer output0 : register(u1);
 
 bool isAlive(int index)
 {

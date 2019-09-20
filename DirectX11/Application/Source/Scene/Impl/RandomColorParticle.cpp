@@ -202,8 +202,8 @@ void RandomColorParticle::update() {
     UINT count = 256;
     //Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> uavs[2] = { mComputeBufferResultUAV,mRandomSeedUAV };
     //Utility::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
-    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mRandomSeedUAV.GetAddressOf(), &count);
+    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
+    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mRandomSeedUAV.GetAddressOf(), &count);
     Utility::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
 
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();

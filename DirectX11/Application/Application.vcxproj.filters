@@ -89,7 +89,6 @@
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Shadow_Color_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Compute\TestCompute.hlsl" />
     <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
     <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />

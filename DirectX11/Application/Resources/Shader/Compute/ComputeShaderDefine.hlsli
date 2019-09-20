@@ -1,3 +1,14 @@
+StructuredBuffer<float> randomTable : register(t0);
+RWByteAddressBuffer randomSeed : register(u0);
+#define RANDOM_MAX 65535
+
+float getRandom()
+{
+    uint addr;
+    randomSeed.InterlockedAdd(0, 1, addr);
+    return randomTable[addr % RANDOM_MAX];
+}
+
 struct CSInput
 {
     uint3 groupThread : SV_GroupThreadID;

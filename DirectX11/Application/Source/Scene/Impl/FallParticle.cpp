@@ -73,7 +73,7 @@ FallParticle::FallParticle() {    //カメラの初期化
     for (int i = 0; i < COUNT; i++) {
         particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Graphics::Color4::WHITE };
     }
-    cs->addUAVEnableVertexBuffer(0, particle, 0);
+    cs->addUAVEnableVertexBuffer(1, particle, 0);
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
@@ -82,7 +82,7 @@ FallParticle::FallParticle() {    //カメラの初期化
     cs->addSRV(0, randomTable);
 
     std::vector<int> randomSeed{ 0 };
-    cs->addUAV(1, randomSeed);
+    cs->addUAV(0, randomSeed);
 
 
     //テクスチャ読み込み

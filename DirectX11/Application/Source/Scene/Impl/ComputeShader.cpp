@@ -165,7 +165,7 @@ void ComputeShader::load(Scene::Collecter& collecter) {}
 
 void ComputeShader::update() {
     UINT count = 256;
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
+    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
     //global.seed = Utility::Random::getInstance().range(0, (int)(INT_MAX / 2));
     global.deltaTime = Utility::Time::getInstance().getDeltaTime();
@@ -175,7 +175,7 @@ void ComputeShader::update() {
     mComputeShader->set();
 
     ID3D11UnorderedAccessView* nullUAV = nullptr;
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, &nullUAV, nullptr);
 
     //mText->setText(Utility::StringBuilder("") << global.seed);
     //Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());

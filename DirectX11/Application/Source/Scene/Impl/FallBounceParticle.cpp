@@ -105,12 +105,12 @@ FallBounceParticle::FallBounceParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
         for (int i = 0; i < COUNT; i++) {
             particle[i] = Particle{ -1.0f,Math::Vector3::ZERO,Math::Vector3::ZERO,Math::Vector3::ZERO, Graphics::Color4::WHITE };
         }
-        cs->addUAVEnableVertexBuffer(0, particle, 0);
+        cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
         std::vector<int> randomSeed{ Utility::Random::getInstance().range(0,RANDOM_MAX) };
 
-        cs->addUAV(1, randomSeed);
+        cs->addUAV(0, randomSeed);
 
         mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
             Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
