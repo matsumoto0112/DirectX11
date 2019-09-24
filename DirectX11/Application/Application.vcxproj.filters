@@ -120,6 +120,7 @@
     <FxCompile Include="Resources\Shader\Particle\Flash_CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Flash_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Flash_GS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Flash_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

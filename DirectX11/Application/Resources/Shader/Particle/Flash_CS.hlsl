@@ -30,19 +30,6 @@ cbuffer GlobalData : register(b0)
     float3 pos;
 };
 
-struct Graph
-{
-    float startMin;
-    float startMax;
-    float endMin;
-    float endMax;
-};
-
-float getT(const Graph g, float t)
-{
-    return randomRange(lerp(g.startMin, g.endMin, t), lerp(g.startMax, g.endMax, t));
-}
-
 RWByteAddressBuffer particles : register(u1);
 
 float3 getPosition(int index)
@@ -62,8 +49,8 @@ float getLifeTime(int index)
 
 float getRandomLifeTime()
 {
-    static const float minLifeTime = 5.0f;
-    static const float maxLifeTime = 7.0f;
+    static const float minLifeTime = 1.0f;
+    static const float maxLifeTime = 1.0f;
     return randomRange(minLifeTime, maxLifeTime);
 }
 
@@ -134,11 +121,9 @@ void main(const CSInput input)
     }
     else
     {
-        //if (emit == input.groupIndex)
+        if (emit == input.groupIndex)
             resetParticle(addr);
-        //else
-        //{
-        //    particles.Store(addr + COLOR_OFFSET + 4 * 3, asuint(0.0f));
-        //}
+        else
+            particles.Store(addr + COLOR_OFFSET + 4 * 3, asuint(0.0f));
     }
 }

@@ -208,7 +208,7 @@ void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
     renderer->setCurrentPerspectiveCamera(m3DCamera.get());
     m3DCamera->render();
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(245.0f / 255.0f, 242.0f / 255.0f, 66.0f / 255.0f, 1.0f));
     Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();

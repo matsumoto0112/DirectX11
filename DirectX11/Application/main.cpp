@@ -57,10 +57,6 @@ private:
         window->setProcedureEvent(new Window::CloseProc());
 
         mSceneManager = std::make_unique<Scene::Manager>();
-        //mSceneManager->registerScene(Define::SceneType::MainPlay, std::make_unique<Main>());
-        //mSceneManager->registerScene(Define::SceneType::ParticleTest, std::make_unique<ParticleTest>());
-        //mSceneManager->registerScene(Define::SceneType::ComputeShader, std::make_unique<ComputeShader>());
-        //mSceneManager->registerScene(Define::SceneType::RandomColorParticle, std::make_unique<RandomColorParticle>());
 
         using Define::SceneType;
         mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());

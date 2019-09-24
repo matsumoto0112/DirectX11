@@ -25,7 +25,7 @@ static constexpr int THREAD_X = 16, THREAD_Y = 16;
 static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 16;
+const int NUM = 8;
 
 struct Particle {
     float lifeTime;
@@ -42,6 +42,15 @@ struct GlobalData {
     float dummy[1];
 };
 
+struct Lerp {
+    Math::Vector3 start;
+    Math::Vector3 end;
+
+    Math::Vector3 operator()(float t) {
+        return start * (1.0f - t) + end * t;
+    }
+};
+
 std::vector<std::unique_ptr<Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
@@ -51,9 +60,8 @@ GlobalData mGlobal;
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
 int mNum;
-float mAngle;
-float mRadius;
 Math::Vector3 mCameraPos, mCameraLookat;
+Lerp mLerp;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -87,7 +95,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Flash_GS");
-    auto ps = std::make_shared<Graphics::PixelShader>("2D/Texture2D_PS");
+    auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
 
     const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
     {
@@ -141,9 +149,9 @@ FlashParticle::FlashParticle() {    //カメラの初期化
 
     mGlobal.emit = -1;
     mNum = NUM;
-    mAngle = 0.0f;
-    mRadius = 10.0f;
     mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance().getTexture()->getResource(Define::TextureType::Circle));
+    mLerp.start = Math::Vector3(-30, -10, 0);
+    mLerp.end = Math::Vector3(30, 10, 0);
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");
@@ -186,15 +194,16 @@ void FlashParticle::update() {
 
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
 
+    float t = (1.0f - mTimer->getCurrentTime() / mTimer->getLimitTime()) * 5.0f;
+    Math::MathUtility::clamp(t, 0.0f, 1.0f);
+    mGlobal.pos = mLerp(t);
+
+    int e = (mGlobal.emit + 1)/* % (THREAD_X * THREAD_Y)*/;
+    mGlobal.emit = e;
+    mCB->setBuffer(mGlobal);
+    mCB->sendBuffer();
     for (int i = 0; i < mNum; i++) {
-        mGlobal.emit = (mGlobal.emit + 1) % (THREAD_X * THREAD_Y);
-        mAngle += 360.0f * Utility::Time::getInstance().getDeltaTime();
-        float x = Math::MathUtility::cos(mAngle) * mRadius;
-        float z = Math::MathUtility::sin(mAngle) * mRadius;
-        Math::Vector3 pos(x, 0, z);
-        mGlobal.pos = pos;
-        mCB->setBuffer(mGlobal);
-        mCB->sendBuffer();
+
         mGPUParticle[i]->simulate();
     }
 }
@@ -209,12 +218,11 @@ void FlashParticle::draw(Framework::Graphics::IRenderer* renderer) {
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     renderer->setCurrentPerspectiveCamera(m3DCamera.get());
-    renderer->setCurrentOrthographicCamera(m2DCamera.get());
     m3DCamera->setPosition(mCameraPos);
     m3DCamera->setLookat(mCameraLookat);
     m3DCamera->render();
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(245.0f / 255.0f, 242.0f / 255.0f, 66.0f / 255.0f, 0.1f));
     Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
