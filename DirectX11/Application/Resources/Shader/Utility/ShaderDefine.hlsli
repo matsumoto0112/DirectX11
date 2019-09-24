@@ -119,6 +119,21 @@ float3 getWorldNormal(float4 nor4, matrix world)
     return normalize(mul(nor4, world).xyz);
 }
 
+matrix createViewMatrix(float3 eye, float3 at, float3 up)
+{
+    const float3 zaxis = normalize(at - eye);
+    const float3 xaxis = normalize(cross(up, zaxis));
+    const float3 yaxis = cross(zaxis, xaxis);
+
+    return float4x4(
+        xaxis.x,                    yaxis.x,            zaxis.x,        0.0f,
+        xaxis.y,                    yaxis.y,            zaxis.y,        0.0f,
+        zaxis.z,                    yaxis.z,            zaxis.z,        0.0f,
+        -dot(xaxis, eye),   -dot(yaxis, eye),   -dot(zaxis, eye),       1.0f
+    );
+
+}
+
 matrix MVP()
 {
     matrix res = mul(mat.world, mat.view);

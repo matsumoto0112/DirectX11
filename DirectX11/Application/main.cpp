@@ -32,6 +32,7 @@
 #include "Source/Scene/Impl/FallBounceRotateParticle.h"
 #include "Source/Scene/Impl/SpotInstancerParticle.h"
 #include "Source/Scene/Impl/FireworkParticle.h"
+#include "Source/Scene/Impl/FlashParticle.h"
 
 using namespace Framework;
 
@@ -68,7 +69,8 @@ private:
         mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
         mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
         mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
-        mSceneManager->loadScene(SceneType::FireworkParticle);
+        mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
+        mSceneManager->loadScene(SceneType::FlashParticle);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
@@ -77,6 +79,7 @@ private:
         ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
         ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);
         ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
+        ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

@@ -8,6 +8,7 @@ namespace Define {
 */
 enum class TextureType {
     Smoke,
+    Circle,
 };
 
 /**
@@ -17,6 +18,7 @@ enum class TextureType {
 class TextureName {
 public:
     static const std::string SMOKE;
+    static const std::string CIRCLE;
 };
 
 } //Define 
