@@ -4,8 +4,8 @@
 #define THREAD_Y (16)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (1)
-#define DISPATCH_Y (1)
+#define DISPATCH_X (4)
+#define DISPATCH_Y (4)
 #define DISPATCH_Z (1)
 
 struct Particle
@@ -49,14 +49,14 @@ float getLifeTime(int index)
 
 float getRandomLifeTime()
 {
-    static const float minLifeTime = 1.0f;
-    static const float maxLifeTime = 1.0f;
+    static const float minLifeTime = 0.25f;
+    static const float maxLifeTime = 0.5f;
     return randomRange(minLifeTime, maxLifeTime);
 }
 
 float3 getRandomPosition()
 {
-    static const float Variation = 1.0f;
+    static const float Variation = 0.25f;
     const float x = randomRange(-Variation, Variation);
     const float y = randomRange(-Variation, Variation);
     const float z = randomRange(-Variation, Variation);
@@ -65,7 +65,7 @@ float3 getRandomPosition()
 
 float3 getRandomVelocity()
 {
-    float3 res = float3(0.0f, 1.0f, 0.0f);
+    float3 res = float3(0.0f, 20.0f, 0.0f);
     return res;
 }
 

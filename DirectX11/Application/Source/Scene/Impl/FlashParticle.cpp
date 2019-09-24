@@ -22,10 +22,10 @@ using namespace Framework;
 
 namespace {
 static constexpr int THREAD_X = 16, THREAD_Y = 16;
-static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
+static constexpr int DISPATCH_X = 4, DISPATCH_Y = 4;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 8;
+const int NUM = 1;
 
 struct Particle {
     float lifeTime;
@@ -150,8 +150,8 @@ FlashParticle::FlashParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     mGlobal.emit = -1;
     mNum = NUM;
     mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance().getTexture()->getResource(Define::TextureType::Circle));
-    mLerp.start = Math::Vector3(-30, -10, 0);
-    mLerp.end = Math::Vector3(30, 10, 0);
+    mLerp.start = Math::Vector3(30, 10, 0);
+    mLerp.end = Math::Vector3(-30, -10, 0);
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");
@@ -194,16 +194,14 @@ void FlashParticle::update() {
 
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
 
-    float t = (1.0f - mTimer->getCurrentTime() / mTimer->getLimitTime()) * 5.0f;
+    float t = (1.0f - mTimer->getCurrentTime() / mTimer->getLimitTime());
     Math::MathUtility::clamp(t, 0.0f, 1.0f);
     mGlobal.pos = mLerp(t);
 
-    int e = (mGlobal.emit + 1)/* % (THREAD_X * THREAD_Y)*/;
-    mGlobal.emit = e;
+    mGlobal.emit = mTimer->isTime() ? -1 : (mGlobal.emit + 1) /*% (THREAD_X * THREAD_Y)*/;
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
     for (int i = 0; i < mNum; i++) {
-
         mGPUParticle[i]->simulate();
     }
 }
