@@ -133,6 +133,7 @@ FireworkParticle::FireworkParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
+    mNum = NUM;
 
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");

@@ -187,7 +187,9 @@ FlashParticle::FlashParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
 
 FlashParticle::~FlashParticle() {}
 
-void FlashParticle::load(Scene::Collecter& collecter) {}
+void FlashParticle::load(Scene::Collecter& collecter) {
+    mTimer->init();
+}
 
 void FlashParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
