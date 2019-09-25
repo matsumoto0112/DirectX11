@@ -144,14 +144,14 @@ FlashParticle::FlashParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
 
-    mTimer = std::make_unique<Utility::Timer>(1.0f);
+    mTimer = std::make_unique<Utility::Timer>(0.5f);
     mTimer->init();
 
     mGlobal.emit = -1;
     mNum = NUM;
     mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance().getTexture()->getResource(Define::TextureType::Circle));
-    mLerp.start = Math::Vector3(30, 10, 0);
-    mLerp.end = Math::Vector3(-30, -10, 0);
+    mLerp.start = Math::Vector3(50, 10, 0);
+    mLerp.end = Math::Vector3(-50, -10, 0);
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");

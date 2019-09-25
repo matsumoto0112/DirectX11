@@ -65,8 +65,8 @@ float3 getRandomPosition()
 
 float3 getRandomVelocity()
 {
-    float3 res = float3(0.0f, 20.0f, 0.0f);
-    return res;
+    const float y = randomRange(5.0f, 20.0f);
+    return float3(0, y, 0);
 }
 
 float3 getRandomScale()
