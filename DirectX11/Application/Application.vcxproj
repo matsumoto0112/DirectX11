@@ -152,6 +152,7 @@
     <ClCompile Include="Source\Scene\Impl\Main.cpp" />
     <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\ShotParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\SpotInstancerParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
     <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Source\Scene\Impl\Main.h" />
     <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\ShotParticle.h" />
     <ClInclude Include="Source\Scene\Impl\SpotInstancerParticle.h" />
     <ClInclude Include="Source\Scene\Impl\Title.h" />
     <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
@@ -489,6 +491,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\ShotParticle_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\Shader\Particle\SpotInstancer_CS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
@@ -525,6 +535,7 @@
   <ItemGroup>
     <None Include="Resources\Shader\Compute\ComputeShaderDefine.hlsli" />
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
+    <None Include="Resources\Shader\Utility\Util.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

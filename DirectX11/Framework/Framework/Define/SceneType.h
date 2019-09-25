@@ -27,6 +27,7 @@ enum class SceneType {
     SpotInstancerParticle,
     FireworkParticle,
     FlashParticle,
+    ShotParticle,
 };
 
 } //Define 
