@@ -164,53 +164,53 @@ std::unique_ptr<Model> FBXLoader::load(const std::string& filepath) {
     return std::make_unique<Model>(std::move(meshes), std::move(materials));
 }
 
-std::unique_ptr<AnimationModel> FBXLoader::loadWithAnimation(const std::string& filepath) {
-    std::vector<std::unique_ptr<Mesh>> meshes;
-    mSets.clear();
-    FbxScene* scene = importScene(filepath);
-
-    std::vector<std::unique_ptr<Material>> materials;
-    const int matNum = scene->GetSrcObjectCount<FbxSurfaceMaterial>();
-    std::string texPath = createModelTexturePath(filepath);
-    const int meshNum = scene->GetMemberCount<FbxMesh>();
-    std::vector<Bone*> bones;
-    std::unique_ptr<Animation> animation = std::make_unique<Animation>();
-
-    FbxArray<FbxString*> animNames;
-    scene->FillAnimStackNameArray(animNames);
-    FbxTakeInfo* take = scene->GetTakeInfo(animNames[0]->Buffer());
-    FbxLongLong start = take->mLocalTimeSpan.GetStart().Get();
-    FbxLongLong end = take->mLocalTimeSpan.GetStop().Get();
-    FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
-    const int animFrameNum = (int)((end - start) / fps60);
-    mStartFrame = (int)(start / fps60);
-
-    std::unique_ptr<Motion> motion = std::make_unique<Motion>(animFrameNum, Define::Animation::BONE_MAX);
-
-
-    for (int i = 0; i < meshNum; i++) {
-        FbxMesh* mesh = scene->GetMember<FbxMesh>(i);
-        meshes.emplace_back(loadMeshWithAnimation(mesh, &bones, animation.get(), motion.get()));
-        meshes[i]->matIndex = i;
-        FbxLayerElementMaterial* layerElement = mesh->GetElementMaterial();
-        if (layerElement != nullptr) {
-            int index = layerElement->GetIndexArray().GetAt(0);
-            materials.emplace_back(loadMaterial(texPath, mesh->GetNode()->GetMaterial(index)));
-        }
-        else {
-            materials.emplace_back(loadMaterial(texPath, mesh->GetNode()->GetMaterial(0)));
-        }
-    }
-
-    animation->addMotion(0, std::move(motion));
-    std::vector<std::unique_ptr<Bone>> pBones(bones.size());
-    const int size = bones.size();
-    for (int i = 0; i < size; i++) {
-        pBones[i] = std::unique_ptr<Bone>(bones[i]);
-    }
-
-    return std::make_unique<AnimationModel>(std::move(meshes), std::move(materials), std::move(pBones), std::move(animation));
-}
+//std::unique_ptr<AnimationModel> FBXLoader::loadWithAnimation(const std::string& filepath) {
+//    std::vector<std::unique_ptr<Mesh>> meshes;
+//    mSets.clear();
+//    FbxScene* scene = importScene(filepath);
+//
+//    std::vector<std::unique_ptr<Material>> materials;
+//    const int matNum = scene->GetSrcObjectCount<FbxSurfaceMaterial>();
+//    std::string texPath = createModelTexturePath(filepath);
+//    const int meshNum = scene->GetMemberCount<FbxMesh>();
+//    std::vector<Bone*> bones;
+//    std::unique_ptr<Animation> animation = std::make_unique<Animation>();
+//
+//    FbxArray<FbxString*> animNames;
+//    scene->FillAnimStackNameArray(animNames);
+//    FbxTakeInfo* take = scene->GetTakeInfo(animNames[0]->Buffer());
+//    FbxLongLong start = take->mLocalTimeSpan.GetStart().Get();
+//    FbxLongLong end = take->mLocalTimeSpan.GetStop().Get();
+//    FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
+//    const int animFrameNum = (int)((end - start) / fps60);
+//    mStartFrame = (int)(start / fps60);
+//
+//    std::unique_ptr<Motion> motion = std::make_unique<Motion>(animFrameNum, Define::Animation::BONE_MAX);
+//
+//
+//    for (int i = 0; i < meshNum; i++) {
+//        FbxMesh* mesh = scene->GetMember<FbxMesh>(i);
+//        meshes.emplace_back(loadMeshWithAnimation(mesh, &bones, animation.get(), motion.get()));
+//        meshes[i]->matIndex = i;
+//        FbxLayerElementMaterial* layerElement = mesh->GetElementMaterial();
+//        if (layerElement != nullptr) {
+//            int index = layerElement->GetIndexArray().GetAt(0);
+//            materials.emplace_back(loadMaterial(texPath, mesh->GetNode()->GetMaterial(index)));
+//        }
+//        else {
+//            materials.emplace_back(loadMaterial(texPath, mesh->GetNode()->GetMaterial(0)));
+//        }
+//    }
+//
+//    animation->addMotion(0, std::move(motion));
+//    std::vector<std::unique_ptr<Bone>> pBones(bones.size());
+//    const int size = bones.size();
+//    for (int i = 0; i < size; i++) {
+//        pBones[i] = std::unique_ptr<Bone>(bones[i]);
+//    }
+//
+//    return std::make_unique<AnimationModel>(std::move(meshes), std::move(materials), std::move(pBones), std::move(animation));
+//}
 
 bool FBXLoader::initializeSDKObjects() {
     mFbxManager = FbxManager::Create();
@@ -386,155 +386,154 @@ void FBXLoader::loadColors(FbxMesh* mesh, std::vector<MeshVertex>* vertices) {
     }
 }
 
-std::unique_ptr<Mesh> FBXLoader::loadMeshWithAnimation(FbxMesh* mesh, std::vector<Bone*>* bones,
-    Animation* animation, Motion* motion) {
-    std::unique_ptr<Mesh> result = std::make_unique<Mesh>();
-    int matIndex = 0;
-    std::vector<WORD> indices = loadIndices(mesh);
-    std::vector<AnimVert> vertices = loadVerticesWithBone(mesh);
-    const int vertexSize = vertices.size();
-
-    //スキンの数を取得
-    int skinCount = mesh->GetDeformerCount(FbxSkin::eSkin);
-    if (skinCount == 0) {
-    }
-
-    FbxSkin* skin = static_cast<FbxSkin*>(mesh->GetDeformer(0, FbxDeformer::eSkin));
-    int boneNum = skin->GetClusterCount();
-
-    //メッシュに紐づいているボーン分ループ
-    for (int bone = 0; bone < boneNum; bone++) {
-        //メッシュに紐づいているbone番目のボーンを取得
-        FbxCluster* cluster = skin->GetCluster(bone);
-        const char* name = cluster->GetLink()->GetName();
-
-
-        //今まで読み込んだボーンか調べる
-        int bone_no = findBone(mSets, name); //ボーン番号
-
-        //読み込んでいないボーンだったら
-        if (bone_no == -1) {
-            //新しく追加しIDを取得
-            bone_no = mSets.size();
-            mSets.emplace(name, bone_no);
-
-            //新しくボーン作成
-            Bone* pBone = new Bone(bone_no);
-
-            //初期姿勢行列
-            FbxAMatrix initMat;
-            cluster->GetTransformLinkMatrix(initMat);
-            initMat.mData[0][1] *= -1;
-            initMat.mData[0][2] *= -1;
-            initMat.mData[1][0] *= -1;
-            initMat.mData[2][0] *= -1;
-            initMat.mData[3][0] *= -1;
-            FbxAMatrix mat2;
-            cluster->GetTransformMatrix(mat2);
-            mat2.mData[0][1] *= -1;
-            mat2.mData[0][2] *= -1;
-            mat2.mData[1][0] *= -1;
-            mat2.mData[2][0] *= -1;
-            mat2.mData[3][0] *= -1;
-
-            ////オフセット行列に初期姿勢の逆行列を代入
-            FbxAMatrix offset = initMat.Inverse() * mat2;
-            FbxVector4 T = mesh->GetNode()->GetGeometricTranslation(FbxNode::eSourcePivot);
-            FbxVector4 R = mesh->GetNode()->GetGeometricRotation(FbxNode::eSourcePivot);
-            FbxVector4 S = mesh->GetNode()->GetGeometricScaling(FbxNode::eSourcePivot);
-            FbxAMatrix TRS = FbxAMatrix(T, R, S);
-
-
-            FbxDouble* offsetM = (FbxDouble*)offset;
-            Math::Matrix4x4 mat;
-            for (int i = 0; i < 16; i++) {
-                mat.m[i / 4][i % 4] = (float)offsetM[i];
-            }
-            //ボーンにオフセット行列をセット
-            pBone->setOffsetMatrix(mat);
-
-            //ボーンIDのキーフレームにおける行列読み込み
-            //loadKeyFrame(animNames[0], bone_no, cluster->GetLink(), motion);
-            loadKeyFrame("default", bone_no, cluster->GetLink(), motion);
-            //ボーンリストにボーン追加
-            bones->emplace_back(pBone);
-        }
-        else {
-        }
-        //ウェイトの数
-        const int weightCount = cluster->GetControlPointIndicesCount();
-        //ウェイト頂点インデックス配列
-        int* weightIndices = cluster->GetControlPointIndices();
-        //ウェイト
-        double* weight = cluster->GetControlPointWeights();
-        int* index = mesh->GetPolygonVertices();
-
-        for (int i = 0; i < weightCount; i++) {
-            int wgtIdx2 = weightIndices[i];
-
-            for (int vtxIdx = 0; vtxIdx < vertexSize; vtxIdx++) {
-                //頂点の中からウェイトがある頂点のインデックスを見つける
-                if (index[vtxIdx] != wgtIdx2)continue;
-                int wc = 0;
-                //未使用のウェイトインデックスを検索
-                for (wc = 0; wc < 4; wc++) {
-                    if (vertices[vtxIdx].weight[wc] <= 0) {
-                        break;
-                    }
-                }
-                if (4 <= wc) continue;
-                vertices[vtxIdx].weight[wc] = (float)weight[i];
-                vertices[vtxIdx].index[wc] = bone_no;
-            }
-        }
-    }
-
-    const int size = vertices.size();
-    for (int i = 0; i < size; i++) {
-        float n = 0.0f;
-        for (int weightCount = 0; weightCount < 4; weightCount++) {
-            if (vertices[i].weight[weightCount] <= 0.0f) {
-                break;
-            }
-            n += vertices[i].weight[weightCount];
-        }
-
-        for (int weightCount = 0; weightCount < 4; weightCount++) {
-            vertices[i].weight[weightCount] /= n;
-        }
-    }
-
-LoadEnd:
-    result->mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, indices,
-        PrimitiveTopology::TriangleList);
-    //result->mVShader = std::make_unique<VertexShader>("AnimationVS");
-    //result->mPShader = std::make_unique<PixelShader>("AnimationPS");
-
-    return std::move(result);
-}
-
-
-
-
-std::vector<AnimVert> FBXLoader::loadVerticesWithBone(FbxMesh * mesh) {
-    const int vertCount = mesh->GetPolygonVertexCount();
-    std::vector<AnimVert> vertices(vertCount);
-    //一旦通常メッシュ頂点として読み込む
-    std::vector<MeshVertex> meshVertices(vertCount);
-    loadPositions(mesh, &meshVertices);
-    loadNormals(mesh, &meshVertices);
-    loadUVs(mesh, &meshVertices);
-    loadColors(mesh, &meshVertices);
-    //読み込んだデータをアニメーション用頂点に流しこむ
-    for (int i = 0; i < vertCount; i++) {
-        vertices[i].pos = meshVertices[i].pos;
-        vertices[i].normal = meshVertices[i].normal;
-        vertices[i].uv = meshVertices[i].uv;
-        vertices[i].color = meshVertices[i].color;
-    }
-
-    return vertices;
-}
+//std::unique_ptr<Mesh> FBXLoader::loadMeshWithAnimation(FbxMesh* mesh, std::vector<Bone*>* bones,
+//    Animation* animation, Motion* motion) {
+//    std::unique_ptr<Mesh> result = std::make_unique<Mesh>();
+//    int matIndex = 0;
+//    std::vector<WORD> indices = loadIndices(mesh);
+//    std::vector<AnimVert> vertices = loadVerticesWithBone(mesh);
+//    const int vertexSize = vertices.size();
+//
+//    //スキンの数を取得
+//    int skinCount = mesh->GetDeformerCount(FbxSkin::eSkin);
+//    if (skinCount == 0) {
+//    }
+//
+//    FbxSkin* skin = static_cast<FbxSkin*>(mesh->GetDeformer(0, FbxDeformer::eSkin));
+//    int boneNum = skin->GetClusterCount();
+//
+//    //メッシュに紐づいているボーン分ループ
+//    for (int bone = 0; bone < boneNum; bone++) {
+//        //メッシュに紐づいているbone番目のボーンを取得
+//        FbxCluster* cluster = skin->GetCluster(bone);
+//        const char* name = cluster->GetLink()->GetName();
+//
+//
+//        //今まで読み込んだボーンか調べる
+//        int bone_no = findBone(mSets, name); //ボーン番号
+//
+//        //読み込んでいないボーンだったら
+//        if (bone_no == -1) {
+//            //新しく追加しIDを取得
+//            bone_no = mSets.size();
+//            mSets.emplace(name, bone_no);
+//
+//            //新しくボーン作成
+//            Bone* pBone = new Bone(bone_no);
+//
+//            //初期姿勢行列
+//            FbxAMatrix initMat;
+//            cluster->GetTransformLinkMatrix(initMat);
+//            initMat.mData[0][1] *= -1;
+//            initMat.mData[0][2] *= -1;
+//            initMat.mData[1][0] *= -1;
+//            initMat.mData[2][0] *= -1;
+//            initMat.mData[3][0] *= -1;
+//            FbxAMatrix mat2;
+//            cluster->GetTransformMatrix(mat2);
+//            mat2.mData[0][1] *= -1;
+//            mat2.mData[0][2] *= -1;
+//            mat2.mData[1][0] *= -1;
+//            mat2.mData[2][0] *= -1;
+//            mat2.mData[3][0] *= -1;
+//
+//            ////オフセット行列に初期姿勢の逆行列を代入
+//            FbxAMatrix offset = initMat.Inverse() * mat2;
+//            FbxVector4 T = mesh->GetNode()->GetGeometricTranslation(FbxNode::eSourcePivot);
+//            FbxVector4 R = mesh->GetNode()->GetGeometricRotation(FbxNode::eSourcePivot);
+//            FbxVector4 S = mesh->GetNode()->GetGeometricScaling(FbxNode::eSourcePivot);
+//            FbxAMatrix TRS = FbxAMatrix(T, R, S);
+//
+//
+//            FbxDouble* offsetM = (FbxDouble*)offset;
+//            Math::Matrix4x4 mat;
+//            for (int i = 0; i < 16; i++) {
+//                mat.m[i / 4][i % 4] = (float)offsetM[i];
+//            }
+//            //ボーンにオフセット行列をセット
+//            pBone->setOffsetMatrix(mat);
+//
+//            //ボーンIDのキーフレームにおける行列読み込み
+//            //loadKeyFrame(animNames[0], bone_no, cluster->GetLink(), motion);
+//            loadKeyFrame("default", bone_no, cluster->GetLink(), motion);
+//            //ボーンリストにボーン追加
+//            bones->emplace_back(pBone);
+//        }
+//        else {
+//        }
+//        //ウェイトの数
+//        const int weightCount = cluster->GetControlPointIndicesCount();
+//        //ウェイト頂点インデックス配列
+//        int* weightIndices = cluster->GetControlPointIndices();
+//        //ウェイト
+//        double* weight = cluster->GetControlPointWeights();
+//        int* index = mesh->GetPolygonVertices();
+//
+//        for (int i = 0; i < weightCount; i++) {
+//            int wgtIdx2 = weightIndices[i];
+//
+//            for (int vtxIdx = 0; vtxIdx < vertexSize; vtxIdx++) {
+//                //頂点の中からウェイトがある頂点のインデックスを見つける
+//                if (index[vtxIdx] != wgtIdx2)continue;
+//                int wc = 0;
+//                //未使用のウェイトインデックスを検索
+//                for (wc = 0; wc < 4; wc++) {
+//                    if (vertices[vtxIdx].weight[wc] <= 0) {
+//                        break;
+//                    }
+//                }
+//                if (4 <= wc) continue;
+//                vertices[vtxIdx].weight[wc] = (float)weight[i];
+//                vertices[vtxIdx].index[wc] = bone_no;
+//            }
+//        }
+//    }
+//
+//    const int size = vertices.size();
+//    for (int i = 0; i < size; i++) {
+//        float n = 0.0f;
+//        for (int weightCount = 0; weightCount < 4; weightCount++) {
+//            if (vertices[i].weight[weightCount] <= 0.0f) {
+//                break;
+//            }
+//            n += vertices[i].weight[weightCount];
+//        }
+//
+//        for (int weightCount = 0; weightCount < 4; weightCount++) {
+//            vertices[i].weight[weightCount] /= n;
+//        }
+//    }
+//
+//    result->mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, indices,
+//        PrimitiveTopology::TriangleList);
+//    //result->mVShader = std::make_unique<VertexShader>("AnimationVS");
+//    //result->mPShader = std::make_unique<PixelShader>("AnimationPS");
+//
+//    return std::move(result);
+//}
+//
+//
+//
+//
+//std::vector<AnimVert> FBXLoader::loadVerticesWithBone(FbxMesh * mesh) {
+//    const int vertCount = mesh->GetPolygonVertexCount();
+//    std::vector<AnimVert> vertices(vertCount);
+//    //一旦通常メッシュ頂点として読み込む
+//    std::vector<MeshVertex> meshVertices(vertCount);
+//    loadPositions(mesh, &meshVertices);
+//    loadNormals(mesh, &meshVertices);
+//    loadUVs(mesh, &meshVertices);
+//    loadColors(mesh, &meshVertices);
+//    //読み込んだデータをアニメーション用頂点に流しこむ
+//    for (int i = 0; i < vertCount; i++) {
+//        vertices[i].pos = meshVertices[i].pos;
+//        vertices[i].normal = meshVertices[i].normal;
+//        vertices[i].uv = meshVertices[i].uv;
+//        vertices[i].color = meshVertices[i].color;
+//    }
+//
+//    return vertices;
+//}
 
 
 

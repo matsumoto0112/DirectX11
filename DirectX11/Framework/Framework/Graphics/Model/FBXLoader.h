@@ -47,12 +47,12 @@ public:
     * @return 読み込んだモデルデータ
     */
     std::unique_ptr<Model> load(const std::string& filepath);
-    /**
-    * @brief モデルとアニメーションの読み込み
-    * @param path Resources以下からのモデルへのパス
-    * @return 読み込んだアニメーション付きモデルデータ
-    */
-    std::unique_ptr<AnimationModel> loadWithAnimation(const std::string& filepath);
+    ///**
+    //* @brief モデルとアニメーションの読み込み
+    //* @param path Resources以下からのモデルへのパス
+    //* @return 読み込んだアニメーション付きモデルデータ
+    //*/
+    //std::unique_ptr<AnimationModel> loadWithAnimation(const std::string& filepath);
 private:
     /**
     * @brief SDKの初期化
@@ -88,9 +88,9 @@ private:
     void loadUVs(FbxMesh* mesh, std::vector<MeshVertex>* vertices);
     void loadColors(FbxMesh* mesh, std::vector<MeshVertex>* vertices);
 
-    std::vector<AnimVert> loadVerticesWithBone(FbxMesh* mesh);
-    std::unique_ptr<Mesh> loadMeshWithAnimation(FbxMesh* mesh,
-        std::vector<Bone*>* bones, Animation* animation, Motion* motion);
+    //std::vector<AnimVert> loadVerticesWithBone(FbxMesh* mesh);
+    //std::unique_ptr<Mesh> loadMeshWithAnimation(FbxMesh* mesh,
+    //    std::vector<Bone*>* bones, Animation* animation, Motion* motion);
 
     void loadKeyFrame(const std::string& name, int bone, FbxNode* boneNode, Motion* motion);
 

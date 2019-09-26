@@ -92,7 +92,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Flash_GS");
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
-    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Flash_VS");
+    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Flash);
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -144,36 +144,9 @@ FlashParticle::FlashParticle() {    //カメラの初期化
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");
     mWindow->addItem(mText);
-
-#define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,static_cast<float>(type),[&](float val){\
-        type = static_cast<int>(val); \
-    }); \
-        mWindow->addItem(field); \
-        field->setMinValue(min); \
-        field->setMaxValue(max); \
-    }
-
-    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
-
-#define ADD_CAMERA_PARAMETER_CHANGE_FIELD(name,type,min,max) { \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,type,[&](float val){ \
-        type = val; \
-    }); \
-    mWindow->addItem(field); \
-    field->setMinValue(min); \
-    field->setMaxValue(max); \
-    }
-
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_X, mCameraPos.x, -30.0f, 30.0f);
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_Y, mCameraPos.y, -30.0f, 30.0f);
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_Z, mCameraPos.z, -30.0f, 30.0f);
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_CX, mCameraLookat.x, -30.0f, 30.0f);
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_CY, mCameraLookat.y, -30.0f, 30.0f);
-    ADD_CAMERA_PARAMETER_CHANGE_FIELD(CAMERA_CZ, mCameraLookat.z, -30.0f, 30.0f);
 }
 
-FlashParticle::~FlashParticle() {}
+FlashParticle::~FlashParticle() { }
 
 void FlashParticle::load(Scene::Collecter& collecter) {
     mTimer->init();
@@ -223,7 +196,7 @@ void FlashParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mWindow->draw();
 }
 
-void FlashParticle::end() {}
+void FlashParticle::end() { }
 
 Define::SceneType FlashParticle::next() {
     return Define::SceneType();

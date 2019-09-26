@@ -118,6 +118,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\VertexShaderResourceStorage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -288,5 +289,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\VertexShaderResourceStorage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\GeometoryShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.h" />
   </ItemGroup>
 </Project>

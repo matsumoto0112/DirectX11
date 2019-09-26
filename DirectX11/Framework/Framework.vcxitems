@@ -80,6 +80,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Texture\TextureLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\FBXModelResourceStorage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\LoadResourceList.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\PixelShaderResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.cpp" />
@@ -129,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\GeometoryShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Texture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />
@@ -236,6 +238,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Range.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\AbstractResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\FBXModelResourceStorage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\LoadResourceList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\PixelShaderResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.h" />
