@@ -19,6 +19,8 @@ enum class PixelShaderType {
     Texture2D_Inversion,
     Model_Shadow_Diffuse,
     Model_Shadow_Color,
+    CubeParticle,
+    Flash,
 };
 
 } //Define 

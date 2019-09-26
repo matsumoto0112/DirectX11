@@ -1,4 +1,4 @@
-#include "SpotInstancerParticle.h"
+#include "WormholeParticle.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
@@ -10,13 +10,13 @@
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/Camera/OrthographicCamera.h"
 #include "Framework/Utility/Time.h"
-#include "Framework/Utility/Random.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
 #include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Shader/GeometoryShader.h"
-#include "Framework/Utility/Timer.h"
 #include "Framework/Graphics/Particle/GPUParticle.h"
+#include "Framework/Utility/Timer.h"
+#include "Framework/Utility/Random.h"
 
 using namespace Framework;
 
@@ -25,7 +25,7 @@ static constexpr int THREAD_X = 32, THREAD_Y = 32;
 static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
 static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
 static constexpr int RANDOM_MAX = 65535;
-const int NUM = 256;
+constexpr int NUM = 64;
 
 struct Particle {
     float lifeTime;
@@ -40,25 +40,24 @@ struct GlobalData {
     float dummy[3];
 };
 
-struct EmitParameter {
-    UINT emitTargetIndex;
+struct ParticleParameter {
+    UINT index;
     Math::Vector3 spot;
     Math::Vector3 center;
-    float dummy[1];
+    float radius;
 };
 
 std::vector<std::unique_ptr<Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
-std::unique_ptr<Graphics::ConstantBuffer<EmitParameter>> mEmitCB; //<! グローバルデータ用コンスタントバッファ
+std::unique_ptr<Graphics::ConstantBuffer<ParticleParameter>> mParameterCB; //<! パラメータ用コンスタントバッファ
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
-std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
-EmitParameter mEmitParameter;
+ParticleParameter mParameter;
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
-float mAngle;
-float mRadius;
 int mNum;
+float mSpeed;
+float mMaxYPosition;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -69,9 +68,10 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 }
 
-SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
+WormholeParticle::WormholeParticle() {
+    //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
-        Math::ViewInfo{ Math::Vector3(0,30,-30),Math::Vector3(0,0,0),Math::Vector3::UP },
+        Math::ViewInfo{ Math::Vector3(0, 30, -30),Math::Vector3(0, 0, 0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
 
     m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
@@ -85,20 +85,20 @@ SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
     }
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
-    mEmitCB = std::make_unique<Graphics::ConstantBuffer<EmitParameter>>(Graphics::ShaderInputType::Compute, 1);
-    auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/SpotInstancer_GS");
-    auto ps = std::make_shared<Graphics::PixelShader>("Particle/CubeParticle_PS");
-    auto vs = std::make_shared<Graphics::VertexShader>("Particle/SpotInstancer_VS");
+    mParameterCB = std::make_unique<Graphics::ConstantBuffer<ParticleParameter>>(Graphics::ShaderInputType::Compute, 1);
+    auto gs = Utility::ResourceManager::getInstance().getGeometoryShader()->getResource(Define::GeometoryShader::SpotInstancer);
+    auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::CubeParticle);
+    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Wormhole);
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
         Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-        auto cs = std::make_shared<Graphics::ComputeShader>("Particle/SpotInstancer_CS", info);
+        auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Wormhole_CS", info);
 
         //パーティクルのデータ作成
         std::vector<Particle> particle(COUNT);
         for (int i = 0; i < COUNT; i++) {
-            particle[i] = Particle{ -1.0f,0.0f,Math::Vector3::ZERO ,Math::Vector3::ZERO, Graphics::Color4(1.0f,1.0f,1.0f,0.0f) };
+            particle[i] = Particle{ -1.0f,0.0f ,Math::Vector3::ZERO,Math::Vector3::ZERO, Graphics::Color4(1.0f,1.0f,1.0f,0.0f) };
         }
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
@@ -108,7 +108,7 @@ SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
         cs->addUAV(0, randomSeed);
 
         mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
-            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
+            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
             cs,
             vs,
             ps,
@@ -128,68 +128,57 @@ SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
 
-    mTimer = std::make_unique<Utility::Timer>(10.0f);
-    mTimer->init();
-
-    mEmitParameter = EmitParameter{ 0 };
-    mEmitParameter.center = Math::Vector3::ZERO;
-    mAngle = 0.0f;
-    mRadius = 10.0f;
-    mNum = (NUM + 1) / 2;
+    mSpeed = 30.0f;
+    mParameter.index = -1;
+    mParameter.spot = Math::Vector3::ZERO;
+    mParameter.radius = 10.0f;
+    mNum = NUM;
+    mMaxYPosition = 20.0f;
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
-#define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,type,[&](float val){\
-        type = val; \
-    }); \
-        mWindow->addItem(field); \
-        field->setMinValue(min); \
-        field->setMaxValue(max); \
-    }
-
     mText = std::make_shared<ImGUI::Text>("");
     mWindow->addItem(mText);
-    ADD_CHANGE_CENTER_FIELD(X, mEmitParameter.center.x, -30.0f, 30.0f);
-    ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y, -30.0f, 30.0f);
-    ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z, -30.0f, 30.0f);
-    ADD_CHANGE_CENTER_FIELD(R, mRadius, -50.0f, 50.0f);
-    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
+
+#define ADD_CHANGE_FIELD(name,var,min,max) { \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,var,[&](float val){var = val;}); \
+    mWindow->addItem(field); \
+    field->setMinValue(min); \
+    field->setMaxValue(max); \
+    }
+
+    ADD_CHANGE_FIELD(RADIUS, mParameter.radius, 0.0f, 30.0f);
+    ADD_CHANGE_FIELD(SPEED, mSpeed, 0.0f, 100.0f);
+    ADD_CHANGE_FIELD(MAX_Y, mMaxYPosition, 0.0f, 100.0f);
 }
 
-SpotInstancerParticle::~SpotInstancerParticle() {}
+WormholeParticle::~WormholeParticle() { }
 
-void SpotInstancerParticle::load(Framework::Scene::Collecter& collecter) {}
+void WormholeParticle::load(Scene::Collecter& collecter) {
+}
 
-void SpotInstancerParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
-
+void WormholeParticle::update() {
     mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
-
-    auto calc = [&]() {
-        float x = Math::MathUtility::cos(mAngle) * mRadius;
-        float z = Math::MathUtility::sin(mAngle) * mRadius;
-        return Math::Vector3(x, 10, z) + mEmitParameter.center;
-    };
-
-    //グローバルデータのセット
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
-    mEmitParameter.emitTargetIndex = (mEmitParameter.emitTargetIndex + 1) % (THREAD_X * THREAD_Y);
 
-    for (size_t i = 0; i < mNum; i++) {
-        mAngle += 360.0f  * Utility::Time::getInstance().getDeltaTime();
-        mEmitParameter.spot = calc();
-        mEmitCB->setBuffer(mEmitParameter);
-        mEmitCB->sendBuffer();
+    mParameter.index = (mParameter.index + 1) % (THREAD_X * THREAD_Y);
+
+    mParameter.spot.y += 1.0f * mSpeed *  Utility::Time::getInstance().getDeltaTime();
+    if (mParameter.spot.y > mMaxYPosition)mParameter.spot.y -= Math::MathUtility::abs(mMaxYPosition) * 2;
+    mParameter.center = mParameter.spot + Math::Vector3(0, -10, 0);
+    mParameterCB->setBuffer(mParameter);
+    mParameterCB->sendBuffer();
+
+    for (int i = 0; i < mNum; i++) {
         mGPUParticle[i]->simulate();
     }
 }
 
-bool SpotInstancerParticle::isEndScene() const {
+bool WormholeParticle::isEndScene() const {
     return false;
 }
 
-void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
+void WormholeParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -202,16 +191,16 @@ void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (size_t i = 0; i < mNum; i++) {
+    for (int i = 0; i < mNum; i++) {
         mGPUParticle[i]->draw();
     }
 
-    mText->setText(Utility::StringBuilder("") << mNum * THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y);
+    mText->setText(Utility::StringBuilder("") << mNum * COUNT);
     mWindow->draw();
 }
 
-void SpotInstancerParticle::end() {}
+void WormholeParticle::end() { }
 
-Define::SceneType SpotInstancerParticle::next() {
+Define::SceneType WormholeParticle::next() {
     return Define::SceneType();
 }

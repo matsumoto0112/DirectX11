@@ -38,6 +38,8 @@ const std::unordered_map<PixelShaderType, std::string> LoadResourceList::PIXEL_S
     {PixelShaderType::Texture2D_Inversion, "2D/Texture2D_Inversion_PS"},
     {PixelShaderType::Model_Shadow_Diffuse, "model/Model_Shadow_Diffuse_PS"},
     {PixelShaderType::Model_Shadow_Color, "model/Model_Shadow_Color_PS"},
+    {PixelShaderType::CubeParticle, "Particle/CubeParticle_PS"},
+    {PixelShaderType::Flash, "Particle/Flash_PS"},
 };
 
 const std::unordered_map<TextureType, std::string> LoadResourceList::TEXTURE_LIST =
@@ -63,6 +65,7 @@ const std::unordered_map<VertexShaderType, std::string> LoadResourceList::VERTEX
     {VertexShaderType::Firework,"Particle/Firework_VS"},
     {VertexShaderType::Flash,"Particle/Flash_VS"},
     {VertexShaderType::SpotInstancer,"Particle/SpotInstancer_VS"},
+    {VertexShaderType::Wormhole,"Particle/Wormhole_VS"},
 };
 
 const std::string LoadResourceList::getGeometoryShaderPath(Define::GeometoryShader type) {

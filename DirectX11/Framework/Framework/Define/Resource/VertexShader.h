@@ -21,6 +21,7 @@ enum class VertexShaderType {
     Firework,
     Flash,
     SpotInstancer,
+    Wormhole,
 };
 
 } //Define 

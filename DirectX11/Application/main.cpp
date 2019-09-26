@@ -34,6 +34,7 @@
 #include "Source/Scene/Impl/FireworkParticle.h"
 #include "Source/Scene/Impl/FlashParticle.h"
 #include "Source/Scene/Impl/ShotParticle.h"
+#include "Source/Scene/Impl/WormholeParticle.h"
 
 using namespace Framework;
 
@@ -68,7 +69,8 @@ private:
         mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
         mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
         mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
-        mSceneManager->loadScene(SceneType::ShotParticle);
+        mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+        mSceneManager->loadScene(SceneType::WormholeParticle);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
@@ -79,6 +81,7 @@ private:
         ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
         ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
         ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
+        ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

@@ -2,6 +2,7 @@
 #include <memory>
 #include "Framework/Utility/Singleton.h"
 #include "Framework/Utility/Resource/FBXModelResourceStorage.h"
+#include "Framework/Utility/Resource/GeometoryShaderResourceStorage.h"
 #include "Framework/Utility/Resource/PixelShaderResourceStorage.h"
 #include "Framework/Utility/Resource/TextureResourceStorage.h"
 #include "Framework/Utility/Resource/VertexShaderResourceStorage.h"
@@ -24,6 +25,10 @@ public:
     */
     VertexShaderResourceStorage* getVertexShader() const { return mVertexShaders.get(); }
     /**
+    * @brief ジオメトリシェーダ管理者の取得
+    */
+    GeometoryShaderResourceStorage* getGeometoryShader() const { return mGeometoryShaders.get(); }
+    /**
     * @brief ピクセルシェーダ管理者の取得
     */
     PixelShaderResourceStorage* getPixelShader() const { return mPixelShaders.get(); }
@@ -42,6 +47,7 @@ protected:
     ResourceManager();
 private:
     std::unique_ptr<VertexShaderResourceStorage> mVertexShaders;
+    std::unique_ptr<GeometoryShaderResourceStorage> mGeometoryShaders;
     std::unique_ptr<PixelShaderResourceStorage> mPixelShaders;
     std::unique_ptr<FBXModelResourceStorage> mFBXModel;
     std::unique_ptr<TextureResourceStorage> mTexture;
