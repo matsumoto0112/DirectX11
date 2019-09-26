@@ -84,10 +84,6 @@ FallParticle::FallParticle() {    //カメラの初期化
     std::vector<int> randomSeed{ 0 };
     cs->addUAV(0, randomSeed);
 
-
-    //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
-
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("SimpleParticleGS");
     auto ps = std::make_shared<Graphics::PixelShader>("2D/Texture2D_Color_PS");

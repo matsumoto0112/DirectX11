@@ -154,9 +154,7 @@ RandomColorParticle::RandomColorParticle() {
     createUAV(sizeof(int), 1, &randomSeed[0], mRandomSeedBuffer, mRandomSeedUAV);
 
     //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
     mTexture = Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke);
-
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mGS = std::make_unique<Graphics::GeometoryShader>("SimpleParticleGS");

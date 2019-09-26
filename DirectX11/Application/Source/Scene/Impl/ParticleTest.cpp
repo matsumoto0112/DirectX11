@@ -29,7 +29,6 @@ ParticleTest::ParticleTest() {
     desc.IndependentBlendEnable = FALSE;
     desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getAddBlendDesc();
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(desc);
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
 
     std::shared_ptr<Graphics::Sprite3D> sprite = std::make_shared<Graphics::Sprite3D>(Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke));
     sprite->setAlpha(0.1f);

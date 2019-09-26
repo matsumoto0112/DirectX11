@@ -80,11 +80,6 @@ FallBounceRotateParticle::FallBounceRotateParticle() {    //カメラの初期化
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
 
-
-
-    //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
-
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Fall_Bounce_Rotate_GS");
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/CubeParticle_PS");

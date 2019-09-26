@@ -16,7 +16,7 @@ enum class PixelShaderType {
     Output_Z,
     Model_Shadow,
     Model_Diffuse_Split4Color,
-    OutPot_Color,
+    Output_Color,
     Texture2D_Inversion,
     Model_Shadow_Diffuse,
     Model_Shadow_Color,

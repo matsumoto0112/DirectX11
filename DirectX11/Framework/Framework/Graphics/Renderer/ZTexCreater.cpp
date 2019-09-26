@@ -14,7 +14,7 @@ ZTexCreater::ZTexCreater(UINT width, UINT height, std::shared_ptr<Effect> effect
         std::make_shared<Graphics::TextureBuffer>(
             Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(width, height));
     mRenderTarget = std::make_unique<Graphics::RenderTarget>(texBuffer, Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
-        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, width, height)),
+        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
         Graphics::SRVFlag::Use);
     mRenderTarget->createDepthStencilView();
     mRenderTarget->setClearColor(Color4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -57,7 +57,7 @@ void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) 
 }
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite3D> sprite) {
-    SpriteRenderer::getInstance().draw(sprite.get(),*mCurrentPerspectiveCamera);
+    SpriteRenderer::getInstance().draw(sprite.get(), *mCurrentPerspectiveCamera);
 }
 
 std::shared_ptr<Texture> ZTexCreater::getRenderedTexture() const {

@@ -23,7 +23,7 @@ public:
     /**
     * @brief リソースをインポートする
     */
-    virtual void importResource(Define::PixelShaderType type, const std::string& filepath) override;
+    virtual void importResource(Define::PixelShaderType type) override;
 };
 
 } //Utility 

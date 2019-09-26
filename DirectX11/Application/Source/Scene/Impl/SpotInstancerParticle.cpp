@@ -84,9 +84,6 @@ SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
 
-    //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
-
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mEmitCB = std::make_unique<Graphics::ConstantBuffer<EmitParameter>>(Graphics::ShaderInputType::Compute, 1);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/SpotInstancer_GS");

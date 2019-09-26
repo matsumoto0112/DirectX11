@@ -76,11 +76,6 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
 
-
-
-    //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
-
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/CubeParticle_GS");
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/CubeParticle_PS");
@@ -162,7 +157,7 @@ void FallBounceParticle::update() {
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    for (int i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mGPUParticle.size(); i++) {
         mGPUParticle[i]->simulate();
     }
 }
@@ -184,7 +179,7 @@ void FallBounceParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (int i = 0; i < mGPUParticle.size(); i++) {
+    for (size_t i = 0; i < mGPUParticle.size(); i++) {
         mGPUParticle[i]->draw();
     }
 

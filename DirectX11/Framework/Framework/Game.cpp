@@ -8,7 +8,6 @@
 #include <Windows.h>
 #include "Framework/Device/GameDevice.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
-#include "Framework/Utility/Resource/ResourceInitializer.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Input/Mouse.h"
 #include "Framework/Window/Window.h"
@@ -67,8 +66,6 @@ int Game::run() {
 }
 
 bool Game::init() {
-    Utility::ResourceManager& resManager = Utility::ResourceManager::getInstance();
-    (void)Utility::ResourceInitializeOnStart(resManager);
     mGameDevice.initialize();
     return true;
 }

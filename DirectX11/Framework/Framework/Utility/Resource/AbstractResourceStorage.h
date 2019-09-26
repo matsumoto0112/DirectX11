@@ -23,9 +23,8 @@ public:
     /**
     * @brief リソースをインポートする
     * @param type リソースの種類
-    * @param filepath ファイルへのパス
     */
-    virtual void importResource(ResourceType type, const std::string& filepath) = 0;
+    virtual void importResource(ResourceType type) = 0;
     /**
     * @brief リソースを削除する
     */
@@ -33,7 +32,7 @@ public:
     /**
     * @brief リソースを取得する
     */
-    virtual std::shared_ptr<ResourceData> getResource(ResourceType type) const;
+    virtual std::shared_ptr<ResourceData> getResource(ResourceType type);
     /**
     * @brief リソースが既に存在しているか
     */
@@ -54,9 +53,8 @@ inline void AbstractResourceStorage<ResourceType, ResourceData>::removeResource(
 }
 
 template<class ResourceType, class ResourceData>
-inline std::shared_ptr<ResourceData> AbstractResourceStorage<ResourceType, ResourceData>::getResource(ResourceType type) const {
-    MY_ASSERTION(mResources.find(type) != mResources.end(),
-        "未登録のリソースが呼ばれました");
+inline std::shared_ptr<ResourceData> AbstractResourceStorage<ResourceType, ResourceData>::getResource(ResourceType type) {
+    if (!isExist(type)) importResource(type);
     return mResources.at(type);
 }
 

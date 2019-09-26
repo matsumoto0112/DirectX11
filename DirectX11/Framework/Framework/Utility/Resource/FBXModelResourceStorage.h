@@ -28,7 +28,7 @@ public:
     /**
     * @brief リソースをインポートする
     */
-    virtual void importResource(Define::ModelType type, const std::string& filepath) override;
+    virtual void importResource(Define::ModelType type) override;
 private:
     std::unique_ptr<Graphics::FBXLoader> mFBXLoader; //!< FBX読み込み
 };

@@ -24,7 +24,7 @@ public:
     /**
     * @brief リソースをインポートする
     */
-    virtual void importResource(Define::VertexShaderType type, const std::string& filepath) override;
+    virtual void importResource(Define::VertexShaderType type) override;
 };
 
 } //Utility 

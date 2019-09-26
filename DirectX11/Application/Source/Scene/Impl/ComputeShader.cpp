@@ -128,7 +128,6 @@ ComputeShader::ComputeShader() {
     hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mResulrBuffer);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
     mSprite = std::make_shared<Graphics::Sprite3D>(Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke));
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);

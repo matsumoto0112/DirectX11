@@ -40,35 +40,6 @@ std::shared_ptr<Graphics::Sprite3D> spr;
 }
 
 Main::Main() {
-    auto fbx = Utility::ResourceManager::getInstance().getFBXModel();
-    fbx->importResource(Define::ModelType::Player, Define::ModelName::PLAYER);
-    fbx->importResource(Define::ModelType::Plane, Define::ModelName::PLANE);
-    fbx->importResource(Define::ModelType::Wall, Define::ModelName::WALL);
-    fbx->importResource(Define::ModelType::Bullet, Define::ModelName::BULLET);
-    fbx->importResource(Define::ModelType::Enemy, Define::ModelName::ENEMY);
-    fbx->importResource(Define::ModelType::Item, Define::ModelName::ITEM);
-
-    auto vs = Utility::ResourceManager::getInstance().getVertexShader();
-    vs->importResource(Define::VertexShaderType::Output_Z, Define::VertexShaderName::OUTPUT_Z);
-    vs->importResource(Define::VertexShaderType::Model_Shadow, Define::VertexShaderName::MODEL_SHADOW);
-    vs->importResource(Define::VertexShaderType::Model_Shadow_Diffuse, Define::VertexShaderName::MODEL_SHADOW_DIFFUSE);
-
-    auto ps = Utility::ResourceManager::getInstance().getPixelShader();
-    ps->importResource(Define::PixelShaderType::Model_Diffuse, Define::PixelShaderName::MODEL_DIFFUSE);
-    ps->importResource(Define::PixelShaderType::Texture2D_Inversion, Define::PixelShaderName::TEXTURE2D_INVERSION);
-    ps->importResource(Define::PixelShaderType::Output_Z, Define::PixelShaderName::OUTPUT_Z);
-    ps->importResource(Define::PixelShaderType::Model_Shadow, Define::PixelShaderName::MODEL_SHADOW);
-    ps->importResource(Define::PixelShaderType::Model_Shadow_Diffuse, Define::PixelShaderName::MODEL_SHADOW_DIFFUSE);
-    ps->importResource(Define::PixelShaderType::Model_Shadow_Color, Define::PixelShaderName::MODEL_SHADOW_COLOR);
-
-    fbx->getResource(Define::ModelType::Player)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Plane)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Enemy)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
-    fbx->getResource(Define::ModelType::Wall)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-    fbx->getResource(Define::ModelType::Bullet)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_NoTexture));
-    fbx->getResource(Define::ModelType::Item)->setPixelShader(ps->getResource(Define::PixelShaderType::Model_Diffuse));
-
-
     std::unique_ptr<Player> player = std::make_unique<Player>(Utility::Transform(), *this);
     std::unique_ptr<Field> field = std::make_unique<Field>(*this);
     mManager = std::make_unique<GameObjectManager>(*this, std::move(player), std::move(field));

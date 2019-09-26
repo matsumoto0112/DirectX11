@@ -42,7 +42,7 @@ void Collider::render() {
     Graphics::Color4 color = Graphics::Color4(1.0f, 0.0f, 0.0f, 0.2f);
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);
     Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position)->set();
-    Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::OutPot_Color)->set();
+    Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color)->set();
     mCollisionRendererInstance->render(mTransform);
     color = Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f);
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, color);

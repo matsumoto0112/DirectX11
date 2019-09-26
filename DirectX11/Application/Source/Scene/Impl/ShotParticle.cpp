@@ -86,10 +86,6 @@ ShotParticle::ShotParticle() {    //カメラの初期化
         randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
     }
 
-    //テクスチャ読み込み
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Smoke, Define::TextureName::SMOKE);
-    Utility::getResourceManager()->getTexture()->importResource(Define::TextureType::Circle, Define::TextureName::CIRCLE);
-
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mShotCB = std::make_unique<Graphics::ConstantBuffer<OnceShotDataBuffer>>(Graphics::ShaderInputType::Compute, 1);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Flash_GS");

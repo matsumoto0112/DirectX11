@@ -28,7 +28,7 @@ public:
     /**
     * @brief リソースをインポートする
     */
-    virtual void importResource(Define::TextureType, const std::string& filepath) override;
+    virtual void importResource(Define::TextureType type) override;
 private:
     std::unique_ptr<Graphics::TextureLoader> mTextureLoader; //!< テクスチャ読み込み
 };
