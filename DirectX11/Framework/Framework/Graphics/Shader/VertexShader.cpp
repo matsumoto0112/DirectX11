@@ -12,24 +12,6 @@ VertexShader::VertexShader(const std::string& name)
     create(name);
 }
 
-VertexShader::VertexShader(const std::string& name, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayouts)
-    : ShaderBase(), mShaderData(std::make_unique<VertexShaderData>()) {
-    ID3D11Device* device = Utility::getDevice();
-    //ファイルパスの作成
-    const std::string filepath = Define::Path::getInstance().shader() + name + ".cso";
-    //シェーダファイルの読み込み
-    std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
-    const UINT shaderSize = shaderData.size();
-
-    //シェーダファイル作成
-    HRESULT hr = device->CreateVertexShader(shaderData.data(), shaderSize, nullptr, &mShaderData->mVertexShader);
-    MY_ASSERTION(SUCCEEDED(hr), "VertexShader作成失敗\n" + filepath);
-    hr = device->CreateInputLayout(inputLayouts.data(), inputLayouts.size(),
-        shaderData.data(), shaderSize, &mShaderData->mInputLayout);
-    MY_ASSERTION(SUCCEEDED(hr), "InputLayout作成失敗");
-
-}
-
 VertexShader::~VertexShader() {}
 
 void VertexShader::create(const std::string& name) {
@@ -40,15 +22,17 @@ void VertexShader::create(const std::string& name) {
     std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
     const UINT shaderSize = shaderData.size();
 
-    unsigned char *pInStruct = nullptr;
+    //シェーダファイルの解析
+    //なぜか関数化すると戻り値の文字が文字化けするため原因がわかるまでここにベタ打ち
+    BYTE* pInStruct = nullptr;
     for (unsigned long i = 0L; i < shaderSize - 4; i++) {
         if (memcmp(&shaderData[i], "ISGN", 4) == NULL) {
-            pInStruct = &shaderData[i];
+            pInStruct = &shaderData.at(i);
             break;
         }
     }
     if (pInStruct == nullptr) {
-        return;
+        MY_ASSERTION(false, "入力エレメントが解析できません");
     }
 
     //変数の数
@@ -68,43 +52,55 @@ void VertexShader::create(const std::string& name) {
             //四次元
         case '\x0f':
             switch (variant) {
-            case D3D10_REGISTER_COMPONENT_FLOAT32:
+            case D3D10_REGISTER_COMPONENT_TYPE::D3D10_REGISTER_COMPONENT_FLOAT32:
                 format[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
                 break;
             default:
-                format[i] = DXGI_FORMAT_UNKNOWN;
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
                 break;
             }
             break;
             //三次元
         case '\x07':
             switch (variant) {
-            case D3D10_REGISTER_COMPONENT_FLOAT32:
-                format[i] = DXGI_FORMAT_R32G32B32_FLOAT;
+            case D3D10_REGISTER_COMPONENT_TYPE::D3D10_REGISTER_COMPONENT_FLOAT32:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT;
                 break;
             default:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
                 break;
             }
             break;
             //二次元
         case '\x03':
             switch (variant) {
-            case D3D10_REGISTER_COMPONENT_FLOAT32:
-                format[i] = DXGI_FORMAT_R32G32_FLOAT;
+            case D3D10_REGISTER_COMPONENT_TYPE::D3D10_REGISTER_COMPONENT_FLOAT32:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT;
                 break;
             default:
-                format[i] = DXGI_FORMAT_UNKNOWN;
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
                 break;
             }
             break;
             //一次元
         case '\x01':
+            switch (variant) {
+            case D3D10_REGISTER_COMPONENT_TYPE::D3D10_REGISTER_COMPONENT_FLOAT32:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT;
+                break;
+            case D3D10_REGISTER_COMPONENT_TYPE::D3D10_REGISTER_COMPONENT_UINT32:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
+                break;
+            default:
+                format[i] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+                break;
+            }
             break;
         default:
+            format[i] = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
             break;
         }
     }
-
     std::vector<D3D11_INPUT_ELEMENT_DESC> descs(cntVariable);
     for (int i = 0; i < cntVariable; i++) {
         descs[i] = {

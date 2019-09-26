@@ -11,14 +11,4 @@ enum class TextureType {
     Circle,
 };
 
-/**
-* @class TextureName
-* @brief テクスチャのリソース名定義
-*/
-class TextureName {
-public:
-    static const std::string SMOKE;
-    static const std::string CIRCLE;
-};
-
 } //Define 

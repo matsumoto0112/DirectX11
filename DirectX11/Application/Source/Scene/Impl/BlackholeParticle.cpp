@@ -92,14 +92,7 @@ BlackholeParticle::BlackholeParticle() {
     auto gs = std::make_shared<Graphics::GeometoryShader>("SimpleParticleGS");
     auto ps = std::make_shared<Graphics::PixelShader>("2D/Texture2D_Color_PS");
 
-    const std::vector<D3D11_INPUT_ELEMENT_DESC>	layouts =
-    {
-        { "POSITION",       0, DXGI_FORMAT_R32G32B32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_RADIUS",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "IN_THETA",       0, DXGI_FORMAT_R32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,          0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Blackhole_VS", layouts);
+    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Blackhole_VS");
 
     mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
         Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),

@@ -15,7 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Texture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Cube.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.cpp" />
@@ -30,9 +29,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\VertexShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Game.cpp" />
