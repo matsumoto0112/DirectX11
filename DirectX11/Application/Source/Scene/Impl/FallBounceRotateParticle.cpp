@@ -132,7 +132,7 @@ FallBounceRotateParticle::FallBounceRotateParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     mText = std::make_shared<ImGUI::Text>("");
     mWindow->addItem(mText);
 #define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){type = val;});\
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,type,[&](float val){type = val;});\
         mWindow->addItem(field); \
         field->setMinValue(min); \
         field->setMaxValue(max); \

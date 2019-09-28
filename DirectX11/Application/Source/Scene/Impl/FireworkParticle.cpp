@@ -129,7 +129,7 @@ FireworkParticle::FireworkParticle() {    //カメラの初期化
     mWindow->addItem(mText);
 
 #define ADD_CHANGE_CENTER_FIELD(name,type,min,max) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){\
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,static_cast<float>(type),[&](float val){\
         type = val; \
     }); \
         mWindow->addItem(field); \
@@ -140,9 +140,9 @@ FireworkParticle::FireworkParticle() {    //カメラの初期化
     ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
-FireworkParticle::~FireworkParticle() {}
+FireworkParticle::~FireworkParticle() { }
 
-void FireworkParticle::load(Framework::Scene::Collecter& collecter) {}
+void FireworkParticle::load(Framework::Scene::Collecter& collecter) { }
 
 void FireworkParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
@@ -153,7 +153,7 @@ void FireworkParticle::update() {
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
 
-    for (size_t i = 0; i < mNum; i++) {
+    for (int i = 0; i < mNum; i++) {
         if (i % 2 == 0) {
             //グローバルデータのセット
             mGlobal.pos1 = Math::Vector3(-30, 0, 0);
@@ -190,7 +190,7 @@ void FireworkParticle::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
 
-    for (size_t i = 0; i < mNum; i++) {
+    for (int i = 0; i < mNum; i++) {
         mGPUParticle[i]->draw();
     }
 
@@ -198,7 +198,7 @@ void FireworkParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mWindow->draw();
 }
 
-void FireworkParticle::end() {}
+void FireworkParticle::end() { }
 
 Define::SceneType FireworkParticle::next() {
     return Define::SceneType();

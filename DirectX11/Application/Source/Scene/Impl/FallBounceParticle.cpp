@@ -124,7 +124,7 @@ FallBounceParticle::FallBounceParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
 #define ADD_CHANGE_CENTER_FIELD(name,type) {\
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,0.0f,[&](float val){mGlobal.center.##type = val;});\
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,mGlobal.center.##type,[&](float val){mGlobal.center.##type = val;});\
         mWindow->addItem(field); \
         field->setMinValue(-10.0f); \
         field->setMaxValue(10.0f); \
