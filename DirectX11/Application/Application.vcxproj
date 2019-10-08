@@ -72,22 +72,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Source\GameObject\Bullet\Bullet.cpp" />
-    <ClCompile Include="Source\GameObject\Collidable3DObject.cpp" />
-    <ClCompile Include="Source\GameObject\Collider.cpp" />
-    <ClCompile Include="Source\GameObject\Enemy\Enemy.cpp" />
-    <ClCompile Include="Source\GameObject\Enemy\NormalEnemy.cpp" />
-    <ClCompile Include="Source\GameObject\Field.cpp" />
-    <ClCompile Include="Source\GameObject\Floor.cpp" />
-    <ClCompile Include="Source\GameObject\FollowCamera.cpp" />
-    <ClCompile Include="Source\GameObject\GameObject3D.cpp" />
-    <ClCompile Include="Source\GameObject\GameObjectManager.cpp" />
-    <ClCompile Include="Source\GameObject\Item\Item.cpp" />
-    <ClCompile Include="Source\GameObject\Player.cpp" />
-    <ClCompile Include="Source\GameObject\Wall.cpp" />
-    <ClCompile Include="Source\GameObject\Weapon\PlayerWeapon.cpp" />
-    <ClCompile Include="Source\GameObject\Weapon\SingleShotWeapon.cpp" />
-    <ClCompile Include="Source\Particle\SmokeParticleEmitter.cpp" />
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
@@ -95,13 +79,10 @@
     <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FireworkParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FlashParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Main.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ParticleTest.cpp" />
     <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShotParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\SpotInstancerParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\Title.cpp" />
-    <ClCompile Include="Source\GameObject\GameObjectUtil.cpp" />
     <ClCompile Include="Source\Scene\Impl\WormholeParticle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -109,28 +90,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\GameObject\Bullet\Bullet.h" />
-    <ClInclude Include="Source\GameObject\Collidable3DObject.h" />
-    <ClInclude Include="Source\GameObject\Collider.h" />
-    <ClInclude Include="Source\GameObject\DebugMacro.h" />
-    <ClInclude Include="Source\GameObject\Enemy\Enemy.h" />
-    <ClInclude Include="Source\GameObject\Enemy\NormalEnemy.h" />
-    <ClInclude Include="Source\GameObject\Field.h" />
-    <ClInclude Include="Source\GameObject\Floor.h" />
-    <ClInclude Include="Source\GameObject\FollowCamera.h" />
-    <ClInclude Include="Source\GameObject\GameObject.h" />
-    <ClInclude Include="Source\GameObject\GameObject3D.h" />
-    <ClInclude Include="Source\GameObject\GameObjectManager.h" />
-    <ClInclude Include="Source\GameObject\IMainSceneMediator.h" />
-    <ClInclude Include="Source\GameObject\Item\Item.h" />
-    <ClInclude Include="Source\GameObject\Player.h" />
-    <ClInclude Include="Source\GameObject\UI\HorizontalGauge.h" />
-    <ClInclude Include="Source\GameObject\UI\IItem.h" />
-    <ClInclude Include="Source\GameObject\UI\UIBoard.h" />
-    <ClInclude Include="Source\GameObject\Wall.h" />
-    <ClInclude Include="Source\GameObject\Weapon\PlayerWeapon.h" />
-    <ClInclude Include="Source\GameObject\Weapon\SingleShotWeapon.h" />
-    <ClInclude Include="Source\Particle\SmokeParticleEmitter.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
@@ -141,13 +100,10 @@
     <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FireworkParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FlashParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\Main.h" />
-    <ClInclude Include="Source\Scene\Impl\ParticleTest.h" />
     <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
     <ClInclude Include="Source\Scene\Impl\ShotParticle.h" />
     <ClInclude Include="Source\Scene\Impl\SpotInstancerParticle.h" />
     <ClInclude Include="Source\Scene\Impl\Title.h" />
-    <ClInclude Include="Source\GameObject\GameObjectUtil.h" />
     <ClInclude Include="Source\Scene\Impl\WormholeParticle.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
