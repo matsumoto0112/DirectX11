@@ -35,6 +35,13 @@
 #include "Source/Scene/Impl/ShotParticle.h"
 #include "Source/Scene/Impl/WormholeParticle.h"
 
+#pragma comment(linker, "/entry:mainCRTStartup")
+#pragma comment(linker,"/SUBSYSTEM:WINDOWS")
+#pragma comment(lib,"d3d11.lib")
+#pragma comment(lib,"d3dCompiler.lib")
+
+
+
 using namespace Framework;
 
 #define ADD_SCENE_JUMP_BUTTON(name,type){ \

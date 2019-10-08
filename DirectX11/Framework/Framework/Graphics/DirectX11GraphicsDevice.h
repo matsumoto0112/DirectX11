@@ -1,9 +1,6 @@
 #pragma once
 #include <wrl/client.h>
 #include <memory>
-
-#pragma comment(lib,"d3d11.lib")
-#pragma comment(lib,"d3dCompiler.lib")
 #include <initguid.h>
 #include <dxgidebug.h>
 #include <d3d11.h>

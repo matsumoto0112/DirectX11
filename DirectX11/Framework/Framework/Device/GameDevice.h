@@ -1,8 +1,4 @@
 #pragma once
-
-#pragma comment(linker, "/entry:mainCRTStartup")
-#pragma comment(linker,"/SUBSYSTEM:WINDOWS")
-
 #include <Windows.h>
 #include <vector>
 #include <memory>
