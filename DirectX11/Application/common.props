@@ -15,7 +15,7 @@
       <Command>xcopy "$(SolutionDir)Resources" "$(TargetDir)Resources" /Y /I /R /S /E </Command>
     </PostBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)FBXSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(FBXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(Directory)%(FileName)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(Directory)%(FileName)</ObjectFileName>
       <PrecompiledHeader>Use</PrecompiledHeader>
