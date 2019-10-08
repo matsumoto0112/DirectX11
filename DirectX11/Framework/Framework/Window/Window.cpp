@@ -25,9 +25,7 @@ bool createWindow(HWND* hWnd,
     //ウィンドウスタイル
     wcex.style = CS_HREDRAW | CS_VREDRAW;
     //ウィンドウのメッセージ処理をするコールバック関数の登録
-    //ウィンドウ終了時にアプリケーションを終了するならメインウィンドウのプロシージャを使用
-    //それ以外はサブウィンドウのプロシージャを使用
-    wcex.lpfnWndProc = toWindowEndApplicationQuit ? Framework::Window::WindowProcedures::mainWndProc : Framework::Window::WindowProcedures::subWndProc;
+    wcex.lpfnWndProc = Framework::Window::WindowProcedures::mainWndProc;
     //ウインドウクラス構造体の後ろに割り当てる補足バイト数
     wcex.cbClsExtra = 0;
     //ウインドウインスタンスの後ろに割り当てる補足バイト数
@@ -91,7 +89,7 @@ Window::Window(const Vec2& clientSize, const Vec2& position, const std::string& 
     ShowWindow(mHWnd, SW_SHOW);
 }
 
-Window::~Window() {}
+Window::~Window() { }
 
 void Window::setWindowSizeAndPosition(const Vec2& clientSize, const Vec2& position) {
     const Vec2 clientWindowSize = convertWindowSize(mHWnd, clientSize);

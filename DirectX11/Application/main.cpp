@@ -10,6 +10,7 @@
 #include "Framework/Window/Window.h"
 #include "Framework/Window/Procedure/CloseProc.h"
 #include "Framework/Window/Procedure/DestroyProc.h"
+#include "Framework/Window/Procedure/ImGUIProc.h"
 #include "Framework/Graphics/String/TextureString.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Input/Mouse.h"
@@ -45,14 +46,15 @@ using namespace Framework;
 
 class MyGame : public Game {
 public:
-    MyGame() :Game(Math::Vector2((float)Define::Window::WIDTH, (float)Define::Window::HEIGHT), false) {};
-    ~MyGame() {};
+    MyGame() :Game(Math::Vector2((float)Define::Window::WIDTH, (float)Define::Window::HEIGHT), false) { };
+    ~MyGame() { };
 private:
     virtual bool init() override {
         if (!Game::init()) {
             return false;
         }
         auto window = mGameDevice.getWindow();
+        window->setProcedureEvent(new Window::ImGUIProc());
         window->setProcedureEvent(new Window::DestroyProc());
         window->setProcedureEvent(new Window::CloseProc());
 
