@@ -60,7 +60,7 @@ RenderModel::RenderModel() {
 
     mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
-        vs, ps);
+        std::make_shared<Graphics::Effect>(vs, ps));
 
     mTransform = Utility::Transform(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(5.0f, 5.0f, 5.0f));
 }

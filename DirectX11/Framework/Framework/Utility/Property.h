@@ -51,3 +51,5 @@ public: inline const type& get##funcName() const { return typeName; } \
 type typeName; \
 public: inline void set ## funcName(const type& val) { setter(val); } \
 public: inline const type& get ## funcName() const{ return getter();}
+
+

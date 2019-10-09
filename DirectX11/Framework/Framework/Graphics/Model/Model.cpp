@@ -1,21 +1,17 @@
 #include "Model.h"
-#include "Model.h"
-#include <fstream>
-#include <string>
 #include "Framework/Define/Path.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 
 namespace Framework {
 namespace Graphics {
 
 Model::Model(std::shared_ptr<VertexBuffer> vertexBuffer,
     std::shared_ptr<IndexBuffer> indexBuffer,
-    std::shared_ptr<VertexShader> vertexShader,
-    std::shared_ptr<PixelShader> pixelShader)
-    :mVertexBuffer(vertexBuffer),
+    std::shared_ptr<Effect> effect)
+    : mVertexBuffer(vertexBuffer),
     mIndexBuffer(indexBuffer),
-    mVertexShader(vertexShader),
-    mPixelShader(pixelShader) { }
+    mEffect(effect) { }
 
 Model::~Model() { }
 
@@ -24,8 +20,7 @@ void Model::draw(const Utility::Transform& transform) {
     //À•W•ÏŠ·s—ñ‚ÌÝ’è
     cbManager->setMatrix(Graphics::ConstantBufferParameterType::World, transform.createSRTMatrix());
     cbManager->send();
-    mVertexShader->set();
-    mPixelShader->set();
+    mEffect->set();
     mVertexBuffer->setData();
     mIndexBuffer->setData();
     mIndexBuffer->drawCall();
