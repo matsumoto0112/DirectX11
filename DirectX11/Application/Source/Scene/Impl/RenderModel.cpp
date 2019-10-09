@@ -6,11 +6,16 @@
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
+#include "Framework/Utility/IO/FBXLoader.h"
+#include "Framework/Define/Path.h"
 
 using namespace Framework;
 
 namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
+std::unique_ptr<Graphics::VertexAndIndexBuffer> mVIBuffer;
+std::shared_ptr<Graphics::VertexShader> mVShader;
+std::shared_ptr<Graphics::PixelShader> mPShader;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -33,13 +38,25 @@ RenderModel::RenderModel() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
     rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rasterizerDesc.DepthClipEnable = TRUE;
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
+
+    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    std::vector<Math::Vector4> pos = loader.getPosition();
+    std::vector<WORD> indices(pos.size());
+    for (int i = 0; i < indices.size() / 3; i++) {
+        indices[i * 3 + 0] = i * 3 + 2;
+        indices[i * 3 + 1] = i * 3 + 1;
+        indices[i * 3 + 2] = i * 3 + 0;
+    }
+    mVIBuffer = std::make_unique<Graphics::VertexAndIndexBuffer>(pos, indices, Graphics::PrimitiveTopology::TriangleList);
+    mVShader = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
+    mPShader = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
 }
 
 RenderModel::~RenderModel() { }
@@ -54,7 +71,6 @@ bool RenderModel::isEndScene() const {
 
 void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
-    //dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     renderer->setCurrentPerspectiveCamera(m3DCamera.get());
@@ -64,6 +80,9 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
+    mVShader->set();
+    mPShader->set();
+    mVIBuffer->render();
 }
 
 void RenderModel::end() { }
