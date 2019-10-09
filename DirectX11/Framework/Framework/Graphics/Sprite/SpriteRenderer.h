@@ -9,7 +9,7 @@ class Effect;
 class GraphicsDeviceManager;
 class Sprite2D;
 class Sprite3D;
-class QuadInstance;
+class VertexAndIndexBuffer;
 class Sampler;
 class PerspectiveCamera;
 
@@ -45,7 +45,7 @@ public:
     */
     void draw(Sprite3D* sprite, const PerspectiveCamera& camera);
 private:
-    std::shared_ptr<QuadInstance> mVIBuffer; //!< 頂点・インデックスバッファ
+    std::shared_ptr<VertexAndIndexBuffer> mVIBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<Effect> mEffect; //!< エフェクト
     std::unique_ptr<Sampler> mSampler; //!< サンプラー
 };

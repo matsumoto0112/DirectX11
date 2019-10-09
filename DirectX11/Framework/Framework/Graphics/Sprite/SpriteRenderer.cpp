@@ -3,7 +3,6 @@
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/Buffer/VertexAndIndexBuffer.h"
 #include "Framework/Graphics/RenderingManager.h"
-#include "Framework/Graphics/Renderer/2D/QuadInstance.h"
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
@@ -13,17 +12,18 @@
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
+#include "Framework/Graphics/Renderer/PrimitiveVertex.h"
 #include <d3d11.h>
 
-namespace  {
+namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
-} 
+}
 
 namespace Framework {
 namespace Graphics {
 
 SpriteRenderer::SpriteRenderer() {
-    mVIBuffer = std::make_unique<QuadInstance>();
+    mVIBuffer = std::make_unique<VertexAndIndexBuffer>(PrimitiveVertex::cubePosition(), PrimitiveVertex::cubeIndex(), PrimitiveVertex::CubePrimitiveTopology);
     mEffect = std::make_shared<Effect>(
         Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
         Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
@@ -42,7 +42,7 @@ SpriteRenderer::SpriteRenderer() {
     Utility::getContext()->RSSetState(ras.Get());
 }
 
-SpriteRenderer::~SpriteRenderer() {}
+SpriteRenderer::~SpriteRenderer() { }
 
 void SpriteRenderer::draw(Sprite2D* sprite) {
     draw(sprite, mEffect);

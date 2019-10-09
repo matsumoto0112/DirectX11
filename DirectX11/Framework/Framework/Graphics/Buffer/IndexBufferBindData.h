@@ -2,20 +2,10 @@
 
 #include <wrl/client.h>
 #include <d3d11.h>
+#include "Framework/Graphics/Renderer/PrimitiveTopology.h"
 
 namespace Framework {
 namespace Graphics {
-
-/**
-* @enum PrimitiveTopology
-* @brief プリミティブトポロジーの種類
-*/
-enum class PrimitiveTopology {
-    LineList, //!< ラインリスト
-    TriangleList, //!< 三角形リスト
-    TriangleStrip, //!< 三角形ストリップ
-    NONE,
-};
 
 /**
 * @struct IndexBufferBindData
