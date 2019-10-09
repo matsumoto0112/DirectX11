@@ -73,7 +73,7 @@ void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
     mVIBuffer->render();
 }
 
-void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera& camera) {
+void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera* camera) {
     Utility::getContext()->RSSetState(ras.Get());
     //コンスタントバッファの取得
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
@@ -96,8 +96,8 @@ void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera& camera) {
 
     Math::Matrix4x4 billboardRotation = bill(
         sprite->getPosition(),
-        camera.getPosition(),
-        camera.getUpVector());
+        camera->getPosition(),
+        camera->getUpVector());
     Math::Matrix4x4 world = billboardRotation;
     world.m[3][0] = sprite->getPosition().x;
     world.m[3][1] = sprite->getPosition().y;

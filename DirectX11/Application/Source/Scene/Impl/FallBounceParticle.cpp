@@ -59,11 +59,11 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 
 FallBounceParticle::FallBounceParticle() {    //カメラの初期化
-    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,30,-30),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -133,9 +133,9 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
     ADD_CHANGE_CENTER_FIELD(Z, z);
 }
 
-FallBounceParticle::~FallBounceParticle() {}
+FallBounceParticle::~FallBounceParticle() { }
 
-void FallBounceParticle::load(Framework::Scene::Collecter& collecter) {}
+void FallBounceParticle::load(Framework::Scene::Collecter& collecter) { }
 
 void FallBounceParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
@@ -161,8 +161,8 @@ void FallBounceParticle::draw(Framework::Graphics::IRenderer* renderer) {
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
-    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
-    m3DCamera->render();
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
@@ -176,7 +176,7 @@ void FallBounceParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mWindow->draw();
 }
 
-void FallBounceParticle::end() {}
+void FallBounceParticle::end() { }
 
 Define::SceneType FallBounceParticle::next() {
     return Define::SceneType();

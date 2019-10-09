@@ -50,8 +50,6 @@ public:
     virtual std::shared_ptr<Texture> getRenderedTexture() const = 0;
 protected:
     PROPERTY(Color4, mBackColor, BackColor);
-    PROPERTY_POINTER(PerspectiveCamera*, mCurrentPerspectiveCamera, CurrentPerspectiveCamera);
-    PROPERTY_POINTER(OrthographicCamera*, mCurrentOrthographicCamera, CurrentOrthographicCamera);
 };
 
 } //Graphics 

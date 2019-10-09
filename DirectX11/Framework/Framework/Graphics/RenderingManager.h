@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Framework/Math/Vector2.h"
+#include "Framework/Graphics/Camera/CameraManager.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/GraphicsDevice.h"
 #include "Framework/Utility/Property.h"
@@ -56,6 +57,10 @@ public:
     */
     ConstantBufferManager* getConstantBufferManager() const { return mConstantBufferManager.get(); }
     /**
+    * @brief カメラ管理者の取得
+    */
+    CameraManager* getCameraManager() const { return mCameraManager.get(); }
+    /**
     * @brief ImGUI管理者の取得
     */
     ImGUI::Manager* getImGUIManager() const { return mImGUIManager.get(); }
@@ -64,6 +69,7 @@ private:
     std::unique_ptr<IRenderer> mBackBufferRenderer; //!< バックバッファ描画デバイス
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
+    std::unique_ptr<CameraManager> mCameraManager; //!< カメラ管理者
     std::unique_ptr<AlphaBlend> mAlphaBlend; //!< アルファブレンド
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理

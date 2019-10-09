@@ -48,7 +48,7 @@ public:
     */
     virtual Framework::Define::SceneType next() override;
 private:
-    std::unique_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
-    std::unique_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
+    std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
+    std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
     std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 };

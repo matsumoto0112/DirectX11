@@ -74,11 +74,11 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 FlashParticle::FlashParticle() {    //カメラの初期化
     mCameraPos = Math::Vector3(0, 0, -30);
     mCameraLookat = Math::Vector3(0, 0, 0);
-    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ mCameraPos,mCameraLookat,Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -177,10 +177,10 @@ void FlashParticle::draw(Framework::Graphics::IRenderer* renderer) {
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
-    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
     m3DCamera->setPosition(mCameraPos);
     m3DCamera->setLookat(mCameraLookat);
-    m3DCamera->render();
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(245.0f / 255.0f, 242.0f / 255.0f, 66.0f / 255.0f, 0.1f));
     Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));

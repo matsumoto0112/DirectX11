@@ -28,7 +28,7 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 RenderModel::RenderModel() {
     //ƒJƒƒ‰‚Ì‰Šú‰»
-    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
@@ -83,8 +83,7 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
-    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
-    m3DCamera->render();
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     //Math::Vector3 scale(5.0f, 5.0f, 5.0f);

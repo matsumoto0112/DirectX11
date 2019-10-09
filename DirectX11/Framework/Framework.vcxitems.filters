@@ -109,6 +109,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Config.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Setting.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
@@ -264,5 +265,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Setting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveTopology.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.h" />
   </ItemGroup>
 </Project>

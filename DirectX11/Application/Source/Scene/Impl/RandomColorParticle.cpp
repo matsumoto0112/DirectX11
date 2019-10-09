@@ -122,11 +122,11 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 
 RandomColorParticle::RandomColorParticle() {
     //カメラの初期化
-    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -219,8 +219,8 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
-    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
-    m3DCamera->render();
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
     mTexture->setData(Graphics::ShaderInputType::Pixel, 0);
 
     //描画処理

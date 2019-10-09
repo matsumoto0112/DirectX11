@@ -29,6 +29,10 @@ Graphics::RenderingManager* getRenderingManager();
 * @brief コンスタントバッファ管理者の取得
 */
 Graphics::ConstantBufferManager* getConstantBufferManager();
+/**
+* @brief カメラ管理者の取得
+*/
+Graphics::CameraManager* getCameraManager();
 
 /**
 * @brief 入力管理の取得

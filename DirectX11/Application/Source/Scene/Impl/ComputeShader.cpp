@@ -79,11 +79,11 @@ void createUAV(int elemSize, int count, Particle* particle) {
 }
 
 ComputeShader::ComputeShader() {
-    m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
     {
         D3D11_BLEND_DESC desc;
         desc.AlphaToCoverageEnable = FALSE;
@@ -180,8 +180,7 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
-    renderer->setCurrentPerspectiveCamera(m3DCamera.get());
-    m3DCamera->render();
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     mVS->set();
     mGS->set();
     mPS->set();

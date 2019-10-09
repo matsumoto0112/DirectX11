@@ -21,6 +21,10 @@ Graphics::ConstantBufferManager* getConstantBufferManager() {
     return getRenderingManager()->getConstantBufferManager();
 }
 
+Graphics::CameraManager* getCameraManager() {
+    return getRenderingManager()->getCameraManager();
+}
+
 Input::InputManager* getInputManager() {
     return Device::GameDevice::getInstance().getInputManager();
 }

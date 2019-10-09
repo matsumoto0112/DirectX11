@@ -14,12 +14,14 @@ namespace Graphics {
 
 RenderingManager::RenderingManager(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen)
     :mScreenSize(screenSize), mGraphicsDevice(std::make_unique<GraphicsDevice>(hWnd, screenSize, isFullScreen)),
-    mConstantBufferManager(nullptr) {}
+    mConstantBufferManager(nullptr),
+    mCameraManager(nullptr) { }
 
-RenderingManager::~RenderingManager() {}
+RenderingManager::~RenderingManager() { }
 
 void RenderingManager::initialize() {
     mConstantBufferManager = std::make_unique<ConstantBufferManager>();
+    mCameraManager = std::make_unique<CameraManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
