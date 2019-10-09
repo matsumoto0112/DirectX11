@@ -45,8 +45,8 @@ RenderModel::RenderModel() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
-    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
-    //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
     loader.getUV();
     std::vector<UINT> indices(pos.size());
@@ -70,6 +70,8 @@ bool RenderModel::isEndScene() const {
     return false;
 }
 
+float mAngle = 0.0f;
+
 void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -79,7 +81,8 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     Math::Vector3 scale(5.0f, 5.0f, 5.0f);
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(scale);
+    mAngle += 1.0f;
+    Math::Matrix4x4 m = Math::Matrix4x4::createScale(scale) * Math::Matrix4x4::createRotationY(mAngle);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
     mVShader->set();

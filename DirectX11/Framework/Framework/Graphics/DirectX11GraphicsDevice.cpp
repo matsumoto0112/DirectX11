@@ -87,6 +87,7 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
     desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
     desc.OutputWindow = hWnd;
     desc.Windowed = !isFullScreen;
+    desc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
     hr = factory->CreateSwapChain(
         mDevice.Get(),
         &desc,
