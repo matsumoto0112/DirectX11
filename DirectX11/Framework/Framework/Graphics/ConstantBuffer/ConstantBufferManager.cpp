@@ -28,7 +28,6 @@ void ConstantBufferManager::send() {
     mColorCBuffer->sendBuffer();
     mMaterial->sendBuffer();
     mCameraCBuffer->sendBuffer();
-    mLightingCBuffer->sendBuffer();
 }
 
 void ConstantBufferManager::setMatrix(ConstantBufferParameterType type, const Math::Matrix4x4& value) {
@@ -100,15 +99,6 @@ buffer->setBuffer(s);})
     mCameraCBuffer = std::make_unique<ConstantBuffer<CameraNumCBufferStruct>>(ShaderInputType::VertexAndPixel, 5);
     mIntBufferManager->add(ConstantBufferParameterType::CameraNum,
         MY_SETBUFFER_FUNC(int, CameraNumCBufferStruct, mCameraCBuffer, cameraNum));
-
-    mLightingCBuffer = std::make_unique<ConstantBuffer<LightingCBufferStruct>>(
-        ShaderInputType::VertexAndPixel, 1);
-
-    mBoneMatrixCBuffer = std::make_unique<ConstantBuffer<BoneMatrixCBufferStruct>>(
-        ShaderInputType::VertexAndPixel, 6);
-
-    mLightMatrixCBuffer = std::make_unique<ConstantBuffer<LightMatrixCBufferStruct>>(
-        ShaderInputType::VertexAndPixel, 7);
 }
 
 } //Graphics 

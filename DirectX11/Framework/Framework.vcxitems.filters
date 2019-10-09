@@ -70,16 +70,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\DirectionalLight.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiRenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\3D\Sphere.cpp" />
@@ -117,12 +112,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Config.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Setting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\CameraType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightSettings.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.h" />
@@ -133,18 +127,14 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexAndIndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBufferBindData.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\BoneMatrixCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\CameraNumCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ColorCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferParameterType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferTypeManager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\DirectionalLightCBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\LightingCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\MaterialCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\MVPMatrixCBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\PointLightCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\UVInfoCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\Particle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\ParticleEmitter.h" />
@@ -221,17 +211,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\DepthStencilView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\DirectionalLight.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\Light.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\LightManager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\LightType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Light\PointLight.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiRenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\MultiViewport.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
@@ -287,5 +271,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Setting.h" />
   </ItemGroup>
 </Project>

@@ -47,7 +47,7 @@ public:
     /**
     * @brief 次のシーン
     */
-    virtual Define::SceneType next() override;
+    virtual Framework::Define::SceneType next() override;
 private:
     std::unique_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ

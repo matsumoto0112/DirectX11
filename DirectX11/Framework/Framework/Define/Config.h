@@ -1,9 +1,10 @@
 #pragma once
 #include <Windows.h>
 #include "Framework/Utility/Singleton.h"
+#include "Framework/Math/Vector2.h"
 
 namespace Framework {
-namespace Define2 {
+namespace Define {
 
 /**
 * @class Config
@@ -21,11 +22,13 @@ protected:
     * @brief デストラクタ
     */
     ~Config();
-//private:
+    //private:
+public:
+    const Math::Vector2 getSize() const { return Math::Vector2(mWidth, mHeight); };
 public:
     UINT mWidth;
     UINT mHeight;
 };
 
-} //Define2 
+} //Define 
 } //Framework 

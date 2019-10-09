@@ -1,5 +1,6 @@
 #pragma once
 
+namespace Framework{
 namespace Define {
 
 /**
@@ -28,3 +29,4 @@ enum class SceneType {
 };
 
 } //Define 
+} //Framework 

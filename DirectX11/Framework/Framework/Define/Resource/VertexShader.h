@@ -1,4 +1,6 @@
 #pragma once
+
+namespace Framework {
 namespace Define {
 
 /**
@@ -25,3 +27,4 @@ enum class VertexShaderType {
 };
 
 } //Define 
+} //Framework 

@@ -1,5 +1,6 @@
 #pragma once
 
+namespace Framework {
 namespace Define {
 
 /**
@@ -14,3 +15,4 @@ enum class GeometoryShader {
     SpotInstancer,
 };
 } //Define 
+} //Framework 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework/Utility/Singleton.h"
 
+namespace Framework {
 namespace Define {
 
 /**
@@ -18,3 +19,4 @@ public:
 };
 
 } //Define 
+} //Framework 

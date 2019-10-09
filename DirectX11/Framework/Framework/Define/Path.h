@@ -3,6 +3,7 @@
 #include <string>
 #include "Framework/Utility/Singleton.h"
 
+namespace Framework {
 namespace Define {
 /**
 * @class Path
@@ -18,7 +19,7 @@ public:
     const std::string& fbxModel() const { return mFBXModel; }
     const std::string& objModel() const { return mOBJModel; }
 private:
-    std::string mExe;
+    std::string mExe; //!< 実行ファイルへのパス
     std::string mResource; //!< リソースフォルダへのパス
     std::string mTexture; //!< テクスチャのルートフォルダへのパス
     std::string mShader; //!< シェーダファイルへのパス
@@ -30,3 +31,4 @@ protected:
     ~Path();
 };
 } //Define 
+} //Framework 

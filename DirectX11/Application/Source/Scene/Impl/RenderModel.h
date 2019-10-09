@@ -46,7 +46,7 @@ public:
     /**
     * @brief Ÿ‚ÌƒV[ƒ“
     */
-    virtual Define::SceneType next() override;
+    virtual Framework::Define::SceneType next() override;
 private:
     std::unique_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< ƒJƒƒ‰
     std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;

@@ -1,6 +1,5 @@
 #pragma once
 #include <d3d11.h>
-#include "Framework/Define/Window.h"
 #include "Framework/Define/Render/MultiSampleQuarity.h"
 
 namespace Framework {

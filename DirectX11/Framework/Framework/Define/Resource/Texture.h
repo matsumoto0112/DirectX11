@@ -1,5 +1,6 @@
 #pragma once
 
+namespace Framework {
 namespace Define {
 
 /**
@@ -12,3 +13,4 @@ enum class TextureType {
 };
 
 } //Define 
+} //Framework 

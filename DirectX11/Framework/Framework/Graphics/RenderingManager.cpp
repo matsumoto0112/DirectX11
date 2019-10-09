@@ -1,5 +1,4 @@
 #include "RenderingManager.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
 #include "Framework/Graphics/ImGUI/Manager.h"
@@ -21,7 +20,6 @@ RenderingManager::~RenderingManager() {}
 
 void RenderingManager::initialize() {
     mConstantBufferManager = std::make_unique<ConstantBufferManager>();
-    mLightManager = std::make_unique<LightManager>();
     mImGUIManager = std::make_unique<ImGUI::Manager>();
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
@@ -38,7 +36,6 @@ IRenderer* RenderingManager::drawBegin() {
 
 void RenderingManager::drawEnd() {
     mImGUIManager->drawAll();
-    mLightManager->set();
 
     //•`‰æ‚ÌÅIˆ—‚ðs‚¤ 
     mGraphicsDevice->drawEnd();

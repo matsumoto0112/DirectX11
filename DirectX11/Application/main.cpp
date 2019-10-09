@@ -6,7 +6,6 @@
 #include "Framework/Math/Vector2.h"
 #include "Framework/Device/GameDevice.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Window/Window.h"
 #include "Framework/Window/Procedure/CloseProc.h"
 #include "Framework/Window/Procedure/DestroyProc.h"
@@ -34,6 +33,7 @@
 #include "Source/Scene/Impl/ShotParticle.h"
 #include "Source/Scene/Impl/WormholeParticle.h"
 #include "Source/Scene/Impl/RenderModel.h"
+#include "Framework/Define/Config.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -53,7 +53,7 @@ using namespace Framework;
 
 class MyGame : public Game {
 public:
-    MyGame() :Game(Math::Vector2((float)Define::Window::WIDTH, (float)Define::Window::HEIGHT), false) { };
+    MyGame() :Game(Math::Vector2((float)Define::Config::getInstance().mWidth, (float)Define::Config::getInstance().mHeight), false) { };
     ~MyGame() { };
 private:
     virtual bool init() override {
@@ -120,8 +120,7 @@ private:
 int main() {
     try {
         MyGame().run();
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         MY_ERROR_WINDOW(false, e.what());
     }
 }

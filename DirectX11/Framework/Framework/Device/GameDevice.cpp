@@ -1,10 +1,11 @@
 #include "GameDevice.h"
-#include "Framework/Define/Window.h"
+#include "Framework/Define/Config.h"
+#include "Framework/Define/Game.h"
+#include "Framework/Define/Setting.h"
 #include "Framework/Graphics/GraphicsDevice.h"
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Define/Game.h"
 #include "Framework/Window/Window.h"
 
 namespace Framework {
@@ -40,12 +41,12 @@ void GameDevice::initialize() {
 
 GameDevice::GameDevice() {
     const Math::Vector2 screenSize(
-        static_cast<float>(Define::Window::WIDTH),
-        static_cast<float>(Define::Window::HEIGHT));
+        static_cast<float>(Define::Config::getInstance().mWidth),
+        static_cast<float>(Define::Config::getInstance().mHeight));
     mMainWindow = std::make_unique<Window::Window>(
         screenSize,
         Math::Vector2(0, 0),
-        Define::Window::TITLE,
+        Define::Setting::WINDOW_TITLE,
         true);
 
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
@@ -55,7 +56,7 @@ GameDevice::GameDevice() {
     mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);
 }
 
-GameDevice::~GameDevice() {}
+GameDevice::~GameDevice() { }
 
 
 } //Device 

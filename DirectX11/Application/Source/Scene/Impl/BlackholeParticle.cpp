@@ -4,7 +4,6 @@
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -17,6 +16,7 @@
 #include "Framework/Graphics/Shader/GeometoryShader.h"
 #include "Framework/Utility/Timer.h"
 #include "Framework/Graphics/Particle/GPUParticle.h"
+#include "Framework/Define/Config.h"
 
 using namespace Framework;
 
@@ -59,9 +59,9 @@ BlackholeParticle::BlackholeParticle() {
     //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -120,9 +120,9 @@ BlackholeParticle::BlackholeParticle() {
     mGlobal.emit = 1;
 }
 
-BlackholeParticle::~BlackholeParticle() {}
+BlackholeParticle::~BlackholeParticle() { }
 
-void BlackholeParticle::load(Framework::Scene::Collecter & collecter) {}
+void BlackholeParticle::load(Framework::Scene::Collecter & collecter) { }
 
 void BlackholeParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
@@ -159,7 +159,7 @@ void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //事
     mGPUParticle->draw();
 }
 
-void BlackholeParticle::end() {}
+void BlackholeParticle::end() { }
 
 Define::SceneType BlackholeParticle::next() {
     return Define::SceneType();

@@ -1,4 +1,6 @@
 #pragma once
+
+namespace Framework {
 namespace Define {
 
 /**
@@ -24,3 +26,4 @@ enum class PixelShaderType {
 };
 
 } //Define 
+} //Framework 

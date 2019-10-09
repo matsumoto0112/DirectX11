@@ -31,11 +31,6 @@ Graphics::RenderingManager* getRenderingManager();
 Graphics::ConstantBufferManager* getConstantBufferManager();
 
 /**
-* @brief ƒ‰ƒCƒgŠÇ—Ò‚Ìæ“¾
-*/
-Graphics::LightManager* getLightManager();
-
-/**
 * @brief “ü—ÍŠÇ—‚Ìæ“¾
 */
 Input::InputManager* getInputManager();

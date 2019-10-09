@@ -1,10 +1,8 @@
 #pragma once
 
 #include "Framework/Graphics/Color4.h"
-#include "Framework/Graphics/ConstantBuffer/BoneMatrixCBufferStruct.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferParameterType.h"
-#include "Framework/Graphics/ConstantBuffer/LightingCBufferStruct.h"
 #include "Framework/Math/Matrix4x4.h"
 #include "Framework/Math/Rect.h"
 
@@ -18,11 +16,6 @@ struct UVInfoCBufferStruct;
 struct ColorCBufferStruct;
 struct MaterialCBufferStruct;
 struct CameraNumCBufferStruct;
-
-struct LightMatrixCBufferStruct {
-    Math::Matrix4x4 view;
-    Math::Matrix4x4 proj;
-};
 
 /**
 * @class ConstantBufferManager
@@ -97,9 +90,6 @@ private:
     std::unique_ptr<ConstantBuffer<ColorCBufferStruct>> mColorCBuffer; //!< 色用コンスタントバッファ
     std::unique_ptr<ConstantBuffer<MaterialCBufferStruct>> mMaterial; //!< マテリアル用コンスタントバッファ
     std::unique_ptr<ConstantBuffer<CameraNumCBufferStruct>> mCameraCBuffer; //!< カメラ用コンスタントバッファ
-    std::unique_ptr<ConstantBuffer<LightingCBufferStruct>> mLightingCBuffer; //!< ライティング用コンスタントバッファ
-    std::unique_ptr<ConstantBuffer<BoneMatrixCBufferStruct>> mBoneMatrixCBuffer; //!< ボーン行列用コンスタントバッファ
-    std::unique_ptr<ConstantBuffer<LightMatrixCBufferStruct>> mLightMatrixCBuffer; //!< ボーン行列用コンスタントバッファ
 
     std::unique_ptr<ConstantBufferTypeManager<Math::Matrix4x4>> mMatrixBufferManager; //!< 行列用バッファ転送管理者
     std::unique_ptr<ConstantBufferTypeManager<float>> mFloatBufferManager; //!< Float用バッファ転送管理者
@@ -107,23 +97,6 @@ private:
     std::unique_ptr<ConstantBufferTypeManager<Color4>> mColorBufferManager; //!< 色用バッファ転送管理者
     std::unique_ptr<ConstantBufferTypeManager<int>> mIntBufferManager; //!< 整数値用バッファ転送管理者
 };
-
-template<>
-inline void ConstantBufferManager::setStruct(const LightingCBufferStruct& value) {
-    mLightingCBuffer->setBuffer(value);
-}
-
-template<>
-inline void ConstantBufferManager::setStruct(const BoneMatrixCBufferStruct& value) {
-    mBoneMatrixCBuffer->setBuffer(value);
-    mBoneMatrixCBuffer->sendBuffer();
-}
-
-template<>
-inline void ConstantBufferManager::setStruct(const LightMatrixCBufferStruct& value) {
-    mLightMatrixCBuffer->setBuffer(value);
-    mLightMatrixCBuffer->sendBuffer();
-}
 
 template<class T>
 inline void ConstantBufferManager::setStruct(const T& value) {

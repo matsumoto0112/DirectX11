@@ -2,15 +2,15 @@
 #include "Framework/Define/Path.h"
 
 namespace Framework {
-namespace Define2 {
+namespace Define {
 
 Config::Config() {
-    std::string path = Define::Path::getInstance().exe() + "/../config.ini";
+    std::string path = Path::getInstance().exe() + "/../config.ini";
     mWidth = GetPrivateProfileInt("Window", "Width", 0, path.c_str());
     mHeight = GetPrivateProfileInt("Window", "Height", 600, path.c_str());
 }
 
 Config::~Config() { }
 
-} //Define2
+} //Define
 } //Framework 

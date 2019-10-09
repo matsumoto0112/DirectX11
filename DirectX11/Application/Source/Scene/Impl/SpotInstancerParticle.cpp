@@ -4,7 +4,6 @@
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -72,9 +71,9 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,30,-30),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -156,9 +155,9 @@ SpotInstancerParticle::SpotInstancerParticle() {    //カメラの初期化
     ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
-SpotInstancerParticle::~SpotInstancerParticle() {}
+SpotInstancerParticle::~SpotInstancerParticle() { }
 
-void SpotInstancerParticle::load(Framework::Scene::Collecter& collecter) {}
+void SpotInstancerParticle::load(Framework::Scene::Collecter& collecter) { }
 
 void SpotInstancerParticle::update() {
     mTimer->update(Utility::Time::getInstance().getDeltaTime());
@@ -210,7 +209,7 @@ void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
     mWindow->draw();
 }
 
-void SpotInstancerParticle::end() {}
+void SpotInstancerParticle::end() { }
 
 Define::SceneType SpotInstancerParticle::next() {
     return Define::SceneType();

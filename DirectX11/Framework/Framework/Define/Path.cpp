@@ -14,6 +14,7 @@ std::string getExePath() {
 }
 }
 
+namespace Framework {
 namespace Define {
 Path::Path() {
     mExe = getExePath();
@@ -38,3 +39,4 @@ Path::Path() {
 Path::~Path() {}
 
 } //Define 
+} //Framework 

@@ -1,5 +1,4 @@
 #include "PerspectiveCamera.h"
-#include "Framework/Define/Window.h"
 
 namespace {
 Framework::Math::Vector3 getLine(const Framework::Math::Matrix4x4& mat, int line) {

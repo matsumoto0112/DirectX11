@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 
 namespace Framework {
@@ -14,10 +13,6 @@ void Camera::render() {
     ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
     cbManager->setMatrix(ConstantBufferParameterType::View, mView);
     cbManager->setMatrix(ConstantBufferParameterType::Projection, mProjection);
-}
-
-Math::Vector3 Camera::screenToWorldPosition(const Math::Vector2& pos, float z) const {
-    return screenToWorldPosition(pos, z, Define::Window::getSize());
 }
 
 Math::Vector3 Camera::screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize) const {

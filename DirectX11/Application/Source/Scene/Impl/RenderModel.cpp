@@ -2,7 +2,6 @@
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Utility/Wrap/DirectX.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
@@ -31,9 +30,7 @@ RenderModel::RenderModel() {
     //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,::Define::Window::getSize(),0.1f,1000.0f });
-
-    UINT w = Framework::Define2::Config::getInstance().mWidth;
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();

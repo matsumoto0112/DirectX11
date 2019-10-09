@@ -4,7 +4,6 @@
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
-#include "Framework/Define/Window.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -125,9 +124,9 @@ RandomColorParticle::RandomColorParticle() {
     //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Window::getSize());
+    m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -141,7 +140,6 @@ RandomColorParticle::RandomColorParticle() {
     for (int i = 0; i < COUNT; i++) {
         //particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
     }
-    HRESULT hr;
 
     float randomTable[RANDOM_MAX];
     for (int i = 0; i < RANDOM_MAX; i++) {
