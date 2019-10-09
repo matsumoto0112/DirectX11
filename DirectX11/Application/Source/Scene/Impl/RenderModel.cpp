@@ -8,14 +8,14 @@
 #include "Framework/Utility/IO/FBXLoader.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Define/Config.h"
+#include "Framework/Graphics/Model/Model.h"
 
 using namespace Framework;
 
 namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
-std::unique_ptr<Graphics::VertexAndIndexBuffer> mVIBuffer;
-std::shared_ptr<Graphics::VertexShader> mVShader;
-std::shared_ptr<Graphics::PixelShader> mPShader;
+Utility::Transform mTransform;
+std::unique_ptr<Graphics::Model> mModel;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -49,23 +49,29 @@ RenderModel::RenderModel() {
     //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     Utility::FBXLoader loader(::Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
-    loader.getUV();
     std::vector<UINT> indices(pos.size());
     for (int i = 0; i < indices.size() / 3; i++) {
         indices[i * 3 + 0] = i * 3 + 2;
         indices[i * 3 + 1] = i * 3 + 1;
         indices[i * 3 + 2] = i * 3 + 0;
     }
-    mVIBuffer = std::make_unique<Graphics::VertexAndIndexBuffer>(pos, indices, Graphics::PrimitiveTopology::TriangleList);
-    mVShader = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
-    mPShader = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
+    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
+    auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
+
+    mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
+        std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
+        vs, ps);
+
+    mTransform = Utility::Transform(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(5.0f, 5.0f, 5.0f));
 }
 
 RenderModel::~RenderModel() { }
 
 void RenderModel::load(Framework::Scene::Collecter& collecter) { }
 
-void RenderModel::update() { }
+void RenderModel::update() {
+    mTransform.setRotate(mTransform.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+}
 
 bool RenderModel::isEndScene() const {
     return false;
@@ -81,14 +87,12 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     m3DCamera->render();
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Vector3 scale(5.0f, 5.0f, 5.0f);
-    mAngle += 1.0f;
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(scale) * Math::Matrix4x4::createRotationY(mAngle);
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
-    Utility::getConstantBufferManager()->send();
-    mVShader->set();
-    mPShader->set();
-    mVIBuffer->render();
+    //Math::Vector3 scale(5.0f, 5.0f, 5.0f);
+    //mAngle += 1.0f;
+    //Math::Matrix4x4 m = Math::Matrix4x4::createScale(scale) * Math::Matrix4x4::createRotationY(mAngle);
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
+    //Utility::getConstantBufferManager()->send();
+    mModel->draw(mTransform);
 }
 
 void RenderModel::end() { }
