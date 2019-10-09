@@ -115,6 +115,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Animation.h" />
@@ -283,5 +285,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Config.h" />
   </ItemGroup>
 </Project>

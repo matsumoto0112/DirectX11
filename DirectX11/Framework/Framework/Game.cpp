@@ -57,7 +57,7 @@ int Game::run() {
             update();
             draw();
             Utility::Time::getInstance().endFrame();
-            //Utility::Time::getInstance().wait();
+            Utility::Time::getInstance().wait();
         }
     }
 

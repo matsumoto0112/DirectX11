@@ -12,7 +12,8 @@
       <ObjectFileOutput>$(OutDir)\cso\%(RelativeDir)\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)Resources" "$(TargetDir)Resources" /Y /I /R /S /E </Command>
+      <Command>copy "$(ProjectDir)config.ini" "$(TargetDir)\config.ini" /Y 
+xcopy "$(SolutionDir)Resources" "$(TargetDir)Resources" /Y /I /R /S /E</Command>
     </PostBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir);$(FBXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

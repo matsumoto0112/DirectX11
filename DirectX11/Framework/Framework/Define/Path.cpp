@@ -17,7 +17,6 @@ std::string getExePath() {
 namespace Define {
 Path::Path() {
     mExe = getExePath();
-    std::cout << ".exe path:" << mExe << "\n";
     char dir[MAX_SIZE];
     char drive[MAX_SIZE];
     char name[MAX_SIZE];

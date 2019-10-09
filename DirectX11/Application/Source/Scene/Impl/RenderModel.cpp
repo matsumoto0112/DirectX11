@@ -8,6 +8,7 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/IO/FBXLoader.h"
 #include "Framework/Define/Path.h"
+#include "Framework/Define/Config.h"
 
 using namespace Framework;
 
@@ -26,10 +27,13 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 
 }
-RenderModel::RenderModel() {    //カメラの初期化
+RenderModel::RenderModel() {
+    //カメラの初期化
     m3DCamera = std::make_unique<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Window::getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,::Define::Window::getSize(),0.1f,1000.0f });
+
+    UINT w = Framework::Define2::Config::getInstance().mWidth;
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -46,7 +50,7 @@ RenderModel::RenderModel() {    //カメラの初期化
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
     //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
-    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    Utility::FBXLoader loader(::Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
     loader.getUV();
     std::vector<UINT> indices(pos.size());

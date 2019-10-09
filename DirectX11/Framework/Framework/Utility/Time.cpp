@@ -16,7 +16,7 @@ Time::Time()
     mFreq = (double)freq.QuadPart;
 }
 
-Time::~Time() {}
+Time::~Time() { }
 
 void Time::init(float fps) {
     mTime = 0.0f;
@@ -44,7 +44,7 @@ void Time::wait() {
 
     if (wait > 0) {
         timeBeginPeriod(1);
-        Sleep(wait);
+        Sleep(static_cast<DWORD>(wait));
         timeEndPeriod(1);
     }
 }
