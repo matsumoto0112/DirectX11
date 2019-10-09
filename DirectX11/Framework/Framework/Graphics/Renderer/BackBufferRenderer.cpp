@@ -31,9 +31,9 @@ void BackBufferRenderer::render(std::shared_ptr<Sprite3D> sprite) {
     SpriteRenderer::getInstance().draw(sprite.get(), *mCurrentPerspectiveCamera);
 }
 
-void BackBufferRenderer::render(std::shared_ptr<Model> model, const Utility::Transform& transform) {
-    model->draw(transform);
-}
+//void BackBufferRenderer::render(std::shared_ptr<Model> model, const Utility::Transform& transform) {
+//    model->draw(transform);
+//}
 
 void BackBufferRenderer::begin() {
     mRenderTarget->setClearColor(mBackColor);

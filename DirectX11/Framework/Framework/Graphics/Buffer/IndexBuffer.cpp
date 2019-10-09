@@ -28,24 +28,26 @@ D3D11_PRIMITIVE_TOPOLOGY convert(Framework::Graphics::PrimitiveTopology type) {
 namespace Framework {
 namespace Graphics {
 
-IndexBuffer::IndexBuffer(const std::vector<WORD>& indices, PrimitiveTopology topology) {
+IndexBuffer::IndexBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology) {
     setBuffer(indices, topology);
 }
 
 IndexBuffer::~IndexBuffer() {}
 
-void IndexBuffer::setBuffer(const std::vector<WORD>& indices, PrimitiveTopology topology) {
+void IndexBuffer::setBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology) {
     mIndexCount = indices.size();
 
+    //デスクの作成
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    desc.ByteWidth = sizeof(WORD) * mIndexCount;
+    desc.ByteWidth = sizeof(UINT) * mIndexCount;
     desc.CPUAccessFlags = 0;
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;
 
+    //サブリソース作成
     D3D11_SUBRESOURCE_DATA subResource;
     ZeroMemory(&subResource, sizeof(subResource));
     subResource.pSysMem = indices.data();
@@ -62,7 +64,7 @@ void IndexBuffer::setBuffer(const std::vector<WORD>& indices, PrimitiveTopology 
 }
 
 void IndexBuffer::setData() {
-    Utility::getContext()->IASetIndexBuffer(mData->mBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+    Utility::getContext()->IASetIndexBuffer(mData->mBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     Utility::getContext()->IASetPrimitiveTopology(mData->mTopology);
 }
 

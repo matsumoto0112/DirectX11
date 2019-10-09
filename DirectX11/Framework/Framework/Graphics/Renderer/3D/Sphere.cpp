@@ -6,8 +6,6 @@
 
 namespace Framework {
 namespace Graphics {
-//u:vert
-//v:hori
 Sphere::Sphere(UINT u_max, UINT v_max) {
     std::vector<OnlyPosition> vertices(u_max *(v_max + 1));
     for (UINT v = 0; v <= v_max; v++) {
@@ -20,7 +18,7 @@ Sphere::Sphere(UINT u_max, UINT v_max) {
             vertices[u_max * v + u].pos = Math::Vector4(x, y, z, 1.0f);
         }
     }
-    std::vector<WORD> indices(2 * v_max * (u_max + 1));
+    std::vector<UINT> indices(2 * v_max * (u_max + 1));
     int i = 0;
     for (UINT v = 0; v < v_max; v++) {
         for (UINT u = 0; u <= u_max; u++) {

@@ -11,7 +11,7 @@ std::unique_ptr<Framework::Graphics::VertexAndIndexBuffer> createBuffer() {
         {{1.0f,1.0f,0.0f,1.0f},{1.0f,1.0f}},
         {{0.0f,1.0f,0.0f,1.0f},{0.0f,1.0f}},
     };
-    std::vector<WORD> indices{ 0,1,2,0,2,3 };
+    std::vector<UINT> indices{ 0,1,2,0,2,3 };
     return std::make_unique<Framework::Graphics::VertexAndIndexBuffer>(vertices, indices, Framework::Graphics::PrimitiveTopology::TriangleList);
 }
 }

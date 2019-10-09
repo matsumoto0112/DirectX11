@@ -39,18 +39,18 @@ void ZTexCreater::end() {
     //mRenderTarget->reset();
 }
 
-void ZTexCreater::render(std::shared_ptr<Model> model, const Utility::Transform& tranform) {
-    std::vector<std::shared_ptr<VertexShader>> vshaders = model->getVertexShader();
-    std::vector<std::shared_ptr<PixelShader>> pshaders = model->getPixelShader();
-
-    model->setVertexShader(mEffect->getVertexShader());
-    model->setPixelShader(mEffect->getPixelShader());
-
-    model->draw(tranform);
-
-    model->setVertexShader(vshaders);
-    model->setPixelShader(pshaders);
-}
+//void ZTexCreater::render(std::shared_ptr<Model> model, const Utility::Transform& tranform) {
+//    std::vector<std::shared_ptr<VertexShader>> vshaders = model->getVertexShader();
+//    std::vector<std::shared_ptr<PixelShader>> pshaders = model->getPixelShader();
+//
+//    model->setVertexShader(mEffect->getVertexShader());
+//    model->setPixelShader(mEffect->getPixelShader());
+//
+//    model->draw(tranform);
+//
+//    model->setVertexShader(vshaders);
+//    model->setPixelShader(pshaders);
+//}
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) {
     sprite->draw();

@@ -32,10 +32,10 @@ public:
     * @brief ピクセルシェーダ管理者の取得
     */
     PixelShaderResourceStorage* getPixelShader() const { return mPixelShaders.get(); }
-    /**
-    * @brief FBXモデル管理者の取得
-    */
-    FBXModelResourceStorage* getFBXModel() const { return mFBXModel.get(); }
+    ///**
+    //* @brief FBXモデル管理者の取得
+    //*/
+    //FBXModelResourceStorage* getFBXModel() const { return mFBXModel.get(); }
     /**
     * @brief テクスチャ管理者の取得
     */
@@ -49,7 +49,7 @@ private:
     std::unique_ptr<VertexShaderResourceStorage> mVertexShaders;
     std::unique_ptr<GeometoryShaderResourceStorage> mGeometoryShaders;
     std::unique_ptr<PixelShaderResourceStorage> mPixelShaders;
-    std::unique_ptr<FBXModelResourceStorage> mFBXModel;
+    //std::unique_ptr<FBXModelResourceStorage> mFBXModel;
     std::unique_ptr<TextureResourceStorage> mTexture;
 };
 

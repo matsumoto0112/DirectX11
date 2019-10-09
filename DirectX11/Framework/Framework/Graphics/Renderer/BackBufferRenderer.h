@@ -39,12 +39,12 @@ public:
     * @param sprite 描画するスプライト
     */
     virtual void render(std::shared_ptr<Sprite3D> sprite) override;
-    /**
-    * @brief モデルを描画する
-    * @param model 描画するモデル
-    * @param transform 描画するモデルのトランスフォーム
-    */
-    virtual void render(std::shared_ptr<Model> model, const Utility::Transform& transform) override;
+    ///**
+    //* @brief モデルを描画する
+    //* @param model 描画するモデル
+    //* @param transform 描画するモデルのトランスフォーム
+    //*/
+    //virtual void render(std::shared_ptr<Model> model, const Utility::Transform& transform) override;
     /**
     * @brief 描画したターゲットのテクスチャを取得する
     * @details バックバッファのテクスチャは取得できないのでエラーとなる

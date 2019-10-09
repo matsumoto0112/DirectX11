@@ -27,7 +27,7 @@ public:
     */
     template<class T>
     VertexAndIndexBuffer(const std::vector<T>& vertices,
-        const std::vector<WORD>& indices,
+        const std::vector<UINT>& indices,
         PrimitiveTopology topology);
     /**
     * @brief デストラクタ
@@ -46,7 +46,7 @@ private:
 
 template<class T>
 inline VertexAndIndexBuffer::VertexAndIndexBuffer(const std::vector<T>& vertices,
-    const std::vector<WORD>& indices,
+    const std::vector<UINT>& indices,
     PrimitiveTopology topology)
     :mVertexBuffer(std::make_unique<VertexBuffer>(vertices)),
     mIndexBuffer(std::make_unique<IndexBuffer>(indices, topology)) {}

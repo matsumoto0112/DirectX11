@@ -15,7 +15,7 @@ Cube::Cube() {
         {{0.5f,    -0.5f,   0.5f,  1.0f} },
         {{-0.5f,   -0.5f,   0.5f,  1.0f} },
     };
-    std::vector<WORD> indices
+    std::vector<UINT> indices
     {
         0,1,2,
         0,2,3,

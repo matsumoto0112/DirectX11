@@ -6,8 +6,12 @@ static const Framework::Math::Vector2 DEFAULT_UV = Framework::Math::Vector2::ZER
 static const Framework::Math::Vector3 DEFAULT_NORMAL = Framework::Math::Vector3::FORWORD;
 
 Framework::Math::Vector4 toPositionVector4(const FbxVector4& pos) {
-    //Xだけ反転しているっぽい
-    return Framework::Math::Vector4(-pos[0], pos[1], pos[2], 1.0f);
+    Framework::Math::Vector4 result;
+    result.x = static_cast<float>(pos[0]);
+    result.y = static_cast<float>(pos[1]);
+    result.z = static_cast<float>(pos[2]);
+    result.w = 1.0f;
+    return result;
 }
 
 Framework::Math::Vector2 toUVVector2(const FbxVector2& uv) {
@@ -18,7 +22,11 @@ Framework::Math::Vector2 toUVVector2(const FbxVector2& uv) {
 }
 
 Framework::Math::Vector3 toNormalVector3(const FbxVector4& normal) {
-    return Framework::Math::Vector3(-normal[0], normal[1], normal[2]);
+    Framework::Math::Vector3 result;
+    result.x = static_cast<float>(normal[0]);
+    result.y = static_cast<float>(normal[1]);
+    result.z = static_cast<float>(normal[2]);
+    return result;
 }
 
 //読み込んだ頂点を正しくコントロールするための行列の作成
@@ -38,11 +46,13 @@ FbxAMatrix createPositionOffsetMatrix(FbxMesh* mesh) {
 std::vector<Framework::Math::Vector4> positions(FbxMesh* mesh) {
     FbxVector4* source = mesh->GetControlPoints();
     const int cpCount = mesh->GetControlPointsCount();
+
+    //初期姿勢行列を用いて頂点を正しい座標に変換する
     FbxAMatrix mat = createPositionOffsetMatrix(mesh);
     for (int i = 0; i < cpCount; i++) {
         source[i] = mat.MultT(source[i]);
     }
-    int c = mesh->GetPolygonCount();
+
     //ポリゴン頂点分ループし、各頂点を格納していく
     const int size = mesh->GetPolygonVertexCount();
     int* polygonVertexIndex = mesh->GetPolygonVertices();
@@ -59,6 +69,7 @@ std::vector<Framework::Math::Vector2> uvs(FbxMesh* mesh) {
     mesh->GetUVSetNames(uvNames);
     const int size = mesh->GetPolygonVertexCount();
     std::vector<Framework::Math::Vector2> result(size);
+
     //UVが存在しなければデフォルトの値を使用する
     if (uvNames.GetCount() == 0) {
         for (int i = 0; i < size; i++) {
@@ -82,7 +93,7 @@ std::vector<Framework::Math::Vector3> normals(FbxMesh* mesh) {
     mesh->GetPolygonVertexNormals(normals);
     const int size = mesh->GetPolygonVertexCount();
     std::vector<Framework::Math::Vector3> result(size);
-    ////法線が存在しなければデフォルトを使用
+    //法線が存在しなければデフォルトを使用
     if (normals.Size() == 0) {
         for (int i = 0; i < size; i++) {
             result[i] = DEFAULT_NORMAL;
@@ -90,11 +101,10 @@ std::vector<Framework::Math::Vector3> normals(FbxMesh* mesh) {
         return result;
     }
 
-    FbxAMatrix mat = createPositionOffsetMatrix(mesh);
-    for (int i = 0; i < normals.Size(); i++) {
-        //法線は回転だけかけたい
-        normals[i] = mat.MultT(normals[i]);
-    }
+    //FbxAMatrix mat = createPositionOffsetMatrix(mesh);
+    //for (int i = 0; i < normals.Size(); i++) {
+    //    normals[i] = mat.MultT(normals[i]);
+    //}
 
     for (int i = 0; i < size; i++) {
         const FbxVector4& normal = normals[i];

@@ -45,10 +45,11 @@ RenderModel::RenderModel() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
-
-    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
-    std::vector<WORD> indices(pos.size());
+    loader.getUV();
+    std::vector<UINT> indices(pos.size());
     for (int i = 0; i < indices.size() / 3; i++) {
         indices[i * 3 + 0] = i * 3 + 2;
         indices[i * 3 + 1] = i * 3 + 1;
@@ -77,7 +78,8 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     m3DCamera->render();
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
+    Math::Vector3 scale(5.0f, 5.0f, 5.0f);
+    Math::Matrix4x4 m = Math::Matrix4x4::createScale(scale);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
     Utility::getConstantBufferManager()->send();
     mVShader->set();

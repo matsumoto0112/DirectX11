@@ -21,7 +21,7 @@ public:
     * @param indices インデックスデータ
     * @param topology プリミティブトポロジーの種類
     */
-    IndexBuffer(const std::vector<WORD>& indices, PrimitiveTopology topology);
+    IndexBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology);
     /**
     * @brief デストラクタ
     */
@@ -39,7 +39,7 @@ private:
     * @brief インデックスデータの設定
     * @param indices インデックスデータ
     */
-    void setBuffer(const std::vector<WORD>& indices, PrimitiveTopology topology);
+    void setBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology);
 private:
     std::unique_ptr<IndexBufferBindData> mData; //!< インデックスバッファのデータ
     UINT mIndexCount; //!< 頂点数
