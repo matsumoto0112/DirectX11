@@ -10,6 +10,7 @@
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/HashCombine.h"
+#include "..\..\Utility\IO\FBXLoader.h"
 
 namespace {
 static const Framework::Math::Vector3 DefaultNormal(0.0f, 0.0f, 1.0f);

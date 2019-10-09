@@ -20,7 +20,6 @@
 #include "Framework/Utility/ImGUI/Window.h"
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Scene/Manager.h"
-#include "Source/Scene/Impl/Title.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Source/Scene/Impl/ComputeShader.h"
@@ -34,6 +33,7 @@
 #include "Source/Scene/Impl/FlashParticle.h"
 #include "Source/Scene/Impl/ShotParticle.h"
 #include "Source/Scene/Impl/WormholeParticle.h"
+#include "Source/Scene/Impl/RenderModel.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -77,7 +77,8 @@ private:
         mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
         mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
         mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-        mSceneManager->loadScene(SceneType::WormholeParticle);
+        mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
+        mSceneManager->loadScene(SceneType::RenderModel);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);

@@ -7,11 +7,6 @@ namespace Define {
 * @brief ƒV[ƒ“‚Ìí—Ş’è‹`
 */
 enum class SceneType {
-    Title,
-    MainPlay,
-    Result,
-    Load,
-
     ParticleTest,
     DepthStencilTest,
     NormalLighting,
@@ -29,6 +24,7 @@ enum class SceneType {
     FlashParticle,
     ShotParticle,
     WormholeParticle,
+    RenderModel,
 };
 
 } //Define 

@@ -1,28 +1,30 @@
 #pragma once
+#include <memory>
 #include "Framework/Scene/SceneBase.h"
 
 namespace Framework {
 namespace Graphics {
-class TextureString;
+class AlphaBlend;
+class PerspectiveCamera;
 } //Graphics 
 } //Framework 
 
 /**
-* @class Title
-* @brief discription
+* @class RenderModel
+* @brief モデル描画テストシーン
 */
-class Title : public Framework::Scene::SceneBase {
+class RenderModel : public Framework::Scene::SceneBase {
 public:
     /**
     * @brief コンストラクタ
     */
-    Title();
+    RenderModel();
     /**
     * @brief デストラクタ
     */
-    ~Title();
+    ~RenderModel();
     /**
-    * @brief シーンデータの読み込み
+    * @brief シーン読み込み処理
     */
     virtual void load(Framework::Scene::Collecter& collecter) override;
     /**
@@ -30,7 +32,7 @@ public:
     */
     virtual void update() override;
     /**
-    * @brief 終了しているか
+    * @brief シーン終了条件を満たしているか
     */
     virtual bool isEndScene() const override;
     /**
@@ -46,5 +48,6 @@ public:
     */
     virtual Define::SceneType next() override;
 private:
-    std::unique_ptr<Framework::Graphics::TextureString> mTitleStr;
+    std::unique_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
+    std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 };

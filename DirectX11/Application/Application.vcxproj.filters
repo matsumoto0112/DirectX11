@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Title.cpp" />
     <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
     <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
@@ -15,10 +14,10 @@
     <ClCompile Include="Source\Scene\Impl\FlashParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShotParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\WormholeParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Source\Scene\Impl\Title.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
@@ -33,6 +32,7 @@
     <ClInclude Include="Source\Scene\Impl\FlashParticle.h" />
     <ClInclude Include="Source\Scene\Impl\ShotParticle.h" />
     <ClInclude Include="Source\Scene\Impl\WormholeParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
