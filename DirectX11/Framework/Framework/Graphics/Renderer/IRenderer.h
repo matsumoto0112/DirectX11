@@ -38,12 +38,12 @@ public:
     * @param sprite 描画するスプライト
     */
     virtual void render(std::shared_ptr<Sprite3D> sprite) = 0;
-    ///**
-    //* @brief モデルを描画する
-    //* @param model 描画するモデル
-    //* @param transform 描画するモデルのトランスフォーム
-    //*/
-    //virtual void render(std::shared_ptr<Model> model, const Utility::Transform& transform) = 0;
+    /**
+    * @brief モデルを描画する
+    * @param model 描画するモデル
+    * @param transform 描画するモデルのトランスフォーム
+    */
+    virtual void render(std::shared_ptr<Model> model, const Utility::Transform& transform) = 0;
     /**
     * @brief 描画したターゲットのテクスチャを取得する
     */

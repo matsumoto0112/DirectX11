@@ -20,7 +20,7 @@ ZTexCreater::ZTexCreater(UINT width, UINT height, std::shared_ptr<Effect> effect
     mRenderTarget->setClearColor(Color4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
-ZTexCreater::~ZTexCreater() {}
+ZTexCreater::~ZTexCreater() { }
 
 void ZTexCreater::setViewMatrix(const Math::Matrix4x4& view) {
     Utility::getConstantBufferManager()->setMatrix(ConstantBufferParameterType::View, view);
@@ -39,18 +39,15 @@ void ZTexCreater::end() {
     //mRenderTarget->reset();
 }
 
-//void ZTexCreater::render(std::shared_ptr<Model> model, const Utility::Transform& tranform) {
-//    std::vector<std::shared_ptr<VertexShader>> vshaders = model->getVertexShader();
-//    std::vector<std::shared_ptr<PixelShader>> pshaders = model->getPixelShader();
-//
-//    model->setVertexShader(mEffect->getVertexShader());
-//    model->setPixelShader(mEffect->getPixelShader());
-//
-//    model->draw(tranform);
-//
-//    model->setVertexShader(vshaders);
-//    model->setPixelShader(pshaders);
-//}
+void ZTexCreater::render(std::shared_ptr<Model> model, const Utility::Transform& tranform) {
+    auto prevEffect = model->getEffect();
+
+    model->setEffect(mEffect);
+
+    model->draw(tranform);
+
+    model->setEffect(prevEffect);
+}
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) {
     sprite->draw();

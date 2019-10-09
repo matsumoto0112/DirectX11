@@ -39,12 +39,12 @@ public:
     * @brief 出力終了
     */
     void end() override;
-    ///**
-    //* @brief 出力処理
-    //* @param model 対象となるモデル
-    //* @param transform 対象となるモデルのトランスフォーム
-    //*/
-    //void render(std::shared_ptr<Model> model, const Utility::Transform& tranform) override;
+    /**
+    * @brief 出力処理
+    * @param model 対象となるモデル
+    * @param transform 対象となるモデルのトランスフォーム
+    */
+    void render(std::shared_ptr<Model> model, const Utility::Transform& tranform) override;
     /**
     * @brief スプライトを描画する
     * @param sprite 描画するスプライト
