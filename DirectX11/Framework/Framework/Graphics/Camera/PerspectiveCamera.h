@@ -24,6 +24,10 @@ public:
     */
     virtual ~PerspectiveCamera();
     /**
+    * @brief •`‰æ€”õ
+    */
+    virtual void render() override;
+    /**
     * @brief ƒJƒƒ‰‚Ì‹“_‚Ìİ’è
     */
     virtual void setPosition(const Math::Vector3& position);

@@ -23,6 +23,10 @@ public:
     */
     virtual ~OrthographicCamera();
     /**
+    * @brief •`‰æ€”õ
+    */
+    virtual void render() override;
+    /**
     * @brief À•W‚Ìİ’è
     */
     void setPosition(const Math::Vector3& position);

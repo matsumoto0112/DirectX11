@@ -71,10 +71,14 @@ void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
     mSampler->setData(ShaderInputType::Pixel, 0);
 
     //モデル・プロジェクション行列の設定
-    cmanager->setMatrix(ConstantBufferParameterType::World, sprite->getModelMatrix());
+    cmanager->setMatrix(ConstantBufferParameterType::World2D, sprite->getModelMatrix());
 
     //UV情報の設定
-    cmanager->setRect(ConstantBufferParameterType::UV, sprite->getSrcRect());
+    Math::Rect rect = sprite->getSrcRect();
+    cmanager->setFloat(ConstantBufferParameterType::UVLeft, rect.getXMin());
+    cmanager->setFloat(ConstantBufferParameterType::UVTop, rect.getYMin());
+    cmanager->setFloat(ConstantBufferParameterType::UVWidth, rect.getWidth());
+    cmanager->setFloat(ConstantBufferParameterType::UVHeight, rect.getHeight());
 
     //色の設定
     cmanager->setColor(ConstantBufferParameterType::Color, sprite->getColor());
@@ -116,10 +120,14 @@ void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera* camera) {
     world.m[3][0] = sprite->getPosition().x;
     world.m[3][1] = sprite->getPosition().y;
     world.m[3][2] = sprite->getPosition().z;
-    cmanager->setMatrix(ConstantBufferParameterType::World, world);
+    cmanager->setMatrix(ConstantBufferParameterType::World3D, world);
 
     //UV情報の設定
-    cmanager->setRect(ConstantBufferParameterType::UV, sprite->getSrcRect());
+    Math::Rect rect = sprite->getSrcRect();
+    cmanager->setFloat(ConstantBufferParameterType::UVLeft, rect.getXMin());
+    cmanager->setFloat(ConstantBufferParameterType::UVTop, rect.getYMin());
+    cmanager->setFloat(ConstantBufferParameterType::UVWidth, rect.getWidth());
+    cmanager->setFloat(ConstantBufferParameterType::UVHeight, rect.getHeight());
 
     //色の設定
     cmanager->setColor(ConstantBufferParameterType::Color, sprite->getColor());

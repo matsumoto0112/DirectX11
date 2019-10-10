@@ -14,8 +14,8 @@ struct PSInput
 PSInput main(VSInput input)
 {
     PSInput o = (PSInput) 0;
-    o.pos = mul(input.pos, MVP());
-    o.ZCalc = mul(input.pos, mat.world);
+    o.pos = mul(input.pos, WORLD_VIEW_PROJECTION_3D());
+    o.ZCalc = mul(input.pos, mat3D.world);
     o.ZCalc = mul(o.ZCalc, lightMat.view);
     o.ZCalc = mul(o.ZCalc, lightMat.proj);
     return o;

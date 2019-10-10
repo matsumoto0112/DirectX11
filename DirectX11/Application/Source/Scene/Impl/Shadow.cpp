@@ -36,7 +36,6 @@ struct LightMatrix {
     Math::Matrix4x4 view;
     Math::Matrix4x4 proj;
 };
-std::unique_ptr<Graphics::ConstantBuffer<LightMatrix>> mLightMatrix;
 LightMatrix mLightMatrixData;
 ComPtr<ID3D11Texture2D> mRenderTargetTexture;
 ComPtr<ID3D11RenderTargetView> mRenderTarget;
@@ -91,18 +90,14 @@ Shadow::Shadow() {
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
         std::make_shared<Graphics::Effect>(vs, ps));
 
-    for (int x = -2; x < 2; x++) {
-        for (int z = -2; z < 2; z++) {
-            mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
-        }
-    }
-    //mTransform.emplace_back(Math::Vector3(3.0f, 0.0f, 0.0f), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+    //for (int x = -2; x < 2; x++) {
+    //    for (int z = -2; z < 2; z++) {
+    //        mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+    //    }
+    //}
+    mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(1, 1, 1));
 
-
-    //mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-10,5,0),Math::Vector3(0,0,0),Math::Vector3::UP }).transpose();
-    mLightMatrixData.proj = m3DCamera->getProjection().transpose();
-    mLightMatrix = std::make_unique<Graphics::ConstantBuffer<LightMatrix>>(Graphics::ShaderInputType::All, 7);
-    mLightMatrix->setBuffer(mLightMatrixData);
+    mLightMatrixData.proj = m3DCamera->getProjection();
     mModelEffect = mModel->getEffect();
     mShadowEffect = std::make_shared<Graphics::Effect>(
         std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMapCreate_VS"), nullptr);
@@ -113,8 +108,6 @@ Shadow::Shadow() {
 
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
-
-    //mSprite = std::make_shared<Graphics::Sprite2D>(mRenderTarget->getRenderTargetTexture());
 
     {
         D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -134,7 +127,6 @@ Shadow::Shadow() {
         std::shared_ptr<Graphics::TextureBuffer> buffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
         std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer);
         std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
-        //mSprite = std::make_shared<Graphics::Sprite2D>(tex);
         Graphics::DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(buffer->getBuffer().Get(), &rtvDesc, &mRenderTarget);
     }
     {
@@ -181,7 +173,7 @@ Shadow::Shadow() {
             std::make_shared<Graphics::PixelShader>("ShadowMap/ShadowMap_PS"));
         mFloor = std::make_shared<Graphics::Model>(vb, ib, mFloorEffect);
         mFloorTransform.setPosition(Math::Vector3(0, -3, 0));
-        mFloorTransform.setScale(Math::Vector3(5, 0.5f, 5));
+        mFloorTransform.setScale(Math::Vector3(10.0f, 0.1f, 10.0f));
     }
 
     mTheta = 0.0f;
@@ -211,11 +203,12 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     mTheta += 0.1f;
     float x = Math::MathUtility::sin(mTheta) * 1;
     float z = Math::MathUtility::cos(mTheta * 0.5f) * 1;
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(x,5,z),Math::Vector3(0,0,0),Math::Vector3::UP }).transpose();
-    mLightMatrix->setBuffer(mLightMatrixData);
-    mLightMatrix->sendBuffer();
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-    Utility::getConstantBufferManager()->send();
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(x,5,z),Math::Vector3(0,0,0),Math::Vector3::UP });
+    Graphics::ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
+    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.view);
+    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.proj);
+    cbManager->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
+    cbManager->send();
 
     Graphics::DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, mRenderTarget.GetAddressOf(), mDepthStencil.Get());
     const float clear[] = { 0.0f,0.0f,0.0f,1.0f };

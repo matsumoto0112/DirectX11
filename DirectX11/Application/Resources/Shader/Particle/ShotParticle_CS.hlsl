@@ -1,5 +1,5 @@
 #include "../Compute/ComputeShaderDefine.hlsli"
-#include "../Utility/Util.hlsli"
+#include "../Utility/UtilFunc.hlsli"
 
 #define THREAD_X (16)
 #define THREAD_Y (16)

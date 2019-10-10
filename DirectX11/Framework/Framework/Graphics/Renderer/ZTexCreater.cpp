@@ -24,11 +24,11 @@ ZTexCreater::ZTexCreater(UINT width, UINT height, std::shared_ptr<Effect> effect
 ZTexCreater::~ZTexCreater() { }
 
 void ZTexCreater::setViewMatrix(const Math::Matrix4x4& view) {
-    Utility::getConstantBufferManager()->setMatrix(ConstantBufferParameterType::View, view);
+    Utility::getConstantBufferManager()->setMatrix(ConstantBufferParameterType::View3D, view);
 }
 
 void ZTexCreater::setProjectionMatrix(const Math::Matrix4x4& proj) {
-    Utility::getConstantBufferManager()->setMatrix(ConstantBufferParameterType::Projection, proj);
+    Utility::getConstantBufferManager()->setMatrix(ConstantBufferParameterType::Projection3D, proj);
 }
 
 void ZTexCreater::begin() {

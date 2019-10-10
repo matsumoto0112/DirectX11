@@ -188,7 +188,7 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     UINT offset = 0;
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, Math::Matrix4x4::identity());
     Utility::getConstantBufferManager()->send();
     Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
     Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);

@@ -42,8 +42,8 @@ float4x4 createBillBoard(float4x4 worldView)
 [maxvertexcount(MAX_VERTEX_COUNT)]
 void main(point GSInput input[1], inout TriangleStream<PSInput> output)
 {
-    float4x4 m = mul(mat.world, mat.view);
-    m = mul(createBillBoard(m), mat.proj);
+    float4x4 m = mul(mat3D.world, mat3D.view);
+    m = mul(createBillBoard(m), mat3D.proj);
 
     float4 pos[4] =
     {

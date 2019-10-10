@@ -119,15 +119,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\CameraNumCBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ColorCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferParameterType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferTypeManager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\MaterialCBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\MVPMatrixCBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\UVInfoCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\Particle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\ParticleEmitter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.h" />
@@ -262,5 +257,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\PrimitiveTopology.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferStruct.h" />
   </ItemGroup>
 </Project>

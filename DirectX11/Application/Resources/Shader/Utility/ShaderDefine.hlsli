@@ -1,29 +1,20 @@
-
 static const float EPSILON = 1e-6; //誤差
 
 //ワールド・ビュー・プロジェクション行列
-//2D時はviewに-(カメラの座標)の行列が入ってくる
-struct MVPMatrix
+struct MVPMatrix3D
 {
-    matrix world; //ワールド行列
-    matrix view; //ビュー行列
-    matrix proj; //プロジェクション行列
+    float4x4 world; //ワールド行列
+    float4x4 view; //ビュー行列
+    float4x4 proj; //プロジェクション行列
 };
 
-//平行光源
-struct DirectionalLight
+//ワールド・ビュー・プロジェクション行列
+//viewに-(カメラの座標)の行列が入ってくる
+struct MVPMatrix2D
 {
-    float4 colDirLight; //色
-    float3 dir; //方向
-};
-
-//点光源
-struct PointLight
-{
-    float4 colPLight; //色
-    float3 posPLight; //座標
-    float R; //最大距離
-    float A; //減衰率
+    float4x4 world; //ワールド行列
+    float4x4 view; //ビュー行列
+    float4x4 proj; //プロジェクション行列
 };
 
 //UV情報
@@ -35,28 +26,23 @@ struct UVInfo
     float height;
 };
 
-//マテリアル情報
-struct Material
-{
-    float4 ambient;
-    float4 diffuse;
-    float4 specular;
-    float shininess;
-    float alpha;
-};
-
 struct LightMatrix
 {
-    matrix view; //ライトビュー行列
-    matrix proj; //ライト射影行列
+    float4x4 view; //ライトビュー行列
+    float4x4 proj; //ライト射影行列
 };
 
-//ワールド・ビュー・プロジェクション行列バッファ
+//3D用ワールド・ビュー・プロジェクション行列バッファ
 cbuffer CB0 : register(b0)
 {
-    MVPMatrix mat;
+    MVPMatrix3D mat3D;
 }
 
+//2D用ワールド・ビュー・プロジェクション行列バッファ
+cbuffer CB1 : register(b1)
+{
+    MVPMatrix2D mat2D;
+}
 
 //UV情報バッファ
 cbuffer CB2 : register(b2)
@@ -67,36 +53,13 @@ cbuffer CB2 : register(b2)
 //色情報バッファ
 cbuffer CB3 : register(b3)
 {
-    float4 color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-}
-
-//マテリアル
-cbuffer CB5 : register(b4)
-{
-    Material material;
-}
-
-//カメラ数
-cbuffer CameraNum : register(b5)
-{
-    int cameraNum;
+    float4 color;
 }
 
 
 cbuffer LightMat : register(b7)
 {
     LightMatrix lightMat;
-}
-
-/**
-* 法線ベクトルをワールド変換して正規化します
-* @param nor4 4次元法線ベクトル
-* @param world ワールド変換行列
-* @return ワールド変換して正規化した法線ベクトル
-*/
-float3 getWorldNormal(float4 nor4, matrix world)
-{
-    return normalize(mul(nor4, world).xyz);
 }
 
 matrix createViewMatrix(float3 eye, float3 at, float3 up)
@@ -106,17 +69,26 @@ matrix createViewMatrix(float3 eye, float3 at, float3 up)
     const float3 yaxis = cross(zaxis, xaxis);
 
     return float4x4(
-        xaxis.x,                    yaxis.x,            zaxis.x,        0.0f,
-        xaxis.y,                    yaxis.y,            zaxis.y,        0.0f,
-        zaxis.z,                    yaxis.z,            zaxis.z,        0.0f,
-        -dot(xaxis, eye),   -dot(yaxis, eye),   -dot(zaxis, eye),       1.0f
+        xaxis.x, yaxis.x, zaxis.x, 0.0f,
+        xaxis.y, yaxis.y, zaxis.y, 0.0f,
+        zaxis.z, yaxis.z, zaxis.z, 0.0f,
+        -dot(xaxis, eye), -dot(yaxis, eye), -dot(zaxis, eye), 1.0f
     );
 
 }
 
-matrix MVP()
+//3Dワールド・ビュー・プロジェクション行列
+float4x4 WORLD_VIEW_PROJECTION_3D()
 {
-    matrix res = mul(mat.world, mat.view);
-    res = mul(res, mat.proj);
-    return res;
+    float4x4 m = mul(mat3D.world, mat3D.view);
+    m = mul(m, mat3D.proj);
+    return m;
+}
+
+//2Dワールド・ビュー・プロジェクション行列
+float4x4 WORLD_VIEW_PROJECTION_2D()
+{
+    float4x4 m = mul(mat2D.world, mat2D.view);
+    m = mul(m, mat2D.proj);
+    return m;
 }

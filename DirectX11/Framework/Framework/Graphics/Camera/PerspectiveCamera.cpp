@@ -1,4 +1,5 @@
 #include "PerspectiveCamera.h"
+#include "Framework/Utility/Wrap/OftenUsed.h"
 
 namespace {
 Framework::Math::Vector3 getLine(const Framework::Math::Matrix4x4& mat, int line) {
@@ -15,9 +16,15 @@ namespace Graphics {
 PerspectiveCamera::PerspectiveCamera(const Math::ViewInfo& view, const Math::ProjectionInfo& proj)
     :Camera(Math::Matrix4x4::createView(view),
         Math::Matrix4x4::createProjection(proj))
-    , mViewInfo(view), mProjInfo(proj) {}
+    , mViewInfo(view), mProjInfo(proj) { }
 
-PerspectiveCamera::~PerspectiveCamera() {}
+PerspectiveCamera::~PerspectiveCamera() { }
+
+void PerspectiveCamera::render() {
+    ConstantBufferManager* cbmanager = Utility::getConstantBufferManager();
+    cbmanager->setMatrix(ConstantBufferParameterType::View3D, mView);
+    cbmanager->setMatrix(ConstantBufferParameterType::Projection3D, mProjection);
+}
 
 void PerspectiveCamera::setPosition(const Math::Vector3& position) {
     mViewInfo.eye = position;

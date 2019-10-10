@@ -3,7 +3,6 @@
 #include <memory>
 #include "Framework/Graphics/Buffer/IndexBuffer.h"
 #include "Framework/Graphics/Buffer/VertexBuffer.h"
-#include "Framework/Graphics/ConstantBuffer/MaterialCBufferStruct.h"
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Vertex/Vertex.h"

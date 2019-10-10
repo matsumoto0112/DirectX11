@@ -19,10 +19,8 @@ struct ps_input
 ps_input main(vs_input input)
 {
     ps_input o = (ps_input) 0;
-    o.position = mul(input.position, mat.world);
-    o.position = mul(o.position, mat.view);
-    o.position = mul(o.position, mat.proj);
-    o.normal = mul(input.normal, (float3x3) mat.world);
+    o.position = mul(input.position, WORLD_VIEW_PROJECTION_3D());
+    o.normal = mul(input.normal, (float3x3) mat3D.world);
     o.color = input.color;
     o.uv = input.uv * float2(uv.width, uv.height) + float2(uv.left, uv.top);
     return o;

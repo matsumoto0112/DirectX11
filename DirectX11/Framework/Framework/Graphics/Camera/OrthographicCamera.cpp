@@ -1,4 +1,5 @@
 #include "OrthographicCamera.h"
+#include "Framework/Utility/Wrap/OftenUsed.h"
 
 namespace Framework {
 namespace Graphics {
@@ -10,7 +11,13 @@ OrthographicCamera::OrthographicCamera(const Math::Vector2& size)
 
 OrthographicCamera::~OrthographicCamera() {}
 
-void Framework::Graphics::OrthographicCamera::setPosition(const Math::Vector3& position) {
+void OrthographicCamera::render() {
+    ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
+    cbManager->setMatrix(ConstantBufferParameterType::View2D, mView);
+    cbManager->setMatrix(ConstantBufferParameterType::Projection2D, mProjection);
+}
+
+void OrthographicCamera::setPosition(const Math::Vector3& position) {
     mPosition = position;
     mView.setupTransform(-mPosition);
 }

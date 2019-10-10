@@ -13,6 +13,6 @@ struct ps_input
 ps_input main(vs_input input)
 {
     ps_input o = (ps_input) 0;
-    o.pos = mul(input.pos, MVP());
+    o.pos = mul(input.pos, WORLD_VIEW_PROJECTION_3D());
     return o;
 }

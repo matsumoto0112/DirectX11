@@ -9,12 +9,6 @@ Camera::Camera(const Math::Matrix4x4& view, const Math::Matrix4x4& proj)
 
 Camera::~Camera() {}
 
-void Camera::render() {
-    ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
-    cbManager->setMatrix(ConstantBufferParameterType::View, mView);
-    cbManager->setMatrix(ConstantBufferParameterType::Projection, mProjection);
-}
-
 Math::Vector3 Camera::screenToWorldPosition(const Math::Vector2& pos, float z, const Math::Vector2& screenSize) const {
     Math::Matrix4x4 invView = Math::Matrix4x4::inverse(mView);
     Math::Matrix4x4 invProj = Math::Matrix4x4::inverse(mProjection);

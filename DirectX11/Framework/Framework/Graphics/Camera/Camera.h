@@ -22,7 +22,7 @@ public:
     /**
     * @brief 描画準備をする
     */
-    virtual void render();
+    virtual void render() = 0;
     /**
     * @brief スクリーン座標からワールド座標に変換する
     * @param pos 変換したい座標

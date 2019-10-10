@@ -22,10 +22,10 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> output)
     pos[2] = float4(-0.5f, -0.5f, 0.0f, 1.0f);
     pos[3] = float4(0.5f, -0.5f, 0.0f, 1.0f);
 
-    float4x4 world = mat.world;
+    float4x4 world = mat3D.world;
     world._m30_m31_m32 = input[0].pos.xyz;
-    float4x4 m = mul(world, mat.view);
-    m = mul(m, mat.proj);
+    float4x4 m = mul(world, mat3D.view);
+    m = mul(m, mat3D.proj);
 
     PSInput o;
     o.col = input[0].color;

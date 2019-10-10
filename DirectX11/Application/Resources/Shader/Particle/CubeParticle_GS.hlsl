@@ -16,7 +16,7 @@ struct PSInput
 [maxvertexcount(36)]
 void main(point GSInput input[1], inout TriangleStream<PSInput> output)
 {
-    float4x4 world = mat.world;
+    float4x4 world = mat3D.world;
     world._m30_m31_m32 = input[0].pos.xyz;
     float4x4 scale = float4x4(
         input[0].scale.x, 0.0f, 0.0f, 0.0f,
@@ -26,8 +26,8 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> output)
     );
 
     float4x4 m = mul(world, scale);
-    m = mul(m, mat.view);
-    m = mul(m, mat.proj);
+    m = mul(m, mat3D.view);
+    m = mul(m, mat3D.proj);
 
     float4 vertices[] =
     {

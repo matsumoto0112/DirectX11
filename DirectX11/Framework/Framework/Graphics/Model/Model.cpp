@@ -18,7 +18,7 @@ Model::~Model() { }
 void Model::draw(const Utility::Transform& transform) {
     ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
     //À•W•ÏŠ·s—ñ‚Ìİ’è
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::World, transform.createSRTMatrix());
+    cbManager->setMatrix(Graphics::ConstantBufferParameterType::World3D, transform.createSRTMatrix());
     cbManager->send();
     mEffect->set();
     mVertexBuffer->setData();

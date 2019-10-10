@@ -201,7 +201,7 @@ void ShotParticle::draw(Framework::Graphics::IRenderer* renderer) {
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, m);
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
     Utility::getConstantBufferManager()->send();
 
     for (int i = 0; i < mGPUParticle.size(); i++) {

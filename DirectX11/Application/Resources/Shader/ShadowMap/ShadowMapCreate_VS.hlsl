@@ -13,7 +13,7 @@ struct PSInput
 PSInput main(const VSInput input)
 {
     PSInput o = (PSInput) 0;
-    o.pos = mul(input.pos, mat.world);
+    o.pos = mul(input.pos, mat3D.world);
     o.pos = mul(o.pos, lightMat.view);
     o.pos = mul(o.pos, lightMat.proj);
     return o;
