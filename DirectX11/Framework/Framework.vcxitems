@@ -112,6 +112,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferStruct.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\BlendStateDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
@@ -157,7 +158,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />

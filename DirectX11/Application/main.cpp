@@ -76,9 +76,9 @@ private:
         //mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
         //mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
         //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-        //mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
-        mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
-        mSceneManager->loadScene(SceneType::Shadow);
+        mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
+        //mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
+        mSceneManager->loadScene(SceneType::RenderModel);
 
         mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
         mFPSText = std::make_shared<ImGUI::Text>("FPS");

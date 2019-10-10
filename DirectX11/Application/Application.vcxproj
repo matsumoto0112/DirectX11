@@ -72,17 +72,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallBounceParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallBounceRotateParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FireworkParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FlashParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\ShotParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\SpotInstancerParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -92,17 +83,8 @@
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallBounceParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallBounceRotateParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FireworkParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FlashParticle.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\ShotParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\SpotInstancerParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

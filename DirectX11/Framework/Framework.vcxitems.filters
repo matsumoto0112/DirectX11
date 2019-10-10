@@ -176,7 +176,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlendSetting.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
@@ -229,5 +228,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IDrawable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderInputType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\BlendStateDesc.h" />
   </ItemGroup>
 </Project>

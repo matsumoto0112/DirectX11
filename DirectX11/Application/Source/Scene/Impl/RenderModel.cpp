@@ -1,5 +1,4 @@
 #include "RenderModel.h"
-#include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
@@ -9,6 +8,7 @@
 #include "Framework/Define/Path.h"
 #include "Framework/Define/Config.h"
 #include "Framework/Graphics/Model/Model.h"
+#include "Framework/Graphics/Desc/BlendStateDesc.h"
 
 using namespace Framework;
 
@@ -16,15 +16,6 @@ namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 Utility::Transform mTransform;
 std::unique_ptr<Graphics::Model> mModel;
-
-std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
-    D3D11_BLEND_DESC desc;
-    desc.AlphaToCoverageEnable = FALSE;
-    desc.IndependentBlendEnable = FALSE;
-    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    return std::make_unique<Graphics::AlphaBlend>(desc);
-}
-
 }
 RenderModel::RenderModel() {
     //カメラの初期化
@@ -33,7 +24,7 @@ RenderModel::RenderModel() {
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
     //アルファブレンドの作成
-    mAlphaBlend = createAlphaBlend();
+    mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Default));
 
     //ラスタライザ作成
     D3D11_RASTERIZER_DESC rasterizerDesc;

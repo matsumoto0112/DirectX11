@@ -9,7 +9,7 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
 #include "Framework/Graphics/Render/RTVWithDSV.h"
-#include "Framework/Graphics/Render/AlphaBlendSetting.h"
+#include "Framework/Graphics/Desc/BlendStateDesc.h"
 
 namespace Framework {
 namespace Graphics {
@@ -33,13 +33,7 @@ void RenderingManager::initialize() {
     std::shared_ptr<RenderTargetView> renderTarget = std::make_shared<RenderTargetView>(texture, nullptr,
         dsvTexture, &DepthStencilDesc::getMSAADepthStencilViewDesc(), Color4::WHITE);
 
-    D3D11_BLEND_DESC desc{};
-    desc.AlphaToCoverageEnable = FALSE;
-    desc.IndependentBlendEnable = FALSE;
-    for (int i = 0; i < 8; i++) {
-        desc.RenderTarget[i] = AlphaBlendSetting::getDefaultDesc();
-    }
-    std::shared_ptr<AlphaBlend> blendState = std::make_shared<AlphaBlend>(desc);
+    std::shared_ptr<AlphaBlend> blendState = std::make_shared<AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Default));
     mDefaultPipeline = std::make_unique<Pipeline>(renderTarget, blendState);
 }
 

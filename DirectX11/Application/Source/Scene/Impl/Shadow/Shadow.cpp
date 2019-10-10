@@ -1,5 +1,5 @@
 #include "Shadow.h"
-#include "Framework/Graphics/Render/AlphaBlendSetting.h"
+#include "Framework/Graphics/Desc/BlendStateDesc.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
@@ -42,14 +42,6 @@ ComPtr<ID3D11RenderTargetView> mRenderTarget;
 ComPtr<ID3D11ShaderResourceView> mRenderTargetSRV;
 ComPtr<ID3D11DepthStencilView> mDepthStencil;
 float mTheta;
-
-std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
-    D3D11_BLEND_DESC desc;
-    desc.AlphaToCoverageEnable = FALSE;
-    desc.IndependentBlendEnable = FALSE;
-    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getDefaultDesc();
-    return std::make_unique<Graphics::AlphaBlend>(desc);
-}
 
 }
 Shadow::Shadow() {

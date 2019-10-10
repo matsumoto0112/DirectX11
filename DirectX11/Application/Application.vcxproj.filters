@@ -4,15 +4,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallBounceParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallBounceRotateParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FireworkParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FlashParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\ShotParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\SpotInstancerParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -21,15 +12,6 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallBounceParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallBounceRotateParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FireworkParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FlashParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\ShotParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\SpotInstancerParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
   </ItemGroup>
   <ItemGroup>
