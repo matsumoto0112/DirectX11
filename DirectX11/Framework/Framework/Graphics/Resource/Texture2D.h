@@ -16,7 +16,7 @@ public:
     * @brief コンストラクタ
     * @param texDesc テクスチャデスク
     */
-    Texture2D(const D3D11_TEXTURE2D_DESC* texDesc);
+    Texture2D(const D3D11_TEXTURE2D_DESC* texDesc, const D3D11_SUBRESOURCE_DATA* subResource);
     /**
     * @brief コンストラクタ
     * @param texture テクスチャ

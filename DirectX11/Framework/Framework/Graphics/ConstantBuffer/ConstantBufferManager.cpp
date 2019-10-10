@@ -58,26 +58,27 @@ void ConstantBufferManager::setup() {
             }); \
     }
 
-    mMVP3DCBuffer = std::make_unique<ConstantBuffer<MVPMatrix3DCBuffer>>(ShaderInputType::All, 0);
+    ShaderInputType inputType = ShaderInputType::Vertex & ShaderInputType::Pixel & ShaderInputType::Geometory;
+    mMVP3DCBuffer = std::make_unique<ConstantBuffer<MVPMatrix3DCBuffer>>(inputType, 0);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::World3D, Math::Matrix4x4, mMVP3DCBuffer, world);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::View3D, Math::Matrix4x4, mMVP3DCBuffer, view);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::Projection3D, Math::Matrix4x4, mMVP3DCBuffer, proj);
 
-    mMVP2DCBuffer = std::make_unique<ConstantBuffer<MVPMatrix2DCBuffer>>(ShaderInputType::All, 1);
+    mMVP2DCBuffer = std::make_unique<ConstantBuffer<MVPMatrix2DCBuffer>>(inputType, 1);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::World2D, Math::Matrix4x4, mMVP2DCBuffer, world);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::View2D, Math::Matrix4x4, mMVP2DCBuffer, view);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::Projection2D, Math::Matrix4x4, mMVP2DCBuffer, proj);
 
-    mUVCBuffer = std::make_unique<ConstantBuffer<UVInfoCBuffer>>(ShaderInputType::All, 2);
+    mUVCBuffer = std::make_unique<ConstantBuffer<UVInfoCBuffer>>(inputType, 2);
     ADD_SEND_FUNC(mFloatBufferManager, ConstantBufferParameterType::UVLeft, float, mUVCBuffer, left);
     ADD_SEND_FUNC(mFloatBufferManager, ConstantBufferParameterType::UVTop, float, mUVCBuffer, top);
     ADD_SEND_FUNC(mFloatBufferManager, ConstantBufferParameterType::UVWidth, float, mUVCBuffer, width);
     ADD_SEND_FUNC(mFloatBufferManager, ConstantBufferParameterType::UVHeight, float, mUVCBuffer, height);
 
-    mColorCBuffer = std::make_unique<ConstantBuffer<ColorCBuffer>>(ShaderInputType::All, 3);
+    mColorCBuffer = std::make_unique<ConstantBuffer<ColorCBuffer>>(inputType, 3);
     ADD_SEND_FUNC(mColorBufferManager, ConstantBufferParameterType::Color, Color4, mColorCBuffer, color);
 
-    mLightMatrixCBuffer = std::make_unique<ConstantBuffer<LightMatrixCBuffer>>(ShaderInputType::All, 7);
+    mLightMatrixCBuffer = std::make_unique<ConstantBuffer<LightMatrixCBuffer>>(inputType, 7);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::LightView, Math::Matrix4x4, mLightMatrixCBuffer, lightView);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::LightProj, Math::Matrix4x4, mLightMatrixCBuffer, lightProj);
 }

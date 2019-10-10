@@ -30,7 +30,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw(IRenderer* renderer) override;
+    virtual void draw(Pipeline* pipeline) override;
 private:
     PROPERTY(bool, mIsAlive, IsAlive); //!< ¶‘¶‚µ‚Ä‚¢‚é‚©
     PROPERTY(float, mDuration, Duration); //!< ¶‘¶ŽžŠÔ

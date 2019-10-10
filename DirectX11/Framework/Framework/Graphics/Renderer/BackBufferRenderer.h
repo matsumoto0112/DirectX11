@@ -1,6 +1,6 @@
 //#pragma once
 //#include "Framework/Graphics/Color4.h"
-//#include "Framework/Graphics/Renderer/IRenderer.h"
+//#include "Framework/Graphics/Renderer/Pipeline.h"
 //#include "Framework/Utility/Property.h"
 //
 //namespace Framework {
@@ -11,7 +11,7 @@
 //* @class BackBufferRenderer
 //* @brief バックバッファに向けて描画するデバイス
 //*/
-//class BackBufferRenderer : public IRenderer {
+//class BackBufferRenderer : public Pipeline {
 //public:
 //    /**
 //    * @brief コンストラクタ

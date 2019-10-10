@@ -15,11 +15,7 @@ Model::Model(std::shared_ptr<VertexBuffer> vertexBuffer,
 
 Model::~Model() { }
 
-void Model::draw(const Utility::Transform& transform) {
-    ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
-    //À•W•ÏŠ·s—ñ‚ÌÝ’è
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::World3D, transform.createSRTMatrix());
-    cbManager->send();
+void Model::draw() {
     mEffect->set();
     mVertexBuffer->setData();
     mIndexBuffer->setData();

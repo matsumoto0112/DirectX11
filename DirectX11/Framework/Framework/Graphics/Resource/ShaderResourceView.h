@@ -3,6 +3,7 @@
 #include <memory>
 #include <d3d11.h>
 #include "Framework/Graphics/Resource/Texture2D.h"
+#include "Framework/Graphics/Shader/ShaderInputType.h"
 
 namespace Framework {
 namespace Graphics {
@@ -24,6 +25,10 @@ public:
     */
     ~ShaderResourceView();
     /**
+    * @brief コンテキストにデータをセットする
+    */
+    void set(ShaderInputType inputType, UINT registerNum);
+    /**;
     * @brief シェーダーリソースビューを取得する
     */
     ComPtr<ID3D11ShaderResourceView> getShaderResourceView() const { return mShaderResourceView; }

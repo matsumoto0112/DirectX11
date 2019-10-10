@@ -11,15 +11,15 @@ class PerspectiveCamera;
 class OrthographicCamera;
 
 /**
-* @class IRenderer
+* @class Pipeline
 * @brief 描画インターフェース
 */
-class IRenderer {
+class Pipeline {
 public:
     /**
     * @brief デストラクタ
     */
-    virtual ~IRenderer() = default;
+    virtual ~Pipeline() = default;
     /**
     * @brief 描画開始
     */

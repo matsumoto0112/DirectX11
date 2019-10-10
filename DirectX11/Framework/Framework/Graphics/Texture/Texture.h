@@ -19,17 +19,15 @@ class ShaderResourceView;
 */
 class Texture {
 private:
-    using Texture2DPtr = std::shared_ptr<TextureBuffer>;
+    using Texture2DPtr = std::shared_ptr<Texture2D>;
     using SRVPtr = std::shared_ptr<ShaderResourceView>;
 public:
     /**
     * @brief コンストラクタ
     * @param texture2D テクスチャ2D
     * @param srv シェーダーリソースビュー
-    * @param width テクスチャの幅
-    * @param height テクスチャの高さ
     */
-    Texture(Texture2DPtr texture2D, SRVPtr srv, int width = 0, int height = 0);
+    Texture(Texture2DPtr texture2D, SRVPtr srv);
     /**
     * @brief デストラクタ
     */

@@ -44,20 +44,15 @@ public:
 
     void clear();
 private:
-    /**
-    * @brief バッファの転送時に使用する関数の作成
-    * @param inputType どのシェーダに値を設定するか
-    * @param slotNum シェーダのどのスロットに値を設定するか
-    */
-    std::function<void(void)> createSendBufferFunction(ShaderInputType inputType, UINT slotNumber);
-private:
     T mData; //!< 現在のコンスタントバッファの値
     ComPtr<ID3D11Buffer> mConstantBuffer; //!< コンスタントバッファ
-    std::function<void(void)> mSendBufferFunction; //!< バッファの転送時に使用する関数
+    ShaderInputType mInputType; //!< どのシェーダーにデータを転送するか
+    UINT mRegisterNum; //!< シェーダーの登録番号
 };
 
 template<class T>
-Graphics::ConstantBuffer<T>::ConstantBuffer(ShaderInputType inputType, UINT slotNumber) {
+Graphics::ConstantBuffer<T>::ConstantBuffer(ShaderInputType inputType, UINT slotNumber)
+    :mInputType(inputType), mRegisterNum(slotNumber) {
     //バッファの作成
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
@@ -69,7 +64,6 @@ Graphics::ConstantBuffer<T>::ConstantBuffer(ShaderInputType inputType, UINT slot
     desc.StructureByteStride = 0;
 
     throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, nullptr, &mConstantBuffer));
-    mSendBufferFunction = createSendBufferFunction(inputType, slotNumber);
 }
 
 template<class T>
@@ -84,45 +78,24 @@ template<class T>
 inline void Graphics::ConstantBuffer<T>::sendBuffer() {
     DX11InterfaceAccessor::getContext()->UpdateSubresource(mConstantBuffer.Get(), 0, nullptr,
         &mData, 0, 0);
-    mSendBufferFunction();
+    if (AND(mInputType, ShaderInputType::Vertex)) {
+        DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(mRegisterNum, 1, mConstantBuffer.GetAddressOf());
+    }
+    if (AND(mInputType, ShaderInputType::Pixel)) {
+        DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(mRegisterNum, 1, mConstantBuffer.GetAddressOf());
+    }
+    if (AND(mInputType, ShaderInputType::Geometory)) {
+        DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(mRegisterNum, 1, mConstantBuffer.GetAddressOf());
+    }
+    if (AND(mInputType, ShaderInputType::Compute)) {
+        DX11InterfaceAccessor::getContext()->CSSetConstantBuffers(mRegisterNum, 1, mConstantBuffer.GetAddressOf());
+    }
 }
 
 template<class T>
 inline void Graphics::ConstantBuffer<T>::clear() {
     mData = T();
-    DX11InterfaceAccessor::getContext()->UpdateSubresource(mConstantBuffer.Get(), 0, nullptr,
-        &mData, 0, 0);
-    mSendBufferFunction();
-}
-
-template<class T>
-inline std::function<void(void)> Graphics::ConstantBuffer<T>::createSendBufferFunction(ShaderInputType inputType, UINT slotNumber) {
-    //inputTypeに応じた関数作成
-    //頂点、ピクセルシェーダのどこに転送するか
-    switch (inputType) {
-        case ShaderInputType::Vertex:
-            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-        case ShaderInputType::Pixel:
-            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-        case ShaderInputType::Compute:
-            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->CSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-        case ShaderInputType::Geometory:
-            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-        case ShaderInputType::VertexAndPixel:
-            return [&, slotNumber]()->void {
-                DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-                DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-            };
-        case ShaderInputType::All:
-            return [&, slotNumber]()->void {
-                DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-                DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-                DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-            };
-        default:
-            MY_ASSERTION(false, "未定義のShaderInputTypeが選択されました。");
-            return NULL;
-    }
+    sendBuffer();
 }
 
 } //Graphics 

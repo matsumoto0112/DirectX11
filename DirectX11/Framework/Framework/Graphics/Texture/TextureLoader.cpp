@@ -1,7 +1,6 @@
 #include "TextureLoader.h"
 #include <vector>
 #include <atlstr.h>
-//#include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
@@ -9,7 +8,8 @@
 namespace Framework {
 namespace Graphics {
 
-TextureLoader::TextureLoader() {
+TextureLoader::TextureLoader()
+    :mTexture2DDesc({}), mSRVDesc({}) {
     //イメージファクトリ作成
     HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory,
         nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mFactory));
@@ -20,7 +20,6 @@ TextureLoader::TextureLoader() {
     MY_ASSERTION(SUCCEEDED(hr), "FormatConverter作成失敗");
 
     //テクスチャデスク作成
-    ZeroMemory(&mTexture2DDesc, sizeof(mTexture2DDesc));
     mTexture2DDesc.MipLevels = 1;
     mTexture2DDesc.ArraySize = 1;
     mTexture2DDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -36,64 +35,62 @@ TextureLoader::TextureLoader() {
     mSRVDesc.Texture2D.MipLevels = mTexture2DDesc.MipLevels;
 }
 
-TextureLoader::~TextureLoader() {}
+TextureLoader::~TextureLoader() { }
 
 std::unique_ptr<Texture> TextureLoader::load(const std::string& filepath) {
-    return nullptr;
-    ////マルチバイト文字に変換
-    //CStringW wPath(filepath.c_str());
-    ////パスからデコーダーを作成
-    //HRESULT hr = mFactory->CreateDecoderFromFilename(
-    //    wPath, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &mDecoder);
-    //MY_ASSERTION(SUCCEEDED(hr), "デコーダー作成失敗\nファイル名は" + filepath);
+    //マルチバイト文字に変換
+    CStringW wPath(filepath.c_str());
+    //パスからデコーダーを作成
+    HRESULT hr = mFactory->CreateDecoderFromFilename(
+        wPath, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &mDecoder);
+    MY_ASSERTION(SUCCEEDED(hr), "デコーダー作成失敗\nファイル名は" + filepath);
 
-    ////フレームの取得
-    //hr = mDecoder->GetFrame(0, &mFrame);
-    //MY_ASSERTION(SUCCEEDED(hr), "GetFrame失敗");
+    //フレームの取得
+    hr = mDecoder->GetFrame(0, &mFrame);
+    MY_ASSERTION(SUCCEEDED(hr), "GetFrame失敗");
 
-    //UINT width, height;
-    //mFrame->GetSize(&width, &height);
-    ////ピクセル形式を取得
-    //WICPixelFormatGUID pixelFormat;
-    //hr = mFrame->GetPixelFormat(&pixelFormat);
-    //MY_ASSERTION(SUCCEEDED(hr), "GetPixelFrame失敗");
+    UINT width, height;
+    mFrame->GetSize(&width, &height);
+    //ピクセル形式を取得
+    WICPixelFormatGUID pixelFormat;
+    hr = mFrame->GetPixelFormat(&pixelFormat);
+    MY_ASSERTION(SUCCEEDED(hr), "GetPixelFrame失敗");
 
-    //int stride = width * 4;
-    //int bufferSize = stride * height;
-    //std::vector<BYTE> buffer(bufferSize);
-    ////ピクセル形式が32bitRGBAでなかったら変換する
-    //if (pixelFormat != GUID_WICPixelFormat32bppRGBA) {
-    //    hr = mFactory->CreateFormatConverter(&mConverter);
-    //    MY_ASSERTION(SUCCEEDED(hr), "FormatConverter作成失敗");
+    int stride = width * 4;
+    int bufferSize = stride * height;
+    std::vector<BYTE> buffer(bufferSize);
+    //ピクセル形式が32bitRGBAでなかったら変換する
+    if (pixelFormat != GUID_WICPixelFormat32bppRGBA) {
+        hr = mFactory->CreateFormatConverter(&mConverter);
+        MY_ASSERTION(SUCCEEDED(hr), "FormatConverter作成失敗");
 
-    //    hr = mConverter->Initialize(mFrame, GUID_WICPixelFormat32bppRGBA,
-    //        WICBitmapDitherTypeErrorDiffusion, nullptr, 0, WICBitmapPaletteTypeCustom);
-    //    MY_ASSERTION(SUCCEEDED(hr), "Converterの初期化失敗");
+        hr = mConverter->Initialize(mFrame, GUID_WICPixelFormat32bppRGBA,
+            WICBitmapDitherTypeErrorDiffusion, nullptr, 0, WICBitmapPaletteTypeCustom);
+        MY_ASSERTION(SUCCEEDED(hr), "Converterの初期化失敗");
 
-    //    hr = mConverter->CopyPixels(0, stride, bufferSize, buffer.data());
-    //    MY_ASSERTION(SUCCEEDED(hr), "ピクセルデータのコピー失敗");
-    //}
-    //else {
-    //    hr = mFrame->CopyPixels(nullptr, stride, bufferSize, buffer.data());
-    //    MY_ASSERTION(SUCCEEDED(hr), "ピクセルデータのコピー失敗");
-    //}
+        hr = mConverter->CopyPixels(0, stride, bufferSize, buffer.data());
+        MY_ASSERTION(SUCCEEDED(hr), "ピクセルデータのコピー失敗");
+    }
+    else {
+        hr = mFrame->CopyPixels(nullptr, stride, bufferSize, buffer.data());
+        MY_ASSERTION(SUCCEEDED(hr), "ピクセルデータのコピー失敗");
+    }
 
-    ////テクスチャ作成
-    //mTexture2DDesc.Width = width;
-    //mTexture2DDesc.Height = height;
+    //テクスチャ作成
+    mTexture2DDesc.Width = width;
+    mTexture2DDesc.Height = height;
 
-    //D3D11_SUBRESOURCE_DATA sub;
-    //ZeroMemory(&sub, sizeof(sub));
-    //sub.pSysMem = buffer.data();
-    //sub.SysMemPitch = width * 4;
-    //sub.SysMemSlicePitch = buffer.size();
+    D3D11_SUBRESOURCE_DATA sub{};
+    sub.pSysMem = buffer.data();
+    sub.SysMemPitch = width * 4;
+    sub.SysMemSlicePitch = buffer.size();
 
-    ////テクスチャ作成
-    //std::shared_ptr<TextureBuffer> texture2D = std::make_shared<TextureBuffer>(mTexture2DDesc, sub);
-    //std::shared_ptr<ShaderResourceView> srv =
-    //    std::make_shared<ShaderResourceView>(*texture2D, mSRVDesc);
+    //テクスチャ作成
+    std::shared_ptr<Texture2D> texture2D = std::make_shared<Texture2D>(&mTexture2DDesc, &sub);
+    std::shared_ptr<ShaderResourceView> srv =
+        std::make_shared<ShaderResourceView>(texture2D, &mSRVDesc);
 
-    //return std::make_unique<Texture>(texture2D, srv, width, height);
+    return std::make_unique<Texture>(texture2D, srv);
 }
 } //Graphics 
 } //Framework 

@@ -1,5 +1,5 @@
 #include "Particle.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 
 namespace Framework {
 namespace Graphics {
@@ -29,10 +29,10 @@ void Particle::simulate(float delta) {
     }
 }
 
-void Particle::draw(IRenderer* renderer) {
+void Particle::draw(Pipeline* pipeline) {
     if (!mIsAlive)return;
     mSprite->setPosition(mPosition);
-    renderer->render(mSprite);
+    //pipeline->render(mSprite);
 }
 
 std::unique_ptr<Particle> Particle::clone() {

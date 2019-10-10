@@ -8,32 +8,19 @@
 namespace Framework {
 namespace Graphics {
 
-Texture::Texture(Texture2DPtr texture2D, SRVPtr srv, int width, int height)
+Texture::Texture(Texture2DPtr texture2D, SRVPtr srv)
     :mTexture2D(texture2D),
-    mSRV(srv),
-    mWidth(width),
-    mHeight(height) {
-    mWidth = static_cast<int>(mTexture2D->getSize().x);
-    mHeight = static_cast<int>(mTexture2D->getSize().y);
+    mSRV(srv) {
+    D3D11_TEXTURE2D_DESC desc;
+    mTexture2D->getTexture()->GetDesc(&desc);
+    mWidth = static_cast<int>(desc.Width);
+    mHeight = static_cast<int>(desc.Height);
 }
 
-Texture::~Texture() {}
+Texture::~Texture() { }
 
 void Texture::setData(ShaderInputType inputType, UINT slotNum) const {
-    switch (inputType) {
-    //case ShaderInputType::Vertex:
-    //    DX11InterfaceAccessor::getContext()->VSSetShaderResources(
-    //        slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
-    //    break;
-    //case ShaderInputType::Pixel:
-    //    DX11InterfaceAccessor::getContext()->PSSetShaderResources(
-    //        slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
-    //    break;
-    //default:
-    //    MY_ASSERTION(false, "どちらかのシェーダーを選択してください。");
-    //    break;
-    //}
-    }
+    mSRV->set(inputType, slotNum);
 }
 
 int Texture::getWidth() const {

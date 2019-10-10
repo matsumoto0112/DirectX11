@@ -11,5 +11,20 @@ ShaderResourceView::ShaderResourceView(std::shared_ptr<Texture2D> texture, const
 
 ShaderResourceView::~ShaderResourceView() { }
 
+void ShaderResourceView::set(ShaderInputType inputType, UINT registerNum) {
+    if ((inputType & ShaderInputType::Vertex) == ShaderInputType::Vertex) {
+        DX11InterfaceAccessor::getContext()->VSSetShaderResources(registerNum, 1, mShaderResourceView.GetAddressOf());
+    }
+    if ((inputType & ShaderInputType::Pixel) == ShaderInputType::Pixel) {
+        DX11InterfaceAccessor::getContext()->PSSetShaderResources(registerNum, 1, mShaderResourceView.GetAddressOf());
+    }
+    if ((inputType & ShaderInputType::Geometory) == ShaderInputType::Geometory) {
+        DX11InterfaceAccessor::getContext()->GSSetShaderResources(registerNum, 1, mShaderResourceView.GetAddressOf());
+    }
+    if ((inputType & ShaderInputType::Compute) == ShaderInputType::Compute) {
+        DX11InterfaceAccessor::getContext()->CSSetShaderResources(registerNum, 1, mShaderResourceView.GetAddressOf());
+    }
+}
+
 } //Graphics 
 } //Framework 

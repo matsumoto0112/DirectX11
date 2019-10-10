@@ -3,7 +3,7 @@
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/IO/FBXLoader.h"
 #include "Framework/Define/Path.h"
@@ -16,6 +16,7 @@
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Renderer/PrimitiveVertex.h"
+#include "Framework/Graphics/Sprite/Sprite2D.h"
 
 using namespace Framework;
 
@@ -193,9 +194,9 @@ bool Shadow::isEndScene() const {
     return false;
 }
 
-void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
+void Shadow::draw(Framework::Graphics::Pipeline* pipeline) {
     //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
+    //pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
     //mAlphaBlend->set();
     //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
@@ -221,7 +222,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     //mFloor->setEffect(mShadowEffect);
     //mFloor->draw(mFloorTransform);
 
-    //renderer->begin();
+    //pipeline->begin();
     //Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
     //mSprite->draw(mDrawDepth);
 

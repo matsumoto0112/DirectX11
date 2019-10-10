@@ -1,5 +1,5 @@
 #include "SimpleParticleEmitter.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Framework/Utility/Random.h"
 
 namespace Framework {
@@ -47,9 +47,9 @@ void SimpleParticleEmitter::simulate(float delta) {
     }
 }
 
-void SimpleParticleEmitter::draw(IRenderer* renderer) {
+void SimpleParticleEmitter::draw(Pipeline* pipeline) {
     for (auto&& particle : mParticles) {
-        particle->draw(renderer);
+        particle->draw(pipeline);
     }
 }
 

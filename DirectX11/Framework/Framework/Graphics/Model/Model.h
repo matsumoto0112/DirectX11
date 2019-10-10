@@ -3,6 +3,7 @@
 #include <memory>
 #include "Framework/Graphics/Buffer/IndexBuffer.h"
 #include "Framework/Graphics/Buffer/VertexBuffer.h"
+#include "Framework/Graphics/Renderer/IDrawable.h"
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Vertex/Vertex.h"
@@ -15,7 +16,7 @@ namespace Graphics {
 * @class Model
 * @brief モデル管理クラス
 */
-class Model {
+class Model : public IDrawable {
 public:
     /**
     * @brief コンストラクタ
@@ -30,7 +31,7 @@ public:
     /**
     * @brief 描画する
     */
-    virtual void draw(const Utility::Transform& transform);
+    virtual void draw() override;
 protected:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点バッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< インデックスバッファ

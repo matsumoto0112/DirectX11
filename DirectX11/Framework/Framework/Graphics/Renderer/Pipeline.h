@@ -6,10 +6,11 @@
 
 namespace Framework {
 namespace Graphics {
+class IDrawable;
 
 /**
 * @class Pipeline
-* @brief discription
+* @brief 描画パイプライン管理クラス
 */
 class Pipeline {
 public:
@@ -21,10 +22,17 @@ public:
     /**
     * @brief デストラクタ
     */
-    ~Pipeline();
+    virtual ~Pipeline();
+    /**
+    * @brief 描画開始
+    */
+    virtual void begin();
+    /**
+    * @brief 描画終了
+    */
+    virtual void end();
 
-    void begin();
-    void end();
+    virtual void render(IDrawable* drawable);
 private:
     PROPERTY_POINTER(std::shared_ptr<RenderTargetView>, mRenderTarget, RenderTargetView);
     PROPERTY_POINTER(std::shared_ptr<AlphaBlend>, mAlphaBlend, AlphaBlend);

@@ -5,7 +5,7 @@
 
 namespace Framework {
 namespace Graphics {
-class IRenderer;
+class Pipeline;
 
 /**
 * @class Particle
@@ -33,7 +33,7 @@ public:
     /**
     * @brief ï`âÊ
     */
-    virtual void draw(IRenderer* renderer);
+    virtual void draw(Pipeline* pipeline);
     /**
     * @brief ï°êªÇ∑ÇÈ
     */

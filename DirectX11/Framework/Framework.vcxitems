@@ -126,6 +126,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IDrawable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IRenderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\PrimitiveTopology.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.h" />

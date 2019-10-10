@@ -3,7 +3,7 @@
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/IO/FBXLoader.h"
 #include "Framework/Define/Path.h"
@@ -77,9 +77,9 @@ bool RenderModel::isEndScene() const {
     return false;
 }
 
-void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
+void RenderModel::draw(Framework::Graphics::Pipeline* pipeline) {
     //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     //mAlphaBlend->set();
     //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 

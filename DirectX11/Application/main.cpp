@@ -20,7 +20,7 @@
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Scene/Manager.h"
 #include "Framework/Utility/Time.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Source/Scene/Impl/ComputeShader.h"
 #include "Source/Scene/Impl/RandomColorParticle.h"
 #include "Source/Scene/Impl/BlackholeParticle.h"
@@ -104,9 +104,9 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::Pipeline* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
-        renderer->begin();
-        //mSceneManager->draw(renderer);
+        Graphics::Pipeline* pipeline = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
+        pipeline->begin();
+        //mSceneManager->draw(pipeline);
 
         mSceneJumpWindow->draw();
         SetWindowText(Device::GameDevice::getInstance()->getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());

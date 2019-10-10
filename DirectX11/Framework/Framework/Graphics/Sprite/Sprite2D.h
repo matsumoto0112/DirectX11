@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "Framework/Graphics/Color4.h"
+#include "Framework/Graphics/Renderer/IDrawable.h"
 #include "Framework/Math/Matrix4x4.h"
 #include "Framework/Math/Rect.h"
 #include "Framework/Utility/Property.h"
@@ -24,7 +25,7 @@ enum class PivotBase {
 * @class Sprite2D
 * @brief 2Dスプライト描画
 */
-class Sprite2D {
+class Sprite2D : public IDrawable {
 protected:
     using Rect = Math::Rect;
 protected:
@@ -41,7 +42,7 @@ public:
     /**
     * @brief 描画する
     */
-    virtual void draw();
+    virtual void draw() override;
     /**
     * @brief 独自エフェクトで描画する
     */

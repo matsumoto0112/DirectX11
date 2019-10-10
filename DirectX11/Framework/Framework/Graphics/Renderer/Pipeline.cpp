@@ -1,4 +1,5 @@
 #include "Pipeline.h"
+#include "Framework/Graphics/Renderer/IDrawable.h"
 
 namespace Framework {
 namespace Graphics {
@@ -15,7 +16,13 @@ void Pipeline::begin() {
     mAlphaBlend->set();
 }
 
-void Pipeline::end() { }
+void Pipeline::end() {
+    mRenderTarget->end();
+}
+
+void Pipeline::render(IDrawable* drawable) {
+    drawable->draw();
+}
 
 } //Graphics 
 } //Framework 

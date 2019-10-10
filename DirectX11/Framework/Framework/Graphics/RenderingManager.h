@@ -15,7 +15,7 @@ namespace Graphics {
 class AlphaBlend;
 class RenderTarget;
 class Sampler;
-class IRenderer;
+class Pipeline;
 
 /**
 * @class RenderingManager
@@ -70,7 +70,7 @@ private:
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<CameraManager> mCameraManager; //!< カメラ管理者
-    //std::unique_ptr<IRenderer> mBackBufferRenderer; //!< バックバッファ描画デバイス
+    //std::unique_ptr<Pipeline> mBackBufferRenderer; //!< バックバッファ描画デバイス
     //std::unique_ptr<AlphaBlend> mAlphaBlend; //!< アルファブレンド
     std::unique_ptr<Pipeline> mDefaultPipeline;
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー

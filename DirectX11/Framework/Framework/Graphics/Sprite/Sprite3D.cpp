@@ -10,9 +10,9 @@ Sprite3D::Sprite3D(std::shared_ptr<Texture> texture)
     mScale(Math::Vector3(1.0f, 1.0f, 1.0f)),
     mContentSize(static_cast<float>(texture->getWidth()), static_cast<float>(texture->getHeight())),
     mColor(Color4::WHITE),
-    mSrcRect(Math::Rect(0.0f, 0.0f, 1.0f, 1.0f)) {}
+    mSrcRect(Math::Rect(0.0f, 0.0f, 1.0f, 1.0f)) { }
 
-Sprite3D::~Sprite3D() {}
+Sprite3D::~Sprite3D() { }
 
 Math::Matrix4x4 Sprite3D::createBillboardMatrix(const Math::Matrix4x4& invView) const {
     Math::Matrix4x4 scale(Math::Matrix4x4::createScale(mScale));

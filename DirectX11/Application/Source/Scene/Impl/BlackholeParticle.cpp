@@ -3,7 +3,7 @@
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
-#include "Framework/Graphics/Renderer/IRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -143,10 +143,10 @@ bool BlackholeParticle::isEndScene() const {
     return false;
 }
 
-void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //Ž–‘O€”õ
+void BlackholeParticle::draw(Framework::Graphics::Pipeline* pipeline) {    //Ž–‘O€”õ
     //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
-    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //dynamic_cast<Graphics::BackBufferRenderer*>(pipeline)->getRenderTarget()->setEnableDepthStencil(false);
+    //pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     //mAlphaBlend->set();
     //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 

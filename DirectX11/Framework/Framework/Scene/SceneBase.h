@@ -5,7 +5,7 @@
 
 namespace Framework {
 namespace Graphics {
-class IRenderer;
+class Pipeline;
 } //Graphics 
 namespace Scene {
 class Collecter;
@@ -36,7 +36,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw(Framework::Graphics::IRenderer* renderer) = 0;
+    virtual void draw(Framework::Graphics::Pipeline* pipeline) = 0;
     /**
     * @brief ƒV[ƒ“‚ÌI—¹ˆ—
     */
