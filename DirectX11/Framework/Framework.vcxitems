@@ -125,6 +125,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Texture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />

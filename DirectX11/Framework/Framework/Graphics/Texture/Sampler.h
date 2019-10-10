@@ -46,7 +46,7 @@ public:
     * @brief コンストラクタ
     * @param sampler サンプラー
     */
-    Sampler(const SamplerState& sampler);
+    Sampler(const D3D11_SAMPLER_DESC& desc);
     /**
     * @brief デストラクタ
     */

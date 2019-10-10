@@ -263,5 +263,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\TypeDef.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\PrimitiveTopology.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
   </ItemGroup>
 </Project>
