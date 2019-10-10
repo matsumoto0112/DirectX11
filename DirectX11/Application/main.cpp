@@ -47,7 +47,7 @@ using namespace Framework;
     std::shared_ptr<ImGUI::Button> btn = std::make_shared<ImGUI::Button>(#name,[&](){ \
         mSceneManager->loadScene(type); \
     }); \
-    mSceneJumpWindow->addItem(btn); \
+    mGlobalWindow->addItem(btn); \
 }
 
 class MyGame : public Game {
@@ -80,7 +80,9 @@ private:
         mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
         mSceneManager->loadScene(SceneType::Shadow);
 
-        mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
+        mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
+        mFPSText = std::make_shared<ImGUI::Text>("FPS");
+        mGlobalWindow->addItem(mFPSText);
         //ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
         //ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
         //ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
@@ -99,6 +101,7 @@ private:
     virtual void update() override {
         Device::GameDevice::getInstance()->update();
         //mSceneManager->update();
+        mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
@@ -106,7 +109,7 @@ private:
         pipeline->begin();
         //mSceneManager->draw(pipeline);
 
-        mSceneJumpWindow->draw();
+        mGlobalWindow->draw();
         SetWindowText(Device::GameDevice::getInstance()->getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
         Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
@@ -116,7 +119,8 @@ private:
     }
 private:
     std::unique_ptr<Scene::Manager> mSceneManager;
-    std::unique_ptr<ImGUI::Window> mSceneJumpWindow;
+    std::unique_ptr<ImGUI::Window> mGlobalWindow;
+    std::shared_ptr<ImGUI::Text> mFPSText;
 };
 
 int main() {
