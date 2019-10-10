@@ -2,7 +2,6 @@
 
 #include <string>
 #include "Framework/Graphics/Shader/ShaderBase.h"
-#include "Framework/Graphics/Shader/PixelShaderData.h"
 
 namespace Framework {
 namespace Graphics {

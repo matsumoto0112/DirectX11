@@ -2,7 +2,6 @@
 
 #include <string>
 #include "Framework/Graphics/Shader/ShaderBase.h"
-#include "Framework/Graphics/Shader/GeometoryShaderData.h"
 
 namespace Framework {
 namespace Graphics {
@@ -14,9 +13,9 @@ class GeometoryShader : public ShaderBase {
 public:
     /**
     * @brief コンストラクタ
-    * @param filename シェーダファイル名
+    * @param filepath シェーダーファイルのパス
     */
-    GeometoryShader(const std::string& filename);
+    GeometoryShader(const std::string& filepath);
     /**
     * @brief デストラクタ
     */
@@ -26,13 +25,7 @@ public:
     */
     void set();
 private:
-    /**
-    * @brief シェーダの作成
-    * @param name シェーダファイル名
-    */
-    void create(const std::string& name);
-private:
-    std::unique_ptr<GeometoryShaderData> mShaderData; //!< シェーダーのデータ
+    ComPtr<ID3D11GeometryShader> mGeometoryShader; //!< シェーダーのデータ
 };
 
 } //Graphics 

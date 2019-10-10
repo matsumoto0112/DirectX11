@@ -7,9 +7,12 @@
 namespace Framework {
 namespace Graphics {
 
-ComputeShader::ComputeShader(const std::string& filename, const Info& info)
-    :ShaderBase(), mShaderData(std::make_unique<ComputeShaderData>()), mInfo(info) {
-    create(filename);
+ComputeShader::ComputeShader(const std::string& filepath, const Info& info)
+    :ShaderBase(), mInfo(info) {
+    //シェーダファイルの読み込み
+    std::vector<BYTE> byteData = Utility::ByteReader(filepath).get();
+    //シェーダファイル作成
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateComputeShader(byteData.data(), byteData.size(), nullptr, &mComputeShader));
 }
 
 ComputeShader::~ComputeShader() {
@@ -19,7 +22,7 @@ ComputeShader::~ComputeShader() {
 }
 
 void ComputeShader::set() {
-    DX11InterfaceAccessor::getContext()->CSSetShader(mShaderData->mComputeShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->CSSetShader(mComputeShader.Get(), nullptr, 0);
 
     for (auto&& srv : mSRVs) {
         DX11InterfaceAccessor::getContext()->CSSetShaderResources(srv.registerNum, 1, srv.srv.GetAddressOf());
@@ -59,15 +62,6 @@ void ComputeShader::clearVertexBuffer() {
     for (auto&& buf : mVertexBuffers) {
         DX11InterfaceAccessor::getContext()->IASetVertexBuffers(buf.registerNum, 1, nullBuffer, &nullStride, &offset);
     }
-}
-
-void ComputeShader::create(const std::string& name) {
-    //ファイルパスの作成
-    const std::string filename = Define::Path::getInstance()->shader() + name + ".cso";
-    //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
-    //シェーダファイル作成
-    DX11InterfaceAccessor::getDevice()->CreateComputeShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mComputeShader);
 }
 
 } //Graphics 

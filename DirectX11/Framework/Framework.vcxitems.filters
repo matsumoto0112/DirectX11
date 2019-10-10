@@ -117,7 +117,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\VertexShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Sprite\Sprite2D.h" />
@@ -196,9 +195,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Range.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ImGUI\Manager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\FloatField.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />

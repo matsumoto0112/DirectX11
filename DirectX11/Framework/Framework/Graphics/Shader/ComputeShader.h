@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "Framework/Graphics/Shader/ShaderBase.h"
-#include "Framework/Graphics/Shader/ComputeShaderData.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
@@ -56,9 +55,9 @@ public:
 public:
     /**
     * @brief コンストラクタ
-    * @param filename シェーダファイル名
+    * @param filepath シェーダへのファイルパス
     */
-    ComputeShader(const std::string& filename, const Info& info);
+    ComputeShader(const std::string& filepath, const Info& info);
     /**
     * @brief デストラクタ
     */
@@ -103,15 +102,9 @@ public:
     */
     void clearVertexBuffer();
 private:
-    /**
-    * @brief ピクセルシェーダの作成
-    * @param name シェーダファイル名
-    */
-    void create(const std::string& name);
-private:
     PROPERTY_READONLY(Info, mInfo, Info); //!< コンピュートシェーダ情報
 private:
-    std::unique_ptr<ComputeShaderData> mShaderData; //!< シェーダーのデータ
+    ComPtr<ID3D11ComputeShader> mComputeShader; //!< コンピュートシェーダー
     std::vector<SRV> mSRVs; //!< シェーダリソースビュー配列
     std::vector<UAV> mUAVs; //!< アンオーダードアクセスビュー配列
     std::vector<VertexBuffer> mVertexBuffers; //!< 頂点バッファ配列

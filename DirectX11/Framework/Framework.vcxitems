@@ -124,9 +124,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RTVWithDSV.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.h" />
@@ -165,7 +163,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderInputType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.h" />

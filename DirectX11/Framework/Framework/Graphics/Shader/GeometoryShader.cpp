@@ -6,24 +6,18 @@
 namespace Framework {
 namespace Graphics {
 
-GeometoryShader::GeometoryShader(const std::string& filename)
-    : ShaderBase(), mShaderData(std::make_unique<GeometoryShaderData>()) {
-    create(filename);
-}
-
-GeometoryShader::~GeometoryShader() {}
-
-void GeometoryShader::set() {   
-    DX11InterfaceAccessor::getContext()->GSSetShader(mShaderData->mGeometoryShader.Get(), nullptr, 0);
-}
-
-void GeometoryShader::create(const std::string& name) { 
-    //ファイルパスの作成
-    const std::string filename = Define::Path::getInstance()->shader() + name + ".cso";
+GeometoryShader::GeometoryShader(const std::string& filepath)
+    : ShaderBase() {
     //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
+    std::vector<BYTE> byteData = Utility::ByteReader(filepath).get();
     //シェーダファイル作成
-    DX11InterfaceAccessor::getDevice()->CreateGeometryShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mGeometoryShader);
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateGeometryShader(byteData.data(), byteData.size(), nullptr, &mGeometoryShader));
+}
+
+GeometoryShader::~GeometoryShader() { }
+
+void GeometoryShader::set() {
+    DX11InterfaceAccessor::getContext()->GSSetShader(mGeometoryShader.Get(), nullptr, 0);
 }
 
 } //Graphics 
