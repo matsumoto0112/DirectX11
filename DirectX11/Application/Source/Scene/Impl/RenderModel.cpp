@@ -16,6 +16,7 @@ namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 Utility::Transform mTransform;
 std::unique_ptr<Graphics::Model> mModel;
+
 }
 RenderModel::RenderModel() {
     //ƒJƒƒ‰‚Ì‰Šú‰»
@@ -36,9 +37,9 @@ RenderModel::RenderModel() {
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
-    Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+    Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    //Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
     std::vector<UINT> indices(pos.size());
     for (int i = 0; i < indices.size() / 3; i++) {
@@ -46,8 +47,8 @@ RenderModel::RenderModel() {
         indices[i * 3 + 1] = i * 3 + 1;
         indices[i * 3 + 2] = i * 3 + 0;
     }
-    auto vs = std::make_shared<Graphics::VertexShader>("3D/Only_Position_VS");
-    auto ps = std::make_shared<Graphics::PixelShader>("3D/Output_Color_PS");;
+    auto vs = std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "3D/Only_Position_VS.cso");
+    auto ps = std::make_shared<Graphics::PixelShader>(Define::Path::getInstance()->shader() + "3D/Output_Color_PS.cso");
 
     mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
@@ -69,13 +70,13 @@ bool RenderModel::isEndScene() const {
 }
 
 void RenderModel::draw(Framework::Graphics::Pipeline* pipeline) {
-    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    //mAlphaBlend->set();
-    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-
-    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    //mModel->draw(mTransform);
+    pipeline->begin();
+    pipeline->getRenderTargetView()->setBackColor(Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, mTransform.createSRTMatrix());
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->send();
+    pipeline->render(mModel.get());
 }
 
 void RenderModel::end() { }

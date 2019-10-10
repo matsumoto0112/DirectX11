@@ -41,6 +41,8 @@ void RenderTargetView::clear() {
     for (auto&& rtv : mRenderTargetView) {
         DX11InterfaceAccessor::getContext()->ClearRenderTargetView(rtv.Get(), mBackColor.get().data());
     }
+    DX11InterfaceAccessor::getContext()->ClearDepthStencilView(mDepthStencilView.Get(),
+        D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 void RenderTargetView::set() {
@@ -54,7 +56,8 @@ void RenderTargetView::set() {
 }
 
 void RenderTargetView::end() {
-    DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, nullptr, nullptr);
+    ID3D11RenderTargetView* view[] = { nullptr };
+    DX11InterfaceAccessor::getContext()->OMSetRenderTargets(_countof(view), view, nullptr);
 }
 
 ComPtr<ID3D11RenderTargetView> RenderTargetView::getRenderTargetView(UINT n) const {

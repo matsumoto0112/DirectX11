@@ -100,17 +100,14 @@ private:
     }
     virtual void update() override {
         Device::GameDevice::getInstance()->update();
-        //mSceneManager->update();
+        mSceneManager->update();
         mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
         Graphics::Pipeline* pipeline = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
-        pipeline->begin();
-        //mSceneManager->draw(pipeline);
-
+        mSceneManager->draw(pipeline);
         mGlobalWindow->draw();
-        SetWindowText(Device::GameDevice::getInstance()->getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
         Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
     }

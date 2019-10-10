@@ -107,7 +107,7 @@ DirectX11GraphicsDevice::~DirectX11GraphicsDevice() {
 }
 
 void DirectX11GraphicsDevice::present(UINT syncInterval) {
-    mSwapChain->Present(0, 0);
+    mSwapChain->Present(syncInterval, 0);
 }
 
 ComPtr<ID3D11Texture2D> DirectX11GraphicsDevice::getBackBuffer() {

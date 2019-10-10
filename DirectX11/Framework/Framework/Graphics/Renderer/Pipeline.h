@@ -2,6 +2,7 @@
 #include <memory>
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Render/RenderTargetView.h"
+#include "Framework/Graphics/Render/Viewport.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
@@ -18,7 +19,8 @@ public:
     * @brief コンストラクタ
     */
     Pipeline(std::shared_ptr<RenderTargetView> renderTarget,
-        std::shared_ptr<AlphaBlend> alphaBlend);
+        std::shared_ptr<AlphaBlend> alphaBlend,
+        const Viewport& viewport);
     /**
     * @brief デストラクタ
     */
@@ -31,11 +33,15 @@ public:
     * @brief 描画終了
     */
     virtual void end();
-
+    /**
+    * @brief 描画する
+    * @param drawable 描画対象
+    */
     virtual void render(IDrawable* drawable);
 private:
     PROPERTY_POINTER(std::shared_ptr<RenderTargetView>, mRenderTarget, RenderTargetView);
     PROPERTY_POINTER(std::shared_ptr<AlphaBlend>, mAlphaBlend, AlphaBlend);
+    PROPERTY(Viewport, mViewport, Viewport);
 };
 
 } //Graphics 

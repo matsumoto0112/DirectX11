@@ -36,7 +36,7 @@ public:
     /**
     * @brief 描画バッファの切り替え
     */
-    void present(UINT syncInterval = 1);
+    void present(UINT syncInterval = 0);
     /**
     * @brief バックバッファの取得
     */

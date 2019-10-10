@@ -17,7 +17,7 @@ public:
     * @brief コンストラクタ
     * @param origin 複製元となるパーティクル
     */
-    ParticleEmitter(std::shared_ptr<Particle> origin) :mOrigin(origin) {}
+    ParticleEmitter(std::shared_ptr<Particle> origin) :mOrigin(origin) { }
     /**
     * @brief デストラクタ
     */
@@ -37,7 +37,7 @@ public:
     /**
     * @brief 現在のパーティクルの数を取得
     */
-    int getParticleNum() const { return mParticles.size(); }
+    UINT getParticleNum() const { return static_cast<UINT>(mParticles.size()); }
 protected:
     std::shared_ptr<Particle> mOrigin; //!< 複製元のパーティクル
     std::list<std::unique_ptr<Particle>> mParticles; //!< 発生したパーティクルリスト

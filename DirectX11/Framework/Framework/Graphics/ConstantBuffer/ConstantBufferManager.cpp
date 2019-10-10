@@ -24,7 +24,7 @@ void ConstantBufferManager::send() {
 }
 
 void ConstantBufferManager::setMatrix(ConstantBufferParameterType type, const Math::Matrix4x4& value) {
-    mMatrixBufferManager->set(type, Math::Matrix4x4::transposition(value));
+    mMatrixBufferManager->set(type, value.transpose());
 }
 
 void ConstantBufferManager::setFloat(ConstantBufferParameterType type, float value) {
@@ -58,7 +58,7 @@ void ConstantBufferManager::setup() {
             }); \
     }
 
-    ShaderInputType inputType = ShaderInputType::Vertex & ShaderInputType::Pixel & ShaderInputType::Geometory;
+    ShaderInputType inputType = ShaderInputType::Vertex | ShaderInputType::Pixel | ShaderInputType::Geometory;
     mMVP3DCBuffer = std::make_unique<ConstantBuffer<MVPMatrix3DCBuffer>>(inputType, 0);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::World3D, Math::Matrix4x4, mMVP3DCBuffer, world);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::View3D, Math::Matrix4x4, mMVP3DCBuffer, view);
