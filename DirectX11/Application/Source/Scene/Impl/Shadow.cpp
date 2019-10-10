@@ -14,6 +14,7 @@
 #include "Framework/Graphics/Render/DepthStencilView.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
+#include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 
 using namespace Framework;
@@ -32,7 +33,10 @@ struct LightMatrix {
 };
 std::unique_ptr<Graphics::ConstantBuffer<LightMatrix>> mLightMatrix;
 LightMatrix mLightMatrixData;
-std::unique_ptr<Graphics::RenderTarget> mRenderTarget;
+ComPtr<ID3D11Texture2D> mRenderTargetTexture;
+ComPtr<ID3D11RenderTargetView> mRenderTarget;
+ComPtr<ID3D11ShaderResourceView> mRenderTargetSRV;
+ComPtr<ID3D11DepthStencilView> mDepthStencil;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -87,24 +91,66 @@ Shadow::Shadow() {
     mLightMatrix = std::make_unique<Graphics::ConstantBuffer<LightMatrix>>(Graphics::ShaderInputType::All, 7);
     mLightMatrix->setBuffer(mLightMatrixData);
     mModelEffect = mModel->getEffect();
+    mModelEffect->setPixelShader(nullptr);
     mShadowEffect = std::make_shared<Graphics::Effect>(
         std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMapCreate_VS"), nullptr);
 
     UINT width = Define::Config::getInstance().mWidth;
     UINT height = Define::Config::getInstance().mHeight;
-    std::shared_ptr<Graphics::TextureBuffer> texBuffer =
-        std::make_shared<Graphics::TextureBuffer>(
-            Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(width, height));
-    mRenderTarget = std::make_unique<Graphics::RenderTarget>(texBuffer, Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
-        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
-        Graphics::SRVFlag::Use);
-    std::shared_ptr<Graphics::TextureBuffer> texBuffer2 =
-        std::make_shared<Graphics::TextureBuffer>(
-            Graphics::DepthStencilDesc::getDefaultTexture2DDesc(width, height));
 
-    mRenderTarget->createDepthStencilView(texBuffer2);
-    mRenderTarget->setClearColor(Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-    mSprite = std::make_shared<Graphics::Sprite2D>(mRenderTarget->getRenderTargetTexture());
+    //mSprite = std::make_shared<Graphics::Sprite2D>(mRenderTarget->getRenderTargetTexture());
+
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
+        rtvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        D3D11_TEXTURE2D_DESC texDesc{};
+        texDesc.Width = width;
+        texDesc.Height = height;
+        texDesc.MipLevels = 1;
+        texDesc.ArraySize = 1;
+        texDesc.Format = rtvDesc.Format;
+        texDesc.SampleDesc.Count = 1;
+        texDesc.SampleDesc.Quality = 0;
+        texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+        texDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET;
+        texDesc.CPUAccessFlags = 0;
+        std::shared_ptr<Graphics::TextureBuffer> buffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
+        std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer);
+        std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
+        //mSprite = std::make_shared<Graphics::Sprite2D>(tex);
+        Utility::getDevice()->CreateRenderTargetView(buffer->getBuffer().Get(), &rtvDesc, &mRenderTarget);
+    }
+    {
+        D3D11_TEXTURE2D_DESC texDesc{};
+        texDesc.Width = width;
+        texDesc.Height = height;
+        texDesc.MipLevels = 1;
+        texDesc.ArraySize = 1;
+        texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24G8_TYPELESS;
+        texDesc.SampleDesc.Count = 1;
+        texDesc.SampleDesc.Quality = 0;
+        texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+        texDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
+        texDesc.CPUAccessFlags = 0;
+        std::shared_ptr<Graphics::TextureBuffer> buffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+        srvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels = 1;
+
+        std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer, srvDesc);
+
+        std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
+        mSprite = std::make_shared<Graphics::Sprite2D>(tex);
+
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+        dsvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT;
+        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
+        dsvDesc.Texture2D.MipSlice = 0;
+        Utility::getDevice()->CreateDepthStencilView(buffer->getBuffer().Get(), &dsvDesc, &mDepthStencil);
+    }
 }
 
 Shadow::~Shadow() { }
@@ -128,16 +174,16 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
     mLightMatrix->sendBuffer();
 
-    mRenderTarget->set();
-    mRenderTarget->clear();
+    Utility::getContext()->OMSetRenderTargets(1, mRenderTarget.GetAddressOf(), mDepthStencil.Get());
+    const float clear[] = { 0.0f,0.0f,0.0f,0.0f };
+    Utility::getContext()->ClearRenderTargetView(mRenderTarget.Get(), clear);
+    Utility::getContext()->ClearDepthStencilView(mDepthStencil.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     mModel->setEffect(mModelEffect);
     mModel->draw(mTransform);
 
     renderer->begin();
 
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
-    std::shared_ptr<Graphics::Texture> tex = mRenderTarget->getDepthStencil()->mRTTexture;
-    mSprite->setTexture(tex, false);
     renderer->render(mSprite);
     //mModel->setEffect(mModelEffect);
     //mModel->draw(mTransform);

@@ -266,5 +266,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveTopology.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\TypeDef.h" />
   </ItemGroup>
 </Project>

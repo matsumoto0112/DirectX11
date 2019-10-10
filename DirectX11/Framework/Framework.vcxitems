@@ -220,6 +220,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\VertexShaderResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\TypeDef.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.h" />
