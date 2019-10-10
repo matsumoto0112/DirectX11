@@ -63,7 +63,7 @@ inline void VertexBuffer::createBuffer(const std::vector<T>& vertices) {
     ZeroMemory(&desc, sizeof(desc));
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    desc.ByteWidth = mData->mStride * vertices.size();
+    desc.ByteWidth = mData->mStride * static_cast<UINT>(vertices.size());
     desc.CPUAccessFlags = 0;
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;

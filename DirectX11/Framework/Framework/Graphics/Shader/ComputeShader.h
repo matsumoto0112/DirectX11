@@ -126,7 +126,7 @@ inline void ComputeShader::addSRV(UINT registerNum, const std::vector<T>& dataAr
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
-    desc.ByteWidth = dataArray.size() * elemSize;
+    desc.ByteWidth = elemSize * static_cast<UINT>(dataArray.size());
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
     desc.StructureByteStride = elemSize;
 
@@ -163,7 +163,7 @@ inline void ComputeShader::addUAV(UINT registerNum, const std::vector<T>& data) 
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;;
-    desc.ByteWidth = elemSize * data.size();
+    desc.ByteWidth = elemSize * static_cast<UINT>(data.size());
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
     desc.StructureByteStride = elemSize;
 
@@ -199,7 +199,7 @@ inline void ComputeShader::addUAVEnableVertexBuffer(UINT registerNum, const std:
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;;
-    desc.ByteWidth = elemSize * data.size();
+    desc.ByteWidth = elemSize * static_cast<UINT>(data.size());
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
     desc.StructureByteStride = elemSize;
 

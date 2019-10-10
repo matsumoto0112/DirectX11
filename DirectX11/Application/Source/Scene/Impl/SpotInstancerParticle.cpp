@@ -152,7 +152,7 @@ SpotInstancerParticle::SpotInstancerParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     ADD_CHANGE_CENTER_FIELD(Y, mEmitParameter.center.y, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(Z, mEmitParameter.center.z, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(R, mRadius, -50.0f, 50.0f);
-    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
+    //ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
 SpotInstancerParticle::~SpotInstancerParticle() { }

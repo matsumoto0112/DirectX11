@@ -139,7 +139,7 @@ FallBounceRotateParticle::FallBounceRotateParticle() {    //ÉJÉÅÉâÇÃèâä˙âª
     ADD_CHANGE_CENTER_FIELD(X, mGlobal.center.x, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(Y, mGlobal.center.y, -30.0f, 30.0f);
     ADD_CHANGE_CENTER_FIELD(Z, mGlobal.center.z, -30.0f, 30.0f);
-    ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
+    //ADD_CHANGE_CENTER_FIELD(N, mNum, 0, NUM);
 }
 
 FallBounceRotateParticle::~FallBounceRotateParticle() { }

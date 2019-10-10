@@ -1,11 +1,10 @@
 #pragma once
 #include <Windows.h>
 #include "Framework/Math/Vector2.h"
+#include "Framework/Graphics/DirectX11GraphicsDevice.h"
 
 namespace Framework {
 namespace Graphics {
-class DirectX11GraphicsDevice;
-
 /**
 * @class GraphicsDevice
 * @brief •`‰æ‹@Ší

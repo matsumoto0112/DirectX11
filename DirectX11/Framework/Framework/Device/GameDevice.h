@@ -2,19 +2,12 @@
 #include <Windows.h>
 #include <vector>
 #include <memory>
+#include "Framework/Window/Window.h"
+#include "Framework/Graphics/RenderingManager.h"
+#include "Framework/Input/InputManager.h"
 #include "Framework/Utility/Singleton.h"
 
 namespace Framework {
-namespace Window {
-class Window;
-} //Window 
-namespace Graphics {
-class RenderingManager;
-} //Graphics 
-namespace Input {
-class InputManager;
-} //Input 
-
 namespace Device {
 
 /**
