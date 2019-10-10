@@ -42,6 +42,7 @@ ComPtr<ID3D11Texture2D> mRenderTargetTexture;
 ComPtr<ID3D11RenderTargetView> mRenderTarget;
 ComPtr<ID3D11ShaderResourceView> mRenderTargetSRV;
 ComPtr<ID3D11DepthStencilView> mDepthStencil;
+float mTheta;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -55,8 +56,8 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 Shadow::Shadow() {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
-        Math::ViewInfo{ Math::Vector3(0,5,-5),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,100.0f });
+        Math::ViewInfo{ Math::Vector3(0,10,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,300.0f });
 
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
     //アルファブレンドの作成
@@ -66,7 +67,7 @@ Shadow::Shadow() {
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
     rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
     rasterizerDesc.DepthClipEnable = TRUE;
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
@@ -82,6 +83,7 @@ Shadow::Shadow() {
         indices[i * 3 + 1] = i * 3 + 1;
         indices[i * 3 + 2] = i * 3 + 0;
     }
+
     auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
     auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
 
@@ -89,10 +91,15 @@ Shadow::Shadow() {
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
         std::make_shared<Graphics::Effect>(vs, ps));
 
-    mTransform.emplace_back(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(5.0f, 5.0f, 5.0f));
-    mTransform.emplace_back(Math::Vector3(3.0f, 0.0f, 0.0f), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+    for (int x = -2; x < 2; x++) {
+        for (int z = -2; z < 2; z++) {
+            mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+        }
+    }
+    //mTransform.emplace_back(Math::Vector3(3.0f, 0.0f, 0.0f), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
 
-    mLightMatrixData.view = m3DCamera->getView().transpose();
+
+    //mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-10,5,0),Math::Vector3(0,0,0),Math::Vector3::UP }).transpose();
     mLightMatrixData.proj = m3DCamera->getProjection().transpose();
     mLightMatrix = std::make_unique<Graphics::ConstantBuffer<LightMatrix>>(Graphics::ShaderInputType::All, 7);
     mLightMatrix->setBuffer(mLightMatrixData);
@@ -170,12 +177,14 @@ Shadow::Shadow() {
         std::shared_ptr<Graphics::VertexBuffer> vb = std::make_shared<Graphics::VertexBuffer>(pos);
         std::shared_ptr<Graphics::IndexBuffer> ib = std::make_shared<Graphics::IndexBuffer>(index, Graphics::PrimitiveTopology::TriangleList);
         mFloorEffect = std::make_shared<Graphics::Effect>(
-            std::make_shared<Graphics::VertexShader>("3D/Only_Position_VS"),
-            std::make_shared<Graphics::PixelShader>("3D/Output_Color_PS"));
+            std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMap_VS"),
+            std::make_shared<Graphics::PixelShader>("ShadowMap/ShadowMap_PS"));
         mFloor = std::make_shared<Graphics::Model>(vb, ib, mFloorEffect);
         mFloorTransform.setPosition(Math::Vector3(0, -3, 0));
         mFloorTransform.setScale(Math::Vector3(5, 0.5f, 5));
     }
+
+    mTheta = 0.0f;
 }
 
 Shadow::~Shadow() { }
@@ -184,7 +193,7 @@ void Shadow::load(Framework::Scene::Collecter& collecter) { }
 
 void Shadow::update() {
     for (auto&& tr : mTransform) {
-        tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+        //tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
     }
     //mTransform.setPosition(mTransform.getPosition() + Math::Vector3(0, 0, 1));
 }
@@ -199,6 +208,11 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     mAlphaBlend->set();
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
+    mTheta += 0.1f;
+    float x = Math::MathUtility::sin(mTheta) * 1;
+    float z = Math::MathUtility::cos(mTheta * 0.5f) * 1;
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(x,5,z),Math::Vector3(0,0,0),Math::Vector3::UP }).transpose();
+    mLightMatrix->setBuffer(mLightMatrixData);
     mLightMatrix->sendBuffer();
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
     Utility::getConstantBufferManager()->send();
@@ -220,7 +234,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     mSprite->draw(mDrawDepth);
 
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    mModel->setEffect(mModelEffect);
+    mModel->setEffect(mFloorEffect);
     for (auto&& tr : mTransform) {
         mModel->draw(tr);
     }
