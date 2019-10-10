@@ -189,24 +189,24 @@ bool SpotInstancerParticle::isEndScene() const {
 }
 
 void SpotInstancerParticle::draw(Framework::Graphics::IRenderer* renderer) {
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
-    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mAlphaBlend->set();
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
-
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
-    Utility::getConstantBufferManager()->send();
-
-    for (size_t i = 0; i < mNum; i++) {
-        mGPUParticle[i]->draw();
-    }
-
-    mText->setText(Utility::StringBuilder("") << mNum * THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y);
-    mWindow->draw();
+//    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+//    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
+//    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+//    mAlphaBlend->set();
+//    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+//    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
+//
+//    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+//    Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
+//    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
+//    Utility::getConstantBufferManager()->send();
+//
+//    for (size_t i = 0; i < mNum; i++) {
+//        mGPUParticle[i]->draw();
+//    }
+//
+//    mText->setText(Utility::StringBuilder("") << mNum * THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y);
+//    mWindow->draw();
 }
 
 void SpotInstancerParticle::end() { }

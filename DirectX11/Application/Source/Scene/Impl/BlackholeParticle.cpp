@@ -144,18 +144,18 @@ bool BlackholeParticle::isEndScene() const {
 }
 
 void BlackholeParticle::draw(Framework::Graphics::IRenderer* renderer) {    //Ž–‘O€”õ
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
-    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mAlphaBlend->set();
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+    //dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
+    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mAlphaBlend->set();
+    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
-    Utility::getConstantBufferManager()->send();
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    //Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
+    //Utility::getConstantBufferManager()->send();
 
-    mGPUParticle->draw();
+    //mGPUParticle->draw();
 }
 
 void BlackholeParticle::end() { }

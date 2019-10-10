@@ -8,6 +8,8 @@
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
+#include "Framework/Graphics/Render/RTVWithDSV.h"
+#include "Framework/Graphics/Render/AlphaBlendSetting.h"
 
 namespace Framework {
 namespace Graphics {
@@ -26,14 +28,24 @@ void RenderingManager::initialize() {
 
     mDefaultSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap, TextureFilterMode::MinMagMipLinear);
 
-    mBackBufferRenderer = std::make_unique<BackBufferRenderer>();
+    std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer());
+    std::shared_ptr<RenderTargetView> renderTarget = std::make_shared<RenderTargetView>(texture, nullptr, Color4::WHITE);
+
+    D3D11_BLEND_DESC desc{};
+    desc.AlphaToCoverageEnable = FALSE;
+    desc.IndependentBlendEnable = FALSE;
+    for (int i = 0; i < 8; i++) {
+        desc.RenderTarget[i] = AlphaBlendSetting::getDefaultDesc();
+    }
+    std::shared_ptr<AlphaBlend> blendState = std::make_shared<AlphaBlend>(desc);
+    mDefaultPipeline = std::make_unique<Pipeline>(renderTarget, blendState);
 }
 
-IRenderer* RenderingManager::drawBegin() {
+Pipeline* RenderingManager::drawBegin() {
     mGraphicsDevice->drawBegin();
-    mBackBufferRenderer->begin();
+    mDefaultPipeline->begin();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);
-    return mBackBufferRenderer.get();
+    return mDefaultPipeline.get();
 }
 
 void RenderingManager::drawEnd() {

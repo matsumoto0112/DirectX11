@@ -100,13 +100,13 @@ private:
     }
     virtual void update() override {
         Device::GameDevice::getInstance()->update();
-        mSceneManager->update();
+        //mSceneManager->update();
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
+        Graphics::Pipeline* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
         renderer->begin();
-        mSceneManager->draw(renderer);
+        //mSceneManager->draw(renderer);
 
         mSceneJumpWindow->draw();
         SetWindowText(Device::GameDevice::getInstance()->getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());

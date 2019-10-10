@@ -1,26 +1,22 @@
 #include "RenderTargetView.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
-#include "Framework/Utility/Debug.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
 
-RenderTargetView::RenderTargetView(TexturePtr texture) {
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(texture->getBuffer().Get(), nullptr, &mRenderTargetView);
-    MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
+RenderTargetView::RenderTargetView(std::shared_ptr<Texture2D> texture, const D3D11_RENDER_TARGET_VIEW_DESC* desc, const Color4& backColor)
+    :mBackColor(backColor) {
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(texture->getTexture().Get(), desc, &mRenderTargetView));
 }
 
-RenderTargetView::RenderTargetView(TexturePtr texture,
-    const D3D11_RENDER_TARGET_VIEW_DESC& desc) {
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(texture->getBuffer().Get(), &desc, &mRenderTargetView);
-    MY_ERROR_WINDOW(SUCCEEDED(hr), "‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½");
+RenderTargetView::~RenderTargetView() { }
+
+void RenderTargetView::clear() {
+    DX11InterfaceAccessor::getContext()->ClearRenderTargetView(mRenderTargetView.Get(), mBackColor.get().data());
 }
 
-RenderTargetView::~RenderTargetView() {}
-
-void RenderTargetView::clear(const Color4& clearColor) {
-    DX11InterfaceAccessor::getContext()->ClearRenderTargetView(mRenderTargetView.Get(), clearColor.get().data());
+void RenderTargetView::set() {
+    DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr);
 }
 
 } //Graphics 

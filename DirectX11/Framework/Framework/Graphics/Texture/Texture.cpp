@@ -1,6 +1,6 @@
 #include "Texture.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
-#include "Framework/Graphics/Shader/ShaderResourceView.h"
+//#include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
@@ -21,17 +21,18 @@ Texture::~Texture() {}
 
 void Texture::setData(ShaderInputType inputType, UINT slotNum) const {
     switch (inputType) {
-    case ShaderInputType::Vertex:
-        DX11InterfaceAccessor::getContext()->VSSetShaderResources(
-            slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
-        break;
-    case ShaderInputType::Pixel:
-        DX11InterfaceAccessor::getContext()->PSSetShaderResources(
-            slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
-        break;
-    default:
-        MY_ASSERTION(false, "どちらかのシェーダーを選択してください。");
-        break;
+    //case ShaderInputType::Vertex:
+    //    DX11InterfaceAccessor::getContext()->VSSetShaderResources(
+    //        slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
+    //    break;
+    //case ShaderInputType::Pixel:
+    //    DX11InterfaceAccessor::getContext()->PSSetShaderResources(
+    //        slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
+    //    break;
+    //default:
+    //    MY_ASSERTION(false, "どちらかのシェーダーを選択してください。");
+    //    break;
+    //}
     }
 }
 

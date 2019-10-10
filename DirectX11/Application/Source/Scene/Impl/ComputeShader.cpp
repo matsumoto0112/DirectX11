@@ -176,41 +176,41 @@ bool ComputeShader::isEndScene() const {
 }
 
 void ComputeShader::draw(Graphics::IRenderer* renderer) {
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
-    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mAlphaBlend->set();
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    mVS->set();
-    mGS->set();
-    mPS->set();
-    UINT stride = sizeof(Particle);
-    UINT offset = 0;
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, Math::Matrix4x4::identity());
-    Utility::getConstantBufferManager()->send();
-    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
-    Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-    Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
+    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+    //dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
+    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mAlphaBlend->set();
+    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    //mVS->set();
+    //mGS->set();
+    //mPS->set();
+    //UINT stride = sizeof(Particle);
+    //UINT offset = 0;
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    //mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, Math::Matrix4x4::identity());
+    //Utility::getConstantBufferManager()->send();
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    //Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
 
-    ID3D11Buffer* nullBuf = nullptr;
-    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
+    //ID3D11Buffer* nullBuf = nullptr;
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
-    //D3D11_MAPPED_SUBRESOURCE mappedSub;
-    //ZeroMemory(&mappedSub, sizeof(mappedSub));
-    //Particle* result;
-    //HRESULT hr = Graphics::DX11InterfaceAccessor::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
-    //result = reinterpret_cast<Particle*>(mappedSub.pData);
-    //Graphics::DX11InterfaceAccessor::getContext()->Unmap(mResulrBuffer.Get(), 0);
+    ////D3D11_MAPPED_SUBRESOURCE mappedSub;
+    ////ZeroMemory(&mappedSub, sizeof(mappedSub));
+    ////Particle* result;
+    ////HRESULT hr = Graphics::DX11InterfaceAccessor::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
+    ////result = reinterpret_cast<Particle*>(mappedSub.pData);
+    ////Graphics::DX11InterfaceAccessor::getContext()->Unmap(mResulrBuffer.Get(), 0);
 
-    //for (int i = 0; i < COUNT; i++) {
-    //    if (!result[i].alive)continue;
-    //    mSprite->setPosition(result[i].position);
-    //    renderer->render(mSprite);
-    //}
+    ////for (int i = 0; i < COUNT; i++) {
+    ////    if (!result[i].alive)continue;
+    ////    mSprite->setPosition(result[i].position);
+    ////    renderer->render(mSprite);
+    ////}
 
-    mWindow->draw();
+    //mWindow->draw();
 }
 
 void ComputeShader::end() { }

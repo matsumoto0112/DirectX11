@@ -8,20 +8,16 @@ namespace Graphics {
 
 DepthStencilView::DepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc,
     const D3D11_DEPTH_STENCIL_VIEW_DESC& dsvDesc) {
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateTexture2D(&texDesc, nullptr, &mTexture);
-    MY_ASSERTION(SUCCEEDED(hr), "DepthStencil—pTexture2Dì¬Ž¸”s");
-    hr = DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(mTexture.Get(), &dsvDesc, &mDepthStencil);
-    MY_ASSERTION(SUCCEEDED(hr), "DepthStencilì¬Ž¸”s");
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateTexture2D(&texDesc, nullptr, &mTexture));
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(mTexture.Get(), &dsvDesc, &mDepthStencil));
 }
 
 DepthStencilView::DepthStencilView(UINT width, UINT height) {
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateTexture2D(&DepthStencilDesc::getDefaultTexture2DDesc(width, height), nullptr, &mTexture);
-    MY_ASSERTION(SUCCEEDED(hr), "DepthStencil—pTexture2Dì¬Ž¸”s");
-    hr = DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(mTexture.Get(), &DepthStencilDesc::getDefaultDepthStencilViewDesc(), &mDepthStencil);
-    MY_ASSERTION(SUCCEEDED(hr), "DepthStencilì¬Ž¸”s");
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateTexture2D(&DepthStencilDesc::getDefaultTexture2DDesc(width, height), nullptr, &mTexture));
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(mTexture.Get(), &DepthStencilDesc::getDefaultDepthStencilViewDesc(), &mDepthStencil));
 }
 
-DepthStencilView::~DepthStencilView() {}
+DepthStencilView::~DepthStencilView() { }
 
 void DepthStencilView::clear() {
     DX11InterfaceAccessor::getContext()->ClearDepthStencilView(mDepthStencil.Get(),

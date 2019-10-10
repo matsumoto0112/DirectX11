@@ -1,31 +1,22 @@
 #pragma once
-#include <d3d11.h>
-#include <wrl/client.h>
 #include "Framework/Graphics/Color4.h"
+#include "Framework/Graphics/Resource/Texture2D.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
-class TextureBuffer;
 /**
 * @class RenderTargetView
 * @brief レンダーターゲットビュー
 */
 class RenderTargetView {
-private:
-    using TexturePtr = std::shared_ptr<TextureBuffer>;
 public:
-    /**
-    * @brief コンストラクタ
-    * @param texture リソーステクスチャ
-    */
-    RenderTargetView(TexturePtr texture);
     /**
     * @brief コンストラクタ
     * @param texture リソーステクスチャ
     * @param desc レンダーターゲットビューの設定
     */
-    RenderTargetView(TexturePtr texture, const D3D11_RENDER_TARGET_VIEW_DESC& desc);
+    RenderTargetView(std::shared_ptr<Texture2D> texture, const D3D11_RENDER_TARGET_VIEW_DESC* desc, const Color4& backColor);
     /**
     * @brief デストラクタ
     */
@@ -33,14 +24,19 @@ public:
     /**
     * @brief レンダーターゲットビューを取得する
     */
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> getRenderTargetView() const { return mRenderTargetView; }
+    ComPtr<ID3D11RenderTargetView> getRenderTargetView() const { return mRenderTargetView; }
     /**
     * @brief レンダーターゲットのクリア
-    * @param clearColor クリア色
     */
-    void clear(const Color4& clearColor);
+    void clear();
+    /**
+    * @brief レンダーターゲットをセットする
+    */
+    void set();
 private:
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView; //!< レンダーターゲットビュー
+    ComPtr<ID3D11RenderTargetView> mRenderTargetView; //!< レンダーターゲットビュー
+private:
+    PROPERTY(Color4, mBackColor, BackColor);
 };
 
 } //Graphics 

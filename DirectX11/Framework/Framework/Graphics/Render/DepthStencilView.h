@@ -34,10 +34,10 @@ public:
     /**
     * @brief 深度・ステンシルビューの取得
     */
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> getDepthStencilView() const { return mDepthStencil; }
+    ComPtr<ID3D11DepthStencilView> getDepthStencilView() const { return mDepthStencil; }
 private:
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> mTexture; //!< テクスチャ 
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthStencil; //!< 深度・ステンシルビュー
+    ComPtr<ID3D11DepthStencilView> mDepthStencil; //!< 深度・ステンシルビュー
+    ComPtr<ID3D11Texture2D> mTexture; //!< テクスチャ 
 };
 
 } //Graphics 

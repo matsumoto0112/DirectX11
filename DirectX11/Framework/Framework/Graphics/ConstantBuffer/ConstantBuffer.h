@@ -52,7 +52,7 @@ private:
     std::function<void(void)> createSendBufferFunction(ShaderInputType inputType, UINT slotNumber);
 private:
     T mData; //!< 現在のコンスタントバッファの値
-    Microsoft::WRL::ComPtr<ID3D11Buffer> mConstantBuffer; //!< コンスタントバッファ
+    ComPtr<ID3D11Buffer> mConstantBuffer; //!< コンスタントバッファ
     std::function<void(void)> mSendBufferFunction; //!< バッファの転送時に使用する関数
 };
 
@@ -68,17 +68,12 @@ Graphics::ConstantBuffer<T>::ConstantBuffer(ShaderInputType inputType, UINT slot
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;
 
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, nullptr, &mConstantBuffer);
-    //作成に失敗したらウィンドウ表示
-    if (FAILED(hr)) {
-        MY_ASSERTION(false, "コンスタントバッファ作成失敗");
-        return;
-    }
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, nullptr, &mConstantBuffer));
     mSendBufferFunction = createSendBufferFunction(inputType, slotNumber);
 }
 
 template<class T>
-inline Graphics::ConstantBuffer<T>::~ConstantBuffer() {}
+inline Graphics::ConstantBuffer<T>::~ConstantBuffer() { }
 
 template<class T>
 inline void Graphics::ConstantBuffer<T>::setBuffer(T data) {
@@ -105,28 +100,28 @@ inline std::function<void(void)> Graphics::ConstantBuffer<T>::createSendBufferFu
     //inputTypeに応じた関数作成
     //頂点、ピクセルシェーダのどこに転送するか
     switch (inputType) {
-    case ShaderInputType::Vertex:
-        return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-    case ShaderInputType::Pixel:
-        return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-    case ShaderInputType::Compute:
-        return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->CSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-    case ShaderInputType::Geometory:
-        return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
-    case ShaderInputType::VertexAndPixel:
-        return [&, slotNumber]()->void {
-            DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-            DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-        };
-    case ShaderInputType::All:
-        return [&, slotNumber]()->void {
-            DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-            DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-            DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
-        };
-    default:
-        MY_ASSERTION(false, "未定義のShaderInputTypeが選択されました。");
-        return NULL;
+        case ShaderInputType::Vertex:
+            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+        case ShaderInputType::Pixel:
+            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+        case ShaderInputType::Compute:
+            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->CSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+        case ShaderInputType::Geometory:
+            return [&, slotNumber]()->void {DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf()); };
+        case ShaderInputType::VertexAndPixel:
+            return [&, slotNumber]()->void {
+                DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+                DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+            };
+        case ShaderInputType::All:
+            return [&, slotNumber]()->void {
+                DX11InterfaceAccessor::getContext()->VSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+                DX11InterfaceAccessor::getContext()->PSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+                DX11InterfaceAccessor::getContext()->GSSetConstantBuffers(slotNumber, 1, mConstantBuffer.GetAddressOf());
+            };
+        default:
+            MY_ASSERTION(false, "未定義のShaderInputTypeが選択されました。");
+            return NULL;
     }
 }
 

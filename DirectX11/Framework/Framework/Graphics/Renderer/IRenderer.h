@@ -44,12 +44,6 @@ public:
     * @param transform 描画するモデルのトランスフォーム
     */
     virtual void render(std::shared_ptr<Model> model, const Utility::Transform& transform) = 0;
-    /**
-    * @brief 描画したターゲットのテクスチャを取得する
-    */
-    virtual std::shared_ptr<Texture> getRenderedTexture() const = 0;
-protected:
-    PROPERTY(Color4, mBackColor, BackColor);
 };
 
 } //Graphics 

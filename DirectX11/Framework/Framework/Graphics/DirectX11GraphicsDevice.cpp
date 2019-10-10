@@ -1,6 +1,5 @@
 #include "DirectX11GraphicsDevice.h"
 #include "Framework/Define/Render/MultiSampleQuarity.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Utility/ImGUI/ImGUI.h"
 
@@ -111,8 +110,10 @@ void DirectX11GraphicsDevice::present(UINT syncInterval) {
     mSwapChain->Present(0, 0);
 }
 
-std::shared_ptr<TextureBuffer> DirectX11GraphicsDevice::getBackBuffer() {
-    return std::make_shared<TextureBuffer>(*this);
+ComPtr<ID3D11Texture2D> DirectX11GraphicsDevice::getBackBuffer() {
+    ComPtr<ID3D11Texture2D> texture;
+    throwIfFailed(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texture));
+    return texture;
 }
 
 } //Graphics 

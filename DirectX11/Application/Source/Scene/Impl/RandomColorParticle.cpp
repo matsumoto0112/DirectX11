@@ -214,37 +214,37 @@ bool RandomColorParticle::isEndScene() const {
 }
 
 void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
-    //事前準備
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
-    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mAlphaBlend->set();
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
-    mTexture->setData(Graphics::ShaderInputType::Pixel, 0);
+    ////事前準備
+    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+    //dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
+    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mAlphaBlend->set();
+    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    //Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
+    //mTexture->setData(Graphics::ShaderInputType::Pixel, 0);
 
-    //描画処理
-    mVS->set();
-    mGS->set();
-    mPS->set();
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
-    Utility::getConstantBufferManager()->send();
+    ////描画処理
+    //mVS->set();
+    //mGS->set();
+    //mPS->set();
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    //Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(1.0f, 1.0f, 1.0f));
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
+    //Utility::getConstantBufferManager()->send();
 
-    UINT stride = sizeof(Particle);
-    UINT offset = 0;
-    //頂点バッファをセットする
-    //パーティクルのバッファをそのまま渡す
-    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
-    Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-    Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
+    //UINT stride = sizeof(Particle);
+    //UINT offset = 0;
+    ////頂点バッファをセットする
+    ////パーティクルのバッファをそのまま渡す
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    //Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
 
-    //頂点バッファを解放する
-    ID3D11Buffer* nullBuf = nullptr;
-    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
+    ////頂点バッファを解放する
+    //ID3D11Buffer* nullBuf = nullptr;
+    //Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
-    mWindow->draw();
+    //mWindow->draw();
 }
 
 void RandomColorParticle::end() {}

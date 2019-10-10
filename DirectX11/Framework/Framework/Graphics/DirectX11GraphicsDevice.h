@@ -40,7 +40,7 @@ public:
     /**
     * @brief バックバッファの取得
     */
-    std::shared_ptr<TextureBuffer> getBackBuffer();
+    ComPtr<ID3D11Texture2D> getBackBuffer();
     /**
     * @brief スワップチェインの取得
     */

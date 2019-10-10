@@ -78,13 +78,13 @@ bool RenderModel::isEndScene() const {
 }
 
 void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    mAlphaBlend->set();
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+    //renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
+    //mAlphaBlend->set();
+    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    mModel->draw(mTransform);
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    //mModel->draw(mTransform);
 }
 
 void RenderModel::end() { }

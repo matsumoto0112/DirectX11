@@ -22,7 +22,7 @@ Sprite2D::Sprite2D(std::shared_ptr<Texture> texture)
     mZOrder(0.0f),
     mRotate(0.0f),
     mScale(1.0f, 1.0f),
-    mContentSize((float)texture->getWidth(), (float)texture->getHeight()),
+    //mContentSize((float)texture->getWidth(), (float)texture->getHeight()),
     mPivot(0.0f, 0.0f),
     mColor(1.0f, 1.0f, 1.0f, 1.0f),
     mSrcRect(0.0f, 0.0f, 1.0f, 1.0f) {}
