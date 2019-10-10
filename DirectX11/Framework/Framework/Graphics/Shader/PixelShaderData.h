@@ -10,7 +10,6 @@ namespace Graphics {
 * @brief ピクセルシェーダの設定に必要なデータ群
 */
 struct PixelShaderData {
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader; //!< ピクセルシェーダ
 };
 
 } //Graphics 

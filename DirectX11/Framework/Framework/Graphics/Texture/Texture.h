@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 #include <d3d11.h>
-#include "Framework/Graphics/Shader/ShaderInputType.h"
+#include "Framework/Graphics/Resource/ShaderInputType.h"
 #include "Framework/Utility/Property.h"
 #include "Framework/Graphics/Resource/ShaderResourceView.h"
 

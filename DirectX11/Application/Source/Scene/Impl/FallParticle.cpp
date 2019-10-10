@@ -88,12 +88,12 @@ FallParticle::FallParticle() {    //カメラの初期化
     auto ps = std::make_shared<Graphics::PixelShader>("2D/Texture2D_Color_PS");
     auto vs = std::make_shared<Graphics::VertexShader>("Particle/Fall_VS");
 
-    mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
-        Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
-        cs,
-        vs,
-        ps,
-        gs);
+    //mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
+    //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
+    //    cs,
+    //    vs,
+    //    ps,
+    //    gs);
 
 
     //ラスタライザ作成

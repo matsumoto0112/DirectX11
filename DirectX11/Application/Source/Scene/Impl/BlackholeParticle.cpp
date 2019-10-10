@@ -94,12 +94,12 @@ BlackholeParticle::BlackholeParticle() {
 
     auto vs = std::make_shared<Graphics::VertexShader>("Particle/Blackhole_VS");
 
-    mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
-        Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
-        cs,
-        vs,
-        ps,
-        gs);
+    //mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
+    //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
+    //    cs,
+    //    vs,
+    //    ps,
+    //    gs);
 
 
     //ラスタライザ作成

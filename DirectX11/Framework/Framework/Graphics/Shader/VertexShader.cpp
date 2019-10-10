@@ -7,16 +7,8 @@
 namespace Framework {
 namespace Graphics {
 
-VertexShader::VertexShader(const std::string& name)
-    :ShaderBase(), mShaderData(std::make_unique<VertexShaderData>()) {
-    create(name);
-}
-
-VertexShader::~VertexShader() { }
-
-void VertexShader::create(const std::string& name) {
-    //ファイルパスの作成
-    const std::string filepath = Define::Path::getInstance()->shader() + name + ".cso";
+VertexShader::VertexShader(const std::string& filepath)
+    :ShaderBase() {
     //シェーダファイルの読み込み
     std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
     const UINT shaderSize = shaderData.size();
@@ -112,16 +104,16 @@ void VertexShader::create(const std::string& name) {
     }
 
     //シェーダファイル作成
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateVertexShader(shaderData.data(), shaderSize, nullptr, &mShaderData->mVertexShader);
-    MY_ASSERTION(SUCCEEDED(hr), "VertexShader作成失敗\n" + filepath);
-    hr = DX11InterfaceAccessor::getDevice()->CreateInputLayout(descs.data(), static_cast<UINT>(descs.size()),
-        shaderData.data(), shaderSize, &mShaderData->mInputLayout);
-    MY_ASSERTION(SUCCEEDED(hr), "InputLayout作成失敗");
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateVertexShader(shaderData.data(), shaderSize, nullptr, &mVertexShader));
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateInputLayout(descs.data(), static_cast<UINT>(descs.size()),
+        shaderData.data(), shaderSize, &mInputLayout));
 }
 
+VertexShader::~VertexShader() { }
+
 void VertexShader::set() {
-    DX11InterfaceAccessor::getContext()->VSSetShader(mShaderData->mVertexShader.Get(), nullptr, 0);
-    DX11InterfaceAccessor::getContext()->IASetInputLayout(mShaderData->mInputLayout.Get());
+    DX11InterfaceAccessor::getContext()->VSSetShader(mVertexShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->IASetInputLayout(mInputLayout.Get());
 }
 
 } //Graphics 

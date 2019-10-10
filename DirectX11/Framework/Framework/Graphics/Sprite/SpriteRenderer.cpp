@@ -1,18 +1,18 @@
 #include "SpriteRenderer.h"
 #include <vector>
 #include <d3d11.h>
+#include "Framework/Define/Path.h"
 #include "Framework/Graphics/Buffer/VertexBuffer.h"
 #include "Framework/Graphics/Buffer/IndexBuffer.h"
 #include "Framework/Graphics/Vertex/Vertex.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Graphics/Shader/Effect.h"
-#include "Framework/Graphics/Shader/ShaderInputType.h"
+#include "Framework/Graphics/Resource/ShaderInputType.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Texture/Sampler.h"
 #include "Framework/Graphics/Texture/Texture.h"
-#include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/Renderer/PrimitiveVertex.h"
@@ -35,9 +35,9 @@ SpriteRenderer::SpriteRenderer() {
     mVertexBuffer = std::make_unique<VertexBuffer>(vertices);
     mIndexBuffer = std::make_unique<IndexBuffer>(PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
 
-    mEffect = std::make_shared<Effect>(
-        Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
-        Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
+    std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>("2D/Texture2D_VS.cso");
+    std::shared_ptr<PixelShader> ps = std::make_shared<PixelShader>("2D/Texture2D_PS.cso");
+    mEffect = std::make_shared<Effect>(vs,ps);
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
 

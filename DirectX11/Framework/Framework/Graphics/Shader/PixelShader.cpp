@@ -6,24 +6,18 @@
 namespace Framework {
 namespace Graphics {
 
-PixelShader::PixelShader(const std::string& filename)
-    : ShaderBase(), mShaderData(std::make_unique<PixelShaderData>()) {
-    create(filename);
-}
-
-PixelShader::~PixelShader() {}
-
-void PixelShader::create(const std::string& name) {
-    //ファイルパスの作成
-    const std::string filename = Define::Path::getInstance()->shader() + name + ".cso";
+PixelShader::PixelShader(const std::string& filepath)
+    : ShaderBase() {
     //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
+    std::vector<BYTE> byteData = Utility::ByteReader(filepath).get();
     //シェーダファイル作成
-    DX11InterfaceAccessor::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mPixelShader);
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mPixelShader));
 }
+
+PixelShader::~PixelShader() { }
 
 void PixelShader::set() {
-    DX11InterfaceAccessor::getContext()->PSSetShader(mShaderData->mPixelShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->PSSetShader(mPixelShader.Get(), nullptr, 0);
 }
 
 } //Graphics 

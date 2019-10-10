@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include <wrl/client.h>
-#include "Framework/Graphics/Shader/ShaderInputType.h"
+#include "Framework/Graphics/Resource/ShaderInputType.h"
 
 namespace Framework {
 namespace Graphics {

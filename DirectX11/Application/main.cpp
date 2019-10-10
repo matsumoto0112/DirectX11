@@ -21,8 +21,6 @@
 #include "Framework/Scene/Manager.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"
-#include "Source/Scene/Impl/ComputeShader.h"
-#include "Source/Scene/Impl/RandomColorParticle.h"
 #include "Source/Scene/Impl/BlackholeParticle.h"
 #include "Source/Scene/Impl/FallParticle.h"
 #include "Source/Scene/Impl/FallBounceParticle.h"
@@ -69,31 +67,31 @@ private:
         mSceneManager = std::make_unique<Scene::Manager>();
 
         using Define::SceneType;
-        mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-        mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
-        mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
-        mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
-        mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
-        mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
-        mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
-        mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
-        mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-        mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
+        //mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+        //mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
+        //mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
+        //mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
+        //mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
+        //mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
+        //mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
+        //mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
+        //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+        //mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
         mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
         mSceneManager->loadScene(SceneType::Shadow);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
-        ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
-        ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
-        ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
-        ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
-        ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);
-        ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
-        ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
-        ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
-        ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
+        //ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
+        //ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
+        //ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
+        //ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
+        //ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);
+        //ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
+        //ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
+        //ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
+        //ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
         ADD_SCENE_JUMP_BUTTON(Shadow, SceneType::Shadow);
-        ADD_SCENE_JUMP_BUTTON(RenderModel, SceneType::RenderModel);
+        //ADD_SCENE_JUMP_BUTTON(RenderModel, SceneType::RenderModel);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Framework/Graphics/Shader/ShaderInputType.h"
+#include "Framework/Graphics/Resource/ShaderInputType.h"
 //#include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"

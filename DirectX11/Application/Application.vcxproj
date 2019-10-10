@@ -73,13 +73,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceRotateParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FireworkParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FlashParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow.cpp" />
     <ClCompile Include="Source\Scene\Impl\ShotParticle.cpp" />
@@ -95,13 +93,11 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\BlackholeParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceRotateParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FireworkParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FlashParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow.h" />
     <ClInclude Include="Source\Scene\Impl\ShotParticle.h" />
@@ -118,15 +114,11 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\2D\Texture2D_Inversion_PS.hlsl">
+    <FxCompile Include="Resources\Shader\NoDelete\Texture2D_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\2D\Texture2D_PS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\2D\Texture2D_VS.hlsl">
+    <FxCompile Include="Resources\Shader\NoDelete\Texture2D_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>

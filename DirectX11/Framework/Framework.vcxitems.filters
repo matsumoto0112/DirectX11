@@ -87,13 +87,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Text.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\FBXModelResourceStorage.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\LoadResourceList.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\PixelShaderResourceStorage.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\VertexShaderResourceStorage.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.cpp" />
@@ -110,9 +103,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\CameraType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Model.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\PixelShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\VertexShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.h" />
@@ -129,9 +119,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderInputType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\VertexShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\VertexShaderData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Sprite\Sprite2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Sprite\Sprite3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Sprite\SpriteRenderer.h" />
@@ -204,7 +192,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Property.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IRenderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\Texture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Range.h" />
@@ -228,15 +215,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Text.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\ImGUI\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\AbstractResourceStorage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\FBXModelResourceStorage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\LoadResourceList.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\PixelShaderResourceStorage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\ResourceManager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\TextureResourceStorage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\VertexShaderResourceStorage.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\GeometoryShader.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Resource\GeometoryShaderResourceStorage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\FBXLoader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
@@ -253,5 +231,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IDrawable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderInputType.h" />
   </ItemGroup>
 </Project>

@@ -55,8 +55,8 @@ RenderModel::RenderModel() {
         indices[i * 3 + 1] = i * 3 + 1;
         indices[i * 3 + 2] = i * 3 + 0;
     }
-    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
-    auto ps = Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
+    auto vs = std::make_shared<Graphics::VertexShader>("3D/Only_Position_VS");
+    auto ps = std::make_shared<Graphics::PixelShader>("3D/Output_Color_PS");;
 
     mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),

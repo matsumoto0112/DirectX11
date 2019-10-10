@@ -7,7 +7,6 @@
 
 #include <Windows.h>
 #include "Framework/Device/GameDevice.h"
-#include "Framework/Utility/Resource/ResourceManager.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Input/Mouse.h"
 #include "Framework/Window/Window.h"

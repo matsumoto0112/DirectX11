@@ -85,9 +85,9 @@ WormholeParticle::WormholeParticle() {
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mParameterCB = std::make_unique<Graphics::ConstantBuffer<ParticleParameter>>(Graphics::ShaderInputType::Compute, 1);
-    auto gs = Utility::ResourceManager::getInstance()->getGeometoryShader()->getResource(Define::GeometoryShader::SpotInstancer);
-    auto ps = Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::CubeParticle);
-    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Wormhole);
+    auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/SpotIndtancer_GS");
+    auto ps = std::make_shared<Graphics::PixelShader>("Particle/CubeParticle_PS");
+    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Wormhole_VS");
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -106,12 +106,12 @@ WormholeParticle::WormholeParticle() {
 
         cs->addUAV(0, randomSeed);
 
-        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
-            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
-            cs,
-            vs,
-            ps,
-            gs));
+        //mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
+        //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
+        //    cs,
+        //    vs,
+        //    ps,
+        //    gs));
     }
 
 
@@ -152,8 +152,7 @@ WormholeParticle::WormholeParticle() {
 
 WormholeParticle::~WormholeParticle() { }
 
-void WormholeParticle::load(Scene::Collecter& collecter) {
-}
+void WormholeParticle::load(Scene::Collecter& collecter) { }
 
 void WormholeParticle::update() {
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();

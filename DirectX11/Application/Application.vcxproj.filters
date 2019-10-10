@@ -3,8 +3,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Source\Scene\Impl\ComputeShader.cpp" />
-    <ClCompile Include="Source\Scene\Impl\RandomColorParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\BlackholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\FallBounceParticle.cpp" />
@@ -22,8 +20,6 @@
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
-    <ClInclude Include="Source\Scene\Impl\ComputeShader.h" />
-    <ClInclude Include="Source\Scene\Impl\RandomColorParticle.h" />
     <ClInclude Include="Source\Scene\Impl\BlackholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\FallBounceParticle.h" />
@@ -37,8 +33,6 @@
     <ClInclude Include="Source\Scene\Impl\Shadow.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\2D\Texture2D_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\2D\Texture2D_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_NoTexture_PS.hlsl" />
@@ -46,7 +40,6 @@
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Split4Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Only_Position_VS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Output_Color_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\2D\Texture2D_Inversion_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
     <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />
@@ -81,6 +74,8 @@
     <FxCompile Include="Resources\Shader\ShadowMap\Depth_PS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMap_VS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMap_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\NoDelete\Texture2D_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\NoDelete\Texture2D_VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

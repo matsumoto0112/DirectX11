@@ -92,7 +92,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Flash_GS");
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
-    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Flash);
+    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Flash_VS");
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -111,12 +111,12 @@ FlashParticle::FlashParticle() {    //カメラの初期化
 
         cs->addUAV(0, randomSeed);
 
-        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
-            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
-            cs,
-            vs,
-            ps,
-            gs));
+        //mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
+        //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
+        //    cs,
+        //    vs,
+        //    ps,
+        //    gs));
     }
 
 
@@ -137,7 +137,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
 
     mGlobal.emit = -1;
     mNum = NUM;
-    mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance()->getTexture()->getResource(Define::TextureType::Circle));
+    //mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance()->getTexture()->getResource(Define::TextureType::Circle));
     mLerp.start = Math::Vector3(50, 10, 0);
     mLerp.end = Math::Vector3(-50, -10, 0);
 

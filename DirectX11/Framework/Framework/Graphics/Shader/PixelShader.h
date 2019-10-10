@@ -14,9 +14,9 @@ class PixelShader : public ShaderBase {
 public:
     /**
     * @brief コンストラクタ
-    * @param filename シェーダファイル名
+    * @param filepath シェーダファイル名
     */
-    PixelShader(const std::string& filename);
+    PixelShader(const std::string& filepath);
     /**
     * @brief デストラクタ
     */
@@ -26,13 +26,7 @@ public:
     */
     void set();
 private:
-    /**
-    * @brief ピクセルシェーダの作成
-    * @param name シェーダファイル名
-    */
-    void create(const std::string& name);
-private:
-    std::unique_ptr<PixelShaderData> mShaderData; //!< シェーダーのデータ
+    ComPtr<ID3D11PixelShader> mPixelShader; //!< ピクセルシェーダ
 };
 
 } //Graphics 

@@ -97,12 +97,12 @@ FireworkParticle::FireworkParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
 
         cs->addUAV(0, randomSeed);
 
-        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
-            Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
-            cs,
-            vs,
-            ps,
-            gs));
+        //mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
+        //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke),
+        //    cs,
+        //    vs,
+        //    ps,
+        //    gs));
     }
 
 

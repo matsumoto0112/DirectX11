@@ -91,7 +91,7 @@ ShotParticle::ShotParticle() {    //カメラの初期化
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
     auto vs = std::make_shared<Graphics::VertexShader>("Particle/Flash_VS");
 
-    Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Model);
+    //Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Model);
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -110,13 +110,13 @@ ShotParticle::ShotParticle() {    //カメラの初期化
 
         cs->addUAV(0, randomSeed);
 
-        mGPUParticle.emplace_back(OnceShotData{ INT_MAX,Math::Vector3::ZERO,Math::Vector3::ZERO,Utility::Timer(0.0f) },
-            std::make_unique<Graphics::GPUParticle>(COUNT,
-                Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
-                cs,
-                vs,
-                ps,
-                gs));
+        //mGPUParticle.emplace_back(OnceShotData{ INT_MAX,Math::Vector3::ZERO,Math::Vector3::ZERO,Utility::Timer(0.0f) },
+        //    std::make_unique<Graphics::GPUParticle>(COUNT,
+        //        Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
+        //        cs,
+        //        vs,
+        //        ps,
+        //        gs));
     }
 
 

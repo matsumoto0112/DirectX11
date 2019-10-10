@@ -1,14 +1,11 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 #include <d3d11.h>
 #include "Framework/Graphics/Shader/ShaderBase.h"
-#include "Framework/Graphics/Shader/VertexShaderData.h"
 
 namespace Framework {
 namespace Graphics {
-class GraphicsDeviceManager;
 
 /**
 * @class VertexShader
@@ -18,9 +15,9 @@ class VertexShader : public ShaderBase {
 public:
     /**
     * @brief コンストラクタ
-    * @param filename シェーダファイル名
+    * @param filepath シェーダファイル名
     */
-    VertexShader(const std::string& name);
+    VertexShader(const std::string& filepath);
     /**
     * @brief デストラクタ
     */
@@ -30,13 +27,8 @@ public:
     */
     void set() override;
 private:
-    /**
-    * @brief 頂点シェーダの作成
-    * @param filename シェーダファイル名
-    */
-    void create(const std::string& name);
-private:
-    std::unique_ptr<VertexShaderData> mShaderData; //!< シェーダーのデータ
+    ComPtr<ID3D11VertexShader> mVertexShader; //!< 頂点シェーダ
+    ComPtr<ID3D11InputLayout> mInputLayout; //!< インプットレイアウト
 };
 } //Graphics 
 } //Framework 

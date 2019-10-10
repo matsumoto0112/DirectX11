@@ -2,7 +2,6 @@
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Input/InputManager.h"
-#include "Framework/Utility/Resource/ResourceManager.h"
 
 namespace Framework {
 
@@ -38,8 +37,5 @@ Graphics::CameraManager* getCameraManager();
 * @brief “ü—ÍŠÇ—‚Ìæ“¾
 */
 Input::InputManager* getInputManager();
-
-Utility::ResourceManager* getResourceManager();
-
 } //Utility 
 } //Framework 
