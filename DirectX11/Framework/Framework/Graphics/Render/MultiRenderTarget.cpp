@@ -4,7 +4,7 @@
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
 #include "Framework/Math/Rect.h"
@@ -36,7 +36,7 @@ MultiRenderTarget::MultiRenderTarget(UINT renderTargetNum,
     mClearColor(Color4::WHITE),
     mUseDepthStencil(false) {
     for (UINT i = 0; i < renderTargetNum; i++) {
-        Utility::getDevice()->CreateRenderTargetView(texture[i]->getBuffer().Get(), &rtvDesc, &mRTVs[i]);
+        DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(texture[i]->getBuffer().Get(), &rtvDesc, &mRTVs[i]);
         std::shared_ptr<ShaderResourceView> srv = std::make_shared<ShaderResourceView>(*texture[i], nullptr);
         mRenderTargetTextures[i] = std::make_shared<Texture>(
             texture[i],
@@ -58,7 +58,7 @@ MultiRenderTarget::MultiRenderTarget(UINT renderTargetNum, const Math::Rect& rec
             RenderTargetViewDesc::getDefaultTexture2DDesc(
                 static_cast<UINT>(rect.getWidth()),
                 static_cast<UINT>(rect.getHeight())));
-        Utility::getDevice()->CreateRenderTargetView(texBuffer->getBuffer().Get(),
+        DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(texBuffer->getBuffer().Get(),
             &desc,
             &mRTVs[i]);
         std::shared_ptr<ShaderResourceView> srv = std::make_shared<ShaderResourceView>(*texBuffer, nullptr);
@@ -86,12 +86,12 @@ void MultiRenderTarget::createDepthStencilView() {
 void MultiRenderTarget::set() {
     if (mUseDepthStencil) {
         MY_ASSERTION(mDepthStencilView != nullptr, "深度・ステンシルビューが未作成です");
-        Utility::getContext()->OMSetRenderTargets(mRTVs.size(),
+        DX11InterfaceAccessor::getContext()->OMSetRenderTargets(mRTVs.size(),
             mRTVs[0].GetAddressOf(),
             mDepthStencilView->getDepthStencilView().Get());
     }
     else {
-        Utility::getContext()->OMSetRenderTargets(mRTVs.size(),
+        DX11InterfaceAccessor::getContext()->OMSetRenderTargets(mRTVs.size(),
             mRTVs[0].GetAddressOf(),
             nullptr);
     }
@@ -101,7 +101,7 @@ void MultiRenderTarget::set() {
 void MultiRenderTarget::clear() {
     const UINT size = mRTVs.size();
     for (UINT i = 0; i < size; i++) {
-        Utility::getContext()->ClearRenderTargetView(mRTVs[i].Get(), mClearColor.get().data());
+        DX11InterfaceAccessor::getContext()->ClearRenderTargetView(mRTVs[i].Get(), mClearColor.get().data());
     }
     if (mUseDepthStencil && mDepthStencilView) {
         mDepthStencilView->clear();

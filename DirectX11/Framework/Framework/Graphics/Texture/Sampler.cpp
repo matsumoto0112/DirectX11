@@ -1,6 +1,6 @@
 #include "Sampler.h"
 #include <assert.h>
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
 #include "Framework/Utility/Debug.h"
 
@@ -47,7 +47,7 @@ Sampler::Sampler(TextureAddressMode addressMode, TextureFilterMode filterMode) {
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = -3.402823466e+38F;
     sampDesc.MaxLOD = 3.402823466e+38F;
-    HRESULT hr = Utility::getDevice()->CreateSamplerState(&sampDesc, &mSamplerState);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateSamplerState(&sampDesc, &mSamplerState);
     MY_ASSERTION(SUCCEEDED(hr), "ƒTƒ“ƒvƒ‰[‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½");
 }
 
@@ -59,10 +59,10 @@ Sampler::~Sampler() {}
 void Sampler::setData(ShaderInputType inputType, UINT slotNumber) {
     switch (inputType) {
     case Graphics::ShaderInputType::Vertex:
-        Utility::getContext()->VSSetSamplers(slotNumber, 1, mSamplerState.GetAddressOf());
+        DX11InterfaceAccessor::getContext()->VSSetSamplers(slotNumber, 1, mSamplerState.GetAddressOf());
         break;
     case Graphics::ShaderInputType::Pixel:
-        Utility::getContext()->PSSetSamplers(slotNumber, 1, mSamplerState.GetAddressOf());
+        DX11InterfaceAccessor::getContext()->PSSetSamplers(slotNumber, 1, mSamplerState.GetAddressOf());
         break;
     }
 }

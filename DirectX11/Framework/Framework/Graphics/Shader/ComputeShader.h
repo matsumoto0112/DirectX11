@@ -133,7 +133,7 @@ inline void ComputeShader::addSRV(UINT registerNum, const std::vector<T>& dataAr
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = dataArray.data();
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &srv.buffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &srv.buffer);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -147,7 +147,7 @@ inline void ComputeShader::addSRV(UINT registerNum, const std::vector<T>& dataAr
     const int numElem = desc.ByteWidth / 4;
     srvDesc.BufferEx.NumElements = numElem;
 
-    hr = Utility::getDevice()->CreateShaderResourceView(srv.buffer.Get(), &srvDesc, &srv.srv);
+    hr = DX11InterfaceAccessor::getDevice()->CreateShaderResourceView(srv.buffer.Get(), &srvDesc, &srv.srv);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     mSRVs.emplace_back(srv);
@@ -170,7 +170,7 @@ inline void ComputeShader::addUAV(UINT registerNum, const std::vector<T>& data) 
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = data.data();
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &uav.buffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &uav.buffer);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
@@ -183,7 +183,7 @@ inline void ComputeShader::addUAV(UINT registerNum, const std::vector<T>& data) 
     const int numElem = desc.ByteWidth / 4;
     uavDesc.Buffer.NumElements = numElem;
 
-    hr = Utility::getDevice()->CreateUnorderedAccessView(uav.buffer.Get(), &uavDesc, &uav.uav);
+    hr = DX11InterfaceAccessor::getDevice()->CreateUnorderedAccessView(uav.buffer.Get(), &uavDesc, &uav.uav);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     mUAVs.emplace_back(uav);
@@ -206,7 +206,7 @@ inline void ComputeShader::addUAVEnableVertexBuffer(UINT registerNum, const std:
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = data.data();
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &uav.buffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &uav.buffer);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
@@ -219,7 +219,7 @@ inline void ComputeShader::addUAVEnableVertexBuffer(UINT registerNum, const std:
     const int numElem = desc.ByteWidth / 4;
     uavDesc.Buffer.NumElements = numElem;
 
-    hr = Utility::getDevice()->CreateUnorderedAccessView(uav.buffer.Get(), &uavDesc, &uav.uav);
+    hr = DX11InterfaceAccessor::getDevice()->CreateUnorderedAccessView(uav.buffer.Get(), &uavDesc, &uav.uav);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     mUAVs.emplace_back(uav);

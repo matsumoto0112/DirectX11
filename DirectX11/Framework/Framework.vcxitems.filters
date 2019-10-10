@@ -52,7 +52,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Scene\Collecter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Scene\Manager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\ByteReader.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Wrap\DirectX.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Wrap\OftenUsed.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Debug.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\FPS.cpp" />
@@ -120,10 +119,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Resource\VertexShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBufferBindData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexAndIndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBufferBindData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\CameraNumCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ColorCBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.h" />
@@ -185,7 +182,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Scene\SceneDataBase.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\IO\ByteReader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\STLExtend\ExtendUnorderedMap.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Wrap\DirectX.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Wrap\OftenUsed.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Debug.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\FPS.h" />
@@ -263,9 +259,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Config.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveTopology.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\TypeDef.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\PrimitiveTopology.h" />
   </ItemGroup>
 </Project>

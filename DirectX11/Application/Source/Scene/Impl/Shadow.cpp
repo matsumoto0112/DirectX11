@@ -2,7 +2,7 @@
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/IO/FBXLoader.h"
@@ -72,8 +72,8 @@ Shadow::Shadow() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
@@ -135,7 +135,7 @@ Shadow::Shadow() {
         std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer);
         std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
         //mSprite = std::make_shared<Graphics::Sprite2D>(tex);
-        Utility::getDevice()->CreateRenderTargetView(buffer->getBuffer().Get(), &rtvDesc, &mRenderTarget);
+        Graphics::DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(buffer->getBuffer().Get(), &rtvDesc, &mRenderTarget);
     }
     {
         D3D11_TEXTURE2D_DESC texDesc{};
@@ -166,7 +166,7 @@ Shadow::Shadow() {
         dsvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT;
         dsvDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
         dsvDesc.Texture2D.MipSlice = 0;
-        Utility::getDevice()->CreateDepthStencilView(buffer->getBuffer().Get(), &dsvDesc, &mDepthStencil);
+        Graphics::DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(buffer->getBuffer().Get(), &dsvDesc, &mDepthStencil);
         mSprite->setScale(Math::Vector2(0.25f, 0.25f));
 
     }
@@ -203,7 +203,7 @@ bool Shadow::isEndScene() const {
 }
 
 void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
     mAlphaBlend->set();
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
@@ -217,10 +217,10 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
     Utility::getConstantBufferManager()->send();
 
-    Utility::getContext()->OMSetRenderTargets(1, mRenderTarget.GetAddressOf(), mDepthStencil.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, mRenderTarget.GetAddressOf(), mDepthStencil.Get());
     const float clear[] = { 0.0f,0.0f,0.0f,1.0f };
-    Utility::getContext()->ClearRenderTargetView(mRenderTarget.Get(), clear);
-    Utility::getContext()->ClearDepthStencilView(mDepthStencil.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    Graphics::DX11InterfaceAccessor::getContext()->ClearRenderTargetView(mRenderTarget.Get(), clear);
+    Graphics::DX11InterfaceAccessor::getContext()->ClearDepthStencilView(mDepthStencil.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     mModel->setEffect(mShadowEffect);
     for (auto&& tr : mTransform) {
         mModel->draw(tr);

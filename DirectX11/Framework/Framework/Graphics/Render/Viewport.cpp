@@ -1,5 +1,5 @@
 #include "Viewport.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -16,7 +16,7 @@ Viewport::Viewport(const Math::Rect& rect) {
 Viewport::~Viewport() {}
 
 void Viewport::set() {
-    Utility::getContext()->RSSetViewports(1, &mViewport);
+    DX11InterfaceAccessor::getContext()->RSSetViewports(1, &mViewport);
 }
 
 } //Graphics 

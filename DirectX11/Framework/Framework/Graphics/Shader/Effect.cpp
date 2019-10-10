@@ -1,5 +1,5 @@
 #include "Effect.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 namespace Framework {
 namespace Graphics {
 
@@ -13,7 +13,7 @@ void Effect::set() {
     mVertexShader->set();
     if (mPixelShader)
         mPixelShader->set();
-    else Utility::getContext()->PSSetShader(nullptr, nullptr, 0);
+    else DX11InterfaceAccessor::getContext()->PSSetShader(nullptr, nullptr, 0);
 }
 
 } //Graphics 

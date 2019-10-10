@@ -2,7 +2,7 @@
 #include <vector>
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector4.h"
-#include "Framework/Graphics/Renderer/PrimitiveTopology.h"
+#include "Framework/Graphics/Buffer/PrimitiveTopology.h"
 
 namespace Framework {
 namespace Graphics {

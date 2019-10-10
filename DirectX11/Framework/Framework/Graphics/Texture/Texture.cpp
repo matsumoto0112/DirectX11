@@ -3,7 +3,7 @@
 #include "Framework/Graphics/Shader/ShaderResourceView.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -22,11 +22,11 @@ Texture::~Texture() {}
 void Texture::setData(ShaderInputType inputType, UINT slotNum) const {
     switch (inputType) {
     case ShaderInputType::Vertex:
-        Utility::getContext()->VSSetShaderResources(
+        DX11InterfaceAccessor::getContext()->VSSetShaderResources(
             slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
         break;
     case ShaderInputType::Pixel:
-        Utility::getContext()->PSSetShaderResources(
+        DX11InterfaceAccessor::getContext()->PSSetShaderResources(
             slotNum, 1, mSRV->getShaderResourceView().GetAddressOf());
         break;
     default:

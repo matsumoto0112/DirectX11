@@ -2,10 +2,7 @@
 
 #include <vector>
 #include <d3d11.h>
-#include <memory>
-#include <wrl/client.h>
-#include "Framework/Graphics/Buffer/IndexBufferBindData.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/Buffer/PrimitiveTopology.h"
 
 namespace Framework {
 namespace Graphics {
@@ -41,7 +38,8 @@ private:
     */
     void setBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology);
 private:
-    std::unique_ptr<IndexBufferBindData> mData; //!< インデックスバッファのデータ
+    ComPtr<ID3D11Buffer> mBuffer; //!< インデックスバッファ
+    D3D11_PRIMITIVE_TOPOLOGY mTopology; //!< プリミティブトポロジーの種類
     UINT mIndexCount; //!< 頂点数
 };
 

@@ -2,7 +2,7 @@
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/IO/FBXLoader.h"
@@ -44,8 +44,8 @@ RenderModel::RenderModel() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
@@ -78,7 +78,7 @@ bool RenderModel::isEndScene() const {
 }
 
 void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);

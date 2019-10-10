@@ -1,5 +1,5 @@
 #include "MultiViewport.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -19,7 +19,7 @@ MultiViewport::MultiViewport(UINT viewportNum, const Math::Rect& rect) {
 MultiViewport::~MultiViewport() {}
 
 void MultiViewport::set() {
-    Utility::getContext()->RSSetViewports(mViewports.size(), mViewports.data());
+    DX11InterfaceAccessor::getContext()->RSSetViewports(mViewports.size(), mViewports.data());
 }
 
 } //Graphics 

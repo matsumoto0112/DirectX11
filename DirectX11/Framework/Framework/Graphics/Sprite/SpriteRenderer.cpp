@@ -45,8 +45,8 @@ SpriteRenderer::SpriteRenderer() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
 }
 
 SpriteRenderer::~SpriteRenderer() { }
@@ -81,7 +81,7 @@ void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
 }
 
 void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera* camera) {
-    Utility::getContext()->RSSetState(ras.Get());
+    DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     //コンスタントバッファの取得
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 

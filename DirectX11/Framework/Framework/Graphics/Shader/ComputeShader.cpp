@@ -2,7 +2,7 @@
 #include "Framework/Define/Path.h"
 #include "Framework/Math/MathUtility.h"
 #include "Framework/Utility/IO/ByteReader.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -19,36 +19,36 @@ ComputeShader::~ComputeShader() {
 }
 
 void ComputeShader::set() {
-    Utility::getContext()->CSSetShader(mShaderData->mComputeShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->CSSetShader(mShaderData->mComputeShader.Get(), nullptr, 0);
 
     for (auto&& srv : mSRVs) {
-        Utility::getContext()->CSSetShaderResources(srv.registerNum, 1, srv.srv.GetAddressOf());
+        DX11InterfaceAccessor::getContext()->CSSetShaderResources(srv.registerNum, 1, srv.srv.GetAddressOf());
     }
 
     for (auto&& uav : mUAVs) {
-        Utility::getContext()->CSSetUnorderedAccessViews(uav.registerNum, 1, uav.uav.GetAddressOf(), nullptr);
+        DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(uav.registerNum, 1, uav.uav.GetAddressOf(), nullptr);
     }
 
-    Utility::getContext()->Dispatch(mInfo.dispatchX, mInfo.dispatchY, mInfo.dispatchZ);
+    DX11InterfaceAccessor::getContext()->Dispatch(mInfo.dispatchX, mInfo.dispatchY, mInfo.dispatchZ);
 
     //コンテキストのデータをきれいにする
-    Utility::getContext()->CSSetShader(nullptr, nullptr, 0);
+    DX11InterfaceAccessor::getContext()->CSSetShader(nullptr, nullptr, 0);
 
     ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
     for (auto&& srv : mSRVs) {
-        Utility::getContext()->CSSetShaderResources(srv.registerNum, 1, nullSRV);
+        DX11InterfaceAccessor::getContext()->CSSetShaderResources(srv.registerNum, 1, nullSRV);
     }
 
     ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
     for (auto&& uav : mUAVs) {
-        Utility::getContext()->CSSetUnorderedAccessViews(uav.registerNum, 1, nullUAV, nullptr);
+        DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(uav.registerNum, 1, nullUAV, nullptr);
     }
 }
 
 void ComputeShader::setToVertexBuffer() {
     UINT offset = 0;
     for (auto&& buf : mVertexBuffers) {
-        Utility::getContext()->IASetVertexBuffers(buf.registerNum, 1, buf.buffer.GetAddressOf(), &buf.stride, &offset);
+        DX11InterfaceAccessor::getContext()->IASetVertexBuffers(buf.registerNum, 1, buf.buffer.GetAddressOf(), &buf.stride, &offset);
     }
 }
 
@@ -57,7 +57,7 @@ void ComputeShader::clearVertexBuffer() {
     UINT nullStride = 0;
     UINT offset = 0;
     for (auto&& buf : mVertexBuffers) {
-        Utility::getContext()->IASetVertexBuffers(buf.registerNum, 1, nullBuffer, &nullStride, &offset);
+        DX11InterfaceAccessor::getContext()->IASetVertexBuffers(buf.registerNum, 1, nullBuffer, &nullStride, &offset);
     }
 }
 
@@ -67,7 +67,7 @@ void ComputeShader::create(const std::string& name) {
     //シェーダファイルの読み込み
     std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
     //シェーダファイル作成
-    Utility::getDevice()->CreateComputeShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mComputeShader);
+    DX11InterfaceAccessor::getDevice()->CreateComputeShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mComputeShader);
 }
 
 } //Graphics 

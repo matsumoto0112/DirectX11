@@ -1,7 +1,7 @@
 #include "GeometoryShader.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Utility/IO/ByteReader.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -14,7 +14,7 @@ GeometoryShader::GeometoryShader(const std::string& filename)
 GeometoryShader::~GeometoryShader() {}
 
 void GeometoryShader::set() {   
-    Utility::getContext()->GSSetShader(mShaderData->mGeometoryShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->GSSetShader(mShaderData->mGeometoryShader.Get(), nullptr, 0);
 }
 
 void GeometoryShader::create(const std::string& name) { 
@@ -23,7 +23,7 @@ void GeometoryShader::create(const std::string& name) {
     //シェーダファイルの読み込み
     std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
     //シェーダファイル作成
-    Utility::getDevice()->CreateGeometryShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mGeometoryShader);
+    DX11InterfaceAccessor::getDevice()->CreateGeometryShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mGeometoryShader);
 }
 
 } //Graphics 

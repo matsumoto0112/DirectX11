@@ -1,12 +1,8 @@
 #pragma once
-
 #include <vector>
-#include <wrl/client.h>
 #include <d3d11.h>
-#include "Framework/Graphics/Buffer/VertexBufferBindData.h"
-#include "Framework/Graphics/DirectX11GraphicsDevice.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
 
 namespace Framework {
 namespace Graphics {
@@ -39,13 +35,14 @@ private:
     template<class T>
     void createBuffer(const std::vector<T>& vertices);
 private:
-    std::unique_ptr<VertexBufferBindData> mData; //!< デバイス転送用データ
+    ComPtr<ID3D11Buffer> mBuffer; //!< バッファ
+    UINT mStride; //!< 1頂点のサイズ
+    UINT mOffset; //!< 頂点配列のオフセット値
 };
 
 //コンストラクタ
 template<class T>
-inline VertexBuffer::VertexBuffer(const std::vector<T>& vertices)
-    :mData(std::make_unique<VertexBufferBindData>()) {
+inline VertexBuffer::VertexBuffer(const std::vector<T>& vertices) {
     createBuffer(vertices);
 }
 
@@ -54,16 +51,16 @@ inline VertexBuffer::VertexBuffer(const std::vector<T>& vertices)
 template<class T>
 inline void VertexBuffer::createBuffer(const std::vector<T>& vertices) {
     //頂点のサイズを保存
-    mData->mStride = sizeof(T);
+    mStride = sizeof(T);
     //オフセットは基本使用しない
-    mData->mOffset = 0;
+    mOffset = 0;
 
     //バッファデータの作成
     D3D11_BUFFER_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    desc.ByteWidth = mData->mStride * static_cast<UINT>(vertices.size());
+    desc.ByteWidth = mStride * static_cast<UINT>(vertices.size());
     desc.CPUAccessFlags = 0;
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;
@@ -74,7 +71,7 @@ inline void VertexBuffer::createBuffer(const std::vector<T>& vertices) {
     subResource.SysMemPitch = 0;
     subResource.SysMemSlicePitch = 0;
     subResource.pSysMem = vertices.data();
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &subResource, &mData->mBuffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer);
     if (FAILED(hr)) {
         MY_ASSERTION(false, "頂点バッファ作成失敗");
     }

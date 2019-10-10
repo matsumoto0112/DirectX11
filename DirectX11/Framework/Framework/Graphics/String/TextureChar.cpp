@@ -5,7 +5,7 @@
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Utility/Debug.h"
 
 namespace Framework {
@@ -96,7 +96,7 @@ TextureChar::TextureChar(const char* c, int fontSize, const std::string& font)
     std::shared_ptr<TextureBuffer> tex = std::make_shared<TextureBuffer>(desc);
 
     D3D11_MAPPED_SUBRESOURCE hMappedResource;
-    HRESULT hr = Utility::getContext()->Map(
+    HRESULT hr = DX11InterfaceAccessor::getContext()->Map(
         tex->getBuffer().Get(),
         0,
         D3D11_MAP_WRITE_DISCARD,
@@ -121,7 +121,7 @@ TextureChar::TextureChar(const char* c, int fontSize, const std::string& font)
             memcpy((BYTE*)pBits + hMappedResource.RowPitch * y + 4 * x, &Color, sizeof(DWORD));
         }
     }
-    Utility::getContext()->Unmap(tex->getBuffer().Get(), 0);
+    DX11InterfaceAccessor::getContext()->Unmap(tex->getBuffer().Get(), 0);
 
     // ShaderResourceView‚Ìî•ñ‚ğì¬‚·‚é
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;

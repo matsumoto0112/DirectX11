@@ -3,11 +3,11 @@
 namespace Framework {
 namespace Graphics {
 
-VertexBuffer::~VertexBuffer() {}
+VertexBuffer::~VertexBuffer() { }
 
 void VertexBuffer::setData() {
-    Utility::getContext()->IASetVertexBuffers(0, 1,
-        mData->mBuffer.GetAddressOf(), &mData->mStride, &mData->mOffset);
+    DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1,
+        mBuffer.GetAddressOf(), &mStride, &mOffset);
 }
 
 } //Graphics 

@@ -1,7 +1,7 @@
 #include "TextureBuffer.h"
 #include "Framework/Graphics/DirectX11GraphicsDevice.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -17,14 +17,14 @@ Graphics::TextureBuffer::TextureBuffer(DirectX11GraphicsDevice& device) {
 
 TextureBuffer::TextureBuffer(const D3D11_TEXTURE2D_DESC& desc)
     :mSize((float)desc.Width, (float)desc.Height) {
-    HRESULT hr = Utility::getDevice()->CreateTexture2D(&desc, nullptr, &mTextureBuffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateTexture2D(&desc, nullptr, &mTextureBuffer);
     MY_ASSERTION(SUCCEEDED(hr), "テクスチャバッファの作成に失敗しました。");
 }
 
 TextureBuffer::TextureBuffer(const D3D11_TEXTURE2D_DESC& desc,
     const D3D11_SUBRESOURCE_DATA& sub)
     : mSize((float)desc.Width, (float)desc.Height) {
-    HRESULT hr = Utility::getDevice()->CreateTexture2D(&desc, &sub, &mTextureBuffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateTexture2D(&desc, &sub, &mTextureBuffer);
     MY_ASSERTION(SUCCEEDED(hr), "テクスチャバッファの作成に失敗しました。");
 }
 

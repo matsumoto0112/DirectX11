@@ -1,7 +1,7 @@
 #include "PixelShader.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Utility/IO/ByteReader.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -19,11 +19,11 @@ void PixelShader::create(const std::string& name) {
     //シェーダファイルの読み込み
     std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
     //シェーダファイル作成
-    Utility::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mPixelShader);
+    DX11InterfaceAccessor::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mShaderData->mPixelShader);
 }
 
 void PixelShader::set() {
-    Utility::getContext()->PSSetShader(mShaderData->mPixelShader.Get(), nullptr, 0);
+    DX11InterfaceAccessor::getContext()->PSSetShader(mShaderData->mPixelShader.Get(), nullptr, 0);
 }
 
 } //Graphics 

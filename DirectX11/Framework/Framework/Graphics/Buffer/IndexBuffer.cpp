@@ -1,5 +1,5 @@
 #include "IndexBuffer.h"
-#include "Framework/Graphics/DirectX11GraphicsDevice.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Utility/Debug.h"
 
 namespace {
@@ -38,8 +38,7 @@ void IndexBuffer::setBuffer(const std::vector<UINT>& indices, PrimitiveTopology 
     mIndexCount = static_cast<UINT>(indices.size());
 
     //デスクの作成
-    D3D11_BUFFER_DESC desc;
-    ZeroMemory(&desc, sizeof(desc));
+    D3D11_BUFFER_DESC desc{};
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
     desc.ByteWidth = sizeof(UINT) * mIndexCount;
@@ -48,28 +47,26 @@ void IndexBuffer::setBuffer(const std::vector<UINT>& indices, PrimitiveTopology 
     desc.StructureByteStride = 0;
 
     //サブリソース作成
-    D3D11_SUBRESOURCE_DATA subResource;
-    ZeroMemory(&subResource, sizeof(subResource));
+    D3D11_SUBRESOURCE_DATA subResource{};
     subResource.pSysMem = indices.data();
     subResource.SysMemPitch = 0;
     subResource.SysMemSlicePitch = 0;
 
-    mData = std::make_unique<IndexBufferBindData>();
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &subResource, &mData->mBuffer);
+    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer);
     if (FAILED(hr)) {
         MY_ASSERTION(false, "バッファの作成に失敗しました。");
         return;
     }
-    mData->mTopology = convert(topology);
+    mTopology = convert(topology);
 }
 
 void IndexBuffer::setData() {
-    Utility::getContext()->IASetIndexBuffer(mData->mBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    Utility::getContext()->IASetPrimitiveTopology(mData->mTopology);
+    DX11InterfaceAccessor::getContext()->IASetIndexBuffer(mBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+    DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(mTopology);
 }
 
 void IndexBuffer::drawCall() {
-    Utility::getContext()->DrawIndexed(mIndexCount, 0, 0);
+    DX11InterfaceAccessor::getContext()->DrawIndexed(mIndexCount, 0, 0);
 }
 
 } //Graphics 

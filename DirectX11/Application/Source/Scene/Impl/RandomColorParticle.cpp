@@ -1,6 +1,6 @@
 #include "RandomColorParticle.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
@@ -68,7 +68,7 @@ void createSRV(int elemSize, int count, T* tArray,
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = tArray;
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &buffer);
+    HRESULT hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &buffer);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -78,7 +78,7 @@ void createSRV(int elemSize, int count, T* tArray,
     srvDesc.Format = DXGI_FORMAT_UNKNOWN;
     srvDesc.BufferEx.NumElements = desc.ByteWidth / 4;
 
-    hr = Utility::getDevice()->CreateShaderResourceView(buffer.Get(), &srvDesc, &srv);
+    hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateShaderResourceView(buffer.Get(), &srvDesc, &srv);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
 }
 
@@ -96,7 +96,7 @@ void createUAV(int elemSize, int count, T* particle,
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = particle;
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &buffer);
+    HRESULT hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &buffer);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
@@ -106,7 +106,7 @@ void createUAV(int elemSize, int count, T* particle,
     uavDesc.Buffer.NumElements = desc.ByteWidth / 4;
     uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
 
-    hr = Utility::getDevice()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, &uav);
+    hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, &uav);
     MY_ASSERTION(SUCCEEDED(hr), "失敗");
 }
 
@@ -168,8 +168,8 @@ RandomColorParticle::RandomColorParticle() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
@@ -188,10 +188,10 @@ void RandomColorParticle::update() {
     //UAVのセット
     UINT count = 256;
     //Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> uavs[2] = { mComputeBufferResultUAV,mRandomSeedUAV };
-    //Utility::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
-    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mRandomSeedUAV.GetAddressOf(), &count);
-    Utility::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
+    //Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(0, 2, uavs->GetAddressOf(), &count);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(0, 1, mRandomSeedUAV.GetAddressOf(), &count);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
 
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
@@ -206,7 +206,7 @@ void RandomColorParticle::update() {
 
     //UAVの解放
     ID3D11UnorderedAccessView* nullUAV = nullptr;
-    Utility::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
 }
 
 bool RandomColorParticle::isEndScene() const {
@@ -215,7 +215,7 @@ bool RandomColorParticle::isEndScene() const {
 
 void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     //事前準備
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
@@ -236,13 +236,13 @@ void RandomColorParticle::draw(Framework::Graphics::IRenderer* renderer) {
     UINT offset = 0;
     //頂点バッファをセットする
     //パーティクルのバッファをそのまま渡す
-    Utility::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
-    Utility::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-    Utility::getContext()->Draw(COUNT, 0);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
 
     //頂点バッファを解放する
     ID3D11Buffer* nullBuf = nullptr;
-    Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
     mWindow->draw();
 }

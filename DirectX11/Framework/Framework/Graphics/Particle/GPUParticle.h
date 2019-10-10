@@ -5,7 +5,6 @@
 #include "Framework/Graphics/Shader/PixelShader.h"
 #include "Framework/Graphics/Shader/VertexShader.h"
 #include "Framework/Graphics/Texture/Texture.h"
-#include "Framework/Utility/Wrap/DirectX.h"
 
 namespace Framework {
 namespace Graphics {

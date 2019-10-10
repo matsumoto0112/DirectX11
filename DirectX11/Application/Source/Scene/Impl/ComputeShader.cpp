@@ -1,6 +1,6 @@
 #include "ComputeShader.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
@@ -63,7 +63,7 @@ void createUAV(int elemSize, int count, Particle* particle) {
     D3D11_SUBRESOURCE_DATA sub;
     sub.pSysMem = particle;
 
-    HRESULT hr = Utility::getDevice()->CreateBuffer(&desc, &sub, &mComputeBufferResult);
+    HRESULT hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &sub, &mComputeBufferResult);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     ZeroMemory(&uavDesc, sizeof(uavDesc));
@@ -73,7 +73,7 @@ void createUAV(int elemSize, int count, Particle* particle) {
     uavDesc.Buffer.NumElements = sizeof(Particle) * count / sizeof(int);
     uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_RAW;
 
-    hr = Utility::getDevice()->CreateUnorderedAccessView(mComputeBufferResult.Get(), &uavDesc, &mComputeBufferResultUAV);
+    hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateUnorderedAccessView(mComputeBufferResult.Get(), &uavDesc, &mComputeBufferResultUAV);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 }
 }
@@ -125,7 +125,7 @@ ComputeShader::ComputeShader() {
     desc.BindFlags = 0;
     desc.MiscFlags = 0;
 
-    hr = Utility::getDevice()->CreateBuffer(&desc, nullptr, &mResulrBuffer);
+    hr = Graphics::DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, nullptr, &mResulrBuffer);
     MY_ASSERTION(SUCCEEDED(hr), "Ž¸”s");
 
     mSprite = std::make_shared<Graphics::Sprite3D>(Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Smoke));
@@ -144,8 +144,8 @@ ComputeShader::ComputeShader() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
 }
 
 ComputeShader::~ComputeShader() { }
@@ -155,7 +155,7 @@ void ComputeShader::load(Scene::Collecter& collecter) { }
 
 void ComputeShader::update() {
     UINT count = 256;
-    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
     //global.seed = Utility::Random::getInstance()->range(0, (int)(INT_MAX / 2));
     global.deltaTime = Utility::Time::getInstance()->getDeltaTime();
@@ -165,10 +165,10 @@ void ComputeShader::update() {
     mComputeShader->set();
 
     ID3D11UnorderedAccessView* nullUAV = nullptr;
-    Utility::getContext()->CSSetUnorderedAccessViews(1, 1, &nullUAV, nullptr);
+    Graphics::DX11InterfaceAccessor::getContext()->CSSetUnorderedAccessViews(1, 1, &nullUAV, nullptr);
 
     //mText->setText(Utility::StringBuilder("") << global.seed);
-    //Utility::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
+    //Graphics::DX11InterfaceAccessor::getContext()->CopyResource(mResulrBuffer.Get(), mComputeBufferResult.Get());
 }
 
 bool ComputeShader::isEndScene() const {
@@ -176,7 +176,7 @@ bool ComputeShader::isEndScene() const {
 }
 
 void ComputeShader::draw(Graphics::IRenderer* renderer) {
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
@@ -190,19 +190,19 @@ void ComputeShader::draw(Graphics::IRenderer* renderer) {
     mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World, Math::Matrix4x4::identity());
     Utility::getConstantBufferManager()->send();
-    Utility::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
-    Utility::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-    Utility::getContext()->Draw(COUNT, 0);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, mComputeBufferResult.GetAddressOf(), &stride, &offset);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    Graphics::DX11InterfaceAccessor::getContext()->Draw(COUNT, 0);
 
     ID3D11Buffer* nullBuf = nullptr;
-    Utility::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
+    Graphics::DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1, &nullBuf, &stride, &offset);
 
     //D3D11_MAPPED_SUBRESOURCE mappedSub;
     //ZeroMemory(&mappedSub, sizeof(mappedSub));
     //Particle* result;
-    //HRESULT hr = Utility::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
+    //HRESULT hr = Graphics::DX11InterfaceAccessor::getContext()->Map(mResulrBuffer.Get(), 0, D3D11_MAP_READ, 0, &mappedSub);
     //result = reinterpret_cast<Particle*>(mappedSub.pData);
-    //Utility::getContext()->Unmap(mResulrBuffer.Get(), 0);
+    //Graphics::DX11InterfaceAccessor::getContext()->Unmap(mResulrBuffer.Get(), 0);
 
     //for (int i = 0; i < COUNT; i++) {
     //    if (!result[i].alive)continue;

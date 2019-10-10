@@ -1,4 +1,5 @@
 #include "GPUParticle.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
 namespace Graphics {
@@ -29,8 +30,8 @@ void GPUParticle::draw() {
     mVertexShader->set();
     mPixelShader->set();
     mGeometoryShader->set();
-    Utility::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-    Utility::getContext()->Draw(mMaxParticleNum, 0);
+    DX11InterfaceAccessor::getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+    DX11InterfaceAccessor::getContext()->Draw(mMaxParticleNum, 0);
 
     mComputeShader->clearVertexBuffer();
 }

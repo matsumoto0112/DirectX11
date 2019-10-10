@@ -5,7 +5,7 @@
 #include "Framework/Graphics/Texture/Texture.h"
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace {
 using UINTPair = std::pair<UINT, UINT>;
@@ -70,12 +70,12 @@ void RenderTarget::createDepthStencilView(const D3D11_TEXTURE2D_DESC& texDesc,
 void RenderTarget::set() {
     if (mEnableDepthStencil) {
         MY_ASSERTION(mDepthStencilView != nullptr, "深度・ステンシルビューが未作成です");
-        Utility::getContext()->OMSetRenderTargets(1,
+        DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1,
             mRenderTargetView->getRenderTargetView().GetAddressOf(),
             mDepthStencilView->getDepthStencilView().Get());
     }
     else {
-        Utility::getContext()->OMSetRenderTargets(1,
+        DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1,
             mRenderTargetView->getRenderTargetView().GetAddressOf(),
             nullptr);
     }
@@ -84,7 +84,7 @@ void RenderTarget::set() {
 
 void RenderTarget::reset() {
     ID3D11RenderTargetView* rtv[1]{ nullptr };
-    Utility::getContext()->OMSetRenderTargets(1, rtv, nullptr);
+    DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, rtv, nullptr);
 }
 
 void RenderTarget::clear() {

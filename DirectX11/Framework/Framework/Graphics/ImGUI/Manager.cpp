@@ -1,6 +1,6 @@
 #include "Manager.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/ImGUI/Window.h"
 
@@ -8,7 +8,7 @@ namespace Framework {
 namespace ImGUI {
 
 Manager::Manager() {
-//#ifdef _DEBUG
+    //#ifdef _DEBUG
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -16,9 +16,11 @@ Manager::Manager() {
     ImGui::StyleColorsDark();
     bool success = ImGui_ImplWin32_Init(Utility::getMainHWND());
     MY_ASSERTION(success, "ImGUIÇÃèâä˙âªÇ…é∏îsÇµÇ‹ÇµÇΩ");
-    success = ImGui_ImplDX11_Init(Utility::getDevice(), Utility::getContext());
+    success = ImGui_ImplDX11_Init(
+        Graphics::DX11InterfaceAccessor::getDevice().Get(),
+        Graphics::DX11InterfaceAccessor::getContext().Get());
     MY_ASSERTION(success, "ImGUIÇÃèâä˙âªÇ…é∏îsÇµÇ‹ÇµÇΩ");
-//#endif // DEBUG
+    //#endif // DEBUG
 }
 
 Manager::~Manager() {

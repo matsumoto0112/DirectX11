@@ -1,6 +1,6 @@
 #include "FallBounceRotateParticle.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
-#include "Framework/Utility/Wrap/DirectX.h"
+#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/IRenderer.h"
@@ -119,8 +119,8 @@ FallBounceRotateParticle::FallBounceRotateParticle() {    //ƒJƒƒ‰‚Ì‰Šú‰»
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
@@ -166,7 +166,7 @@ bool FallBounceRotateParticle::isEndScene() const {
 }
 
 void FallBounceRotateParticle::draw(Framework::Graphics::IRenderer* renderer) {
-    Utility::getContext()->RSSetState(ras.Get());
+    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     dynamic_cast<Graphics::BackBufferRenderer*>(renderer)->getRenderTarget()->setEnableDepthStencil(false);
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
