@@ -88,6 +88,7 @@
     <FxCompile Include="Resources\Shader\Particle\Wormhole_VS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_VS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\ShadowMap\Depth_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
