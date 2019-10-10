@@ -1,5 +1,6 @@
 #include "SpriteRenderer.h"
 #include <vector>
+#include <d3d11.h>
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/Buffer/VertexAndIndexBuffer.h"
 #include "Framework/Graphics/RenderingManager.h"
@@ -13,7 +14,6 @@
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/Renderer/PrimitiveVertex.h"
-#include <d3d11.h>
 
 namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
@@ -23,7 +23,14 @@ namespace Framework {
 namespace Graphics {
 
 SpriteRenderer::SpriteRenderer() {
-    mVIBuffer = std::make_unique<VertexAndIndexBuffer>(PrimitiveVertex::cubePosition(), PrimitiveVertex::cubeIndex(), PrimitiveVertex::CubePrimitiveTopology);
+    std::vector<BaseVertex2D> vertices(4);
+    auto positions = PrimitiveVertex::quadPosition();
+    auto uvs = PrimitiveVertex::quadUV();
+    for (int i = 0; i < vertices.size(); i++) {
+        vertices[i].pos = positions[i];
+        vertices[i].uv = uvs[i];
+    }
+    mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
     mEffect = std::make_shared<Effect>(
         Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
         Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
@@ -33,7 +40,7 @@ SpriteRenderer::SpriteRenderer() {
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
     rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rasterizerDesc.DepthClipEnable = FALSE;
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;

@@ -5,16 +5,16 @@
 namespace Framework {
 namespace Math {
 
-Matrix4x4::Matrix4x4() {}
+Matrix4x4::Matrix4x4() { }
 
 Matrix4x4::Matrix4x4(float m11, float m12, float m13, float m14,
     float m21, float m22, float m23, float m24,
     float m31, float m32, float m33, float m34,
     float m41, float m42, float m43, float m44)
-    :m({ {{m11,m12,m13,m14},{m21,m22,m23,m24},{m31,m32,m33,m34},{m41,m42,m43,m44}} }) {}
+    :m({ {{m11,m12,m13,m14},{m21,m22,m23,m24},{m31,m32,m33,m34},{m41,m42,m43,m44}} }) { }
 
 Matrix4x4::Matrix4x4(std::array<std::array<float, 4>, 4> m)
-    : m(m) {}
+    : m(m) { }
 
 void Matrix4x4::loadIdentity() {
     //äeóvëfÇ0Ç≈èâä˙âª
@@ -402,37 +402,41 @@ Quaternion Matrix4x4::toQuaternion() const {
     const float mult = 0.25f / biggestValue;
     float x, y, z, w;
     switch (biggestIndex) {
-    case 0:
-        x = (m[1][2] - m[2][1]) * mult;
-        y = (m[2][0] - m[0][2]) * mult;
-        z = (m[0][1] - m[1][0]) * mult;
-        w = biggestValue;
-        break;
-    case 1:
-        x = biggestValue;
-        y = (m[0][1] + m[1][0]) * mult;
-        z = (m[2][0] + m[0][2]) * mult;
-        w = (m[1][2] - m[2][1]) * mult;
-        break;
-    case 2:
-        x = (m[1][0] + m[0][1]) * mult;
-        y = biggestValue;
-        z = (m[1][2] + m[2][1]) * mult;
-        w = (m[2][0] - m[0][2]) * mult;
-        break;
-    case 3:
-        x = (m[2][0] + m[0][2]) * mult;
-        y = (m[1][2] + m[2][1]) * mult;
-        z = biggestValue;
-        w = (m[0][1] - m[1][0]) * mult;
-        break;
+        case 0:
+            x = (m[1][2] - m[2][1]) * mult;
+            y = (m[2][0] - m[0][2]) * mult;
+            z = (m[0][1] - m[1][0]) * mult;
+            w = biggestValue;
+            break;
+        case 1:
+            x = biggestValue;
+            y = (m[0][1] + m[1][0]) * mult;
+            z = (m[2][0] + m[0][2]) * mult;
+            w = (m[1][2] - m[2][1]) * mult;
+            break;
+        case 2:
+            x = (m[1][0] + m[0][1]) * mult;
+            y = biggestValue;
+            z = (m[1][2] + m[2][1]) * mult;
+            w = (m[2][0] - m[0][2]) * mult;
+            break;
+        case 3:
+            x = (m[2][0] + m[0][2]) * mult;
+            y = (m[1][2] + m[2][1]) * mult;
+            z = biggestValue;
+            w = (m[0][1] - m[1][0]) * mult;
+            break;
     }
     return Quaternion(x, y, z, w);
 }
 
-Matrix4x4& Matrix4x4::transpose() {
-    *this = transposition(*this);
-    return *this;
+Matrix4x4 Matrix4x4::transpose() const {
+    return Matrix4x4(
+        m[0][0], m[1][0], m[2][0], m[3][0],
+        m[0][1], m[1][1], m[2][1], m[3][1],
+        m[0][2], m[1][2], m[2][2], m[3][2],
+        m[0][3], m[1][3], m[2][3], m[3][3]
+    );
 }
 
 Matrix4x4 Matrix4x4::transposition(const Matrix4x4& mat) {

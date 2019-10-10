@@ -33,6 +33,7 @@
 #include "Source/Scene/Impl/ShotParticle.h"
 #include "Source/Scene/Impl/WormholeParticle.h"
 #include "Source/Scene/Impl/RenderModel.h"
+#include "Source/Scene/Impl/Shadow.h"
 #include "Framework/Define/Config.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
@@ -78,7 +79,8 @@ private:
         mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
         mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
         mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
-        mSceneManager->loadScene(SceneType::RenderModel);
+        mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
+        mSceneManager->loadScene(SceneType::Shadow);
 
         mSceneJumpWindow = std::make_unique<ImGUI::Window>("Jumper");
         ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
@@ -90,6 +92,8 @@ private:
         ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
         ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
         ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
+        ADD_SCENE_JUMP_BUTTON(Shadow, SceneType::Shadow);
+        ADD_SCENE_JUMP_BUTTON(RenderModel, SceneType::RenderModel);
 
         ATLASSERT(_CrtCheckMemory());
         return true;

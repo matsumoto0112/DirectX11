@@ -19,8 +19,6 @@ struct OnlyPosition {
 struct BaseVertex2D {
     Math::Vector4 pos; //!< ’¸“_À•W
     Math::Vector2 uv; //!< UVÀ•W
-    BaseVertex2D(const Math::Vector4& pos, const Math::Vector2& uv)
-        :pos(pos), uv(uv) {}
 };
 
 /*

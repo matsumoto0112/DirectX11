@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Scene\Impl\ShotParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\WormholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Source\Scene\Impl\ShotParticle.h" />
     <ClInclude Include="Source\Scene\Impl\WormholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
+    <ClInclude Include="Source\Scene\Impl\Shadow.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
@@ -84,6 +86,8 @@
     <FxCompile Include="Resources\Shader\Particle\ShotParticle_CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Wormhole_CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Wormhole_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

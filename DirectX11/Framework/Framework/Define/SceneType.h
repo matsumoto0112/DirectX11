@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Framework{
+namespace Framework {
 namespace Define {
 
 /**
@@ -26,6 +26,7 @@ enum class SceneType {
     ShotParticle,
     WormholeParticle,
     RenderModel,
+    Shadow,
 };
 
 } //Define 

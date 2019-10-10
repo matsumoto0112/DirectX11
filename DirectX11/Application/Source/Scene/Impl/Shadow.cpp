@@ -1,4 +1,4 @@
-#include "RenderModel.h"
+#include "Shadow.h"
 #include "Framework/Graphics/Render/AlphaBlendSetting.h"
 #include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
@@ -9,6 +9,12 @@
 #include "Framework/Define/Path.h"
 #include "Framework/Define/Config.h"
 #include "Framework/Graphics/Model/Model.h"
+#include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
+#include "Framework/Graphics/Render/RenderTarget.h"
+#include "Framework/Graphics/Render/DepthStencilView.h"
+#include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
+#include "Framework/Graphics/Desc/DepthStencilDesc.h"
+#include "Framework/Graphics/Texture/TextureBuffer.h"
 
 using namespace Framework;
 
@@ -16,6 +22,17 @@ namespace {
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 Utility::Transform mTransform;
 std::unique_ptr<Graphics::Model> mModel;
+std::shared_ptr<Graphics::Effect> mShadowEffect;
+std::shared_ptr<Graphics::Effect> mModelEffect;
+std::shared_ptr<Graphics::Sprite2D> mSprite;
+
+struct LightMatrix {
+    Math::Matrix4x4 view;
+    Math::Matrix4x4 proj;
+};
+std::unique_ptr<Graphics::ConstantBuffer<LightMatrix>> mLightMatrix;
+LightMatrix mLightMatrixData;
+std::unique_ptr<Graphics::RenderTarget> mRenderTarget;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     D3D11_BLEND_DESC desc;
@@ -26,12 +43,13 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 }
 
 }
-RenderModel::RenderModel() {
+Shadow::Shadow() {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
 
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
 
@@ -63,32 +81,70 @@ RenderModel::RenderModel() {
         std::make_shared<Graphics::Effect>(vs, ps));
 
     mTransform = Utility::Transform(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(5.0f, 5.0f, 5.0f));
+
+    mLightMatrixData.view = m3DCamera->getView().transpose();
+    mLightMatrixData.proj = m3DCamera->getProjection().transpose();
+    mLightMatrix = std::make_unique<Graphics::ConstantBuffer<LightMatrix>>(Graphics::ShaderInputType::All, 7);
+    mLightMatrix->setBuffer(mLightMatrixData);
+    mModelEffect = mModel->getEffect();
+    mShadowEffect = std::make_shared<Graphics::Effect>(
+        std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMapCreate_VS"), nullptr);
+
+    UINT width = Define::Config::getInstance().mWidth;
+    UINT height = Define::Config::getInstance().mHeight;
+    std::shared_ptr<Graphics::TextureBuffer> texBuffer =
+        std::make_shared<Graphics::TextureBuffer>(
+            Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(width, height));
+    mRenderTarget = std::make_unique<Graphics::RenderTarget>(texBuffer, Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc(),
+        std::make_unique<Graphics::Viewport>(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
+        Graphics::SRVFlag::Use);
+    std::shared_ptr<Graphics::TextureBuffer> texBuffer2 =
+        std::make_shared<Graphics::TextureBuffer>(
+            Graphics::DepthStencilDesc::getDefaultTexture2DDesc(width, height));
+
+    mRenderTarget->createDepthStencilView(texBuffer2);
+    mRenderTarget->setClearColor(Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
+    mSprite = std::make_shared<Graphics::Sprite2D>(mRenderTarget->getRenderTargetTexture());
 }
 
-RenderModel::~RenderModel() { }
+Shadow::~Shadow() { }
 
-void RenderModel::load(Framework::Scene::Collecter& collecter) { }
+void Shadow::load(Framework::Scene::Collecter& collecter) { }
 
-void RenderModel::update() {
+void Shadow::update() {
     mTransform.setRotate(mTransform.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
 }
 
-bool RenderModel::isEndScene() const {
+bool Shadow::isEndScene() const {
     return false;
 }
 
-void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
+void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getContext()->RSSetState(ras.Get());
     renderer->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
     mAlphaBlend->set();
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
 
     Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    mLightMatrix->sendBuffer();
+
+    mRenderTarget->set();
+    mRenderTarget->clear();
+    mModel->setEffect(mModelEffect);
     mModel->draw(mTransform);
+
+    renderer->begin();
+
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
+    std::shared_ptr<Graphics::Texture> tex = mRenderTarget->getDepthStencil()->mRTTexture;
+    mSprite->setTexture(tex, false);
+    renderer->render(mSprite);
+    //mModel->setEffect(mModelEffect);
+    //mModel->draw(mTransform);
 }
 
-void RenderModel::end() { }
+void Shadow::end() { }
 
-Define::SceneType RenderModel::next() {
+Define::SceneType Shadow::next() {
     return Define::SceneType();
 }
