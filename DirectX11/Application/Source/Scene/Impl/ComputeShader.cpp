@@ -81,9 +81,9 @@ void createUAV(int elemSize, int count, Particle* particle) {
 ComputeShader::ComputeShader() {
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
     {
         D3D11_BLEND_DESC desc;
         desc.AlphaToCoverageEnable = FALSE;
@@ -101,17 +101,17 @@ ComputeShader::ComputeShader() {
 
     Particle particle[COUNT];
     for (int i = 0; i < COUNT; i++) {
-        //float life = Utility::Random::getInstance().range(5.0f, 10.0f);
+        //float life = Utility::Random::getInstance()->range(5.0f, 10.0f);
         //particle[i].lifeTime = -1;
         ////particle[i].lifeTime = 13;
 
         //particle[i].position = Math::Vector3(0, -2, 0);
-        //float x = Utility::Random::getInstance().range(-3.0f, 3.0f);
-        //float y = Utility::Random::getInstance().range(0.5f, 2.0f);
+        //float x = Utility::Random::getInstance()->range(-3.0f, 3.0f);
+        //float y = Utility::Random::getInstance()->range(0.5f, 2.0f);
         //particle[i].velocity = Math::Vector3(x, y, 0);
         //par
         //particle[i].velocity = Math::Vector3(17, 19, 23);
-        particle[i].seed = Utility::Random::getInstance().range(0, (int)(INT_MAX / 2));
+        particle[i].seed = Utility::Random::getInstance()->range(0, (int)(INT_MAX / 2));
     }
 
     HRESULT hr;
@@ -157,8 +157,8 @@ void ComputeShader::update() {
     UINT count = 256;
     Utility::getContext()->CSSetUnorderedAccessViews(1, 1, mComputeBufferResultUAV.GetAddressOf(), &count);
     GlobalData global;
-    //global.seed = Utility::Random::getInstance().range(0, (int)(INT_MAX / 2));
-    global.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    //global.seed = Utility::Random::getInstance()->range(0, (int)(INT_MAX / 2));
+    global.deltaTime = Utility::Time::getInstance()->getDeltaTime();
     mCB->setBuffer(global);
     mCB->sendBuffer();
 

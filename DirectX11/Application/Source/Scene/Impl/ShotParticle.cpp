@@ -73,16 +73,16 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 ShotParticle::ShotParticle() {    //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0, 10, -10),Math::Vector3(0, 0, 0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
-        randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
@@ -91,7 +91,7 @@ ShotParticle::ShotParticle() {    //カメラの初期化
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
     auto vs = std::make_shared<Graphics::VertexShader>("Particle/Flash_VS");
 
-    Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Model);
+    Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Model);
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -106,7 +106,7 @@ ShotParticle::ShotParticle() {    //カメラの初期化
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
-        std::vector<int> randomSeed{ Utility::Random::getInstance().range(0,RANDOM_MAX) };
+        std::vector<int> randomSeed{ Utility::Random::getInstance()->range(0,RANDOM_MAX) };
 
         cs->addUAV(0, randomSeed);
 
@@ -146,12 +146,12 @@ ShotParticle::~ShotParticle() {}
 void ShotParticle::load(Scene::Collecter& collecter) {}
 
 void ShotParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
     if (mTimer->isTime()) {
         mTimer->init();
-        const float x = Utility::Random::getInstance().range(0.0f, 30.0f);
+        const float x = Utility::Random::getInstance()->range(0.0f, 30.0f);
         const float y = 10.0f;
-        const float z = Utility::Random::getInstance().range(0.0f, 10.0f);
+        const float z = Utility::Random::getInstance()->range(0.0f, 10.0f);
         Math::Vector3 n = Math::Vector3(x, y, z);
         Math::Vector3 f = n + Math::Vector3(-30, -20, 0);
         mGPUParticle[mCurrentShotNum].first.start = n;
@@ -161,7 +161,7 @@ void ShotParticle::update() {
         mCurrentShotNum = (mCurrentShotNum + 1) % mGPUParticle.size();
     }
 
-    mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     mCB->setBuffer(mGlobal);
     mCB->sendBuffer();
@@ -175,7 +175,7 @@ void ShotParticle::update() {
         OnceShotDataBuffer buf;
         buf.emitIndex = mGPUParticle[i].first.timer.isTime() ? -1 : mGPUParticle[i].first.index;
         mGPUParticle[i].first.index++;
-        mGPUParticle[i].first.timer.update(Utility::Time::getInstance().getDeltaTime());
+        mGPUParticle[i].first.timer.update(Utility::Time::getInstance()->getDeltaTime());
         Math::Vector3 s = mGPUParticle[i].first.start;
         Math::Vector3 e = mGPUParticle[i].first.end;
         float t = 1.0f - (mGPUParticle[i].first.timer.getCurrentTime() / mGPUParticle[i].first.timer.getLimitTime());

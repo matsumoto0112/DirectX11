@@ -19,7 +19,7 @@ void GeometoryShader::set() {
 
 void GeometoryShader::create(const std::string& name) { 
     //ファイルパスの作成
-    const std::string filename = Define::Path::getInstance().shader() + name + ".cso";
+    const std::string filename = Define::Path::getInstance()->shader() + name + ".cso";
     //シェーダファイルの読み込み
     std::vector<BYTE> byteData = Utility::ByteReader(filename).get();
     //シェーダファイル作成

@@ -124,9 +124,9 @@ RandomColorParticle::RandomColorParticle() {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -143,7 +143,7 @@ RandomColorParticle::RandomColorParticle() {
 
     float randomTable[RANDOM_MAX];
     for (int i = 0; i < RANDOM_MAX; i++) {
-        randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
 
     int randomSeed[1]{ 0 };
@@ -183,7 +183,7 @@ RandomColorParticle::~RandomColorParticle() {}
 void RandomColorParticle::load(Framework::Scene::Collecter& collecter) {}
 
 void RandomColorParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
 
     //UAVのセット
     UINT count = 256;
@@ -193,7 +193,7 @@ void RandomColorParticle::update() {
     Utility::getContext()->CSSetUnorderedAccessViews(0, 1, mRandomSeedUAV.GetAddressOf(), &count);
     Utility::getContext()->CSSetShaderResources(0, 1, mRandomTableSRV.GetAddressOf());
 
-    mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     //グローバルデータのセット
     mCB->setBuffer(mGlobal);

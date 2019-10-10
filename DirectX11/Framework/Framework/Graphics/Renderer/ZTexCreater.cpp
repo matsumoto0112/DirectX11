@@ -55,7 +55,7 @@ void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite2D> sprite) 
 }
 
 void Framework::Graphics::ZTexCreater::render(std::shared_ptr<Sprite3D> sprite) {
-    SpriteRenderer::getInstance().draw(sprite.get(), Utility::getCameraManager()->getPerspectiveCamera().get());
+    SpriteRenderer::getInstance()->draw(sprite.get(), Utility::getCameraManager()->getPerspectiveCamera().get());
 }
 
 std::shared_ptr<Texture> ZTexCreater::getRenderedTexture() const {

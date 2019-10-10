@@ -61,9 +61,9 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 FallBounceParticle::FallBounceParticle() {    //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,30,-30),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -72,7 +72,7 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
-        randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
@@ -93,7 +93,7 @@ FallBounceParticle::FallBounceParticle() {    //カメラの初期化
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
-        std::vector<int> randomSeed{ Utility::Random::getInstance().range(0,RANDOM_MAX) };
+        std::vector<int> randomSeed{ Utility::Random::getInstance()->range(0,RANDOM_MAX) };
 
         cs->addUAV(0, randomSeed);
 
@@ -138,9 +138,9 @@ FallBounceParticle::~FallBounceParticle() { }
 void FallBounceParticle::load(Framework::Scene::Collecter& collecter) { }
 
 void FallBounceParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
 
-    mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
     mGlobal.gravity = 9.8f;
 
     //グローバルデータのセット

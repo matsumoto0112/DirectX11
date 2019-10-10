@@ -13,7 +13,7 @@ TextureResourceStorage::~TextureResourceStorage() {}
 
 void TextureResourceStorage::importResource(Define::TextureType type) {
     if (isExist(type))return;
-    mResources.emplace(type, mTextureLoader->load(Define::Path::getInstance().texture() + LoadResourceList::getTexturePath(type)));
+    mResources.emplace(type, mTextureLoader->load(Define::Path::getInstance()->texture() + LoadResourceList::getTexturePath(type)));
 }
 
 } //Utility 

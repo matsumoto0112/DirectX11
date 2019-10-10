@@ -32,8 +32,8 @@ SpriteRenderer::SpriteRenderer() {
     }
     mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
     mEffect = std::make_shared<Effect>(
-        Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
-        Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
+        Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
+        Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
 

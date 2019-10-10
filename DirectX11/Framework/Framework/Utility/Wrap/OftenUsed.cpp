@@ -6,7 +6,7 @@ namespace Framework {
 namespace Utility {
 
 HWND getMainHWND() {
-    return Device::GameDevice::getInstance().getWindow()->getHWND();
+    return Device::GameDevice::getInstance()->getWindow()->getHWND();
 }
 
 ImGUI::Manager* getImGUIManager() {
@@ -14,7 +14,7 @@ ImGUI::Manager* getImGUIManager() {
 }
 
 Graphics::RenderingManager* Utility::getRenderingManager() {
-    return Device::GameDevice::getInstance().getRenderingManager();
+    return Device::GameDevice::getInstance()->getRenderingManager();
 }
 
 Graphics::ConstantBufferManager* getConstantBufferManager() {
@@ -26,11 +26,11 @@ Graphics::CameraManager* getCameraManager() {
 }
 
 Input::InputManager* getInputManager() {
-    return Device::GameDevice::getInstance().getInputManager();
+    return Device::GameDevice::getInstance()->getInputManager();
 }
 
 Utility::ResourceManager* getResourceManager() {
-    return &Utility::ResourceManager::getInstance();
+    return Utility::ResourceManager::getInstance();
 }
 
 } //Graphics 

@@ -43,9 +43,5 @@ std::string Debug::errorMessage(const std::string& funcName,
     return (StringBuilder(funcName) << " " << line << ":" << message << "\n");
 }
 
-Debug::Debug() {}
-
-Debug::~Debug() {}
-
 } //Utility
 } //Framework

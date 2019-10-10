@@ -23,10 +23,10 @@ public:
     * @brief インスタンスの取得
     * @return インスタンス
     */
-    static T& getInstance() {
+    static T* getInstance() {
         struct temp : T { temp() :T() {} };
         static temp instance;
-        return instance;
+        return &instance;
     }
 private:
     //コピーコンストラクタ禁止

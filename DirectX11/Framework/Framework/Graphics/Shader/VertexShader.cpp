@@ -17,7 +17,7 @@ VertexShader::~VertexShader() {}
 void VertexShader::create(const std::string& name) {
     ID3D11Device* device = Utility::getDevice();
     //ファイルパスの作成
-    const std::string filepath = Define::Path::getInstance().shader() + name + ".cso";
+    const std::string filepath = Define::Path::getInstance()->shader() + name + ".cso";
     //シェーダファイルの読み込み
     std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
     const UINT shaderSize = shaderData.size();

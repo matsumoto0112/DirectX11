@@ -8,18 +8,18 @@ D3D11_PRIMITIVE_TOPOLOGY convert(Framework::Graphics::PrimitiveTopology type) {
     using Framework::Graphics::PrimitiveTopology;
     D3D11_PRIMITIVE_TOPOLOGY result;
     switch (type) {
-    case PrimitiveTopology::LineList:
-        result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
-        break;
-    case PrimitiveTopology::TriangleList:
-        result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-        break;
-    case PrimitiveTopology::TriangleStrip:
-        result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-        break;
-    default:
-        MY_ASSERTION(false, "未定義のプリミティブトポロジーの種類が選択されました。");
-        break;
+        case PrimitiveTopology::LineList:
+            result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+            break;
+        case PrimitiveTopology::TriangleList:
+            result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+            break;
+        case PrimitiveTopology::TriangleStrip:
+            result = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+            break;
+        default:
+            MY_ASSERTION(false, "未定義のプリミティブトポロジーの種類が選択されました。");
+            break;
     }
     return result;
 }
@@ -32,10 +32,10 @@ IndexBuffer::IndexBuffer(const std::vector<UINT>& indices, PrimitiveTopology top
     setBuffer(indices, topology);
 }
 
-IndexBuffer::~IndexBuffer() {}
+IndexBuffer::~IndexBuffer() { }
 
 void IndexBuffer::setBuffer(const std::vector<UINT>& indices, PrimitiveTopology topology) {
-    mIndexCount = indices.size();
+    mIndexCount = static_cast<UINT>(indices.size());
 
     //デスクの作成
     D3D11_BUFFER_DESC desc;

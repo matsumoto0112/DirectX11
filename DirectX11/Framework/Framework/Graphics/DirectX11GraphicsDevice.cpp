@@ -98,7 +98,7 @@ DirectX11GraphicsDevice::DirectX11GraphicsDevice(HWND hWnd, UINT screenWidth, UI
         return;
     }
 
-    Define::MultiSampleQuarity::getInstance().setMultiSample(MSAA.Count, MSAA.Quality);
+    Define::MultiSampleQuarity::getInstance()->setMultiSample(MSAA.Count, MSAA.Quality);
     //mDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(mDebug.GetAddressOf()));
 }
 

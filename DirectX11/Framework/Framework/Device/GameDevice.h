@@ -42,7 +42,7 @@ public:
     /**
     * @brief 初期化処理
     */
-    void initialize();
+    void initialize(const Math::Vector2& screenSize, const std::string& title);
 protected:
     /**
     * @brief コンストラクタ

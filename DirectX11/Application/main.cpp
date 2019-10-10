@@ -54,14 +54,14 @@ using namespace Framework;
 
 class MyGame : public Game {
 public:
-    MyGame() :Game(Math::Vector2((float)Define::Config::getInstance().mWidth, (float)Define::Config::getInstance().mHeight), false) { };
+    MyGame() :Game(Define::Config::getInstance()->getSize(), "Game", false) { };
     ~MyGame() { };
 private:
     virtual bool init() override {
         if (!Game::init()) {
             return false;
         }
-        auto window = mGameDevice.getWindow();
+        auto window = Device::GameDevice::getInstance()->getWindow();
         window->setProcedureEvent(new Window::ImGUIProc());
         window->setProcedureEvent(new Window::DestroyProc());
         window->setProcedureEvent(new Window::CloseProc());
@@ -99,18 +99,18 @@ private:
         return true;
     }
     virtual void update() override {
-        mGameDevice.update();
+        Device::GameDevice::getInstance()->update();
         mSceneManager->update();
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::IRenderer* renderer = mGameDevice.getRenderingManager()->drawBegin();
+        Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
         renderer->begin();
         mSceneManager->draw(renderer);
 
         mSceneJumpWindow->draw();
-        SetWindowText(mGameDevice.getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance().getCurrentFPS());
-        mGameDevice.getRenderingManager()->drawEnd();
+        SetWindowText(Device::GameDevice::getInstance()->getWindow()->getHWND(), Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
+        Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void finalize() override {

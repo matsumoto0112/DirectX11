@@ -55,9 +55,9 @@ std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
 FallParticle::FallParticle() {    //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
@@ -76,7 +76,7 @@ FallParticle::FallParticle() {    //カメラの初期化
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
-        randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
     cs->addSRV(0, randomTable);
 
@@ -117,9 +117,9 @@ FallParticle::~FallParticle() {}
 void FallParticle::load(Framework::Scene::Collecter& collecter) {}
 
 void FallParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
 
-    mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
     mGlobal.gravity = 9.8f;
 
     //グローバルデータのセット

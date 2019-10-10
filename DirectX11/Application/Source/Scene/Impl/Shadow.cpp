@@ -57,9 +57,9 @@ Shadow::Shadow() {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,10,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,300.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,300.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
 
@@ -74,8 +74,8 @@ Shadow::Shadow() {
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Utility::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::getContext()->RSSetState(ras.Get());
-    //Utility::FBXLoader loader(Define::Path::getInstance().fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
-    Utility::FBXLoader loader(::Define::Path::getInstance().fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
     std::vector<UINT> indices(pos.size());
     for (int i = 0; i < indices.size() / 3; i++) {
@@ -84,8 +84,8 @@ Shadow::Shadow() {
         indices[i * 3 + 2] = i * 3 + 0;
     }
 
-    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
-    auto ps = Utility::ResourceManager::getInstance().getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
+    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
+    auto ps = Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
 
     mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
@@ -111,8 +111,8 @@ Shadow::Shadow() {
         std::make_shared<Graphics::VertexShader>("2D/Texture2D_VS"),
         std::make_shared<Graphics::PixelShader>("ShadowMap/Depth_PS"));
 
-    UINT width = Define::Config::getInstance().mWidth;
-    UINT height = Define::Config::getInstance().mHeight;
+    UINT width = Define::Config::getInstance()->getWidth();
+    UINT height = Define::Config::getInstance()->getHeight();
 
     //mSprite = std::make_shared<Graphics::Sprite2D>(mRenderTarget->getRenderTargetTexture());
 

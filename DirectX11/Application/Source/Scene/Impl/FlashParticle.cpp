@@ -76,22 +76,22 @@ FlashParticle::FlashParticle() {    //カメラの初期化
     mCameraLookat = Math::Vector3(0, 0, 0);
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ mCameraPos,mCameraLookat,Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance().getSize(),0.1f,1000.0f });
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
 
-    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance().getSize());
+    m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     //アルファブレンドの作成
     mAlphaBlend = createAlphaBlend();
 
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
-        randomTable[i] = Utility::Random::getInstance().range(0.0f, 1.0f);
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
 
     mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/Flash_GS");
     auto ps = std::make_shared<Graphics::PixelShader>("Particle/Flash_PS");
-    auto vs = Utility::ResourceManager::getInstance().getVertexShader()->getResource(Define::VertexShaderType::Flash);
+    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Flash);
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
@@ -106,7 +106,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
-        std::vector<int> randomSeed{ Utility::Random::getInstance().range(0,RANDOM_MAX) };
+        std::vector<int> randomSeed{ Utility::Random::getInstance()->range(0,RANDOM_MAX) };
 
         cs->addUAV(0, randomSeed);
 
@@ -136,7 +136,7 @@ FlashParticle::FlashParticle() {    //カメラの初期化
 
     mGlobal.emit = -1;
     mNum = NUM;
-    mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance().getTexture()->getResource(Define::TextureType::Circle));
+    mSprite = std::make_shared<Graphics::Sprite2D>(Utility::ResourceManager::getInstance()->getTexture()->getResource(Define::TextureType::Circle));
     mLerp.start = Math::Vector3(50, 10, 0);
     mLerp.end = Math::Vector3(-50, -10, 0);
 
@@ -152,9 +152,9 @@ void FlashParticle::load(Scene::Collecter& collecter) {
 }
 
 void FlashParticle::update() {
-    mTimer->update(Utility::Time::getInstance().getDeltaTime());
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
 
-    mGlobal.deltaTime = Utility::Time::getInstance().getDeltaTime();
+    mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     float t = (1.0f - mTimer->getCurrentTime() / mTimer->getLimitTime());
     Math::MathUtility::clamp(t, 0.0f, 1.0f);

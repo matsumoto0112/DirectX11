@@ -16,16 +16,16 @@
 
 namespace Framework {
 
-Game::Game(const Math::Vector2& screenSize, bool isFullScreen, float fps)
-    :mGameDevice(Device::GameDevice::getInstance()),
-    mScreenSize(screenSize),
+Game::Game(const Math::Vector2& screenSize, const std::string& title, bool isFullScreen, float fps)
+    : mScreenSize(screenSize),
     mIsFullScreen(isFullScreen),
     mFPS(fps) {
     //メモリリーク検出
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    Device::GameDevice::getInstance()->initialize(screenSize, title);
 }
 
-Game::~Game() {}
+Game::~Game() { }
 
 int Game::run() {
     if (!init()) {
@@ -34,9 +34,9 @@ int Game::run() {
 
     //タイマーの初期化をここでする
     //リソースの読み込みなどで時間がかかっているため
-    Utility::Time::getInstance().init(mFPS);
-    Utility::Time::getInstance().startFrame();
-    Utility::Time::getInstance().endFrame();
+    Utility::Time::getInstance()->init(mFPS);
+    Utility::Time::getInstance()->startFrame();
+    Utility::Time::getInstance()->endFrame();
 
     MSG msg = {};
     //メインループ
@@ -44,7 +44,7 @@ int Game::run() {
         if (!isRunning()) {
             break;
         }
-        if (mGameDevice.isEnd()) {
+        if (Device::GameDevice::getInstance()->isEnd()) {
             break;
         }
         //メッセージがあれば処理する
@@ -53,11 +53,11 @@ int Game::run() {
             DispatchMessage(&msg);
         }
         else {
-            Utility::Time::getInstance().startFrame();
+            Utility::Time::getInstance()->startFrame();
             update();
             draw();
-            Utility::Time::getInstance().endFrame();
-            //Utility::Time::getInstance().wait();
+            Utility::Time::getInstance()->endFrame();
+            //Utility::Time::getInstance()->wait();
         }
     }
 
@@ -66,16 +66,15 @@ int Game::run() {
 }
 
 bool Game::init() {
-    mGameDevice.initialize();
     return true;
 }
 
 void Game::finalize() {
-    mGameDevice.finalize();
+    Device::GameDevice::getInstance()->finalize();
 }
 
 bool Game::isRunning() {
-    return !mGameDevice.getInputManager()->getKeyboard().getKeyDown(Input::KeyCode::Escape);
+    return !Device::GameDevice::getInstance()->getInputManager()->getKeyboard().getKeyDown(Input::KeyCode::Escape);
 }
 
 } //Framework 

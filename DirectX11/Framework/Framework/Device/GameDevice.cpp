@@ -1,7 +1,6 @@
 #include "GameDevice.h"
 #include "Framework/Define/Config.h"
 #include "Framework/Define/Game.h"
-#include "Framework/Define/Setting.h"
 #include "Framework/Graphics/GraphicsDevice.h"
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Input/InputManager.h"
@@ -35,26 +34,24 @@ void GameDevice::finalize() {
     mMainWindow->quit();
 }
 
-void GameDevice::initialize() {
-    mRenderingManager->initialize();
-}
-
-GameDevice::GameDevice() {
-    const Math::Vector2 screenSize(
-        static_cast<float>(Define::Config::getInstance().mWidth),
-        static_cast<float>(Define::Config::getInstance().mHeight));
+void GameDevice::initialize(const Math::Vector2& screenSize, const std::string& title) {
     mMainWindow = std::make_unique<Window::Window>(
         screenSize,
         Math::Vector2(0, 0),
-        Define::Setting::WINDOW_TITLE,
+        title,
         true);
 
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
         mMainWindow->getHWND(),
         screenSize,
         false);
+
     mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);
+
+    mRenderingManager->initialize();
 }
+
+GameDevice::GameDevice() { }
 
 GameDevice::~GameDevice() { }
 

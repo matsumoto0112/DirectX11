@@ -12,23 +12,23 @@ BackBufferRenderer::BackBufferRenderer() {
     mRenderTarget = std::make_unique<RenderTarget>(
         Utility::getRenderingManager()->getGraphicsDevice()->getDirectX11GraphicsDevice()->getBackBuffer(),
         std::make_unique<Viewport>(Math::Rect(0.0f, 0.0f,
-            static_cast<float>(Define::Config::getInstance().mWidth), static_cast<float>(Define::Config::getInstance().mHeight))),
+            static_cast<float>(Define::Config::getInstance()->getWidth()), static_cast<float>(Define::Config::getInstance()->getHeight()))),
         SRVFlag::NoUse);
     mRenderTarget->createDepthStencilView(
         Graphics::DepthStencilDesc::getMSAATexture2DDesc(
-            Define::Config::getInstance().mWidth,
-            Define::Config::getInstance().mHeight),
+            Define::Config::getInstance()->getWidth(),
+            Define::Config::getInstance()->getHeight()),
         DepthStencilDesc::getMSAADepthStencilViewDesc());
 }
 
 BackBufferRenderer::~BackBufferRenderer() { }
 
 void BackBufferRenderer::render(std::shared_ptr<Sprite2D> sprite) {
-    SpriteRenderer::getInstance().draw(sprite.get());
+    SpriteRenderer::getInstance()->draw(sprite.get());
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Sprite3D> sprite) {
-    SpriteRenderer::getInstance().draw(sprite.get(), Utility::getCameraManager()->getPerspectiveCamera().get());
+    SpriteRenderer::getInstance()->draw(sprite.get(), Utility::getCameraManager()->getPerspectiveCamera().get());
 }
 
 void BackBufferRenderer::render(std::shared_ptr<Model> model, const Utility::Transform& transform) {

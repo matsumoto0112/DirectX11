@@ -17,10 +17,11 @@ protected:
     /**
     * @brief コンストラクタ
     * @param screenSize スクリーンの大きさ
+    * @param title ウィンドウタイトル
     * @param isFullScreen フルスクリーンか？
     * @param fps フレームレート
     */
-    Game(const Math::Vector2& screenSize, bool isFullScreen = false, float fps = 60.0f);
+    Game(const Math::Vector2& screenSize, const std::string& title, bool isFullScreen = false, float fps = 60.0f);
     /**
     * @brief デストラクタ
     */
@@ -58,7 +59,6 @@ private:
     Game(const Game& other) = delete;
     Game& operator=(const Game& other) = delete;
 protected:
-    Device::GameDevice& mGameDevice; //!< ゲーム機器管理
     Math::Vector2 mScreenSize; //!< スクリーンの大きさ
     bool mIsFullScreen; //!< フルスクリーンか？
     float mFPS; //!< フレームレート
