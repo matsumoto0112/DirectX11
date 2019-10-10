@@ -37,26 +37,16 @@
     <ClInclude Include="Source\Scene\Impl\Shadow.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\Model\Model_Lighting_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Lighting_VS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\Texture2D_VS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\Texture2D_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_NoTexture_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Lighting_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Output_Z_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Output_Z_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Shadow_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Shadow_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Split4Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Only_Position_VS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Output_Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\Texture2D_Inversion_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Shadow_Diffuse_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Model\Model_Shadow_Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
     <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />

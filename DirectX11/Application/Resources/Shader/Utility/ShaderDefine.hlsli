@@ -1,13 +1,5 @@
-static const int MAX_DIRECTIONALLIGHT = 4; //最大平行光源数
-static const int MAX_POINTLIGHT = 4; //最大点光源数
-static const int MAX_CAMERA_NUM = 4; //最大カメラ数
-
-static const int MAX_BONES = 256; //最大ボーン数
 
 static const float EPSILON = 1e-6; //誤差
-
-static const float4 LIGHT_COLOR = float4(255.0f / 255, 165.0f / 255, 0.0f / 255, 1.0f);
-static const float3 SHADOW_COLOR = float3(0.0f, 0.0f, 0.0f);
 
 //ワールド・ビュー・プロジェクション行列
 //2D時はviewに-(カメラの座標)の行列が入ってくる
@@ -65,12 +57,6 @@ cbuffer CB0 : register(b0)
     MVPMatrix mat;
 }
 
-//ライトバッファ
-cbuffer CB1 : register(b1)
-{
-    DirectionalLight dirLights[MAX_DIRECTIONALLIGHT];
-    PointLight pLights[MAX_POINTLIGHT];
-}
 
 //UV情報バッファ
 cbuffer CB2 : register(b2)
@@ -94,12 +80,6 @@ cbuffer CB5 : register(b4)
 cbuffer CameraNum : register(b5)
 {
     int cameraNum;
-}
-
-//スキニング情報
-cbuffer Skinning : register(b6)
-{
-    float4x4 bones[MAX_BONES];
 }
 
 
