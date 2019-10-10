@@ -1,8 +1,10 @@
 #include "SpriteRenderer.h"
 #include <vector>
 #include <d3d11.h>
+#include "Framework/Graphics/Buffer/VertexBuffer.h"
+#include "Framework/Graphics/Buffer/IndexBuffer.h"
+#include "Framework/Graphics/Vertex/Vertex.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
-#include "Framework/Graphics/Buffer/VertexAndIndexBuffer.h"
 #include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Shader/ShaderInputType.h"
@@ -30,7 +32,9 @@ SpriteRenderer::SpriteRenderer() {
         vertices[i].pos = positions[i];
         vertices[i].uv = uvs[i];
     }
-    mVIBuffer = std::make_unique<VertexAndIndexBuffer>(vertices, PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
+    mVertexBuffer = std::make_unique<VertexBuffer>(vertices);
+    mIndexBuffer = std::make_unique<IndexBuffer>(PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
+
     mEffect = std::make_shared<Effect>(
         Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Texture2D),
         Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Texture2D));
@@ -45,7 +49,7 @@ SpriteRenderer::SpriteRenderer() {
     rasterizerDesc.MultisampleEnable = FALSE;
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
-    DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras));
     DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
 }
 
@@ -76,8 +80,11 @@ void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
     cmanager->setColor(ConstantBufferParameterType::Color, sprite->getColor());
 
     cmanager->send();
+
     //•`‰æ
-    mVIBuffer->render();
+    mVertexBuffer->setData();
+    mIndexBuffer->setData();
+    mIndexBuffer->drawCall();
 }
 
 void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera* camera) {
@@ -118,8 +125,11 @@ void SpriteRenderer::draw(Sprite3D* sprite, const PerspectiveCamera* camera) {
     cmanager->setColor(ConstantBufferParameterType::Color, sprite->getColor());
 
     cmanager->send();
+
     //•`‰æ
-    mVIBuffer->render();
+    mVertexBuffer->setData();
+    mIndexBuffer->setData();
+    mIndexBuffer->drawCall();
 }
 
 } //Graphics 

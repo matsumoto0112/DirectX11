@@ -34,7 +34,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Game.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexAndIndexBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.cpp" />
@@ -153,7 +152,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexAndIndexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\VertexBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.h" />

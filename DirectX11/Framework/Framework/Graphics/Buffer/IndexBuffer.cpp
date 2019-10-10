@@ -52,11 +52,7 @@ void IndexBuffer::setBuffer(const std::vector<UINT>& indices, PrimitiveTopology 
     subResource.SysMemPitch = 0;
     subResource.SysMemSlicePitch = 0;
 
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer);
-    if (FAILED(hr)) {
-        MY_ASSERTION(false, "バッファの作成に失敗しました。");
-        return;
-    }
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer));
     mTopology = convert(topology);
 }
 

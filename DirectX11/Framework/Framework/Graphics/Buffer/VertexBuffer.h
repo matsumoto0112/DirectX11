@@ -71,10 +71,7 @@ inline void VertexBuffer::createBuffer(const std::vector<T>& vertices) {
     subResource.SysMemPitch = 0;
     subResource.SysMemSlicePitch = 0;
     subResource.pSysMem = vertices.data();
-    HRESULT hr = DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer);
-    if (FAILED(hr)) {
-        MY_ASSERTION(false, "頂点バッファ作成失敗");
-    }
+    throwIfFailed( DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer));
 }
 
 } //Graphics 

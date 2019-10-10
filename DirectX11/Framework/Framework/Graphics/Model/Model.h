@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
-#include "Framework/Graphics/Vertex/Vertex.h"
-#include "Framework/Graphics/Buffer/VertexAndIndexBuffer.h"
+#include "Framework/Graphics/Buffer/IndexBuffer.h"
+#include "Framework/Graphics/Buffer/VertexBuffer.h"
+#include "Framework/Graphics/ConstantBuffer/MaterialCBufferStruct.h"
 #include "Framework/Graphics/Shader/Effect.h"
 #include "Framework/Graphics/Texture/Texture.h"
-#include "Framework/Graphics/ConstantBuffer/MaterialCBufferStruct.h"
-#include "Framework/Utility/Transform.h"
+#include "Framework/Graphics/Vertex/Vertex.h"
 #include "Framework/Utility/Property.h"
+#include "Framework/Utility/Transform.h"
 
 namespace Framework {
 namespace Graphics {
@@ -32,8 +33,8 @@ public:
     */
     virtual void draw(const Utility::Transform& transform);
 protected:
-    std::shared_ptr<VertexBuffer> mVertexBuffer;
-    std::shared_ptr<IndexBuffer> mIndexBuffer;
+    std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点バッファ
+    std::shared_ptr<IndexBuffer> mIndexBuffer; //!< インデックスバッファ
     PROPERTY_POINTER(std::shared_ptr<Effect>, mEffect, Effect);
 };
 

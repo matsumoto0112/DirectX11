@@ -7,11 +7,12 @@ namespace Framework {
 namespace Graphics {
 class Effect;
 class GraphicsDeviceManager;
+class IndexBuffer;
+class PerspectiveCamera;
+class Sampler;
 class Sprite2D;
 class Sprite3D;
-class VertexAndIndexBuffer;
-class Sampler;
-class PerspectiveCamera;
+class VertexBuffer;
 
 /**
 * @class SpriteRenderer
@@ -21,7 +22,6 @@ class SpriteRenderer : public Utility::Singleton<SpriteRenderer> {
 public:
     /**
     * @brief コンストラクタ
-    * @param graphicsDevice グラフィックデバイス
     */
     SpriteRenderer();
     /**
@@ -42,10 +42,12 @@ public:
     /**
     * @brief 3Dスプライトをビルボードで描画
     * @param sprite 描画するスプライト
+    * @param camera 描画するカメラ
     */
     void draw(Sprite3D* sprite, const PerspectiveCamera* camera);
 private:
-    std::shared_ptr<VertexAndIndexBuffer> mVIBuffer; //!< 頂点・インデックスバッファ
+    std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点・インデックスバッファ
+    std::shared_ptr<IndexBuffer> mIndexBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<Effect> mEffect; //!< エフェクト
     std::unique_ptr<Sampler> mSampler; //!< サンプラー
 };

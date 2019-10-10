@@ -34,7 +34,7 @@ enum class TextureFilterMode {
 */
 class Sampler {
 private:
-    using SamplerState = Microsoft::WRL::ComPtr<ID3D11SamplerState>;
+    using SamplerState = ComPtr<ID3D11SamplerState>;
 public:
     /**
     * @brief コンストラクタ
