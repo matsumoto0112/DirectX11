@@ -1,23 +1,17 @@
 #pragma once
 #include <memory>
-#include "Framework/Math/Vector2.h"
 #include "Framework/Graphics/Camera/CameraManager.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 #include "Framework/Graphics/GraphicsDevice.h"
+#include "Framework/Graphics/ImGUI/Manager.h"
+#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
+#include "Framework/Graphics/Renderer/Pipeline.h"
+#include "Framework/Math/Vector2.h"
 #include "Framework/Utility/Property.h"
 
-#include "Framework/Graphics/Renderer/Pipeline.h"
-#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
-
 namespace Framework {
-namespace ImGUI {
-class Manager;
-} //ImGUI 
 namespace Graphics {
-class AlphaBlend;
-class RenderTarget;
 class Sampler;
-class Pipeline;
 
 /**
 * @class RenderingManager

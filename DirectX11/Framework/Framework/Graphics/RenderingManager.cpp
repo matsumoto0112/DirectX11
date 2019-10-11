@@ -1,14 +1,9 @@
 #include "RenderingManager.h"
-#include "Framework/Graphics/DirectX11GraphicsDevice.h"
+#include "Framework/Graphics/Desc/BlendStateDesc.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
-#include "Framework/Graphics/ImGUI/Manager.h"
-#include "Framework/Graphics/Renderer/AlphaBlend.h"
+#include "Framework/Graphics/DirectX11GraphicsDevice.h"
 #include "Framework/Graphics/Renderer/Viewport.h"
 #include "Framework/Graphics/Texture/Sampler.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
-#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
-
-#include "Framework/Graphics/Desc/BlendStateDesc.h"
 
 namespace Framework {
 namespace Graphics {
@@ -41,9 +36,16 @@ IRenderer* RenderingManager::drawBegin() {
 
 void RenderingManager::drawEnd() {
     mImGUIManager->drawAll();
+    
+    //バックバッファの描画を終える
     mBackBufferRenderer->end();
+
     //描画の最終処理を行う 
     mGraphicsDevice->drawEnd();
+
+    //コンテキストの情報をクリアする
+    DX11InterfaceAccessor::getContext()->ClearState();
+    DX11InterfaceAccessor::getContext()->Flush();
 }
 
 } //Graphics 
