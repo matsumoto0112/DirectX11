@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include "Framework/Graphics/Render/AlphaBlend.h"
-#include "Framework/Graphics/Render/RenderTargetView.h"
-#include "Framework/Graphics/Render/Viewport.h"
+#include "Framework/Graphics/Renderer/AlphaBlend.h"
+#include "Framework/Graphics/Renderer/RenderTargetView.h"
+#include "Framework/Graphics/Renderer/Viewport.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {

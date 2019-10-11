@@ -1,5 +1,5 @@
 #include "RenderModel.h"
-#include "Framework/Graphics/Render/AlphaBlend.h"
+#include "Framework/Graphics/Renderer/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"

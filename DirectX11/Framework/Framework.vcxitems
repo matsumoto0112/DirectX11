@@ -24,7 +24,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RasterizerState.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RTVWithDSV.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RTVWithDSV.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.cpp" />
@@ -49,9 +49,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\Particle.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\AlphaBlend.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RenderTargetView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Viewport.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.cpp" />
@@ -126,7 +126,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RasterizerState.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RTVWithDSV.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RTVWithDSV.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ComputeShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\GeometoryShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.h" />
@@ -160,10 +160,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\ParticleEmitter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\RenderingManager.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\AlphaBlend.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RenderTargetView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Viewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.h" />

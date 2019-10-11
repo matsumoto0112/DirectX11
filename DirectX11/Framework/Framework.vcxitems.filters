@@ -14,8 +14,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\Particle.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\VertexShader.cpp" />
@@ -63,7 +61,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
@@ -94,11 +91,14 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RTVWithDSV.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RasterizerState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\AlphaBlend.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RenderTargetView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RTVWithDSV.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
@@ -114,8 +114,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\Particle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\ParticleEmitter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\SimpleParticleEmitter.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RenderTargetView.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\Viewport.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\Effect.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\PixelShader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Shader\ShaderBase.h" />
@@ -176,10 +174,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\Camera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\PerspectiveCamera.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\OrthographicCamera.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\AlphaBlend.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\SRVFlag.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RenderTargetViewDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.h" />
@@ -222,7 +218,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\PrimitiveTopology.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferStruct.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Render\RTVWithDSV.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.h" />
@@ -232,5 +227,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IRenderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RasterizerState.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RasterizerStateDesc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\AlphaBlend.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Viewport.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RenderTargetView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RTVWithDSV.h" />
   </ItemGroup>
 </Project>
