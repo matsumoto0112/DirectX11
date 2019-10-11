@@ -231,5 +231,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\BlendStateDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\IRenderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RasterizerState.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RasterizerStateDesc.h" />
   </ItemGroup>
 </Project>

@@ -10,12 +10,12 @@
 #include "Framework/Graphics/Model/Model.h"
 #include "Framework/Graphics/Renderer/RasterizerState.h"
 #include "Framework/Graphics/Desc/BlendStateDesc.h"
+#include "Framework/Graphics/Desc/RasterizerStateDesc.h"
 
 using namespace Framework;
 
 namespace {
 std::unique_ptr<Graphics::RasterizerState> mRasterizer;
-Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 Utility::Transform mTransform;
 std::unique_ptr<Graphics::Model> mModel;
 
@@ -29,16 +29,8 @@ RenderModel::RenderModel() {
     //アルファブレンドの作成
     mAlphaBlend = std::make_unique<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Default));
 
-    //ラスタライザ作成
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-    rasterizerDesc.DepthBiasClamp = 0;
-    rasterizerDesc.SlopeScaledDepthBias = 0;
-    mRasterizer = std::make_unique<Graphics::RasterizerState>(&rasterizerDesc);
+    mRasterizer = std::make_unique<Graphics::RasterizerState>(&Graphics::RasterizerStateDesc::getDefaultDesc(
+        Graphics::FillMode::WireFrame, Graphics::CullMode::Back));
     //Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     //Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
