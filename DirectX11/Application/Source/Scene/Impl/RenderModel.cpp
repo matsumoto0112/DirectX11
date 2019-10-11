@@ -37,7 +37,6 @@ RenderModel::RenderModel() {
     rasterizerDesc.DepthBiasClamp = 0;
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     //Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
