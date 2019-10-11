@@ -14,10 +14,11 @@ public:
     /**
     * @brief コンストラクタ
     * @param hWnd ウィンドウハンドル
-    * @param screenSize スクリーンの大きさ
+    * @param width ウィンドウ幅
+    * @param height ウィンドウ高さ
     * @param isFullScreen フルスクリーンかどうか
     */
-    GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen);
+    GraphicsDevice(HWND hWnd, UINT width, UINT height, bool isFullScreen);
     /**
     * @brief デストラクタ
     */

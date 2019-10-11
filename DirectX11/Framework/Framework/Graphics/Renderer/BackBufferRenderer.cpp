@@ -14,7 +14,7 @@ BackBufferRenderer::BackBufferRenderer(std::shared_ptr<Texture2D>backBufferTextu
             nullptr,
             std::make_shared<Texture2D>(&DepthStencilDesc::getMSAATexture2DDesc(width, height), nullptr),
             &DepthStencilDesc::getMSAADepthStencilViewDesc(),
-            Viewport(Math::Rect(0, 0, width, height)),
+            Viewport(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
             backColor),
         std::make_shared<Pipeline>(
             std::make_shared<AlphaBlend>(BlendStateDesc::BLEND_DESC(AlphaBlendType::Default)),

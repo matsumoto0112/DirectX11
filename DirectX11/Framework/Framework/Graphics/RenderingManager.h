@@ -28,10 +28,11 @@ public:
     /**
     * @brief コンストラクタ
     * @param hWnd ウィンドウハンドル
-    * @param screenSize スクリーンの大きさ
+    * @param width ウィンドウ幅
+    * @param height ウィンドウ高さ
     * @param isFullScreen フルスクリーン起動か
     */
-    RenderingManager(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen);
+    RenderingManager(HWND hWnd, UINT width, UINT height, bool isFullScreen);
     /**
     * @brief デストラクタ
     */
@@ -68,7 +69,8 @@ public:
     */
     ImGUI::Manager* getImGUIManager() const { return mImGUIManager.get(); }
 private:
-    Math::Vector2 mScreenSize;
+    UINT mWidth;
+    UINT mHeight;
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<CameraManager> mCameraManager; //!< カメラ管理者

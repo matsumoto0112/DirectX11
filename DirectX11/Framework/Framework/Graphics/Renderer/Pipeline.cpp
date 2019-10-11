@@ -9,11 +9,6 @@ Pipeline::Pipeline(std::shared_ptr<AlphaBlend> alphaBlend, std::shared_ptr<Raste
 
 Pipeline::~Pipeline() { }
 
-void Pipeline::clearState() {
-    mAlphaBlend->clearState();
-    mRasterizer->clearState();
-}
-
 void Pipeline::setPipeline() {
     mAlphaBlend->set();
     mRasterizer->set();

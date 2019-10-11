@@ -23,10 +23,6 @@ public:
     */
     virtual ~Pipeline();
     /**
-    * @brief コンテキストの状態をクリアする
-    */
-    virtual void clearState();
-    /**
     * @brief 描画パイプラインをセットする
     */
     virtual void setPipeline();

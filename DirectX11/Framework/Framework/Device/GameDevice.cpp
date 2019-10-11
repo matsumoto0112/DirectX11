@@ -43,7 +43,8 @@ void GameDevice::initialize(const Math::Vector2& screenSize, const std::string& 
 
     mRenderingManager = std::make_unique<Graphics::RenderingManager>(
         mMainWindow->getHWND(),
-        screenSize,
+        static_cast<UINT>(screenSize.x),
+        static_cast<UINT>(screenSize.y),
         false);
 
     mInputManager = std::make_unique<Input::InputManager>(*mMainWindow);

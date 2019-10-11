@@ -6,11 +6,11 @@
 namespace Framework {
 namespace Graphics {
 
-GraphicsDevice::GraphicsDevice(HWND hWnd, const Math::Vector2& screenSize, bool isFullScreen)
+GraphicsDevice::GraphicsDevice(HWND hWnd, UINT width, UINT height, bool isFullScreen)
     :mDirectX11Device(std::make_unique<DirectX11GraphicsDevice>(
-        hWnd, static_cast<UINT>(screenSize.x), static_cast<UINT>(screenSize.y), isFullScreen)) {}
+        hWnd, width, height, isFullScreen)) { }
 
-GraphicsDevice::~GraphicsDevice() {}
+GraphicsDevice::~GraphicsDevice() { }
 
 void GraphicsDevice::drawBegin() {
     ImGui_ImplDX11_NewFrame();
