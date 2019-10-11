@@ -35,6 +35,7 @@ public:
     * @param drawable •`‰æ‘ÎÛ
     */
     virtual void render(IDrawable* drawable) = 0;
+    std::shared_ptr<Graphics::RenderTargetView> getRenderTarget() const { return mRenderTarget; }
 protected:
     std::shared_ptr<Graphics::RenderTargetView> mRenderTarget;
     std::shared_ptr<Graphics::Pipeline> mPipeline;

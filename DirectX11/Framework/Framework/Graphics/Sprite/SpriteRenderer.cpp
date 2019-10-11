@@ -35,9 +35,9 @@ SpriteRenderer::SpriteRenderer() {
     mVertexBuffer = std::make_unique<VertexBuffer>(vertices);
     mIndexBuffer = std::make_unique<IndexBuffer>(PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
 
-    std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>("2D/Texture2D_VS.cso");
-    std::shared_ptr<PixelShader> ps = std::make_shared<PixelShader>("2D/Texture2D_PS.cso");
-    mEffect = std::make_shared<Effect>(vs,ps);
+    std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>(Define::Path::getInstance()->shader() + "2D/Texture2D_VS.cso");
+    std::shared_ptr<PixelShader> ps = std::make_shared<PixelShader>(Define::Path::getInstance()->shader() + "2D/Texture2D_PS.cso");
+    mEffect = std::make_shared<Effect>(vs, ps);
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
 

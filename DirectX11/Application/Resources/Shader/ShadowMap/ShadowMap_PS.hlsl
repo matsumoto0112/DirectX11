@@ -17,10 +17,10 @@ float4 main(PSInput input) : SV_TARGET
     uv.y = (1.0f - input.ZCalc.y / input.ZCalc.w) * 0.5f;
     float dep = depth.Sample(samplerState, uv);
 
-    float3 color = float3(1.0f, 1.0f, 1.0f);
+    float4 o = color;
     if (ZValue > dep + 0.005f)
     {
-        color *= 0.5f;
+        o.rgb *= 0.5f;
     }
-    return float4(color, 1.0f);
+    return o;
 }

@@ -4,6 +4,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -11,6 +12,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
+    <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />

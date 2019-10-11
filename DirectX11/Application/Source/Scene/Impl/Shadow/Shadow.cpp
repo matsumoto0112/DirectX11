@@ -14,53 +14,89 @@
 #include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Renderer/PrimitiveVertex.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
+#include "Framework/Graphics/Desc/RasterizerStateDesc.h"
+#include "Framework/Graphics/Texture/Sampler.h"
 
 using namespace Framework;
 
 namespace {
+static void createRTV(UINT width, UINT height,
+    std::shared_ptr<Graphics::RenderTargetView>* rtv, std::shared_ptr<Graphics::Sprite2D>* sprite) {
+    D3D11_TEXTURE2D_DESC texDesc = Graphics::RenderTargetViewDesc::getDefaultTexture2DDesc(width, height);
+    std::shared_ptr<Graphics::Texture2D> texture = std::make_shared<Graphics::Texture2D>(&texDesc, nullptr);
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = Graphics::RenderTargetViewDesc::getDefaultRenderTargetViewDesc();
+
+    texDesc = Graphics::DepthStencilDesc::getMSAATexture2DDesc(width, height);
+    std::shared_ptr<Graphics::Texture2D> dsvTexture = std::make_shared<Graphics::Texture2D>(&texDesc, nullptr);
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = Graphics::DepthStencilDesc::getMSAADepthStencilViewDesc();
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+    srvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = 1;
+
+    std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(dsvTexture, &srvDesc);
+    std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(dsvTexture, srv);
+    *sprite = std::make_shared<Graphics::Sprite2D>(tex);
+    *rtv = std::make_shared< Graphics::RenderTargetView>(texture, &rtvDesc, dsvTexture, &dsvDesc,
+        Graphics::Viewport(Math::Rect(0, 0, width, height)), Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
 /**
 * @class DepthRenderer
 * @brief Z値出力用レンダラー
 */
 class DepthRenderer : public Graphics::IRenderer {
-//public:
-//    /**
-//    * @brief コンストラクタ
-//    */
-//    DepthRenderer();
-//    /**
-//    * @brief デストラクタ
-//    */
-//    ~DepthRenderer();
-//    virtual void begin() override { }
-//
-//    virtual void end() override { }
-//
-//    virtual void render(IDrawable* drawable) override { }
-//private:
+public:
+    /**
+    * @brief コンストラクタ
+    */
+    DepthRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv,
+        std::shared_ptr<Graphics::Pipeline> pipeline)
+        :IRenderer(rtv, pipeline) {
+        mEffect = std::make_shared<Graphics::Effect>(
+            std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMapCreate_VS.cso"),
+            nullptr);
+    }
+    /**
+    * @brief デストラクタ
+    */
+    ~DepthRenderer() { }
+    virtual void begin() override {
+        mRenderTarget->set();
+        mRenderTarget->clear();
+        mPipeline->setPipeline();
+    }
 
+    virtual void end() override {
+        Graphics::DX11InterfaceAccessor::getContext()->ClearState();
+        Graphics::DX11InterfaceAccessor::getContext()->Flush();
+    }
+
+    virtual void render(Graphics::IDrawable* drawable) override {
+        std::shared_ptr<Graphics::Effect> prevEffect = drawable->getEffect();
+        drawable->setEffect(mEffect);
+        drawable->draw();
+        drawable->setEffect(prevEffect);
+    }
+private:
+    std::shared_ptr<Graphics::Effect> mEffect;
 };
 
-std::vector<Utility::Transform> mTransform;
 std::shared_ptr<Graphics::Model> mModel;
-std::shared_ptr<Graphics::Effect> mShadowEffect;
-std::shared_ptr<Graphics::Effect> mModelEffect;
-std::shared_ptr<Graphics::Effect> mDrawDepth;
+std::vector<Utility::Transform> mTransform;
+std::unique_ptr<Graphics::Sampler> mDefaultSampler;
+
 std::shared_ptr<Graphics::Sprite2D> mSprite;
 std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
-std::shared_ptr<Graphics::Effect> mFloorEffect;
+std::shared_ptr<DepthRenderer> mDepthRenderer;
 
 struct LightMatrix {
     Math::Matrix4x4 view;
     Math::Matrix4x4 proj;
 };
 LightMatrix mLightMatrixData;
-ComPtr<ID3D11Texture2D> mRenderTargetTexture;
-ComPtr<ID3D11RenderTargetView> mRenderTarget;
-ComPtr<ID3D11ShaderResourceView> mRenderTargetSRV;
-ComPtr<ID3D11DepthStencilView> mDepthStencil;
-float mTheta;
 
 }
 Shadow::Shadow() {
@@ -70,7 +106,16 @@ Shadow::Shadow() {
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,300.0f });
 
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
-    //アルファブレンドの作成
+
+    std::shared_ptr<Graphics::RenderTargetView> rtv;
+    std::shared_ptr<Graphics::Pipeline> pipeline = std::make_shared<Graphics::Pipeline>(
+        std::make_shared<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Alignment)),
+        std::make_shared<Graphics::RasterizerState>(&Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None)));
+    createRTV(Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), &rtv, &mSprite);
+    mDepthRenderer = std::make_unique<DepthRenderer>(rtv, pipeline);
+
+
+    mDefaultSampler = std::make_unique<Graphics::Sampler>(Graphics::TextureAddressMode::Wrap, Graphics::TextureFilterMode::MinMagMipLinear);
 
     //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
@@ -82,100 +127,47 @@ Shadow::Shadow() {
         indices[i * 3 + 2] = i * 3 + 0;
     }
 
-    auto vs = Utility::ResourceManager::getInstance()->getVertexShader()->getResource(Define::VertexShaderType::Only_Position);
-    auto ps = Utility::ResourceManager::getInstance()->getPixelShader()->getResource(Define::PixelShaderType::Output_Color);
+    {
+        auto vs = std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_VS.cso");
+        auto ps = std::make_shared<Graphics::PixelShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_PS.cso");
 
-    mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
-        std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
-        std::make_shared<Graphics::Effect>(vs, ps));
+
+        mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
+            std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
+            std::make_shared<Graphics::Effect>(vs, ps),
+            std::make_shared<Graphics::ModelMaterial>());
+        mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(1, 1, 1));
+        auto mat = static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get());
+        mat->mWorldMatrix.mData = mTransform[0].createSRTMatrix();
+        mat->mColor.mData = Graphics::Color4(0.25f, 0.5f, 0.6f, 1.0f);
+    }
+
 
     //for (int x = -2; x < 2; x++) {
     //    for (int z = -2; z < 2; z++) {
     //        mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
     //    }
     //}
-    mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(1, 1, 1));
 
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-5,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
     mLightMatrixData.proj = m3DCamera->getProjection();
-    mModelEffect = mModel->getEffect();
-    mShadowEffect = std::make_shared<Graphics::Effect>(
-        std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMapCreate_VS"), nullptr);
-
-    mDrawDepth = std::make_shared<Graphics::Effect>(
-        std::make_shared<Graphics::VertexShader>("2D/Texture2D_VS"),
-        std::make_shared<Graphics::PixelShader>("ShadowMap/Depth_PS"));
 
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
-
     {
-        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
-        rtvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
-        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-        D3D11_TEXTURE2D_DESC texDesc{};
-        texDesc.Width = width;
-        texDesc.Height = height;
-        texDesc.MipLevels = 1;
-        texDesc.ArraySize = 1;
-        texDesc.Format = rtvDesc.Format;
-        texDesc.SampleDesc.Count = 1;
-        texDesc.SampleDesc.Quality = 0;
-        texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-        texDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET;
-        texDesc.CPUAccessFlags = 0;
-        std::shared_ptr<Graphics::TextureBuffer> buffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
-        std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer);
-        std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
-        Graphics::DX11InterfaceAccessor::getDevice()->CreateRenderTargetView(buffer->getBuffer().Get(), &rtvDesc, &mRenderTarget);
-    }
-    {
-        D3D11_TEXTURE2D_DESC texDesc{};
-        texDesc.Width = width;
-        texDesc.Height = height;
-        texDesc.MipLevels = 1;
-        texDesc.ArraySize = 1;
-        texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24G8_TYPELESS;
-        texDesc.SampleDesc.Count = 1;
-        texDesc.SampleDesc.Quality = 0;
-        texDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-        texDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-        texDesc.CPUAccessFlags = 0;
-        std::shared_ptr<Graphics::TextureBuffer> buffer = std::make_shared<Graphics::TextureBuffer>(texDesc);
-
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-        srvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = 1;
-
-        std::shared_ptr<Graphics::ShaderResourceView> srv = std::make_shared<Graphics::ShaderResourceView>(*buffer, srvDesc);
-
-        std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(buffer, srv, width, height);
-        mSprite = std::make_shared<Graphics::Sprite2D>(tex);
-
-
-        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-        dsvDesc.Format = DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT;
-        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION::D3D11_DSV_DIMENSION_TEXTURE2D;
-        dsvDesc.Texture2D.MipSlice = 0;
-        Graphics::DX11InterfaceAccessor::getDevice()->CreateDepthStencilView(buffer->getBuffer().Get(), &dsvDesc, &mDepthStencil);
-        mSprite->setScale(Math::Vector2(0.25f, 0.25f));
-
-    }
-    {
-
         std::vector<Math::Vector4> pos = Graphics::PrimitiveVertex::cubePosition();
         std::vector<UINT> index = Graphics::PrimitiveVertex::cubeIndex();
         std::shared_ptr<Graphics::VertexBuffer> vb = std::make_shared<Graphics::VertexBuffer>(pos);
         std::shared_ptr<Graphics::IndexBuffer> ib = std::make_shared<Graphics::IndexBuffer>(index, Graphics::PrimitiveTopology::TriangleList);
-        mFloorEffect = std::make_shared<Graphics::Effect>(
-            std::make_shared<Graphics::VertexShader>("ShadowMap/ShadowMap_VS"),
-            std::make_shared<Graphics::PixelShader>("ShadowMap/ShadowMap_PS"));
-        mFloor = std::make_shared<Graphics::Model>(vb, ib, mFloorEffect);
+        mFloor = std::make_shared<Graphics::Model>(vb, ib, mModel->getEffect(),
+            std::make_shared<Graphics::ModelMaterial>());
         mFloorTransform.setPosition(Math::Vector3(0, -3, 0));
         mFloorTransform.setScale(Math::Vector3(10.0f, 0.1f, 10.0f));
+        auto mat = static_cast<Graphics::ModelMaterial*>(mFloor->getMaterial().get());
+        mat->mWorldMatrix.mData = mFloorTransform.createSRTMatrix();
+        mat->mColor.mData = Graphics::Color4(0.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    mTheta = 0.0f;
 }
 
 Shadow::~Shadow() { }
@@ -184,57 +176,45 @@ void Shadow::load(Framework::Scene::Collecter& collecter) { }
 
 void Shadow::update() {
     for (auto&& tr : mTransform) {
-        //tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+        tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
     }
-    //mTransform.setPosition(mTransform.getPosition() + Math::Vector3(0, 0, 1));
 }
 
 bool Shadow::isEndScene() const {
     return false;
 }
 
-void Shadow::draw(Framework::Graphics::Pipeline* pipeline) {
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
-    mAlphaBlend->set();
+void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
+    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0, 0, 0, 0));
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
-    mTheta += 0.1f;
-    float x = Math::MathUtility::sin(mTheta) * 1;
-    float z = Math::MathUtility::cos(mTheta * 0.5f) * 1;
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(x,5,z),Math::Vector3(0,0,0),Math::Vector3::UP });
     Graphics::ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
     cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.view);
     cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.proj);
-    cbManager->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-    cbManager->send();
 
-    Graphics::DX11InterfaceAccessor::getContext()->OMSetRenderTargets(1, mRenderTarget.GetAddressOf(), mDepthStencil.Get());
-    const float clear[] = { 0.0f,0.0f,0.0f,1.0f };
-    Graphics::DX11InterfaceAccessor::getContext()->ClearRenderTargetView(mRenderTarget.Get(), clear);
-    Graphics::DX11InterfaceAccessor::getContext()->ClearDepthStencilView(mDepthStencil.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-    mModel->setEffect(mShadowEffect);
-    for (auto&& tr : mTransform) {
-        mModel->draw(tr);
+    mDepthRenderer->begin();
+    {
+        for (auto&& tr : mTransform) {
+            static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get())->mWorldMatrix.mData = tr.createSRTMatrix();
+            mDepthRenderer->render(mModel.get());
+        }
+        mDepthRenderer->render(mFloor.get());
     }
+    mDepthRenderer->end();
 
-    mFloor->setEffect(mShadowEffect);
-    mFloor->draw(mFloorTransform);
+    renderer->begin();
+    mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
+    mDefaultSampler->setData(Graphics::ShaderInputType::Pixel, 0);
 
-    pipeline->begin();
-    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
-    mSprite->draw(mDrawDepth);
-
-    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    mModel->setEffect(mFloorEffect);
-    for (auto&& tr : mTransform) {
-        mModel->draw(tr);
+    {
+        //renderer->render(mSprite.get());
+        for (auto&& tr : mTransform) {
+            static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get())->mWorldMatrix.mData = tr.createSRTMatrix();
+            renderer->render(mModel.get());
+        }
+        renderer->render(mFloor.get());
     }
-
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-    Utility::getConstantBufferManager()->send();
-    mFloor->setEffect(mFloorEffect);
-    mFloor->draw(mFloorTransform);
 }
 
 void Shadow::end() { }

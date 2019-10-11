@@ -38,7 +38,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw(Framework::Graphics::Pipeline* pipeline) override;
+    virtual void draw(Framework::Graphics::IRenderer* renderer) override;
     /**
     * @brief I—¹ˆ—
     */

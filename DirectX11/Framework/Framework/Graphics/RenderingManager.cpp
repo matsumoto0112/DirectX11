@@ -24,7 +24,7 @@ void RenderingManager::initialize() {
 
     mBackBufferRenderer = std::make_unique<BackBufferRenderer>(
         std::make_shared<Texture2D>(mGraphicsDevice->getDirectX11GraphicsDevice()->getBackBuffer()),
-        mWidth, mHeight, Color4::WHITE);
+        mWidth, mHeight, Color4::BLACK);
 }
 
 IRenderer* RenderingManager::drawBegin() {

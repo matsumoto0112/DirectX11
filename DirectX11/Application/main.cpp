@@ -30,7 +30,7 @@
 //#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/ShotParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
-//#include "Source/Scene/Impl/Shadow/Shadow.h"
+#include "Source/Scene/Impl/Shadow/Shadow.h"
 #include "Source/Scene/Impl/RenderModel.h"
 #include "Framework/Define/Config.h"
 
@@ -77,8 +77,8 @@ private:
         //mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
         //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
         mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
-        //mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
-        mSceneManager->loadScene(SceneType::RenderModel);
+        mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
+        mSceneManager->loadScene(SceneType::Shadow);
 
         mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
         mFPSText = std::make_shared<ImGUI::Text>("FPS");
