@@ -2,11 +2,9 @@
 
 #include <memory>
 #include "Framework/Define/SceneType.h"
+#include "Framework/Graphics/Renderer/IRenderer.h"
 
 namespace Framework {
-namespace Graphics {
-class Pipeline;
-} //Graphics 
 namespace Scene {
 class Collecter;
 
@@ -36,7 +34,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw(Framework::Graphics::Pipeline* pipeline) = 0;
+    virtual void draw(Graphics::IRenderer* renderer) = 0;
     /**
     * @brief ƒV[ƒ“‚ÌI—¹ˆ—
     */

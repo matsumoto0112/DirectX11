@@ -25,6 +25,10 @@ public:
     */
     void set();
     /**
+    * @brief コンテキストの状態をクリアする
+    */
+    void clearState();
+    /**
     * @brief 現在のブレンドステートを取得する
     */
     D3D11_BLEND_DESC getCurrentBlendStateDesc() const;

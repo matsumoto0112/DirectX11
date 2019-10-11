@@ -19,6 +19,10 @@ void AlphaBlend::set() {
     DX11InterfaceAccessor::getContext()->OMSetBlendState(mAlphaBlend.Get(), nullptr, sampleMask);
 }
 
+void AlphaBlend::clearState() {
+    DX11InterfaceAccessor::getContext()->OMSetBlendState(nullptr, nullptr, 0);
+}
+
 D3D11_BLEND_DESC AlphaBlend::getCurrentBlendStateDesc() const {
     D3D11_BLEND_DESC res;
     mAlphaBlend->GetDesc(&res);

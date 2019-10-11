@@ -21,17 +21,17 @@
 #include "Framework/Scene/Manager.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"
-#include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
-#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
-#include "Source/Scene/Impl/GPUParticle/FallBounceParticle.h"
-#include "Source/Scene/Impl/GPUParticle/FallBounceRotateParticle.h"
-#include "Source/Scene/Impl/GPUParticle/SpotInstancerParticle.h"
-#include "Source/Scene/Impl/GPUParticle/FireworkParticle.h"
-#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
-#include "Source/Scene/Impl/GPUParticle/ShotParticle.h"
-#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/FallBounceParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/FallBounceRotateParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/SpotInstancerParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/FireworkParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/ShotParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
+//#include "Source/Scene/Impl/Shadow/Shadow.h"
 #include "Source/Scene/Impl/RenderModel.h"
-#include "Source/Scene/Impl/Shadow/Shadow.h"
 #include "Framework/Define/Config.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
@@ -105,7 +105,7 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::Pipeline* pipeline = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
+        Graphics::IRenderer* pipeline = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
         mSceneManager->draw(pipeline);
         mGlobalWindow->draw();
         Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();

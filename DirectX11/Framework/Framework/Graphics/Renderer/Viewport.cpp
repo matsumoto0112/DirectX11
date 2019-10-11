@@ -13,7 +13,7 @@ Viewport::Viewport(const Math::Rect& rect) {
     mViewport.MaxDepth = 1.0f;
 }
 
-Viewport::~Viewport() {}
+Viewport::~Viewport() { }
 
 void Viewport::set() {
     DX11InterfaceAccessor::getContext()->RSSetViewports(1, &mViewport);

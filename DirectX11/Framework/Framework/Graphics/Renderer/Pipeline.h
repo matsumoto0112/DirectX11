@@ -1,13 +1,11 @@
 #pragma once
 #include <memory>
 #include "Framework/Graphics/Renderer/AlphaBlend.h"
-#include "Framework/Graphics/Renderer/RenderTargetView.h"
-#include "Framework/Graphics/Renderer/Viewport.h"
+#include "Framework/Graphics/Renderer/RasterizerState.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
 namespace Graphics {
-class IDrawable;
 
 /**
 * @class Pipeline
@@ -18,30 +16,23 @@ public:
     /**
     * @brief コンストラクタ
     */
-    Pipeline(std::shared_ptr<RenderTargetView> renderTarget,
-        std::shared_ptr<AlphaBlend> alphaBlend,
-        const Viewport& viewport);
+    Pipeline(std::shared_ptr<AlphaBlend> alphaBlend,
+        std::shared_ptr<RasterizerState> rasterizer);
     /**
     * @brief デストラクタ
     */
     virtual ~Pipeline();
     /**
-    * @brief 描画開始
+    * @brief コンテキストの状態をクリアする
     */
-    virtual void begin();
+    virtual void clearState();
     /**
-    * @brief 描画終了
+    * @brief 描画パイプラインをセットする
     */
-    virtual void end();
-    /**
-    * @brief 描画する
-    * @param drawable 描画対象
-    */
-    virtual void render(IDrawable* drawable);
+    virtual void setPipeline();
 private:
-    PROPERTY_POINTER(std::shared_ptr<RenderTargetView>, mRenderTarget, RenderTargetView);
     PROPERTY_POINTER(std::shared_ptr<AlphaBlend>, mAlphaBlend, AlphaBlend);
-    PROPERTY(Viewport, mViewport, Viewport);
+    PROPERTY_POINTER(std::shared_ptr<RasterizerState>, mRasterizer, RasterizerState);
 };
 
 } //Graphics 

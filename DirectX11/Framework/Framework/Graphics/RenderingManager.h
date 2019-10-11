@@ -7,6 +7,8 @@
 #include "Framework/Utility/Property.h"
 
 #include "Framework/Graphics/Renderer/Pipeline.h"
+#include "Framework/Graphics/Renderer/BackBufferRenderer.h"
+
 namespace Framework {
 namespace ImGUI {
 class Manager;
@@ -44,7 +46,7 @@ public:
     * @return バックバッファの描画デバイス
     * @details 描画時はこのレンダラーを通すと出力される
     */
-    Pipeline* drawBegin();
+    IRenderer* drawBegin();
     /**
     * @brief 描画終了
     */
@@ -70,9 +72,7 @@ private:
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<CameraManager> mCameraManager; //!< カメラ管理者
-    //std::unique_ptr<Pipeline> mBackBufferRenderer; //!< バックバッファ描画デバイス
-    //std::unique_ptr<AlphaBlend> mAlphaBlend; //!< アルファブレンド
-    std::unique_ptr<Pipeline> mDefaultPipeline;
+    std::unique_ptr<BackBufferRenderer> mBackBufferRenderer;
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理
 };

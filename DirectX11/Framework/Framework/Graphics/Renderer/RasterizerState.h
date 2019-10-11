@@ -21,6 +21,10 @@ public:
     * @brief ラスタライザをコンテキストにセットする
     */
     void set();
+    /**
+    * @brief コンテキストの状態をクリアする
+    */
+    void clearState();
 private:
     ComPtr<ID3D11RasterizerState> mRasterizer;
 };

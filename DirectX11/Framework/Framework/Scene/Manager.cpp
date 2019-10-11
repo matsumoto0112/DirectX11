@@ -19,9 +19,9 @@ void Manager::update() {
     }
 }
 
-void Manager::draw(Graphics::Pipeline* pipeline) {
+void Manager::draw(Graphics::IRenderer* renderer) {
     MY_ASSERTION(mCurrentScene, "ƒV[ƒ“‚ª‘¶Ý‚µ‚Ü‚¹‚ñ");
-    mCurrentScene->draw(pipeline);
+    mCurrentScene->draw(renderer);
 }
 
 void Manager::registerScene(Define::SceneType type, ScenePtr scene) {

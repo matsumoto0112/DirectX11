@@ -14,5 +14,9 @@ void RasterizerState::set() {
     DX11InterfaceAccessor::getContext()->RSSetState(mRasterizer.Get());
 }
 
+void RasterizerState::clearState() {
+    DX11InterfaceAccessor::getContext()->RSSetState(nullptr);
+}
+
 } //Graphics 
 } //Framework 

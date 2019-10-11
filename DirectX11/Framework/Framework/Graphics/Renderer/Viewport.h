@@ -24,6 +24,10 @@ public:
     * @brief 設定する
     */
     void set();
+    /**
+    * @brief コンテキストの状態をクリアする
+    */
+    void clearState();
 private:
     D3D11_VIEWPORT mViewport;
 };

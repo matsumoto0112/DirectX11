@@ -6,7 +6,7 @@
 
 namespace Framework {
 namespace Graphics {
-class Pipeline;
+class IRenderer;
 } //Graphics 
 namespace Scene {
 class SceneBase;
@@ -36,7 +36,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    void draw(Graphics::Pipeline* pipeline);
+    void draw(Graphics::IRenderer* renderer);
     /**
     * @brief ƒV[ƒ“‚Ì“o˜^
     * @param type ƒV[ƒ“‚Ìí—Ş
