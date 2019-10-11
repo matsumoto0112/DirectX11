@@ -4,7 +4,6 @@
 
 namespace Framework {
 namespace Graphics {
-class AlphaBlend;
 class PerspectiveCamera;
 } //Graphics 
 } //Framework 
@@ -49,5 +48,4 @@ public:
     virtual Framework::Define::SceneType next() override;
 private:
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< ƒJƒƒ‰
-    std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend; 
 };

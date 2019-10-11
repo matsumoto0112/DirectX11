@@ -45,6 +45,10 @@ public:
     * @param camera 描画するカメラ
     */
     void draw(Sprite3D* sprite);
+    /**
+    * @brief スプライト描画に使用するデフォルトのエフェクトを取得する
+    */
+    std::shared_ptr<Effect> getDefaultSpriteEffect() const { return mEffect; }
 private:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< 頂点・インデックスバッファ

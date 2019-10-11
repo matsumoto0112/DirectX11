@@ -37,7 +37,6 @@ public:
 protected:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点バッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< インデックスバッファ
-    PROPERTY_POINTER(std::shared_ptr<Effect>, mEffect, Effect);
     PROPERTY_POINTER(std::shared_ptr<IMaterial>, mMaterial, Material);
 };
 

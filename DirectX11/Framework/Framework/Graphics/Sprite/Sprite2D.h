@@ -44,10 +44,6 @@ public:
     */
     virtual void draw() override;
     /**
-    * @brief 独自エフェクトで描画する
-    */
-    virtual void draw(std::shared_ptr<Effect> effect);
-    /**
     * @brief ピボットの設定
     * @param pivot ピボットの場所
     * @param base 何を基準に設定するか

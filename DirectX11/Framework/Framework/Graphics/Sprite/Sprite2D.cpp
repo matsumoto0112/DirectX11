@@ -6,7 +6,8 @@ namespace Framework {
 namespace Graphics {
 
 Sprite2D::Sprite2D()
-    :mTexture(nullptr),
+    :IDrawable(SpriteRenderer::getInstance()->getDefaultSpriteEffect()),
+    mTexture(nullptr),
     mPosition(0, 0),
     mZOrder(0.0f),
     mRotate(0.0f),
@@ -14,27 +15,24 @@ Sprite2D::Sprite2D()
     mContentSize(Math::Vector2(0, 0)),
     mPivot(0, 0),
     mColor(1.0f, 1.0f, 1.0f, 1.0f),
-    mSrcRect(0.0f, 0.0f, 1.0f, 1.0f) {}
+    mSrcRect(0.0f, 0.0f, 1.0f, 1.0f) { }
 
 Sprite2D::Sprite2D(std::shared_ptr<Texture> texture)
-    : mTexture(texture),
+    :IDrawable(SpriteRenderer::getInstance()->getDefaultSpriteEffect()),
+    mTexture(texture),
     mPosition(0, 0),
     mZOrder(0.0f),
     mRotate(0.0f),
     mScale(1.0f, 1.0f),
-    //mContentSize((float)texture->getWidth(), (float)texture->getHeight()),
+    mContentSize((float)texture->getWidth(), (float)texture->getHeight()),
     mPivot(0.0f, 0.0f),
     mColor(1.0f, 1.0f, 1.0f, 1.0f),
-    mSrcRect(0.0f, 0.0f, 1.0f, 1.0f) {}
+    mSrcRect(0.0f, 0.0f, 1.0f, 1.0f) { }
 
-Sprite2D::~Sprite2D() {}
+Sprite2D::~Sprite2D() { }
 
 void Sprite2D::draw() {
     SpriteRenderer::getInstance()->draw(this);
-}
-
-void Sprite2D::draw(std::shared_ptr<Effect> effect) {
-    SpriteRenderer::getInstance()->draw(this, effect);
 }
 
 void Sprite2D::setPivot(const Math::Vector2& pivot, PivotBase base) {

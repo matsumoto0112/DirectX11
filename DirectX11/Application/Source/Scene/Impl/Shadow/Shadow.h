@@ -4,7 +4,6 @@
 
 namespace Framework {
 namespace Graphics {
-class AlphaBlend;
 class PerspectiveCamera;
 class OrthographicCamera;
 } //Graphics 
@@ -51,5 +50,4 @@ public:
 private:
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< ƒJƒƒ‰
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< ƒJƒƒ‰
-    std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 };

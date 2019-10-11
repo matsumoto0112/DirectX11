@@ -10,9 +10,8 @@ Model::Model(std::shared_ptr<VertexBuffer> vertexBuffer,
     std::shared_ptr<IndexBuffer> indexBuffer,
     std::shared_ptr<Effect> effect,
     std::shared_ptr<IMaterial> material)
-    : mVertexBuffer(vertexBuffer),
+    :IDrawable(effect), mVertexBuffer(vertexBuffer),
     mIndexBuffer(indexBuffer),
-    mEffect(effect),
     mMaterial(material) { }
 
 Model::~Model() { }
