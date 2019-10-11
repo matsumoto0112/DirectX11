@@ -18,6 +18,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Camera\CameraManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\MaterialProperty.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\ModelMaterial.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.cpp" />
@@ -117,6 +119,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RasterizerStateDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11InterfaceAccessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DXHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\IMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\MaterialProperty.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\ModelMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Model\Model.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Particle\GPUParticle.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\BackBufferRenderer.h" />

@@ -46,7 +46,8 @@ RenderModel::RenderModel() {
 
     mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
         std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
-        std::make_shared<Graphics::Effect>(vs, ps));
+        std::make_shared<Graphics::Effect>(vs, ps),
+        std::make_shared<Graphics::ModelMaterial>());
 
     mTransform = Utility::Transform(Math::Vector3::ZERO, Math::Quaternion::IDENTITY, Math::Vector3(5.0f, 5.0f, 5.0f));
 }
@@ -57,6 +58,10 @@ void RenderModel::load(Framework::Scene::Collecter& collecter) { }
 
 void RenderModel::update() {
     mTransform.setRotate(mTransform.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+
+    auto mat = static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get());
+    mat->mWorldMatrix.mData = mTransform.createSRTMatrix();
+    mat->mColor.mData = Graphics::Color4(1.0f, 0.0f, 1.0f, 1.0f);
 }
 
 bool RenderModel::isEndScene() const {
@@ -65,10 +70,10 @@ bool RenderModel::isEndScene() const {
 
 void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     //mRasterizer->set();
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, mTransform.createSRTMatrix());
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, mTransform.createSRTMatrix());
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 1.0f, 1.0f));
-    Utility::getConstantBufferManager()->send();
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 0.0f, 1.0f, 1.0f));
+    //Utility::getConstantBufferManager()->send();
     renderer->render(mModel.get());
 }
 
