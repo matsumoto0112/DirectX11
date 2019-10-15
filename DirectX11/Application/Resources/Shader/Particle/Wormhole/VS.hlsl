@@ -1,3 +1,6 @@
+#ifndef INCLUDE_PARTICLE_WORMHOLE_VS_HLSL
+#define INCLUDE_PARTICLE_WORMHOLE_VS_HLSL
+
 struct Particle
 {
     float lifeTime : IN_LIFETIME; //!< ¶‘¶ŽžŠÔ
@@ -20,3 +23,5 @@ VSOutput main(const Particle input)
     o.color = input.color;
     return o;
 }
+
+#endif // INCLUDE_PARTICLE_WORMHOLE_VS_HLSL

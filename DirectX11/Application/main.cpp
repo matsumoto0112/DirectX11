@@ -30,7 +30,7 @@
 //#include "Source/Scene/Impl/GPUParticle/FireworkParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/ShotParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
+#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
 #include "Source/Scene/Impl/Shadow/Shadow.h"
 #include "Source/Scene/Impl/RenderModel.h"
 #include "Framework/Define/Config.h"
@@ -84,10 +84,10 @@ private:
             //mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
             //mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
             //mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
-            //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+            mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
             mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
             mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
-            mSceneManager->loadScene(SceneType::BlackholeParticle);
+            mSceneManager->loadScene(SceneType::WormholeParticle);
 
             mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
@@ -100,7 +100,7 @@ private:
             //ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
             //ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
             //ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
-            //ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
+            ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
             ADD_SCENE_JUMP_BUTTON(Shadow, SceneType::Shadow);
             ADD_SCENE_JUMP_BUTTON(RenderModel, SceneType::RenderModel);
         }

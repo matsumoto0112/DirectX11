@@ -4,40 +4,25 @@
 #include "Framework/Graphics/Shader/ComputeShader.h"
 #include "Framework/Graphics/Sprite/Sprite3D.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"
-#include "Framework/Graphics/Render/AlphaBlendSetting.h"
-#include "Framework/Graphics/Render/AlphaBlend.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/Camera/OrthographicCamera.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 #include "Framework/Graphics/Renderer/BackBufferRenderer.h"
-#include "Framework/Graphics/Render/RenderTarget.h"
 #include "Framework/Graphics/Shader/GeometoryShader.h"
 #include "Framework/Graphics/Particle/GPUParticle.h"
 #include "Framework/Utility/Timer.h"
 #include "Framework/Utility/Random.h"
+#include "Framework/Graphics/Texture/TextureLoader.h"
+#include "Source/Utility/Shader/ShaderLoad.h"
+#include "Framework/Define/Path.h"
+#include "Framework/Graphics/Desc/RasterizerStateDesc.h"
+#include "Framework/Graphics/Desc/BlendStateDesc.h"
 
 using namespace Framework;
 
 namespace {
-static constexpr int THREAD_X = 32, THREAD_Y = 32;
-static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
-static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
-static constexpr int RANDOM_MAX = 65535;
-constexpr int NUM = 64;
-
-struct Particle {
-    float lifeTime;
-    float speed;
-    Math::Vector3 position;
-    Math::Vector3 velocity;
-    Graphics::Color4 color;
-};
-
-struct GlobalData {
-    float deltaTime;
-    float dummy[3];
-};
+constexpr int NUM = 256;
 
 struct ParticleParameter {
     UINT index;
@@ -47,10 +32,7 @@ struct ParticleParameter {
 };
 
 std::vector<std::unique_ptr<Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
-std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
 std::unique_ptr<Graphics::ConstantBuffer<ParticleParameter>> mParameterCB; //<! パラメータ用コンスタントバッファ
-Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
-GlobalData mGlobal;
 ParticleParameter mParameter;
 std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
@@ -58,13 +40,6 @@ int mNum;
 float mSpeed;
 float mMaxYPosition;
 
-std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
-    D3D11_BLEND_DESC desc;
-    desc.AlphaToCoverageEnable = FALSE;
-    desc.IndependentBlendEnable = FALSE;
-    desc.RenderTarget[0] = Graphics::AlphaBlendSetting::getAddBlendDesc();
-    return std::make_unique<Graphics::AlphaBlend>(desc);
-}
 }
 
 WormholeParticle::WormholeParticle() {
@@ -75,24 +50,20 @@ WormholeParticle::WormholeParticle() {
 
     m2DCamera = std::make_unique<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
-    //アルファブレンドの作成
-    mAlphaBlend = createAlphaBlend();
-
     std::vector<float> randomTable(RANDOM_MAX);
     for (int i = 0; i < RANDOM_MAX; i++) {
         randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
     }
 
-    mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mParameterCB = std::make_unique<Graphics::ConstantBuffer<ParticleParameter>>(Graphics::ShaderInputType::Compute, 1);
-    auto gs = std::make_shared<Graphics::GeometoryShader>("Particle/SpotIndtancer_GS");
-    auto ps = std::make_shared<Graphics::PixelShader>("Particle/CubeParticle_PS");
-    auto vs = std::make_shared<Graphics::VertexShader>("Particle/Wormhole_VS");
+    auto gs = ShaderLoad::loadGS("Particle/Geometry/Cube_GS");
+    auto ps = ShaderLoad::loadPS("Particle/Output_Color_PS");
+    auto vs = ShaderLoad::loadVS("Particle/Wormhole/VS");
 
     for (int i = 0; i < NUM; i++) {
         //コンピュートシェーダ作成
         Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-        auto cs = std::make_shared<Graphics::ComputeShader>("Particle/Wormhole_CS", info);
+        auto cs = ShaderLoad::loadCS("Particle/Wormhole/CS", info);
 
         //パーティクルのデータ作成
         std::vector<Particle> particle(COUNT);
@@ -106,37 +77,29 @@ WormholeParticle::WormholeParticle() {
 
         cs->addUAV(0, randomSeed);
 
-        //mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
-        //    Utility::getResourceManager()->getTexture()->getResource(Define::TextureType::Circle),
-        //    cs,
-        //    vs,
-        //    ps,
-        //    gs));
-    }
-
-
-    //ラスタライザ作成
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-    rasterizerDesc.DepthBiasClamp = 0;
-    rasterizerDesc.SlopeScaledDepthBias = 0;
-    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
+        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(COUNT,
+            Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Circle.png"),
+            cs,
+            vs,
+            ps,
+            gs));
+    }   
+    mGlobalDataCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
 
     mSpeed = 30.0f;
     mParameter.index = -1;
     mParameter.spot = Math::Vector3::ZERO;
     mParameter.radius = 10.0f;
-    mNum = NUM;
+    mNum = 10;
     mMaxYPosition = 20.0f;
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");
     mWindow->addItem(mText);
+
+    mTimer = std::make_unique<Utility::Timer>(10.0f);
+    mTimer->init();
+
 
 #define ADD_CHANGE_FIELD(name,var,min,max) { \
     std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,var,[&](float val){var = val;}); \
@@ -148,16 +111,39 @@ WormholeParticle::WormholeParticle() {
     ADD_CHANGE_FIELD(RADIUS, mParameter.radius, 0.0f, 30.0f);
     ADD_CHANGE_FIELD(SPEED, mSpeed, 0.0f, 100.0f);
     ADD_CHANGE_FIELD(MAX_Y, mMaxYPosition, 0.0f, 100.0f);
+    ADD_CHANGE_FIELD(NUM, mNum, 0, NUM);
 }
 
 WormholeParticle::~WormholeParticle() { }
 
-void WormholeParticle::load(Scene::Collecter& collecter) { }
+void WormholeParticle::load(Scene::Collecter& collecter) {
+    //このシーンで使用するステートを作成する
+    auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
+        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
+    auto newBlendState = std::make_shared<Graphics::AlphaBlend>(
+        Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
+
+    //前の状態をコピーしておく
+    //シーン終了時にもとに戻してあげる
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+    mPrevRasterizer = backBufferRenderer->getPipeline()->getRasterizerState();
+    mPrevAlphaBlend = backBufferRenderer->getPipeline()->getAlphaBlend();
+
+    backBufferRenderer->getPipeline()->setRasterizerState(newRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(newBlendState);
+    backBufferRenderer->getRenderTarget()->setEnableDepthStencil(false);
+}
 
 void WormholeParticle::update() {
+    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
+
+    mGlobal.time = Utility::Time::getInstance()->getTime();
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
-    mCB->setBuffer(mGlobal);
-    mCB->sendBuffer();
+
+    //グローバルデータのセット
+    mGlobal.emit = 0;
+    mGlobalDataCB->setBuffer(mGlobal);
+    mGlobalDataCB->sendBuffer();
 
     mParameter.index = (mParameter.index + 1) % (THREAD_X * THREAD_Y);
 
@@ -176,28 +162,31 @@ bool WormholeParticle::isEndScene() const {
     return false;
 }
 
-void WormholeParticle::draw(Framework::Graphics::Pipeline* pipeline) {
-    //Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    //dynamic_cast<Graphics::BackBufferRenderer*>(pipeline)->getRenderTarget()->setEnableDepthStencil(false);
-    //pipeline->setBackColor(Graphics::Color4(0.0f, 0.0f, 0.0f, 1.0f));
-    //mAlphaBlend->set();
-    //Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
-    //Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
+void WormholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
 
-    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
-    //Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
-    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
-    //Utility::getConstantBufferManager()->send();
+    Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
+    Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
-    //for (int i = 0; i < mNum; i++) {
-    //    mGPUParticle[i]->draw();
-    //}
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Math::Matrix4x4 m = Math::Matrix4x4::createTranslate(Math::Vector3(0.0f, 0.0f, 0.0f));
+    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
+    Utility::getConstantBufferManager()->send();
 
-    //mText->setText(Utility::StringBuilder("") << mNum * COUNT);
-    //mWindow->draw();
+    for (int i = 0; i < mNum; i++) {
+        mGPUParticle[i]->draw();
+    }
+
+    mText->setText(Utility::StringBuilder("") << mNum * COUNT);
+    mWindow->draw();
 }
 
-void WormholeParticle::end() { }
+void WormholeParticle::unload() {
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+
+    backBufferRenderer->getPipeline()->setRasterizerState(mPrevRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(mPrevAlphaBlend);
+    backBufferRenderer->getRenderTarget()->setEnableDepthStencil(true);
+}
 
 Define::SceneType WormholeParticle::next() {
     return Define::SceneType();

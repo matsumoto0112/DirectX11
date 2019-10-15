@@ -1,5 +1,5 @@
-#ifndef PARTICLE_BLACKHOLE_CS_HLSL
-#define PARTICLE_BLACKHOLE_CS_HLSL
+#ifndef INCLUDE_PARTICLE_BLACKHOLE_CS_HLSL
+#define INCLUDE_PARTICLE_BLACKHOLE_CS_HLSL
 
 #include "../../Utility/ComputeShaderDefine.hlsli"
 #include "../Util/GPUParticleDefine.hlsli"
@@ -92,4 +92,4 @@ void main(const CSInput input)
     }
 }
 
-#endif // PARTICLE_BLACKHOLE_CS_HLSL
+#endif // INCLUDE_PARTICLE_BLACKHOLE_CS_HLSL

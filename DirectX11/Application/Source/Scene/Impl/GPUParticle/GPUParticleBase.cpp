@@ -18,6 +18,7 @@
 #include "Framework/Graphics/Texture/TextureLoader.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Graphics/Desc/RasterizerStateDesc.h"
+#include "Source/Utility/Shader/ShaderLoad.h"
 
 using namespace Framework;
 
@@ -29,40 +30,37 @@ GPUParticleBase::GPUParticleBase() {
 
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
-    //コンピュートシェーダ作成
-    Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-    const std::string shaderPath = Define::Path::getInstance()->shader();
-    auto gs = std::make_shared<Graphics::GeometoryShader>(shaderPath + "Particle/Geometry/Quad_GS");
-    auto ps = std::make_shared<Graphics::PixelShader>(shaderPath + "2D/Texture2D_Color_PS");
-    auto cs = std::make_shared<Graphics::ComputeShader>(shaderPath + "Particle/Blackhole/Blackhole_CS", info);
-    auto vs = std::make_shared<Graphics::VertexShader>(shaderPath + "Particle/Blackhole/Blackhole_VS");
-    {
-        //パーティクルのデータ作成
-        std::vector<Blackhole> particle(COUNT);
-        for (int i = 0; i < COUNT; i++) {
-            particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
-        }
-        cs->addUAVEnableVertexBuffer(1, particle, 0);
+    ////コンピュートシェーダ作成
+    //Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
+    //auto cs = ShaderLoad::loadCS("Particle/Blackhole/CS", info);
+    //{
+    //    //パーティクルのデータ作成
+    //    std::vector<Blackhole> particle(COUNT);
+    //    for (int i = 0; i < COUNT; i++) {
+    //        particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
+    //    }
+    //    cs->addUAVEnableVertexBuffer(1, particle, 0);
 
-        std::vector<float> randomTable(RANDOM_MAX);
-        for (int i = 0; i < RANDOM_MAX; i++) {
-            randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
-        }
-        cs->addSRV(0, randomTable);
+    //    std::vector<float> randomTable(RANDOM_MAX);
+    //    for (int i = 0; i < RANDOM_MAX; i++) {
+    //        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
+    //    }
+    //    cs->addSRV(0, randomTable);
 
-        std::vector<int> randomSeed{ 0 };
-        cs->addUAV(0, randomSeed);
-    }
+    //    std::vector<int> randomSeed{ 0 };
+    //    cs->addUAV(0, randomSeed);
+    //}
 
 
-    mCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
+    mGlobalDataCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
 
-    mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
-        Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Smoke.png"),
-        cs,
-        vs,
-        ps,
-        gs);
+    //mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
+    //    Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Smoke.png"),
+    //    cs,
+    //    ShaderLoad::loadVS("Particle/Blackhole/VS"),
+    //    ShaderLoad::loadPS("2D/Texture2D_Color_PS"),
+    //    ShaderLoad::loadGS("Particle/Geometry/Quad_GS"));
+
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
@@ -97,8 +95,8 @@ void GPUParticleBase::update() {
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     //グローバルデータのセット
-    mCB->setBuffer(mGlobal);
-    mCB->sendBuffer();
+    mGlobalDataCB->setBuffer(mGlobal);
+    mGlobalDataCB->sendBuffer();
 
     mGlobal.emit = 0;
 

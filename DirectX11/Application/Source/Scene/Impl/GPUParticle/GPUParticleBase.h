@@ -76,10 +76,10 @@ protected:
         float deltaTime;
         float dummy[1];
     };
+    std::unique_ptr<Framework::Utility::Timer> mTimer; //!< パーティクルタイマー
     std::unique_ptr<Framework::Graphics::GPUParticle> mGPUParticle; //!< パーティクル
-    std::unique_ptr<Framework::Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
-    std::unique_ptr<Framework::Utility::Timer> mTimer;
+    std::unique_ptr<Framework::Graphics::ConstantBuffer<GlobalData>> mGlobalDataCB; //<! グローバルデータ用コンスタントバッファ
     GlobalData mGlobal;
-    std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer;
-    std::shared_ptr<Framework::Graphics::AlphaBlend> mPrevAlphaBlend;
+    std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer; //!< 前シーンのラスタライザの状態
+    std::shared_ptr<Framework::Graphics::AlphaBlend> mPrevAlphaBlend; //!< 前シーンのアルファブレンドの状態
 };

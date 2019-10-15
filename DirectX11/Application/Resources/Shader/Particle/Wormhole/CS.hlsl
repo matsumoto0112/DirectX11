@@ -1,4 +1,9 @@
-#include "../Compute/ComputeShaderDefine.hlsli"
+#ifndef INCLUDE_PARTICLE_WORMHOLE_CS_HLSL
+#define INCLUDE_PARTICLE_WORMHOLE_CS_HLSL
+
+#include "../../Utility/ComputeShaderDefine.hlsli"
+#include "../Util/GPUParticleDefine.hlsli"
+#include "../Util/UtilFunc.hlsli"
 
 #define THREAD_X (32)
 #define THREAD_Y (32)
@@ -23,11 +28,6 @@ struct Particle
 #define VELOCITY_OFFSET (4 * 5)
 #define COLOR_OFFSET (4 * 8)
 #define PARTICLE_SIZE (4 * 12)
-
-cbuffer GlobalData : register(b0)
-{
-    float deltaTime; //!< ‘OƒtƒŒ[ƒ€‚©‚ç‚Ì·•ªŽžŠÔ
-};
 
 cbuffer EmitParameter : register(b1)
 {
@@ -131,3 +131,5 @@ void main(const CSInput input)
             particles.Store(addr + COLOR_OFFSET + 4 * 3, asuint(0.0f));
     }
 }
+
+#endif // INCLUDE_PARTICLE_WORMHOLE_CS_HLSL
