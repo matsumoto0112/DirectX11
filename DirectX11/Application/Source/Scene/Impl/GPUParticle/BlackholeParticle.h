@@ -43,7 +43,7 @@ public:
     /**
     * @brief I—¹ˆ—
     */
-    virtual void end() override;
+    virtual void unload() override;
     /**
     * @brief Ÿ‚ÌƒV[ƒ“
     */

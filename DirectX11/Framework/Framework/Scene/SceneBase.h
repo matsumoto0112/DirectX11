@@ -38,7 +38,7 @@ public:
     /**
     * @brief シーンの終了処理
     */
-    virtual void end() = 0;
+    virtual void unload() = 0;
     /**
     * @brief 次のシーン
     */

@@ -118,8 +118,8 @@ Shadow::Shadow() {
 
     mDefaultSampler = std::make_unique<Graphics::Sampler>(Graphics::TextureAddressMode::Wrap, Graphics::TextureFilterMode::MinMagMipLinear);
 
-    //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
-    Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
+    Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    //Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
     std::vector<Math::Vector4> pos = loader.getPosition();
     std::vector<UINT> indices(pos.size());
     for (int i = 0; i < indices.size() / 3; i++) {
@@ -132,23 +132,20 @@ Shadow::Shadow() {
         auto vs = std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_VS.cso");
         auto ps = std::make_shared<Graphics::PixelShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_PS.cso");
 
-
         mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
             std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
             std::make_shared<Graphics::Effect>(vs, ps),
             std::make_shared<Graphics::ModelMaterial>());
-        mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(1, 1, 1));
         auto mat = static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get());
-        mat->mWorldMatrix.mData = mTransform[0].createSRTMatrix();
         mat->mColor.mData = Graphics::Color4(0.25f, 0.5f, 0.6f, 1.0f);
     }
 
-
-    //for (int x = -2; x < 2; x++) {
-    //    for (int z = -2; z < 2; z++) {
-    //        mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
-    //    }
-    //}
+    //“¯‚¶ƒ‚ƒfƒ‹‚ðŽg‚¢‚Ü‚í‚·‚½‚ß‚ÉÀ•W‚¾‚¯•¡”ŒÂì‚Á‚Ä‚¨‚­
+    for (int x = -2; x < 2; x++) {
+        for (int z = -2; z < 2; z++) {
+            mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+        }
+    }
 
     mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-5,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
     mLightMatrixData.proj = m3DCamera->getProjection();
@@ -224,7 +221,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     }
 }
 
-void Shadow::end() { }
+void Shadow::unload() { }
 
 Define::SceneType Shadow::next() {
     return Define::SceneType();

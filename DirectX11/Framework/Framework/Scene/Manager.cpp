@@ -30,7 +30,7 @@ void Manager::registerScene(Define::SceneType type, ScenePtr scene) {
 }
 
 void Manager::loadScene(Define::SceneType next) {
-    if (mCurrentScene)mCurrentScene->end();
+    if (mCurrentScene)mCurrentScene->unload();
     mCurrentScene = getNextScene(next);
     mCurrentScene->load(*mCollecter);
 }

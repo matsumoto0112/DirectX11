@@ -60,7 +60,7 @@ void RenderModel::draw(Framework::Graphics::IRenderer* renderer) {
     renderer->render(mModel.get());
 }
 
-void RenderModel::end() { }
+void RenderModel::unload() { }
 
 Define::SceneType RenderModel::next() {
     return Define::SceneType();

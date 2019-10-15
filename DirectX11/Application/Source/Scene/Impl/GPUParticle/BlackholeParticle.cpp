@@ -43,15 +43,10 @@ struct GlobalData {
 
 std::unique_ptr<Graphics::GPUParticle> mGPUParticle; //!< パーティクル
 std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ用コンスタントバッファ
-Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
-std::shared_ptr<Graphics::RasterizerState> rasterizer;
-std::shared_ptr<Graphics::AlphaBlend> alpha;
-
-std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
-    return std::make_unique<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
-}
+std::shared_ptr<Graphics::RasterizerState> mPrevRasterizer;
+std::shared_ptr<Graphics::AlphaBlend> mPrevAlphaBlend;
 }
 
 BlackholeParticle::BlackholeParticle() {
@@ -97,22 +92,6 @@ BlackholeParticle::BlackholeParticle() {
         ps,
         gs);
 
-
-    //ラスタライザ作成
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-    rasterizerDesc.DepthBiasClamp = 0;
-    rasterizerDesc.SlopeScaledDepthBias = 0;
-    Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-    rasterizer = std::make_shared<Graphics::RasterizerState>(
-        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
-    alpha = std::make_shared<Graphics::AlphaBlend>(
-        Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
 
@@ -122,10 +101,21 @@ BlackholeParticle::BlackholeParticle() {
 BlackholeParticle::~BlackholeParticle() { }
 
 void BlackholeParticle::load(Framework::Scene::Collecter& collecter) {
-    Utility::getRenderingManager()->getRenderer()->getPipeline()->setRasterizerState(rasterizer);
-    Utility::getRenderingManager()->getRenderer()->getPipeline()->setAlphaBlend(alpha);
-    Utility::getRenderingManager()->getRenderer()->getRenderTarget()->setEnableDepthStencil(false);
-    int a = 0;
+    //このシーンで使用するステートを作成する
+    auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
+        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
+    auto newBlendState = std::make_shared<Graphics::AlphaBlend>(
+        Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
+
+    //前の状態をコピーしておく
+    //シーン終了時にもとに戻してあげる
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+    mPrevRasterizer = backBufferRenderer->getPipeline()->getRasterizerState();
+    mPrevAlphaBlend = backBufferRenderer->getPipeline()->getAlphaBlend();
+
+    backBufferRenderer->getPipeline()->setRasterizerState(newRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(newBlendState);
+    backBufferRenderer->getRenderTarget()->setEnableDepthStencil(false);
 }
 
 void BlackholeParticle::update() {
@@ -148,7 +138,6 @@ bool BlackholeParticle::isEndScene() const {
 }
 
 void BlackholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
-    Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
@@ -160,7 +149,13 @@ void BlackholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
     mGPUParticle->draw();
 }
 
-void BlackholeParticle::end() { }
+void BlackholeParticle::unload() {
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+
+    backBufferRenderer->getPipeline()->setRasterizerState(mPrevRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(mPrevAlphaBlend);
+    backBufferRenderer->getRenderTarget()->setEnableDepthStencil(true);
+}
 
 Define::SceneType BlackholeParticle::next() {
     return Define::SceneType();
