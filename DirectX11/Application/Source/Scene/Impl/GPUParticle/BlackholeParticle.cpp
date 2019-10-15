@@ -18,6 +18,7 @@
 #include "Framework/Graphics/Texture/TextureLoader.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Graphics/Desc/RasterizerStateDesc.h"
+#include "Source/Utility/Shader/ShaderLoad.h"
 
 using namespace Framework;
 
@@ -31,11 +32,7 @@ BlackholeParticle::BlackholeParticle() {
 
     //コンピュートシェーダ作成
     Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-    const std::string shaderPath = Define::Path::getInstance()->shader();
-    auto gs = std::make_shared<Graphics::GeometoryShader>(shaderPath + "Particle/Geometry/Quad_GS");
-    auto ps = std::make_shared<Graphics::PixelShader>(shaderPath + "2D/Texture2D_Color_PS");
-    auto cs = std::make_shared<Graphics::ComputeShader>(shaderPath + "Particle/Blackhole/CS", info);
-    auto vs = std::make_shared<Graphics::VertexShader>(shaderPath + "Particle/Blackhole/VS");
+    auto cs = ShaderLoad::loadCS("Particle/Blackhole/CS", info);
     {
         //パーティクルのデータ作成
         std::vector<Blackhole> particle(COUNT);
@@ -60,9 +57,9 @@ BlackholeParticle::BlackholeParticle() {
     mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
         Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Smoke.png"),
         cs,
-        vs,
-        ps,
-        gs);
+        ShaderLoad::loadVS("Particle/Blackhole/VS"),
+        ShaderLoad::loadPS("2D/Texture2D_Color_PS"),
+        ShaderLoad::loadGS("Particle/Geometry/Quad_GS"));
 
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
