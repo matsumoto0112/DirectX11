@@ -34,11 +34,29 @@ public:
     * @brief 描画する
     */
     virtual void draw() override;
+
+    /**
+    * @brief マテリアルをセットする
+    */
+    void setMaterial(std::shared_ptr<IMaterial> newMaterial) { mMaterial = newMaterial; }
+
+    /**
+    * @brief マテリアルを取得する
+    * @tparam T マテリアルの型
+    * @details マテリアルがTに変換できなければコンパイルエラーとなる
+    */
+    template <class T>
+    T* getMaterial() const;
 protected:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点バッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< インデックスバッファ
-    PROPERTY_POINTER(std::shared_ptr<IMaterial>, mMaterial, Material);
+    std::shared_ptr<IMaterial> mMaterial;
 };
+
+template<class T>
+inline T* Model::getMaterial() const {
+    return static_cast<T*>(mMaterial.get());
+}
 
 } //Graphics 
 } //Framework 

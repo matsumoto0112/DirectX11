@@ -1,7 +1,5 @@
 #include "Texture.h"
 #include "Framework/Graphics/Resource/ShaderInputType.h"
-//#include "Framework/Graphics/Shader/ShaderResourceView.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
 

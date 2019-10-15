@@ -46,7 +46,7 @@ void RenderModel::load(Framework::Scene::Collecter& collecter) { }
 void RenderModel::update() {
     mTransform.setRotate(mTransform.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
 
-    auto mat = static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get());
+    auto mat = mModel->getMaterial<Graphics::ModelMaterial>();
     mat->mWorldMatrix.mData = mTransform.createSRTMatrix();
     mat->mColor.mData = Graphics::Color4(1.0f, 0.0f, 1.0f, 1.0f);
 }

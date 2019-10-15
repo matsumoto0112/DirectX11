@@ -11,7 +11,6 @@
 #include "Framework/Graphics/ConstantBuffer/ConstantBuffer.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
 #include "Framework/Graphics/Desc/DepthStencilDesc.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Graphics/Renderer/PrimitiveVertex.h"
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Desc/RasterizerStateDesc.h"
@@ -39,7 +38,7 @@ static void createRTV(UINT width, UINT height,
     std::shared_ptr<Graphics::Texture> tex = std::make_shared<Graphics::Texture>(dsvTexture, srv);
     *sprite = std::make_shared<Graphics::Sprite2D>(tex);
     *rtv = std::make_shared< Graphics::RenderTargetView>(texture, &rtvDesc, dsvTexture, &dsvDesc,
-        Graphics::Viewport(Math::Rect(0, 0, width, height)), Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
+        Graphics::Viewport(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))), Graphics::Color4(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 /**
@@ -136,13 +135,13 @@ Shadow::Shadow() {
             std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
             std::make_shared<Graphics::Effect>(vs, ps),
             std::make_shared<Graphics::ModelMaterial>());
-        auto mat = static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get());
+        auto mat = mModel->getMaterial<Graphics::ModelMaterial>();
         mat->mColor.mData = Graphics::Color4(0.25f, 0.5f, 0.6f, 1.0f);
     }
 
     //ìØÇ∂ÉÇÉfÉãÇégÇ¢Ç‹ÇÌÇ∑ÇΩÇﬂÇ…ç¿ïWÇæÇØï°êîå¬çÏÇ¡ÇƒÇ®Ç≠
-    for (int x = -2; x < 2; x++) {
-        for (int z = -2; z < 2; z++) {
+    for (float x = -2.0f; x < 2.0f; x += 1.0f) {
+        for (float z = -2.0f; z <= 2.0f; z += 1.0f) {
             mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
         }
     }
@@ -161,7 +160,7 @@ Shadow::Shadow() {
             std::make_shared<Graphics::ModelMaterial>());
         mFloorTransform.setPosition(Math::Vector3(0, -3, 0));
         mFloorTransform.setScale(Math::Vector3(10.0f, 0.1f, 10.0f));
-        auto mat = static_cast<Graphics::ModelMaterial*>(mFloor->getMaterial().get());
+        auto mat = mFloor->getMaterial<Graphics::ModelMaterial>();
         mat->mWorldMatrix.mData = mFloorTransform.createSRTMatrix();
         mat->mColor.mData = Graphics::Color4(0.0f, 1.0f, 1.0f, 1.0f);
     }
@@ -200,7 +199,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     mDepthRenderer->begin();
     {
         for (auto&& tr : mTransform) {
-            static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get())->mWorldMatrix.mData = tr.createSRTMatrix();
+            mModel->getMaterial<Graphics::ModelMaterial>()->mWorldMatrix.mData = tr.createSRTMatrix();
             mDepthRenderer->render(mModel.get());
         }
         mDepthRenderer->render(mFloor.get());
@@ -214,7 +213,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     {
         renderer->render(mSprite.get());
         for (auto&& tr : mTransform) {
-            static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get())->mWorldMatrix.mData = tr.createSRTMatrix();
+            mModel->getMaterial<Graphics::ModelMaterial>()->mWorldMatrix.mData = tr.createSRTMatrix();
             renderer->render(mModel.get());
         }
         renderer->render(mFloor.get());

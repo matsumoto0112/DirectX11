@@ -2,7 +2,6 @@
 #include <vector>
 #include <atlstr.h>
 #include "Framework/Graphics/Texture/Texture.h"
-#include "Framework/Graphics/Texture/TextureBuffer.h"
 #include "Framework/Utility/Debug.h"
 
 namespace Framework {
@@ -83,7 +82,7 @@ std::unique_ptr<Texture> TextureLoader::load(const std::string& filepath) {
     D3D11_SUBRESOURCE_DATA sub{};
     sub.pSysMem = buffer.data();
     sub.SysMemPitch = width * 4;
-    sub.SysMemSlicePitch = buffer.size();
+    sub.SysMemSlicePitch = static_cast<UINT>(buffer.size());
 
     //テクスチャ作成
     std::shared_ptr<Texture2D> texture2D = std::make_shared<Texture2D>(&mTexture2DDesc, &sub);
