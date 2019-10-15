@@ -70,6 +70,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Time.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\PaintProc.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_draw.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\TypeDef.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\ImGUIProc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Window\Procedure\PaintProc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imconfig.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\ImGUI\imgui_impl_dx11.h" />
