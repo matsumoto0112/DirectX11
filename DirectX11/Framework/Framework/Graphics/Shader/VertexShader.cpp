@@ -10,7 +10,7 @@ namespace Graphics {
 VertexShader::VertexShader(const std::string& filepath)
     :ShaderBase() {
     //シェーダファイルの読み込み
-    std::vector<BYTE> shaderData = Utility::ByteReader(filepath).get();
+    std::vector<BYTE> shaderData = Utility::ByteReader(addExtendIfNotExist(filepath)).get();
     const UINT shaderSize = shaderData.size();
 
     //シェーダファイルの解析

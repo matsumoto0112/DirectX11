@@ -1,4 +1,4 @@
-#include "../Compute/ComputeShaderDefine.hlsli"
+#include "../../Utility/ComputeShaderDefine.hlsli"
 
 #define THREAD_X (16)
 #define THREAD_Y (4)

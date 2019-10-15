@@ -12,7 +12,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    ShaderBase() {}
+    ShaderBase() { }
     /**
     * @brief デストラクタ
     */
@@ -21,6 +21,11 @@ public:
     * @brief シェーダを使用する
     */
     virtual void set() = 0;
+protected:
+    /**
+    * @brief パスの最後に拡張子がなければ追加する
+    */
+    std::string addExtendIfNotExist(const std::string& filepath);
 };
 
 } //Graphics 

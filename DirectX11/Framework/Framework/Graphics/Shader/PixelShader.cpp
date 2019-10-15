@@ -9,7 +9,7 @@ namespace Graphics {
 PixelShader::PixelShader(const std::string& filepath)
     : ShaderBase() {
     //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = Utility::ByteReader(filepath).get();
+    std::vector<BYTE> byteData = Utility::ByteReader(addExtendIfNotExist(filepath)).get();
     //シェーダファイル作成
     throwIfFailed(DX11InterfaceAccessor::getDevice()->CreatePixelShader(byteData.data(), byteData.size(), nullptr, &mPixelShader));
 }

@@ -21,7 +21,7 @@ void GraphicsDevice::drawBegin() {
 }
 
 void GraphicsDevice::drawEnd() {
-    mDirectX11Device->present();
+    mDirectX11Device->present(0);
 }
 
 void GraphicsDevice::cleanup() {

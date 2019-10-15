@@ -7,7 +7,7 @@ namespace Define {
 Config::Config() {
     std::string path = Path::getInstance()->exe() + "/../config.ini";
     mWidth = GetPrivateProfileInt("Window", "Width", 0, path.c_str());
-    mHeight = GetPrivateProfileInt("Window", "Height", 600, path.c_str());
+    mHeight = GetPrivateProfileInt("Window", "Height", 0, path.c_str());
 }
 
 Config::~Config() { }

@@ -13,8 +13,8 @@ struct ps_input
 float4 main(ps_input input) : SV_TARGET
 {
     float4 o = tex.Sample(samLinear, input.uv);
-    o *= input.color;
-    o *= color;
-    clip(o.a - EPSILON);
+    //o *= input.color;
+    //o *= color;
+    //clip(o.a - EPSILON);
     return o;
 }

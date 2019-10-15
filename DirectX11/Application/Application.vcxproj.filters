@@ -5,6 +5,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -13,6 +14,7 @@
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
@@ -22,35 +24,8 @@
     <FxCompile Include="Resources\Shader\Model\Model_Diffuse_Split4Color_PS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Only_Position_VS.hlsl" />
     <FxCompile Include="Resources\Shader\3D\Output_Color_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Compute\SimpleParticle.hlsl" />
-    <FxCompile Include="Resources\Shader\SimpleParticleGS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl" />
     <FxCompile Include="Resources\Shader\2D\Texture2D_Color_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Compute\RandomParticle.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Blackhole_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Blackhole_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\CubeParticle_GS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\CubeParticle_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Fall_Bounce_Rotate_GS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\SpotInstancer_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\SpotInstancer_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\SpotInstancer_GS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Firework_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Firework_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Firework_GS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Flash_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Flash_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Flash_GS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Flash_PS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\ShotParticle_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Wormhole_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Wormhole_VS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_VS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMapCreate_PS.hlsl" />
     <FxCompile Include="Resources\Shader\ShadowMap\Depth_PS.hlsl" />
@@ -58,10 +33,13 @@
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMap_PS.hlsl" />
     <FxCompile Include="Resources\Shader\NoDelete\Texture2D_PS.hlsl" />
     <FxCompile Include="Resources\Shader\NoDelete\Texture2D_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Geometry\Quad_GS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
-    <None Include="Resources\Shader\Compute\ComputeShaderDefine.hlsli" />
     <None Include="Resources\Shader\Utility\UtilFunc.hlsli" />
+    <None Include="Resources\Shader\Utility\ComputeShaderDefine.hlsli" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace Graphics {
 ComputeShader::ComputeShader(const std::string& filepath, const Info& info)
     :ShaderBase(), mInfo(info) {
     //シェーダファイルの読み込み
-    std::vector<BYTE> byteData = Utility::ByteReader(filepath).get();
+    std::vector<BYTE> byteData = Utility::ByteReader(addExtendIfNotExist(filepath)).get();
     //シェーダファイル作成
     throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateComputeShader(byteData.data(), byteData.size(), nullptr, &mComputeShader));
 }

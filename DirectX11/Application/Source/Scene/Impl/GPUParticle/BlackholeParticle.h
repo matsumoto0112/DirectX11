@@ -39,7 +39,7 @@ public:
     /**
     * @brief •`‰æ
     */
-    virtual void draw(Framework::Graphics::Pipeline* pipeline) override;
+    virtual void draw(Framework::Graphics::IRenderer* pipeline) override;
     /**
     * @brief I—¹ˆ—
     */
@@ -51,5 +51,4 @@ public:
 private:
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< ƒJƒƒ‰
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< ƒJƒƒ‰
-    std::unique_ptr<Framework::Graphics::AlphaBlend> mAlphaBlend;
 };
