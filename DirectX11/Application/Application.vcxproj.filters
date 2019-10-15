@@ -6,6 +6,7 @@
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -15,6 +16,7 @@
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
@@ -33,13 +35,15 @@
     <FxCompile Include="Resources\Shader\ShadowMap\ShadowMap_PS.hlsl" />
     <FxCompile Include="Resources\Shader\NoDelete\Texture2D_PS.hlsl" />
     <FxCompile Include="Resources\Shader\NoDelete\Texture2D_VS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_CS.hlsl" />
-    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Geometry\Quad_GS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
     <None Include="Resources\Shader\Utility\UtilFunc.hlsli" />
     <None Include="Resources\Shader\Utility\ComputeShaderDefine.hlsli" />
+    <None Include="Resources\Shader\Particle\Util\GPUParticleDefine.hlsli" />
+    <None Include="Resources\Shader\Particle\Util\UtilFunc.hlsli" />
   </ItemGroup>
 </Project>

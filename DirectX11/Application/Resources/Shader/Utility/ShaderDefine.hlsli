@@ -1,3 +1,6 @@
+#ifndef INCLUDE_UTILITY_SHADERDEFINE_HLSLI
+#define INCLUDE_UTILITY_SHADERDEFINE_HLSLI
+
 static const float EPSILON = 1e-6; //誤差
 
 //ワールド・ビュー・プロジェクション行列
@@ -92,3 +95,4 @@ float4x4 WORLD_VIEW_PROJECTION_2D()
     m = mul(m, mat2D.proj);
     return m;
 }
+#endif // INCLUDE_UTILITY_SHADERDEFINE_HLSLI

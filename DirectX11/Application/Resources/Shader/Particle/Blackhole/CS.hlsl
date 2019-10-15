@@ -1,4 +1,9 @@
+#ifndef PARTICLE_BLACKHOLE_CS_HLSL
+#define PARTICLE_BLACKHOLE_CS_HLSL
+
 #include "../../Utility/ComputeShaderDefine.hlsli"
+#include "../Util/GPUParticleDefine.hlsli"
+#include "../Util/UtilFunc.hlsli"
 
 #define THREAD_X (16)
 #define THREAD_Y (4)
@@ -21,13 +26,6 @@ struct BlackholeParticle
 #define THETA_OFFSET    (4 * 4)
 #define COLOR_OFFSET (4 * 5)
 #define BLACKHOLE_SIZE (4 * 9)
-
-cbuffer GlobalData : register(b0)
-{
-    int emit;
-    float time; //!< ゲーム経過時間
-    float deltaTime; //!< 前フレームからの差分時間
-};
 
 RWByteAddressBuffer particles : register(u1);
 
@@ -82,7 +80,9 @@ void main(const CSInput input)
 
     const uint addr = index * BLACKHOLE_SIZE;
 
-    if (emit == 0)
+    //最初のフレームに全部生成する
+    //最初は-1が来るようにする
+    if (emitIndex >= 0)
     {
         updateParticle(addr);
     }
@@ -91,3 +91,5 @@ void main(const CSInput input)
         resetParticle(addr);
     }
 }
+
+#endif // PARTICLE_BLACKHOLE_CS_HLSL

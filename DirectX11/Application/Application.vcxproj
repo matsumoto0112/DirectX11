@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -85,6 +86,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
     <ClInclude Include="stdafx.h" />
@@ -114,7 +116,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_CS.hlsl">
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\CS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
     </FxCompile>
@@ -138,7 +140,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle\Blackhole\Blackhole_VS.hlsl">
+    <FxCompile Include="Resources\Shader\Particle\Blackhole\VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
@@ -170,6 +172,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Shader\Particle\Util\GPUParticleDefine.hlsli" />
+    <None Include="Resources\Shader\Particle\Util\UtilFunc.hlsli" />
     <None Include="Resources\Shader\Utility\ComputeShaderDefine.hlsli" />
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
     <None Include="Resources\Shader\Utility\UtilFunc.hlsli" />

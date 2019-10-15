@@ -1,3 +1,6 @@
+#ifndef INCLUDE_PARTICLE_BLACKHOLE_VS_HLSL
+#define INCLUDE_PARTICLE_BLACKHOLE_VS_HLSL
+
 struct BlackholeParticle
 {
     float3 position : POSITION;
@@ -19,3 +22,5 @@ VSOutput main(const BlackholeParticle input)
     o.color = input.color;
     return o;
 }
+
+#endif // INCLUDE_PARTICLE_BLACKHOLE_VS_HLSL

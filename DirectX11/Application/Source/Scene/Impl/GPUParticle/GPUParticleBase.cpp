@@ -1,4 +1,4 @@
-#include "BlackholeParticle.h"
+#include "GPUParticleBase.h"
 #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
@@ -21,7 +21,7 @@
 
 using namespace Framework;
 
-BlackholeParticle::BlackholeParticle() {
+GPUParticleBase::GPUParticleBase() {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
         Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
@@ -34,8 +34,8 @@ BlackholeParticle::BlackholeParticle() {
     const std::string shaderPath = Define::Path::getInstance()->shader();
     auto gs = std::make_shared<Graphics::GeometoryShader>(shaderPath + "Particle/Geometry/Quad_GS");
     auto ps = std::make_shared<Graphics::PixelShader>(shaderPath + "2D/Texture2D_Color_PS");
-    auto cs = std::make_shared<Graphics::ComputeShader>(shaderPath + "Particle/Blackhole/CS", info);
-    auto vs = std::make_shared<Graphics::VertexShader>(shaderPath + "Particle/Blackhole/VS");
+    auto cs = std::make_shared<Graphics::ComputeShader>(shaderPath + "Particle/Blackhole/Blackhole_CS", info);
+    auto vs = std::make_shared<Graphics::VertexShader>(shaderPath + "Particle/Blackhole/Blackhole_VS");
     {
         //パーティクルのデータ作成
         std::vector<Blackhole> particle(COUNT);
@@ -67,12 +67,12 @@ BlackholeParticle::BlackholeParticle() {
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
 
-    mGlobal.emit = -1;
+    mGlobal.emit = 1;
 }
 
-BlackholeParticle::~BlackholeParticle() { }
+GPUParticleBase::~GPUParticleBase() { }
 
-void BlackholeParticle::load(Framework::Scene::Collecter& collecter) {
+void GPUParticleBase::load(Framework::Scene::Collecter& collecter) {
     //このシーンで使用するステートを作成する
     auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
         Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
@@ -90,7 +90,7 @@ void BlackholeParticle::load(Framework::Scene::Collecter& collecter) {
     backBufferRenderer->getRenderTarget()->setEnableDepthStencil(false);
 }
 
-void BlackholeParticle::update() {
+void GPUParticleBase::update() {
     mTimer->update(Utility::Time::getInstance()->getDeltaTime());
 
     mGlobal.time = Utility::Time::getInstance()->getTime();
@@ -105,23 +105,23 @@ void BlackholeParticle::update() {
     mGPUParticle->simulate();
 }
 
-bool BlackholeParticle::isEndScene() const {
+bool GPUParticleBase::isEndScene() const {
     return false;
 }
 
-void BlackholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
+void GPUParticleBase::draw(Framework::Graphics::IRenderer* pipeline) {
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.3f));
-    Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
-    Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
+    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.3f));
+    //Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
+    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
     Utility::getConstantBufferManager()->send();
 
     mGPUParticle->draw();
 }
 
-void BlackholeParticle::unload() {
+void GPUParticleBase::unload() {
     Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
 
     backBufferRenderer->getPipeline()->setRasterizerState(mPrevRasterizer);
@@ -129,6 +129,6 @@ void BlackholeParticle::unload() {
     backBufferRenderer->getRenderTarget()->setEnableDepthStencil(true);
 }
 
-Define::SceneType BlackholeParticle::next() {
+Define::SceneType GPUParticleBase::next() {
     return Define::SceneType();
 }

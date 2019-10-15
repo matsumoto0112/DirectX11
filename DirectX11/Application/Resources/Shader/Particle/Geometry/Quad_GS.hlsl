@@ -1,3 +1,6 @@
+#ifndef INCLUDE_PARTICLE_GEOMERTRY_QUAD_GS_HLSL
+#define INCLUDE_PARTICLE_GEOMERTRY_QUAD_GS_HLSL
+
 #include "../../Utility/ShaderDefine.hlsli"
 
 struct GSInput
@@ -51,3 +54,5 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> output)
     output.Append(o);
     output.RestartStrip();
 }
+
+#endif // INCLUDE_PARTICLE_GEOMERTRY_QUAD_GS_HLSL

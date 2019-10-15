@@ -21,16 +21,16 @@ class Timer;
 * @class RandomColorParticle
 * @brief ランダム色パーティクルテストシーン
 */
-class BlackholeParticle : public Framework::Scene::SceneBase {
+class GPUParticleBase : public Framework::Scene::SceneBase {
 public:
     /**
     * @brief コンストラクタ
     */
-    BlackholeParticle();
+    GPUParticleBase();
     /**
     * @brief デストラクタ
     */
-    ~BlackholeParticle();
+    ~GPUParticleBase();
     /**
     * @brief シーン読み込み処理
     */
@@ -55,7 +55,7 @@ public:
     * @brief 次のシーン
     */
     virtual Framework::Define::SceneType next() override;
-private:
+protected:
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
     static constexpr int THREAD_X = 16, THREAD_Y = 4;

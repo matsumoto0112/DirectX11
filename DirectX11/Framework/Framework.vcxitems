@@ -136,6 +136,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\Texture2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\AABB3D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Math.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />

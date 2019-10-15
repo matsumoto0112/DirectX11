@@ -232,5 +232,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\IMaterial.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\MaterialProperty.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Material\ModelMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Math\Math.h" />
   </ItemGroup>
 </Project>
