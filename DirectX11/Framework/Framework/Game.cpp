@@ -51,13 +51,13 @@ int Game::run() {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        else {
-            Utility::Time::getInstance()->startFrame();
-            update();
-            draw();
-            Utility::Time::getInstance()->endFrame();
-            Utility::Time::getInstance()->wait();
-        }
+        //else {
+        //    Utility::Time::getInstance()->startFrame();
+        //    update();
+        //    draw();
+        //    Utility::Time::getInstance()->endFrame();
+        //    Utility::Time::getInstance()->wait();
+        //}
     }
 
     finalize();

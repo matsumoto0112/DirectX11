@@ -39,7 +39,29 @@
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d3dCompiler.lib")
 
-
+class PaintPoc : public Framework::Window::IWindowProc {
+    using PerFrameFunc = std::function<void(void)>;
+public:
+    PaintPoc(PerFrameFunc perFrameFunc) : mPerFrameFunc(perFrameFunc) { }
+    /**
+    * @brief デストラクタ
+    */
+    virtual ~PaintPoc() { }
+    /**
+    * @brief ウィンドウプロシージャ
+    */
+    virtual LRESULT CALLBACK wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, BOOL* isReturn) override {
+        switch (msg) {
+        case WM_PAINT:
+            *isReturn = TRUE;
+            mPerFrameFunc();
+            break;
+        }
+        return 0L;
+    }
+private:
+    PerFrameFunc mPerFrameFunc;
+};
 
 using namespace Framework;
 
@@ -62,6 +84,13 @@ private:
         auto window = Device::GameDevice::getInstance()->getWindow();
         window->setProcedureEvent(new Window::ImGUIProc());
         window->setProcedureEvent(new Window::DestroyProc());
+        window->setProcedureEvent(new PaintPoc([&]() {
+            Utility::Time::getInstance()->startFrame();
+            this->update(); 
+            this->draw();
+            Utility::Time::getInstance()->endFrame();
+            Utility::Time::getInstance()->wait();
+        }));
         window->setProcedureEvent(new Window::CloseProc());
 
         mSceneManager = std::make_unique<Scene::Manager>();
@@ -123,7 +152,8 @@ private:
 int main() {
     try {
         MyGame().run();
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e) {
         MY_ERROR_WINDOW(false, e.what());
     }
 }
