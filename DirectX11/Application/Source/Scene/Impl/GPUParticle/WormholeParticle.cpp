@@ -76,7 +76,7 @@ WormholeParticle::WormholeParticle()
     AddField::addFloatField(*mWindow, "RADIUS", mGPUParameter.radius, 0.0f, 30.0f);
     AddField::addFloatField(*mWindow, "SPEED", mCPUParameter.mSpeed, 0.0f, 100.0f);
     AddField::addFloatField(*mWindow, "MAX_Y", mCPUParameter.mMaxYPosition, 0.0f, 100.0f);
-    AddField::addFloatField(*mWindow, "RUN_NUM", mCPUParameter.mCurrentRunsGPUParticleNum, 0, mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM);
+    AddField::addIntField(*mWindow, "RUN_NUM", mCPUParameter.mCurrentRunsGPUParticleNum, 0, mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM);
 }
 
 WormholeParticle::~WormholeParticle() { }
