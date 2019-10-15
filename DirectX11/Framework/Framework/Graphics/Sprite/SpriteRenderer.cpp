@@ -35,8 +35,8 @@ SpriteRenderer::SpriteRenderer() {
     mVertexBuffer = std::make_unique<VertexBuffer>(vertices);
     mIndexBuffer = std::make_unique<IndexBuffer>(PrimitiveVertex::quadIndex(), PrimitiveVertex::QuadPrimitiveTopology);
 
-    std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>(Define::Path::getInstance()->shader() + "2D/Texture2D_VS.cso");
-    std::shared_ptr<PixelShader> ps = std::make_shared<PixelShader>(Define::Path::getInstance()->shader() + "2D/Texture2D_PS.cso");
+    std::shared_ptr<VertexShader> vs = std::make_shared<VertexShader>(Define::Path::getInstance()->shader() + "NoDelete/Texture2D_VS.cso");
+    std::shared_ptr<PixelShader> ps = std::make_shared<PixelShader>(Define::Path::getInstance()->shader() + "NoDelete/Texture2D_PS.cso");
     mEffect = std::make_shared<Effect>(vs, ps);
     mSampler = std::make_unique<Sampler>(TextureAddressMode::Wrap,
         TextureFilterMode::MinMagMipLinear);
@@ -64,7 +64,9 @@ void SpriteRenderer::draw(Sprite2D* sprite, std::shared_ptr<Effect> effect) {
     ConstantBufferManager* cmanager = Utility::getConstantBufferManager();
 
     //エフェクト
-    effect->set();
+    if (effect) {
+        effect->set();
+    }
 
     //テクスチャデータ
     sprite->getTexture()->setData(ShaderInputType::Pixel, 0);

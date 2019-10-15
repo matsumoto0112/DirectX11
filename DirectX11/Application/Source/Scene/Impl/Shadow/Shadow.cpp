@@ -88,6 +88,7 @@ std::vector<Utility::Transform> mTransform;
 std::unique_ptr<Graphics::Sampler> mDefaultSampler;
 
 std::shared_ptr<Graphics::Sprite2D> mSprite;
+std::shared_ptr<Graphics::Effect> mDepthSpriteEffect;
 std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
 std::shared_ptr<DepthRenderer> mDepthRenderer;
@@ -168,6 +169,12 @@ Shadow::Shadow() {
         mat->mColor.mData = Graphics::Color4(0.0f, 1.0f, 1.0f, 1.0f);
     }
 
+    std::string shaderPath = Define::Path::getInstance()->shader();
+    mDepthSpriteEffect = std::make_shared<Graphics::Effect>(
+        std::make_shared<Graphics::VertexShader>(shaderPath + "NoDelete/Texture2D_VS.cso"),
+        std::make_shared<Graphics::PixelShader>(shaderPath + "ShadowMap/Depth_PS.cso"));
+    mSprite->setEffect(mDepthSpriteEffect);
+    mSprite->setScale(Math::Vector2(0.25f, 0.25f));
 }
 
 Shadow::~Shadow() { }
@@ -208,7 +215,7 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     mDefaultSampler->setData(Graphics::ShaderInputType::Pixel, 0);
 
     {
-        //renderer->render(mSprite.get());
+        renderer->render(mSprite.get());
         for (auto&& tr : mTransform) {
             static_cast<Graphics::ModelMaterial*>(mModel->getMaterial().get())->mWorldMatrix.mData = tr.createSRTMatrix();
             renderer->render(mModel.get());

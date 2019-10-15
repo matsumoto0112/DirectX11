@@ -32,7 +32,7 @@ Sprite2D::Sprite2D(std::shared_ptr<Texture> texture)
 Sprite2D::~Sprite2D() { }
 
 void Sprite2D::draw() {
-    SpriteRenderer::getInstance()->draw(this);
+    SpriteRenderer::getInstance()->draw(this,mEffect);
 }
 
 void Sprite2D::setPivot(const Math::Vector2& pivot, PivotBase base) {

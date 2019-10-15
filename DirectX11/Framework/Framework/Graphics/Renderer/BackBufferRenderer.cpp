@@ -17,7 +17,7 @@ BackBufferRenderer::BackBufferRenderer(std::shared_ptr<Texture2D>backBufferTextu
             Viewport(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
             backColor),
         std::make_shared<Pipeline>(
-            std::make_shared<AlphaBlend>(BlendStateDesc::BLEND_DESC(AlphaBlendType::Default)),
+            std::make_shared<AlphaBlend>(BlendStateDesc::BLEND_DESC(AlphaBlendType::Alignment)),
             std::make_shared<RasterizerState>(&RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::Back)))) { }
 
 BackBufferRenderer::~BackBufferRenderer() { }
