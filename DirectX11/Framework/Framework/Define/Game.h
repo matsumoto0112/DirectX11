@@ -7,7 +7,7 @@ namespace Define {
 */
 class Game {
 public:
-    static constexpr unsigned int FPS = 15; //!< FPS
+    static constexpr unsigned int FPS = 60; //!< FPS
 };
 
 } //Define 

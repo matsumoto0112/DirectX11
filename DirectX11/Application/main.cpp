@@ -89,7 +89,7 @@ private:
             this->update(); 
             this->draw();
             Utility::Time::getInstance()->endFrame();
-            Utility::Time::getInstance()->wait();
+            //Utility::Time::getInstance()->wait();
         }));
         window->setProcedureEvent(new Window::CloseProc());
 
