@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Framework/Scene/SceneBase.h"
+#include "Framework/Graphics/Shader/ComputeShader.h"
 
 namespace Framework {
 namespace Graphics {
@@ -17,6 +18,22 @@ class Timer;
 } //Utility 
 } //Framework 
 
+struct GPUParticleInfo : public Framework::Graphics::ComputeShader::Info {
+    GPUParticleInfo(const Framework::Graphics::ComputeShader::Info& info)
+        :Framework::Graphics::ComputeShader::Info{ info }{}
+public:
+    UINT COUNT() {
+        return threadX * threadY * threadZ * dispatchX * dispatchY * dispatchZ;
+    }
+};
+
+struct GlobalData {
+    int emit;
+    float time;
+    float deltaTime;
+    float dummy[1];
+};
+
 /**
 * @class RandomColorParticle
 * @brief ランダム色パーティクルテストシーン
@@ -26,7 +43,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    GPUParticleBase();
+    GPUParticleBase(const GPUParticleInfo& info, const Framework::Math::ViewInfo& viewInfo);
     /**
     * @brief デストラクタ
     */
@@ -56,28 +73,13 @@ public:
     */
     virtual Framework::Define::SceneType next() override;
 protected:
+    std::vector<float> createRandomTable() const;
+protected:
+    static constexpr int RANDOM_MAX = 65535;
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
-    static constexpr int THREAD_X = 16, THREAD_Y = 4;
-    static constexpr int DISPATCH_X = 1, DISPATCH_Y = 8;
-    static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
-    static constexpr int RANDOM_MAX = 65535;
-
-    struct Blackhole {
-        Framework::Math::Vector3 position;
-        float radius;
-        float theta;
-        Framework::Graphics::Color4 color;
-    };
-
-    struct GlobalData {
-        int emit;
-        float time;
-        float deltaTime;
-        float dummy[1];
-    };
-    std::unique_ptr<Framework::Utility::Timer> mTimer; //!< パーティクルタイマー
-    std::unique_ptr<Framework::Graphics::GPUParticle> mGPUParticle; //!< パーティクル
+    GPUParticleInfo mInfo;
+    std::vector<std::unique_ptr<Framework::Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
     std::unique_ptr<Framework::Graphics::ConstantBuffer<GlobalData>> mGlobalDataCB; //<! グローバルデータ用コンスタントバッファ
     GlobalData mGlobal;
     std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer; //!< 前シーンのラスタライザの状態

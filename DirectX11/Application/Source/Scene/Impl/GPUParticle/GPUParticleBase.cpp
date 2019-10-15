@@ -22,49 +22,16 @@
 
 using namespace Framework;
 
-GPUParticleBase::GPUParticleBase() {
+GPUParticleBase::GPUParticleBase(const GPUParticleInfo& info, const Math::ViewInfo& viewInfo)
+    :mInfo(info) {
     //カメラの初期化
     m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
-        Math::ViewInfo{ Math::Vector3(0,0,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
-        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,1000.0f });
+        viewInfo,
+        Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,100.0f });
 
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
-    ////コンピュートシェーダ作成
-    //Graphics::ComputeShader::Info info{ DISPATCH_X,DISPATCH_Y,1,THREAD_X,THREAD_Y,1 };
-    //auto cs = ShaderLoad::loadCS("Particle/Blackhole/CS", info);
-    //{
-    //    //パーティクルのデータ作成
-    //    std::vector<Blackhole> particle(COUNT);
-    //    for (int i = 0; i < COUNT; i++) {
-    //        particle[i] = Blackhole{ Math::Vector3::ZERO,0.0f,0.0f,Graphics::Color4::WHITE };
-    //    }
-    //    cs->addUAVEnableVertexBuffer(1, particle, 0);
-
-    //    std::vector<float> randomTable(RANDOM_MAX);
-    //    for (int i = 0; i < RANDOM_MAX; i++) {
-    //        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
-    //    }
-    //    cs->addSRV(0, randomTable);
-
-    //    std::vector<int> randomSeed{ 0 };
-    //    cs->addUAV(0, randomSeed);
-    //}
-
-
     mGlobalDataCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
-
-    //mGPUParticle = std::make_unique<Graphics::GPUParticle>(COUNT,
-    //    Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Smoke.png"),
-    //    cs,
-    //    ShaderLoad::loadVS("Particle/Blackhole/VS"),
-    //    ShaderLoad::loadPS("2D/Texture2D_Color_PS"),
-    //    ShaderLoad::loadGS("Particle/Geometry/Quad_GS"));
-
-
-    mTimer = std::make_unique<Utility::Timer>(10.0f);
-    mTimer->init();
-
     mGlobal.emit = 1;
 }
 
@@ -89,18 +56,14 @@ void GPUParticleBase::load(Framework::Scene::Collecter& collecter) {
 }
 
 void GPUParticleBase::update() {
-    mTimer->update(Utility::Time::getInstance()->getDeltaTime());
-
     mGlobal.time = Utility::Time::getInstance()->getTime();
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     //グローバルデータのセット
+    mGlobal.emit = 0;
     mGlobalDataCB->setBuffer(mGlobal);
     mGlobalDataCB->sendBuffer();
 
-    mGlobal.emit = 0;
-
-    mGPUParticle->simulate();
 }
 
 bool GPUParticleBase::isEndScene() const {
@@ -110,13 +73,7 @@ bool GPUParticleBase::isEndScene() const {
 void GPUParticleBase::draw(Framework::Graphics::IRenderer* pipeline) {
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
-
-    //Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.3f));
-    //Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
-    //Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
     Utility::getConstantBufferManager()->send();
-
-    mGPUParticle->draw();
 }
 
 void GPUParticleBase::unload() {
@@ -129,4 +86,12 @@ void GPUParticleBase::unload() {
 
 Define::SceneType GPUParticleBase::next() {
     return Define::SceneType();
+}
+
+std::vector<float> GPUParticleBase::createRandomTable() const {
+    std::vector<float> randomTable(RANDOM_MAX);
+    for (int i = 0; i < RANDOM_MAX; i++) {
+        randomTable[i] = Utility::Random::getInstance()->range(0.0f, 1.0f);
+    }
+    return randomTable;
 }

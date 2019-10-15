@@ -9,7 +9,7 @@
 #define THREAD_Y (32)
 #define THREAD_Z (1)
 
-#define DISPATCH_X (1)
+#define DISPATCH_X (4)
 #define DISPATCH_Y (1)
 #define DISPATCH_Z (1)
 

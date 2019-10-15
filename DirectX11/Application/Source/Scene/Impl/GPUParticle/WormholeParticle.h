@@ -1,26 +1,11 @@
 #pragma once
 #include <memory>
-#include "Framework/Scene/SceneBase.h"
-
-namespace Framework {
-namespace Graphics {
-class AlphaBlend;
-class OrthographicCamera;
-class PerspectiveCamera;
-class GPUParticle;
-class RasterizerState;
-template <class T>
-class ConstantBuffer;
-} //Graphics 
-namespace Utility {
-class Timer;
-} //Utility 
-} //Framework 
+#include "Source/Scene/Impl/GPUParticle/GPUParticleBase.h"
 
 /**
 * @class WormholeParticle
 */
-class WormholeParticle : public Framework::Scene::SceneBase {
+class WormholeParticle : public GPUParticleBase {
 public:
     /**
     * @brief コンストラクタ
@@ -30,10 +15,6 @@ public:
     * @brief デストラクタ
     */
     ~WormholeParticle();
-    /**
-    * @brief シーン読み込み処理
-    */
-    virtual void load(Framework::Scene::Collecter& collecter) override;
     /**
     * @brief 更新
     */
@@ -46,22 +27,7 @@ public:
     * @brief 描画
     */
     virtual void draw(Framework::Graphics::IRenderer* pipeline) override;
-    /**
-    * @brief 終了処理
-    */
-    virtual void unload() override;
-    /**
-    * @brief 次のシーン
-    */
-    virtual Framework::Define::SceneType next() override;
 private:
-    std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
-    std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
-    static constexpr int THREAD_X = 32, THREAD_Y = 32;
-    static constexpr int DISPATCH_X = 1, DISPATCH_Y = 1;
-    static constexpr int COUNT = THREAD_X * THREAD_Y * DISPATCH_X * DISPATCH_Y;
-    static constexpr int RANDOM_MAX = 65535;
-
     struct Particle {
         float lifeTime;
         float speed;
@@ -69,17 +35,4 @@ private:
         Framework::Math::Vector3 velocity;
         Framework::Graphics::Color4 color;
     };
-
-
-    struct GlobalData {
-        int emit;
-        float time;
-        float deltaTime;
-        float dummy[1];
-    };
-    std::unique_ptr<Framework::Utility::Timer> mTimer; //!< パーティクルタイマー
-    std::unique_ptr<Framework::Graphics::ConstantBuffer<GlobalData>> mGlobalDataCB; //<! グローバルデータ用コンスタントバッファ
-    GlobalData mGlobal;
-    std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer; //!< 前シーンのラスタライザの状態
-    std::shared_ptr<Framework::Graphics::AlphaBlend> mPrevAlphaBlend; //!< 前シーンのアルファブレンドの状態
 };
