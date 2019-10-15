@@ -1,3 +1,6 @@
+#ifndef INCLUDE_SHADOWMAP_SHADOWMAPCREATE_VS_HLSL
+#define INCLUDE_SHADOWMAP_SHADOWMAPCREATE_VS_HLSL
+
 #include "../Utility/ShaderDefine.hlsli"
 
 struct VSInput
@@ -18,3 +21,5 @@ PSInput main(const VSInput input)
     o.pos = mul(o.pos, lightMat.proj);
     return o;
 }
+
+#endif // INCLUDE_SHADOWMAP_SHADOWMAPCREATE_VS_HLSL

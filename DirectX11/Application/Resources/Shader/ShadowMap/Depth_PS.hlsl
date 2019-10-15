@@ -1,3 +1,5 @@
+#ifndef INCLUDE_SHADOWMAP_DEPTH_PS_HLSL
+#define INCLUDE_SHADOWMAP_DEPTH_PS_HLSL
 
 Texture2D<float> tex : register(t0);
 SamplerState samplerState : register(s0);
@@ -13,3 +15,5 @@ float4 main(PSInput input) : SV_TARGET
     float dep = tex.Sample(samplerState, input.uv);
     return float4(dep, dep, dep, 1.0f);
 }
+
+#endif // INCLUDE_SHADOWMAP_DEPTH_PS_HLSL

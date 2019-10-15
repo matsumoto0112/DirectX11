@@ -1,3 +1,6 @@
+#ifndef INCLUDE_SHADOWMAP_SHADOWMAP_PS_HLSL
+#define INCLUDE_SHADOWMAP_SHADOWMAP_PS_HLSL
+
 #include "../Utility/ShaderDefine.hlsli"
 
 Texture2D<float> depth : register(t0);
@@ -24,3 +27,5 @@ float4 main(PSInput input) : SV_TARGET
     }
     return o;
 }
+
+#endif // INCLUDE_SHADOWMAP_SHADOWMAP_PS_HLSL

@@ -1,3 +1,6 @@
+#ifndef INCLUDE_SHADOWMAP_SHADOWMAP_VS_HLSL
+#define INCLUDE_SHADOWMAP_SHADOWMAP_VS_HLSL
+
 #include "../Utility/ShaderDefine.hlsli"
 
 struct VSInput
@@ -20,3 +23,5 @@ PSInput main(VSInput input)
     o.ZCalc = mul(o.ZCalc, lightMat.proj);
     return o;
 }
+
+#endif // INCLUDE_SHADOWMAP_SHADOWMAP_VS_HLSL
