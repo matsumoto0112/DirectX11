@@ -19,43 +19,41 @@
 #include "Framework/Graphics/Desc/RasterizerStateDesc.h"
 #include "Framework/Graphics/Desc/BlendStateDesc.h"
 
+#include "Source/Utility/ImGUI/AddField.h"
 using namespace Framework;
 
 namespace {
-constexpr int NUM = 128;
-
-struct ParticleParameter {
-    UINT index;
-    Math::Vector3 spot;
-    Math::Vector3 center;
-    float radius;
-};
-
-std::unique_ptr<Graphics::ConstantBuffer<ParticleParameter>> mParameterCB; //<! パラメータ用コンスタントバッファ
-ParticleParameter mParameter;
-std::unique_ptr<ImGUI::Window> mWindow;
 std::shared_ptr<ImGUI::Text> mText;
-int mNum;
-float mSpeed;
-float mMaxYPosition;
-
 }
 
 WormholeParticle::WormholeParticle()
     :GPUParticleBase(GPUParticleInfo({ 32, 32, 1, 4, 1, 1 }),
         { Math::Vector3(0,30,-30),Math::Vector3(0,0,0),Math::Vector3::UP }) {
 
-    mParameterCB = std::make_unique<Graphics::ConstantBuffer<ParticleParameter>>(Graphics::ShaderInputType::Compute, 1);
+    mParameterCB = std::make_unique<Graphics::ConstantBuffer<ParticleGPUParameter>>(Graphics::ShaderInputType::Compute, 1);
+
+    //最大パーティクル粒子数はMAX_RUNS_GPUPARTICLE_NUM * スレッド数 * ディスパッチ数
+    mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM = 256;
+    mCPUParameter.mSpeed = 30.0f;
+    mCPUParameter.mCurrentRunsGPUParticleNum = 10;
+    mCPUParameter.mMaxYPosition = 20.0f;
+    mGPUParameter.index = -1;
+    mGPUParameter.spot = Math::Vector3::ZERO;
+    mGPUParameter.radius = 10.0f;
+    mGPUParameter.center = Math::Vector3::ZERO;
+
     auto gs = ShaderLoad::loadGS("Particle/Geometry/Cube_GS");
     auto ps = ShaderLoad::loadPS("Particle/Output_Color_PS");
     auto vs = ShaderLoad::loadVS("Particle/Wormhole/VS");
 
     auto randomTable = createRandomTable();
-    for (int i = 0; i < NUM; i++) {
+
+    //最大実行パーティクル数までパーティクル生成
+    for (int i = 0; i < mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM; i++) {
         auto cs = ShaderLoad::loadCS("Particle/Wormhole/CS", mInfo);
 
         //パーティクルのデータ作成
-        std::vector<Particle> particle(mInfo.COUNT(), { 0 });
+        std::vector<Particle> particle(mInfo.COUNT());
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
@@ -71,49 +69,31 @@ WormholeParticle::WormholeParticle()
             gs));
     }
 
-    mSpeed = 30.0f;
-    mParameter.index = -1;
-    mParameter.spot = Math::Vector3::ZERO;
-    mParameter.radius = 10.0f;
-    mNum = 10;
-    mMaxYPosition = 20.0f;
 
-    mWindow = std::make_unique<ImGUI::Window>("Parameter");
     mText = std::make_shared<ImGUI::Text>("");
     mWindow->addItem(mText);
 
-#define ADD_CHANGE_FIELD(name,var,min,max) { \
-    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name,var,[&](float val){var = val;}); \
-    mWindow->addItem(field); \
-    field->setMinValue(min); \
-    field->setMaxValue(max); \
-    }
-
-    ADD_CHANGE_FIELD(RADIUS, mParameter.radius, 0.0f, 30.0f);
-    ADD_CHANGE_FIELD(SPEED, mSpeed, 0.0f, 100.0f);
-    ADD_CHANGE_FIELD(MAX_Y, mMaxYPosition, 0.0f, 100.0f);
-    ADD_CHANGE_FIELD(NUM, mNum, 0, NUM);
+    AddField::addFloatField(*mWindow, "RADIUS", mGPUParameter.radius, 0.0f, 30.0f);
+    AddField::addFloatField(*mWindow, "SPEED", mCPUParameter.mSpeed, 0.0f, 100.0f);
+    AddField::addFloatField(*mWindow, "MAX_Y", mCPUParameter.mMaxYPosition, 0.0f, 100.0f);
+    AddField::addFloatField(*mWindow, "RUN_NUM", mCPUParameter.mCurrentRunsGPUParticleNum, 0, mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM);
 }
 
 WormholeParticle::~WormholeParticle() { }
 
 void WormholeParticle::update() {
     GPUParticleBase::update();
-    mParameter.index = (mParameter.index + 1) % (mInfo.threadX * mInfo.threadY);
+    mGPUParameter.index = (mGPUParameter.index + 1) % (mInfo.threadX * mInfo.threadY);
 
-    mParameter.spot.y += 1.0f * mSpeed *  Utility::Time::getInstance()->getDeltaTime();
-    if (mParameter.spot.y > mMaxYPosition)mParameter.spot.y -= Math::MathUtility::abs(mMaxYPosition) * 2;
-    mParameter.center = mParameter.spot + Math::Vector3(0, -10, 0);
-    mParameterCB->setBuffer(mParameter);
+    mGPUParameter.spot.y += 1.0f * mCPUParameter.mSpeed *  Utility::Time::getInstance()->getDeltaTime();
+    if (mGPUParameter.spot.y > mCPUParameter.mMaxYPosition) mGPUParameter.spot.y -= Math::MathUtility::abs(mCPUParameter.mMaxYPosition) * 2;
+    mGPUParameter.center = mGPUParameter.spot + Math::Vector3(0, -10, 0);
+    mParameterCB->setBuffer(mGPUParameter);
     mParameterCB->sendBuffer();
 
-    for (int i = 0; i < mNum; i++) {
+    for (int i = 0; i < mCPUParameter.mCurrentRunsGPUParticleNum; i++) {
         mGPUParticle[i]->simulate();
     }
-}
-
-bool WormholeParticle::isEndScene() const {
-    return false;
 }
 
 void WormholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
@@ -124,10 +104,10 @@ void WormholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
     Utility::getConstantBufferManager()->send();
 
-    for (int i = 0; i < mNum; i++) {
+    for (int i = 0; i < mCPUParameter.mCurrentRunsGPUParticleNum; i++) {
         mGPUParticle[i]->draw();
     }
 
-    mText->setText(Utility::StringBuilder("") << mNum * mInfo.COUNT());
+    mText->setText(Utility::StringBuilder("") << mCPUParameter.mCurrentRunsGPUParticleNum * mInfo.COUNT());
     mWindow->draw();
 }

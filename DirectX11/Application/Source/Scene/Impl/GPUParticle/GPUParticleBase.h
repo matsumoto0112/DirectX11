@@ -84,4 +84,5 @@ protected:
     GlobalData mGlobal;
     std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer; //!< 前シーンのラスタライザの状態
     std::shared_ptr<Framework::Graphics::AlphaBlend> mPrevAlphaBlend; //!< 前シーンのアルファブレンドの状態
+    std::unique_ptr<Framework::ImGUI::Window> mWindow;
 };

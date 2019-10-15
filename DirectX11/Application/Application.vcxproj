@@ -77,6 +77,7 @@
     <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
+    <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
     <ClCompile Include="Source\Utility\Shader\ShaderLoad.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -96,6 +97,7 @@
     <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
+    <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
     <ClInclude Include="Source\Utility\Shader\ShaderLoad.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

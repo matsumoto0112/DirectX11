@@ -33,6 +33,8 @@ GPUParticleBase::GPUParticleBase(const GPUParticleInfo& info, const Math::ViewIn
 
     mGlobalDataCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
     mGlobal.emit = 1;
+
+    mWindow = std::make_unique<ImGUI::Window>("Parameter");
 }
 
 GPUParticleBase::~GPUParticleBase() { }

@@ -9,6 +9,7 @@
     <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
     <ClCompile Include="Source\Utility\Shader\ShaderLoad.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
+    <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -21,6 +22,7 @@
     <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
     <ClInclude Include="Source\Utility\Shader\ShaderLoad.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
+    <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
