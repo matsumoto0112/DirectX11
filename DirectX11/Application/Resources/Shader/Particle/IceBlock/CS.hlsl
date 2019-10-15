@@ -1,4 +1,9 @@
-#include "../Compute/ComputeShaderDefine.hlsli"
+#ifndef INCLUDE_PARTICLE_ICEBLOCK_CS_HLSL
+#define INCLUDE_PARTICLE_ICEBLOCK_CS_HLSL
+
+#include "../../Utility/ComputeShaderDefine.hlsli"
+#include "../Util/GPUParticleDefine.hlsli"
+#include "../Util/UtilFunc.hlsli"
 
 #define THREAD_X (32)
 #define THREAD_Y (32)
@@ -28,14 +33,13 @@ struct FallParticle
 #define COLOR_OFFSET (4 * 16)
 #define PARTICLE_SIZE (4 * 20)
 
-cbuffer GlobalData : register(b0)
+cbuffer EmitParameter : register(b1)
 {
-    float deltaTime; //!< 前フレームからの差分時間
-    float gravity; //!< 毎秒かかる重力
     float3 center;
 };
 
 RWByteAddressBuffer particles : register(u1);
+static const float GRAVITY = 9.8f;
 
 static const float MaxAlpha = 1.0f;
 
@@ -128,7 +132,7 @@ void updateParticle(int index)
     float3 pos = getPosition(index) + vel * deltaTime;
     particles.Store3(index + POSITION_OFFSET, asuint(pos));
 
-    vel.y -= gravity * deltaTime;
+    vel.y -= GRAVITY * deltaTime;
     //地面より下に行ったら速度を反転させ、勢いを減らす
     if (pos.y < -3 && vel.y < 0)
     {
@@ -171,3 +175,5 @@ void main(const CSInput input)
         resetParticle(addr);
     }
 }
+
+#endif // INCLUDE_PARTICLE_ICEBLOCK_CS_HLSL

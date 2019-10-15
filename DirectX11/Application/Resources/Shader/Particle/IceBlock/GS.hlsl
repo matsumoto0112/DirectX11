@@ -1,4 +1,7 @@
-#include "../Utility/ShaderDefine.hlsli"
+#ifndef INCLUDE_PARTICLE_ICEBLOCK_GS_HLSL
+#define INCLUDE_PARTICLE_ICEBLOCK_VS_HLSL
+
+#include "../../Utility/ShaderDefine.hlsli"
 
 struct GSInput
 {
@@ -91,3 +94,5 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> output)
             output.RestartStrip();
     }
 }
+
+#endif // INCLUDE_PARTICLE_ICEBLOCK_VS_HLSL

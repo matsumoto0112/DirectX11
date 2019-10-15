@@ -19,7 +19,7 @@ enum class SceneType {
     BlackholeParticle,
     FallParticle,
     FallBounceParticle,
-    FallBounceRotateParticle,
+    IceBlock,
     SpotInstancerParticle,
     FireworkParticle,
     FlashParticle,

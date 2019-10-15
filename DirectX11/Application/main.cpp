@@ -25,7 +25,7 @@
 #include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
 #include "Source/Scene/Impl/GPUParticle/FallParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FallBounceParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/FallBounceRotateParticle.h"
+#include "Source/Scene/Impl/GPUParticle/IceBlock.h"
 //#include "Source/Scene/Impl/GPUParticle/SpotInstancerParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FireworkParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
@@ -79,7 +79,7 @@ private:
             mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
             mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
             //mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
-            //mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
+            mSceneManager->registerScene(SceneType::IceBlock, std::make_unique<IceBlock>());
             //mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
             //mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
             //mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
@@ -95,7 +95,7 @@ private:
             ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
             ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
             //ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
-            //ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
+            ADD_SCENE_JUMP_BUTTON(IceBlock, SceneType::IceBlock);
             //ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);
             //ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
             //ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
@@ -115,8 +115,8 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::IRenderer* pipeline = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
-        mSceneManager->draw(pipeline);
+        Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
+        mSceneManager->draw(renderer);
         mGlobalWindow->draw();
         Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
         ATLASSERT(_CrtCheckMemory());
@@ -136,5 +136,6 @@ int main() {
     }
     catch (const std::exception& e) {
         MY_ERROR_WINDOW(false, e.what());
+        return -1;
     }
 }

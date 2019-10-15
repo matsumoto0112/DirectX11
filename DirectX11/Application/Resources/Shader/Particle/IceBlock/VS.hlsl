@@ -1,3 +1,6 @@
+#ifndef INCLUDE_PARTICLE_ICEBLOCK_VS_HLSL
+#define INCLUDE_PARTICLE_ICEBLOCK_VS_HLSL
+
 struct FallParticle
 {
     float lifeTime : IN_LIFETIME; //!< ¶‘¶ŽžŠÔ
@@ -26,3 +29,5 @@ VSOutput main(const FallParticle input)
     o.color = input.color;
     return o;
 }
+
+#endif // INCLUDE_PARTICLE_ICEBLOCK_VS_HLSL

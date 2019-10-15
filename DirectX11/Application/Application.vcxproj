@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\IceBlock.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\IceBlock.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
@@ -161,6 +163,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Particle\Blackhole\VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\IceBlock\CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\IceBlock\GS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle\IceBlock\VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
