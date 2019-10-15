@@ -23,7 +23,7 @@
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"
 #include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
+#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FallBounceParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/FallBounceRotateParticle.h"
 //#include "Source/Scene/Impl/GPUParticle/SpotInstancerParticle.h"
@@ -77,7 +77,7 @@ private:
         {
             using Define::SceneType;
             mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-            //mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
+            mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
             //mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
             //mSceneManager->registerScene(SceneType::FallBounceRotateParticle, std::make_unique<FallBounceRotateParticle>());
             //mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
@@ -93,7 +93,7 @@ private:
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
             mGlobalWindow->addItem(mFPSText);
             ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
-            //ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
+            ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
             //ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
             //ADD_SCENE_JUMP_BUTTON(FallBounceRotateParticle, SceneType::FallBounceRotateParticle);
             //ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);

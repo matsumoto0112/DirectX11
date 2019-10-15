@@ -22,7 +22,7 @@ struct GPUParticleInfo : public Framework::Graphics::ComputeShader::Info {
     GPUParticleInfo(const Framework::Graphics::ComputeShader::Info& info)
         :Framework::Graphics::ComputeShader::Info{ info }{}
 public:
-    UINT COUNT() {
+    UINT particleNum() {
         return threadX * threadY * threadZ * dispatchX * dispatchY * dispatchZ;
     }
 };

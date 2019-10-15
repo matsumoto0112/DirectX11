@@ -1,4 +1,9 @@
-#include "../Compute/ComputeShaderDefine.hlsli"
+#ifndef INCLUDE_PARTICLE_FALL_CS_HLSL
+#define INCLUDE_PARTICLE_FALL_CS_HLSL
+
+#include "../Util/GPUParticleDefine.hlsli"
+#include "../Util/UtilFunc.hlsli"
+#include "../../Utility/ComputeShaderDefine.hlsli"
 
 #define THREAD_X (16)
 #define THREAD_Y (16)
@@ -22,13 +27,8 @@ struct FallParticle
 #define COLOR_OFFSET (4 * 7)
 #define PARTICLE_SIZE (4 * 11)
 
-cbuffer GlobalData : register(b0)
-{
-    float deltaTime; //!< 前フレームからの差分時間
-    float gravity; //!< 毎秒かかる重力
-};
-
 RWByteAddressBuffer particles : register(u1);
+static const float GRAVITY = 9.8f;
 
 float3 getPosition(int index)
 {
@@ -93,7 +93,7 @@ void updateParticle(int index)
 {
     float3 vel = getVelocity(index);
     particles.Store3(index + POSITION_OFFSET, asuint(getPosition(index) + vel * deltaTime));
-    vel.y -= gravity * deltaTime;
+    vel.y -= GRAVITY * deltaTime;
 
     particles.Store3(index + VELOCITY_OFFSET, asuint(vel));
 
@@ -118,3 +118,5 @@ void main(const CSInput input)
         resetParticle(addr);
     }
 }
+
+#endif // INCLUDE_PARTICLE_FALL_CS_HLSL

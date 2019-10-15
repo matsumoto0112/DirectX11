@@ -10,6 +10,7 @@
     <ClCompile Include="Source\Utility\Shader\ShaderLoad.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
     <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="Source\Utility\Shader\ShaderLoad.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
     <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
@@ -47,6 +49,8 @@
     <FxCompile Include="Resources\Shader\Particle\Wormhole\CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Geometry\Cube_GS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Output_Color_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall\VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Fall\CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

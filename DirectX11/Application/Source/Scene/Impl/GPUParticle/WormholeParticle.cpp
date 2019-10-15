@@ -53,7 +53,7 @@ WormholeParticle::WormholeParticle()
         auto cs = ShaderLoad::loadCS("Particle/Wormhole/CS", mInfo);
 
         //パーティクルのデータ作成
-        std::vector<Particle> particle(mInfo.COUNT());
+        std::vector<Particle> particle(mInfo.particleNum());
         cs->addUAVEnableVertexBuffer(1, particle, 0);
 
         cs->addSRV(0, randomTable);
@@ -61,7 +61,7 @@ WormholeParticle::WormholeParticle()
 
         cs->addUAV(0, randomSeed);
 
-        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(mInfo.COUNT(),
+        mGPUParticle.emplace_back(std::make_unique<Graphics::GPUParticle>(mInfo.particleNum(),
             Graphics::TextureLoader().load(Define::Path::getInstance()->texture() + "Circle.png"),
             cs,
             vs,
@@ -108,6 +108,6 @@ void WormholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
         mGPUParticle[i]->draw();
     }
 
-    mText->setText(Utility::StringBuilder("") << mCPUParameter.mCurrentRunsGPUParticleNum * mInfo.COUNT());
+    mText->setText(Utility::StringBuilder("") << mCPUParameter.mCurrentRunsGPUParticleNum * mInfo.particleNum());
     mWindow->draw();
 }
