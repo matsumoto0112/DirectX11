@@ -12,7 +12,7 @@ public:
     /**
     * @brief コンストラクタ
     */
-    RasterizerState(const D3D11_RASTERIZER_DESC* desc);
+    RasterizerState(const D3D11_RASTERIZER_DESC& desc);
     /**
     * @brief デストラクタ
     */

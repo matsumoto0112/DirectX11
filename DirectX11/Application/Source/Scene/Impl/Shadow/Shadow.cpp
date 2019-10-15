@@ -111,7 +111,7 @@ Shadow::Shadow() {
     std::shared_ptr<Graphics::RenderTargetView> rtv;
     std::shared_ptr<Graphics::Pipeline> pipeline = std::make_shared<Graphics::Pipeline>(
         std::make_shared<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Alignment)),
-        std::make_shared<Graphics::RasterizerState>(&Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None)));
+        std::make_shared<Graphics::RasterizerState>(Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None)));
     createRTV(Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), &rtv, &mSprite);
     mDepthRenderer = std::make_unique<DepthRenderer>(rtv, pipeline);
 

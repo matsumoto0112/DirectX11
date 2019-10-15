@@ -18,7 +18,7 @@ BackBufferRenderer::BackBufferRenderer(std::shared_ptr<Texture2D>backBufferTextu
             backColor),
         std::make_shared<Pipeline>(
             std::make_shared<AlphaBlend>(BlendStateDesc::BLEND_DESC(AlphaBlendType::Alignment)),
-            std::make_shared<RasterizerState>(&RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::Back)))) { }
+            std::make_shared<RasterizerState>(RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::Back)))) { }
 
 BackBufferRenderer::~BackBufferRenderer() { }
 

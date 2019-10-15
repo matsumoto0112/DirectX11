@@ -62,13 +62,17 @@ public:
     * @brief ImGUI管理者の取得
     */
     ImGUI::Manager* getImGUIManager() const { return mImGUIManager.get(); }
+    /**
+    * @brief 最終描画対象のレンダラーを取得する
+    */
+    BackBufferRenderer* getRenderer() const { return mBackBufferRenderer.get(); }
 private:
     UINT mWidth;
     UINT mHeight;
     std::unique_ptr<GraphicsDevice> mGraphicsDevice; //!< グラフィックデバイス
     std::unique_ptr<ConstantBufferManager> mConstantBufferManager; //!< コンスタントバッファ管理
     std::unique_ptr<CameraManager> mCameraManager; //!< カメラ管理者
-    std::unique_ptr<BackBufferRenderer> mBackBufferRenderer;
+    std::unique_ptr<BackBufferRenderer> mBackBufferRenderer; //!< バックバッファ描画
     std::unique_ptr<Sampler> mDefaultSampler; //!< サンプラー
     std::unique_ptr<ImGUI::Manager> mImGUIManager; //!< ImGUIの管理
 };

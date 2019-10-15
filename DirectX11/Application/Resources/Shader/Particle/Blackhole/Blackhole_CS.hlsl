@@ -48,7 +48,7 @@ float getTheta(int index)
 
 void resetParticle(int index)
 {
-    float radius = getRandom() * 3.0f + 1.0f;
+    float radius = getRandom() * 1.0f + 1.0f;
     particles.Store(index + RADIUS_OFFSET, asuint(radius));
 
     float theta = getRandom() * 360.0f;

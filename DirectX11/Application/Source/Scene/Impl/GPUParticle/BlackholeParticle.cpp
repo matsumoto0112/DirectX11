@@ -17,6 +17,7 @@
 #include "Framework/Graphics/Desc/BlendStateDesc.h"
 #include "Framework/Graphics/Texture/TextureLoader.h"
 #include "Framework/Define/Path.h"
+#include "Framework/Graphics/Desc/RasterizerStateDesc.h"
 
 using namespace Framework;
 
@@ -45,6 +46,8 @@ std::unique_ptr<Graphics::ConstantBuffer<GlobalData>> mCB; //<! グローバルデータ
 Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
 std::unique_ptr<Utility::Timer> mTimer;
 GlobalData mGlobal;
+std::shared_ptr<Graphics::RasterizerState> rasterizer;
+std::shared_ptr<Graphics::AlphaBlend> alpha;
 
 std::unique_ptr<Graphics::AlphaBlend> createAlphaBlend() {
     return std::make_unique<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
@@ -106,7 +109,10 @@ BlackholeParticle::BlackholeParticle() {
     rasterizerDesc.SlopeScaledDepthBias = 0;
     Graphics::DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&rasterizerDesc, &ras);
     Graphics::DX11InterfaceAccessor::getContext()->RSSetState(ras.Get());
-
+    rasterizer = std::make_shared<Graphics::RasterizerState>(
+        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
+    alpha = std::make_shared<Graphics::AlphaBlend>(
+        Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Add));
     mTimer = std::make_unique<Utility::Timer>(10.0f);
     mTimer->init();
 
@@ -115,7 +121,12 @@ BlackholeParticle::BlackholeParticle() {
 
 BlackholeParticle::~BlackholeParticle() { }
 
-void BlackholeParticle::load(Framework::Scene::Collecter & collecter) { }
+void BlackholeParticle::load(Framework::Scene::Collecter& collecter) {
+    Utility::getRenderingManager()->getRenderer()->getPipeline()->setRasterizerState(rasterizer);
+    Utility::getRenderingManager()->getRenderer()->getPipeline()->setAlphaBlend(alpha);
+    Utility::getRenderingManager()->getRenderer()->getRenderTarget()->setEnableDepthStencil(false);
+    int a = 0;
+}
 
 void BlackholeParticle::update() {
     mTimer->update(Utility::Time::getInstance()->getDeltaTime());
@@ -141,7 +152,7 @@ void BlackholeParticle::draw(Framework::Graphics::IRenderer* pipeline) {
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
-    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+    Utility::getConstantBufferManager()->setColor(Graphics::ConstantBufferParameterType::Color, Graphics::Color4(1.0f, 1.0f, 1.0f, 0.3f));
     Math::Matrix4x4 m = Math::Matrix4x4::createScale(Math::Vector3(0.1f, 0.1f, 1.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World3D, m);
     Utility::getConstantBufferManager()->send();

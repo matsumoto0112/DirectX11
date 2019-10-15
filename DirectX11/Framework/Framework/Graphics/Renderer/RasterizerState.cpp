@@ -4,8 +4,8 @@
 namespace Framework {
 namespace Graphics {
 
-RasterizerState::RasterizerState(const D3D11_RASTERIZER_DESC* desc) {
-    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateRasterizerState(desc, &mRasterizer));
+RasterizerState::RasterizerState(const D3D11_RASTERIZER_DESC& desc) {
+    throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateRasterizerState(&desc, &mRasterizer));
 }
 
 RasterizerState::~RasterizerState() { }

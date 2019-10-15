@@ -55,6 +55,7 @@ private:
     Viewport mViewport; //!< ビューポート
 private:
     PROPERTY(Color4, mBackColor, BackColor);
+    PROPERTY(bool, mEnableDepthStencil, EnableDepthStencil);
 };
 
 } //Graphics 

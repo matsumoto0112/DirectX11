@@ -35,7 +35,14 @@ public:
     * @param drawable 描画対象
     */
     virtual void render(IDrawable* drawable) = 0;
+    /**
+    * @brief 描画ターゲットを取得する
+    */
     std::shared_ptr<Graphics::RenderTargetView> getRenderTarget() const { return mRenderTarget; }
+    /**
+    * @brief 描画ステートを取得する
+    */
+    std::shared_ptr<Graphics::Pipeline> getPipeline() const { return mPipeline; }
 protected:
     std::shared_ptr<Graphics::RenderTargetView> mRenderTarget;
     std::shared_ptr<Graphics::Pipeline> mPipeline;

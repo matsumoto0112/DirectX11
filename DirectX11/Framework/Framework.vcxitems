@@ -35,8 +35,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Math\3DPrimitive\OBB3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Utility\Collision.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Path.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Game.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Buffer\IndexBuffer.cpp" />
@@ -142,9 +140,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Game.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\DepthStencilDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Path.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Camera.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\CameraType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\Primitive.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\SceneType.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Game.h" />
