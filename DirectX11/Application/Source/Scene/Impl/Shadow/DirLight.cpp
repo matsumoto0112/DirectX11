@@ -34,7 +34,7 @@ LightMatrix mLightMatrixData;
 
 DirLight::DirLight() {
     //ƒJƒƒ‰‚Ì‰Šú‰»
-    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<DebugCamera>(
         Math::ViewInfo{ Math::Vector3(0,10,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,300.0f });
 
@@ -140,6 +140,8 @@ void DirLight::draw(Framework::Graphics::IRenderer* renderer) {
         }
         //renderer->render(mFloor.get());
     }
+
+    m3DCamera->drawControlWindow();
 }
 
 void DirLight::unload() {

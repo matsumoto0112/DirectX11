@@ -81,6 +81,7 @@
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
+    <ClCompile Include="Source\Utility\DebugCamera.cpp" />
     <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
     <ClCompile Include="Source\Utility\Shader\ShaderLoad.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -141,6 +142,7 @@
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
+    <ClInclude Include="Source\Utility\DebugCamera.h" />
     <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
     <ClInclude Include="Source\Utility\Shader\ShaderLoad.h" />
     <ClInclude Include="stdafx.h" />
