@@ -32,7 +32,7 @@ GPUParticleBase::GPUParticleBase(const GPUParticleInfo& info, const Math::ViewIn
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     mGlobalDataCB = std::make_unique<Graphics::ConstantBuffer<GlobalData>>(Graphics::ShaderInputType::Compute, 0);
-    mGlobal.emit = 1;
+    mGlobal.emit = 0;
 
     mWindow = std::make_unique<ImGUI::Window>("Parameter");
 }
@@ -62,10 +62,8 @@ void GPUParticleBase::update() {
     mGlobal.deltaTime = Utility::Time::getInstance()->getDeltaTime();
 
     //グローバルデータのセット
-    mGlobal.emit = 0;
     mGlobalDataCB->setBuffer(mGlobal);
     mGlobalDataCB->sendBuffer();
-
 }
 
 bool GPUParticleBase::isEndScene() const {

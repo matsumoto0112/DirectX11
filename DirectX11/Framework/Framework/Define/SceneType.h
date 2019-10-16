@@ -27,6 +27,7 @@ enum class SceneType {
     WormholeParticle,
     RenderModel,
     Shadow,
+    Firefly,
 };
 
 } //Define 

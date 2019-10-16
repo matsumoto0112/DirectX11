@@ -12,6 +12,7 @@
     <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\IceBlock.cpp" />
+    <ClCompile Include="Source\Scene\Impl\GPUParticle\Firefly.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\IceBlock.h" />
+    <ClInclude Include="Source\Scene\Impl\GPUParticle\Firefly.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
@@ -56,6 +58,11 @@
     <FxCompile Include="Resources\Shader\Particle\IceBlock\CS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\IceBlock\VS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\IceBlock\GS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firefly\CS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firefly\VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firefly\GS.hlsl" />
+    <FxCompile Include="Resources\Shader\Particle\Firefly\PS.hlsl" />
+    <FxCompile Include="Resources\Shader\MRT\Blend_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

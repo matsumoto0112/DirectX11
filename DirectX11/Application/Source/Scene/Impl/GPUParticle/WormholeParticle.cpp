@@ -49,7 +49,7 @@ WormholeParticle::WormholeParticle()
     auto randomTable = createRandomTable();
 
     //最大実行パーティクル数までパーティクル生成
-    for (int i = 0; i < mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM; i++) {
+    for (UINT i = 0; i < mCPUParameter.MAX_RUNS_GPUPARTICLE_NUM; i++) {
         auto cs = ShaderLoad::loadCS("Particle/Wormhole/CS", mInfo);
 
         //パーティクルのデータ作成

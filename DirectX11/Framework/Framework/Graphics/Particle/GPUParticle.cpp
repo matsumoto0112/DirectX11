@@ -15,17 +15,18 @@ GPUParticle::GPUParticle(UINT maxParticleNum,
     mComputeShader(cs),
     mVertexShader(vs),
     mPixelShader(ps),
-    mGeometoryShader(gs) {}
+    mGeometoryShader(gs) { }
 
 
-GPUParticle::~GPUParticle() {}
+GPUParticle::~GPUParticle() { }
 
 void GPUParticle::simulate() {
     mComputeShader->set();
 }
 
 void GPUParticle::draw() {
-    mTexture->setData(Graphics::ShaderInputType::Pixel, 0);
+    if (mTexture)
+        mTexture->setData(Graphics::ShaderInputType::Pixel, 0);
     mComputeShader->setToVertexBuffer();
     mVertexShader->set();
     mPixelShader->set();
