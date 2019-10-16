@@ -13,6 +13,7 @@
     <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\IceBlock.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\Firefly.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -29,6 +30,7 @@
     <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\IceBlock.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\Firefly.h" />
+    <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />

@@ -49,6 +49,10 @@ using namespace Framework;
     }); \
     mGlobalWindow->addItem(btn); \
 }
+#define BUILD_SCENE(name,type,scene) { \
+    mSceneManager->registerScene(type, scene); \
+    ADD_SCENE_JUMP_BUTTON(name,type); \
+}
 
 class MyGame : public Game {
 public:
@@ -81,7 +85,6 @@ private:
             //mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
             ////mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
             //mSceneManager->registerScene(SceneType::IceBlock, std::make_unique<IceBlock>());
-            mSceneManager->registerScene(SceneType::Firefly, std::make_unique<Firefly>());
             ////mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
             ////mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
             ////mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
@@ -89,22 +92,18 @@ private:
             //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
             //mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
             //mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
-            mSceneManager->loadScene(SceneType::Firefly);
 
             mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
             mGlobalWindow->addItem(mFPSText);
-            ADD_SCENE_JUMP_BUTTON(BlackholeParticle, SceneType::BlackholeParticle);
-            ADD_SCENE_JUMP_BUTTON(FallParticle, SceneType::FallParticle);
-            //ADD_SCENE_JUMP_BUTTON(FallBounceParticle, SceneType::FallBounceParticle);
-            ADD_SCENE_JUMP_BUTTON(IceBlock, SceneType::IceBlock);
-            //ADD_SCENE_JUMP_BUTTON(SpotInstancerParticle, SceneType::SpotInstancerParticle);
-            //ADD_SCENE_JUMP_BUTTON(FireworkParticle, SceneType::FireworkParticle);
-            //ADD_SCENE_JUMP_BUTTON(FlashParticle, SceneType::FlashParticle);
-            //ADD_SCENE_JUMP_BUTTON(ShotParticle, SceneType::ShotParticle);
-            ADD_SCENE_JUMP_BUTTON(WormholeParticle, SceneType::WormholeParticle);
-            ADD_SCENE_JUMP_BUTTON(Shadow, SceneType::Shadow);
-            ADD_SCENE_JUMP_BUTTON(RenderModel, SceneType::RenderModel);
+            BUILD_SCENE(FireFly, SceneType::Firefly, std::make_unique<Firefly>());
+            BUILD_SCENE(BlackholeParticle, SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+            BUILD_SCENE(FallParticle, SceneType::FallParticle, std::make_unique<FallParticle>());
+            BUILD_SCENE(IceBlock, SceneType::IceBlock, std::make_unique<IceBlock>());
+            BUILD_SCENE(WormholeParticle, SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+            BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
+            BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
+            mSceneManager->loadScene(SceneType::Firefly);
         }
 
         ATLASSERT(_CrtCheckMemory());
