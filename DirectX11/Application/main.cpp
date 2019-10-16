@@ -25,17 +25,13 @@
 #include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
 #include "Source/Scene/Impl/GPUParticle/Firefly.h"
 #include "Source/Scene/Impl/GPUParticle/FallParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/FallBounceParticle.h"
 #include "Source/Scene/Impl/GPUParticle/IceBlock.h"
-//#include "Source/Scene/Impl/GPUParticle/SpotInstancerParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/FireworkParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/FlashParticle.h"
-//#include "Source/Scene/Impl/GPUParticle/ShotParticle.h"
 #include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
 #include "Source/Scene/Impl/Shadow/Shadow.h"
 #include "Source/Scene/Impl/RenderModel.h"
 #include "Framework/Define/Config.h"
 #include "Source/Scene/Impl/Shadow/DirLight.h"
+#include "Source/Scene/Impl/Light/NormalizedLambert.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -105,7 +101,8 @@ private:
             BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
             BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
             BUILD_SCENE(DirLight, SceneType::DirLight, std::make_unique<DirLight>());
-            mSceneManager->loadScene(SceneType::IceBlock);
+            BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert>());
+            mSceneManager->loadScene(SceneType::NormalizedLambert);
         }
 
         ATLASSERT(_CrtCheckMemory());

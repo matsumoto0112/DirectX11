@@ -92,11 +92,7 @@ std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
 std::shared_ptr<DepthRenderer> mDepthRenderer;
 
-struct LightMatrix {
-    Math::Matrix4x4 view;
-    Math::Matrix4x4 proj;
-};
-LightMatrix mLightMatrixData;
+Graphics::LightMatrixCBuffer mLightMatrixData;
 
 }
 Shadow::Shadow() {
@@ -146,8 +142,8 @@ Shadow::Shadow() {
         }
     }
 
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-5,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
-    mLightMatrixData.proj = m3DCamera->getProjection();
+    mLightMatrixData.lightView = Math::Matrix4x4::createView({ Math::Vector3(-5,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
+    mLightMatrixData.lightProj = m3DCamera->getProjection();
 
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
@@ -193,8 +189,8 @@ void Shadow::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
     Graphics::ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.view);
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.proj);
+    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.lightView);
+    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.lightProj);
 
     mDepthRenderer->begin();
     {

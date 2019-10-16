@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Scene\Impl\GPUParticle\Firefly.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
     <ClCompile Include="Source\Utility\DebugCamera.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Source\Scene\Impl\GPUParticle\Firefly.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
     <ClInclude Include="Source\Utility\DebugCamera.h" />
+    <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
@@ -69,6 +71,8 @@
     <FxCompile Include="Resources\Shader\MRT\Blend_PS.hlsl" />
     <FxCompile Include="Resources\Shader\Lighting\DirLight\VS.hlsl" />
     <FxCompile Include="Resources\Shader\Lighting\DirLight\PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Lighting\NormalizedLambert_VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Lighting\NormalizedLambert_PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -1,4 +1,4 @@
-#include "DirLight.h"
+#include "NormalizedLambert.h"
 #include "Framework/Graphics/Desc/BlendStateDesc.h"
 #include "Framework/Graphics/Camera/PerspectiveCamera.h"
 #include "Framework/Graphics/DX11InterfaceAccessor.h"
@@ -19,6 +19,7 @@
 
 using namespace Framework;
 
+namespace  {
 std::unique_ptr<Graphics::Sampler> mDefaultSampler;
 std::shared_ptr<Graphics::Model> mModel;
 std::vector<Utility::Transform> mTransform;
@@ -26,9 +27,10 @@ std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
 
 Graphics::LightMatrixCBuffer mLightMatrixData;
+}  
 
 
-DirLight::DirLight() {
+NormalizedLambert::NormalizedLambert() {
     //カメラの初期化
     m3DCamera = std::make_shared<DebugCamera>(
         Math::ViewInfo{ Math::Vector3(0,10,-10),Math::Vector3(0,0,0),Math::Vector3::UP },
@@ -52,8 +54,8 @@ DirLight::DirLight() {
     }
 
     {
-        auto vs = ShaderLoad::loadVS("Lighting/DirLight/VS");
-        auto ps = ShaderLoad::loadPS("Lighting/DirLight/PS");
+        auto vs = ShaderLoad::loadVS("Lighting/NormalizedLambert_VS");
+        auto ps = ShaderLoad::loadPS("Lighting/NormalizedLambert_PS");
 
         mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(vert),
             std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
@@ -72,7 +74,7 @@ DirLight::DirLight() {
     mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 
     mLightMatrixData.lightView = Math::Matrix4x4::createView({ Math::Vector3(-30,0,0),Math::Vector3(0,0,0),Math::Vector3::UP });
-    mLightMatrixData.lightProj= m3DCamera->getProjection();
+    mLightMatrixData.lightProj = m3DCamera->getProjection();
 
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
@@ -91,9 +93,9 @@ DirLight::DirLight() {
     }
 }
 
-DirLight::~DirLight() { }
+NormalizedLambert::~NormalizedLambert() { }
 
-void DirLight::load(Framework::Scene::Collecter& collecter) {
+void NormalizedLambert::load(Framework::Scene::Collecter& collecter) {
     //このシーンで使用するステートを作成する
     auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
         Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
@@ -109,17 +111,17 @@ void DirLight::load(Framework::Scene::Collecter& collecter) {
     backBufferRenderer->getPipeline()->setAlphaBlend(newBlendState);
 }
 
-void DirLight::update() {
+void NormalizedLambert::update() {
     for (auto&& tr : mTransform) {
-        //tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+        tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
     }
 }
 
-bool DirLight::isEndScene() const {
+bool NormalizedLambert::isEndScene() const {
     return false;
 }
 
-void DirLight::draw(Framework::Graphics::IRenderer* renderer) {
+void NormalizedLambert::draw(Framework::Graphics::IRenderer* renderer) {
     renderer->getRenderTarget()->setBackColor(Graphics::Color4(0.0f, 0, 0, 0));
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
@@ -140,13 +142,13 @@ void DirLight::draw(Framework::Graphics::IRenderer* renderer) {
     m3DCamera->drawControlWindow();
 }
 
-void DirLight::unload() {
+void NormalizedLambert::unload() {
     Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
 
     backBufferRenderer->getPipeline()->setRasterizerState(mPrevRasterizer);
     backBufferRenderer->getPipeline()->setAlphaBlend(mPrevAlphaBlend);
 }
 
-Define::SceneType DirLight::next() {
+Define::SceneType NormalizedLambert::next() {
     return Define::SceneType();
 }

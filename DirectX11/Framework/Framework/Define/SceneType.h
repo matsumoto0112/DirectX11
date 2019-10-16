@@ -29,6 +29,7 @@ enum class SceneType {
     Shadow,
     Firefly,
     DirLight,
+    NormalizedLambert,
 };
 
 } //Define 
