@@ -28,6 +28,7 @@ enum class SceneType {
     RenderModel,
     Shadow,
     Firefly,
+    DirLight,
 };
 
 } //Define 

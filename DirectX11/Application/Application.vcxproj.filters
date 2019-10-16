@@ -65,6 +65,8 @@
     <FxCompile Include="Resources\Shader\Particle\Firefly\GS.hlsl" />
     <FxCompile Include="Resources\Shader\Particle\Firefly\PS.hlsl" />
     <FxCompile Include="Resources\Shader\MRT\Blend_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\Lighting\DirLight\VS.hlsl" />
+    <FxCompile Include="Resources\Shader\Lighting\DirLight\PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />

@@ -4,6 +4,8 @@
 
 namespace Framework {
 namespace Graphics {
+class AlphaBlend;
+class RasterizerState;
 class PerspectiveCamera;
 class OrthographicCamera;
 } //Graphics 
@@ -50,4 +52,6 @@ public:
 private:
     std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
+    std::shared_ptr<Framework::Graphics::RasterizerState> mPrevRasterizer; //!< 前シーンのラスタライザの状態
+    std::shared_ptr<Framework::Graphics::AlphaBlend> mPrevAlphaBlend; //!< 前シーンのアルファブレンドの状態
 };

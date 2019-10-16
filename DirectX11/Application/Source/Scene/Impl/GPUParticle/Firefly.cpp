@@ -137,7 +137,15 @@ Firefly::Firefly()
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
     D3D11_TEXTURE2D_DESC desc = RenderTargetViewDesc::getDefaultTexture2DDesc(width, height);
-    D3D11_VIEWPORT vp{ 0,0,width,height,0.0f,1.0f };
+    D3D11_VIEWPORT vp{
+        0,
+        0,
+        static_cast<float>(width),
+        static_cast<float>(height),
+        0.0f,
+        1.0f
+    };
+
     for (UINT n = 0; n < 2; n++) {
         texs[n] = std::make_shared<Texture2D>(&desc, nullptr);
     }
@@ -193,8 +201,8 @@ void Firefly::draw(Framework::Graphics::IRenderer* renderer) {
     mRTV->end();
 
     renderer->begin();
-    float width = Define::Config::getInstance()->getWidth();
-    float height = Define::Config::getInstance()->getHeight();
+    float width = static_cast<float>(Define::Config::getInstance()->getWidth());
+    float height = static_cast<float>(Define::Config::getInstance()->getHeight());
 
     m = Math::Matrix4x4::createScale(Math::Vector3(width, height, 1.0f));
     Utility::getConstantBufferManager()->setMatrix(Graphics::ConstantBufferParameterType::World2D, m);

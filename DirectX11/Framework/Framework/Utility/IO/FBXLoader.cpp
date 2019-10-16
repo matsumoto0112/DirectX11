@@ -162,6 +162,18 @@ std::vector<Math::Vector4> FBXLoader::getPosition() const {
     return result;
 }
 
+void FBXLoader::getPosition(std::vector<Math::Vector4>* position, std::vector<UINT>* index) {
+    *position = getPosition();
+    index->clear();
+    const size_t size = position->size();
+    index->resize(size);
+    for (int i = 0; i < size / 3; i++) {
+        (*index)[i * 3 + 0] = i * 3 + 2;
+        (*index)[i * 3 + 1] = i * 3 + 1;
+        (*index)[i * 3 + 2] = i * 3 + 0;
+    } 
+}
+
 bool FBXLoader::hasUV() const {
     const int meshNum = mScene->GetMemberCount<FbxMesh>();
     for (int i = 0; i < meshNum; i++) {

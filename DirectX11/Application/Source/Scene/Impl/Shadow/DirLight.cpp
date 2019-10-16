@@ -15,15 +15,13 @@
 #include "Framework/Graphics/Sprite/Sprite2D.h"
 #include "Framework/Graphics/Desc/RasterizerStateDesc.h"
 #include "Framework/Graphics/Texture/Sampler.h"
+#include "Source/Utility/Shader/ShaderLoad.h"
 
 using namespace Framework;
 
+std::unique_ptr<Graphics::Sampler> mDefaultSampler;
 std::shared_ptr<Graphics::Model> mModel;
 std::vector<Utility::Transform> mTransform;
-std::unique_ptr<Graphics::Sampler> mDefaultSampler;
-
-std::shared_ptr<Graphics::Sprite2D> mSprite;
-std::shared_ptr<Graphics::Effect> mDepthSpriteEffect;
 std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
 
@@ -44,19 +42,17 @@ DirLight::DirLight() {
 
     mDefaultSampler = std::make_unique<Graphics::Sampler>(Graphics::TextureAddressMode::Wrap, Graphics::TextureFilterMode::MinMagMipLinear);
 
-    Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
+    Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "pyramid.fbx");
+    //Utility::FBXLoader loader(Define::Path::getInstance()->fbxModel() + "049d62f6-093d-4a3c-940e-b2f4fad27d9d.fbx");
     //Utility::FBXLoader loader(::Define::Path::getInstance()->fbxModel() + "a2380cb0-6f46-41a7-8cde-3db2ec73e8ed.fbx");
-    std::vector<Math::Vector4> pos = loader.getPosition();
-    std::vector<UINT> indices(pos.size());
-    for (int i = 0; i < indices.size() / 3; i++) {
-        indices[i * 3 + 0] = i * 3 + 2;
-        indices[i * 3 + 1] = i * 3 + 1;
-        indices[i * 3 + 2] = i * 3 + 0;
-    }
+    std::vector<Math::Vector4> pos;
+    std::vector<UINT> indices;
+    loader.getPosition(&pos, &indices);
+    std::vector<Math::Vector3> normal = loader.getNormal();
 
     {
-        auto vs = std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_VS.cso");
-        auto ps = std::make_shared<Graphics::PixelShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMap_PS.cso");
+        auto vs = ShaderLoad::loadVS("Lighting/DirLight/VS");
+        auto ps = ShaderLoad::loadPS("Lighting/DirLight/PS");
 
         mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
             std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
@@ -67,13 +63,14 @@ DirLight::DirLight() {
     }
 
     //同じモデルを使いまわすために座標だけ複数個作っておく
-    for (float x = -2.0f; x < 2.0f; x += 1.0f) {
-        for (float z = -2.0f; z <= 2.0f; z += 1.0f) {
-            mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
-        }
-    }
+    //for (float x = -2.0f; x < 2.0f; x += 1.0f) {
+    //    for (float z = -2.0f; z <= 2.0f; z += 1.0f) {
+    //        mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
+    //    }
+    //}
+    mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-5,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(0,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
     mLightMatrixData.proj = m3DCamera->getProjection();
 
     UINT width = Define::Config::getInstance()->getWidth();
@@ -91,18 +88,25 @@ DirLight::DirLight() {
         mat->mWorldMatrix.mData = mFloorTransform.createSRTMatrix();
         mat->mColor.mData = Graphics::Color4(0.0f, 1.0f, 1.0f, 1.0f);
     }
-
-    std::string shaderPath = Define::Path::getInstance()->shader();
-    mDepthSpriteEffect = std::make_shared<Graphics::Effect>(
-        std::make_shared<Graphics::VertexShader>(shaderPath + "NoDelete/Texture2D_VS.cso"),
-        std::make_shared<Graphics::PixelShader>(shaderPath + "ShadowMap/Depth_PS.cso"));
-    mSprite->setEffect(mDepthSpriteEffect);
-    mSprite->setScale(Math::Vector2(0.25f, 0.25f));
 }
 
 DirLight::~DirLight() { }
 
-void DirLight::load(Framework::Scene::Collecter& collecter) { }
+void DirLight::load(Framework::Scene::Collecter& collecter) {
+    //このシーンで使用するステートを作成する
+    auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
+        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::Back));
+    auto newBlendState = std::make_shared<Graphics::AlphaBlend>(
+        Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Alignment));
+
+    //前の状態をコピーしておく
+    //シーン終了時にもとに戻してあげる
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+    mPrevRasterizer = backBufferRenderer->getPipeline()->getRasterizerState();
+    mPrevAlphaBlend = backBufferRenderer->getPipeline()->getAlphaBlend();
+    backBufferRenderer->getPipeline()->setRasterizerState(newRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(newBlendState);
+}
 
 void DirLight::update() {
     for (auto&& tr : mTransform) {
@@ -115,29 +119,30 @@ bool DirLight::isEndScene() const {
 }
 
 void DirLight::draw(Framework::Graphics::IRenderer* renderer) {
-    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0, 0, 0, 0));
+    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0.3f, 0, 0, 0));
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
     Graphics::ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
     cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.view);
     cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.proj);
-
-    renderer->begin();
-    mSprite->getTexture()->setData(Graphics::ShaderInputType::Pixel, 0);
     mDefaultSampler->setData(Graphics::ShaderInputType::Pixel, 0);
 
     {
-        renderer->render(mSprite.get());
         for (auto&& tr : mTransform) {
             mModel->getMaterial<Graphics::ModelMaterial>()->mWorldMatrix.mData = tr.createSRTMatrix();
             renderer->render(mModel.get());
         }
-        renderer->render(mFloor.get());
+        //renderer->render(mFloor.get());
     }
 }
 
-void DirLight::unload() { }
+void DirLight::unload() {
+    Graphics::IRenderer* backBufferRenderer = Utility::getRenderingManager()->getRenderer();
+
+    backBufferRenderer->getPipeline()->setRasterizerState(mPrevRasterizer);
+    backBufferRenderer->getPipeline()->setAlphaBlend(mPrevAlphaBlend);
+}
 
 Define::SceneType DirLight::next() {
     return Define::SceneType();

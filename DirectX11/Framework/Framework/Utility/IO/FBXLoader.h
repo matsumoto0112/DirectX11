@@ -37,6 +37,10 @@ public:
     */
     std::vector<Math::Vector4> getPosition() const;
     /**
+    * @brief 頂点座標とそのインデックスを取得する
+    */
+    void getPosition(std::vector<Math::Vector4>* position, std::vector<UINT>* index);
+    /**
     * @brief オブジェクトがUVを持っているか
     */
     bool hasUV() const;
