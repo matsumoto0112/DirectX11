@@ -75,7 +75,7 @@ DirLight::DirLight() {
     //}
     mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(30,0,0),Math::Vector3(0,0,0),Math::Vector3::UP });
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(-30,0,0),Math::Vector3(0,0,0),Math::Vector3::UP });
     mLightMatrixData.proj = m3DCamera->getProjection();
 
     UINT width = Define::Config::getInstance()->getWidth();
@@ -115,7 +115,7 @@ void DirLight::load(Framework::Scene::Collecter& collecter) {
 
 void DirLight::update() {
     for (auto&& tr : mTransform) {
-        tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
+        //tr.setRotate(tr.getRotate() * Math::Quaternion::createRotateAboutY(1.0f));
     }
 }
 

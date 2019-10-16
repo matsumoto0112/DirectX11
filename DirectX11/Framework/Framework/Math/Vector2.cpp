@@ -137,10 +137,6 @@ Vector2 operator*(float s, const Vector2 & v) {
     return v * s;
 }
 
-Vector2 operator/(float s, const Vector2 & v) {
-    return v / s;
-}
-
 std::ostream& operator<<(std::ostream& os, const Vector2& v) {
     os << "(" << v.x << "," << v.y << ")";
     return os;

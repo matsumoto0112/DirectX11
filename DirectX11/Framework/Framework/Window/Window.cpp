@@ -63,7 +63,7 @@ bool createWindow(HWND* hWnd,
         return false;
 
     //ウィンドウの大きさがリリースモード時に違うことがあるのでここで再指定
-    return SetWindowPos(*hWnd, nullptr, position.x, position.y, clientSize.x, clientSize.y, SWP_NOZORDER);;
+    return SetWindowPos(*hWnd, nullptr, (int)position.x, (int)position.y, (int)clientSize.x, (int)clientSize.y, SWP_NOZORDER);;
 }
 }
 namespace Framework {

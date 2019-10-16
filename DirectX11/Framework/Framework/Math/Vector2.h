@@ -79,10 +79,6 @@ public:
     */
     Vector2 operator /(float s) const;
     /**
-    * @brief ƒXƒJƒ‰[œZ
-    */
-    friend Vector2 operator /(float s, const Vector2& v);
-    /**
     * @brief ‰ÁZ‘ã“ü‰‰Zq
     */
     Vector2& operator +=(const Vector2& v);
