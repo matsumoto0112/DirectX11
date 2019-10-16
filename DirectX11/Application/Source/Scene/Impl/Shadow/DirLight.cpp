@@ -49,12 +49,17 @@ DirLight::DirLight() {
     std::vector<UINT> indices;
     loader.getPosition(&pos, &indices);
     std::vector<Math::Vector3> normal = loader.getNormal();
+    std::vector<Graphics::NormalVertex> vert(pos.size());
+    for (UINT n = 0; n < pos.size(); n++) {
+        vert[n].pos = pos[n];
+        vert[n].normal = normal[n];
+    }
 
     {
         auto vs = ShaderLoad::loadVS("Lighting/DirLight/VS");
         auto ps = ShaderLoad::loadPS("Lighting/DirLight/PS");
 
-        mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(pos),
+        mModel = std::make_unique<Graphics::Model>(std::make_shared<Graphics::VertexBuffer>(vert),
             std::make_shared<Graphics::IndexBuffer>(indices, Graphics::PrimitiveTopology::TriangleList),
             std::make_shared<Graphics::Effect>(vs, ps),
             std::make_shared<Graphics::ModelMaterial>());
@@ -70,7 +75,7 @@ DirLight::DirLight() {
     //}
     mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 
-    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(0,5,0),Math::Vector3(0,0,0),Math::Vector3::UP });
+    mLightMatrixData.view = Math::Matrix4x4::createView({ Math::Vector3(30,0,0),Math::Vector3(0,0,0),Math::Vector3::UP });
     mLightMatrixData.proj = m3DCamera->getProjection();
 
     UINT width = Define::Config::getInstance()->getWidth();
@@ -95,7 +100,7 @@ DirLight::~DirLight() { }
 void DirLight::load(Framework::Scene::Collecter& collecter) {
     //このシーンで使用するステートを作成する
     auto newRasterizer = std::make_shared<Graphics::RasterizerState>(
-        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::Back));
+        Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None));
     auto newBlendState = std::make_shared<Graphics::AlphaBlend>(
         Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Alignment));
 
@@ -119,7 +124,7 @@ bool DirLight::isEndScene() const {
 }
 
 void DirLight::draw(Framework::Graphics::IRenderer* renderer) {
-    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0.3f, 0, 0, 0));
+    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0.0f, 0, 0, 0));
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 

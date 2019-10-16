@@ -32,6 +32,14 @@ struct TextureVertex3D {
 };
 
 /**
+* @brief 法線と頂点座標
+*/
+struct NormalVertex {
+    Math::Vector4 pos;
+    Math::Vector3 normal;
+};
+
+/**
 * @struct MeshVertex
 * @brief メッシュ頂点
 */
