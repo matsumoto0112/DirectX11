@@ -2,12 +2,12 @@
 #include <memory>
 #include "Framework/Scene/SceneBase.h"
 #include "Framework/Graphics/Shader/ComputeShader.h"
+#include "Source/Utility/DebugCamera.h"
 
 namespace Framework {
 namespace Graphics {
 class AlphaBlend;
 class OrthographicCamera;
-class PerspectiveCamera;
 class GPUParticle;
 class RasterizerState;
 template <class T>
@@ -77,7 +77,7 @@ protected:
 protected:
     static constexpr int RANDOM_MAX = 65535;
     std::shared_ptr<Framework::Graphics::OrthographicCamera> m2DCamera; //!< カメラ
-    std::shared_ptr<Framework::Graphics::PerspectiveCamera> m3DCamera; //!< カメラ
+    std::shared_ptr<DebugCamera> m3DCamera; //!< カメラ
     GPUParticleInfo mInfo;
     std::vector<std::unique_ptr<Framework::Graphics::GPUParticle>> mGPUParticle; //!< パーティクル
     std::unique_ptr<Framework::Graphics::ConstantBuffer<GlobalData>> mGlobalDataCB; //<! グローバルデータ用コンスタントバッファ

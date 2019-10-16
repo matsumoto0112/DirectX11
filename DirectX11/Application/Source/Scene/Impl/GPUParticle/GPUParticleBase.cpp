@@ -25,7 +25,7 @@ using namespace Framework;
 GPUParticleBase::GPUParticleBase(const GPUParticleInfo& info, const Math::ViewInfo& viewInfo)
     :mInfo(info) {
     //ƒJƒƒ‰‚Ì‰Šú‰»
-    m3DCamera = std::make_shared<Graphics::PerspectiveCamera>(
+    m3DCamera = std::make_shared<DebugCamera>(
         viewInfo,
         Math::ProjectionInfo{ 45.0f,Define::Config::getInstance()->getSize(),0.1f,100.0f });
 
@@ -71,6 +71,7 @@ bool GPUParticleBase::isEndScene() const {
 }
 
 void GPUParticleBase::draw(Framework::Graphics::IRenderer* pipeline) {
+    m3DCamera->drawControlWindow();
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
     Utility::getConstantBufferManager()->send();
