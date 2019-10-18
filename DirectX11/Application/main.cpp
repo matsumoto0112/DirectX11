@@ -32,6 +32,7 @@
 #include "Framework/Define/Config.h"
 #include "Source/Scene/Impl/Shadow/DirLight.h"
 #include "Source/Scene/Impl/Light/NormalizedLambert.h"
+#include "Source/Scene/Impl/Light/NormalizedLambert_NewRendering.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -93,15 +94,16 @@ private:
             mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
             mGlobalWindow->addItem(mFPSText);
-            BUILD_SCENE(FireFly, SceneType::Firefly, std::make_unique<Firefly>());
-            BUILD_SCENE(BlackholeParticle, SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-            BUILD_SCENE(FallParticle, SceneType::FallParticle, std::make_unique<FallParticle>());
-            BUILD_SCENE(IceBlock, SceneType::IceBlock, std::make_unique<IceBlock>());
-            BUILD_SCENE(WormholeParticle, SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-            BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
-            BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
-            BUILD_SCENE(DirLight, SceneType::DirLight, std::make_unique<DirLight>());
-            BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert>());
+            //BUILD_SCENE(FireFly, SceneType::Firefly, std::make_unique<Firefly>());
+            //BUILD_SCENE(BlackholeParticle, SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+            //BUILD_SCENE(FallParticle, SceneType::FallParticle, std::make_unique<FallParticle>());
+            //BUILD_SCENE(IceBlock, SceneType::IceBlock, std::make_unique<IceBlock>());
+            //BUILD_SCENE(WormholeParticle, SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+            //BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
+            //BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
+            //BUILD_SCENE(DirLight, SceneType::DirLight, std::make_unique<DirLight>());
+            //BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert>());
+            BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert_NewRendering>());
             mSceneManager->loadScene(SceneType::NormalizedLambert);
         }
 

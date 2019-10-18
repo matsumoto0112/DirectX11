@@ -79,6 +79,7 @@
     <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
     <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
     <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.cpp" />
     <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
     <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
@@ -139,6 +140,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
     </FxCompile>
+    <ClInclude Include="Source\Rendering\RenderingList.h" />
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
     <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
     <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert.h" />
+    <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.h" />
     <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
     <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />

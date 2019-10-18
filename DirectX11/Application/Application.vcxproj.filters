@@ -16,6 +16,7 @@
     <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
     <ClCompile Include="Source\Utility\DebugCamera.cpp" />
     <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert.cpp" />
+    <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -35,6 +36,8 @@
     <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
     <ClInclude Include="Source\Utility\DebugCamera.h" />
     <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert.h" />
+    <ClInclude Include="Source\Rendering\RenderingList.h" />
+    <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Model\Model_VS.hlsl" />
