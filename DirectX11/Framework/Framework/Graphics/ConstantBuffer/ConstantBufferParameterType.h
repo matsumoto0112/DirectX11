@@ -20,6 +20,8 @@ enum class ConstantBufferParameterType {
     Color, //!< 色
     LightView, //!< ライトビュー行列
     LightProj, //!< ライトプロジェクション行列
+    DirectionalLightDirection,
+    DirectionalLightColor,
 };
 
 } //Graphics 

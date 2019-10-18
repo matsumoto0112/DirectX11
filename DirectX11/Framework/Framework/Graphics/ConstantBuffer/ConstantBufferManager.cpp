@@ -9,7 +9,8 @@ ConstantBufferManager::ConstantBufferManager()
     : mMatrixBufferManager(std::make_unique<ConstantBufferTypeManager<Math::Matrix4x4>>()),
     mFloatBufferManager(std::make_unique<ConstantBufferTypeManager<float>>()),
     mColorBufferManager(std::make_unique<ConstantBufferTypeManager<Color4>>()),
-    mIntBufferManager(std::make_unique<ConstantBufferTypeManager<int>>()) {
+    mIntBufferManager(std::make_unique<ConstantBufferTypeManager<int>>()),
+    mVector4BufferManager(std::make_unique<ConstantBufferTypeManager<Math::Vector4>>()) {
     setup();
 }
 
@@ -20,6 +21,7 @@ void ConstantBufferManager::send() {
     mMVP2DCBuffer->sendBuffer();
     mUVCBuffer->sendBuffer();
     mColorCBuffer->sendBuffer();
+    mLightCBuffer->sendBuffer();
     mLightMatrixCBuffer->sendBuffer();
 }
 
@@ -41,11 +43,16 @@ void ConstantBufferManager::setInt(ConstantBufferParameterType type, int value) 
 
 void ConstantBufferManager::setBool(ConstantBufferParameterType type, bool value) { }
 
+void ConstantBufferManager::setVector4(ConstantBufferParameterType type, const Math::Vector4& value) {
+    mVector4BufferManager->set(type, value);
+}
+
 void ConstantBufferManager::clearBuffer() {
     mMVP3DCBuffer->clear();
     mMVP2DCBuffer->clear();
     mUVCBuffer->clear();
     mColorCBuffer->clear();
+    mLightCBuffer->clear();
     mLightMatrixCBuffer->clear();
 }
 
@@ -77,6 +84,10 @@ void ConstantBufferManager::setup() {
 
     mColorCBuffer = std::make_unique<ConstantBuffer<ColorCBuffer>>(inputType, 3);
     ADD_SEND_FUNC(mColorBufferManager, ConstantBufferParameterType::Color, Color4, mColorCBuffer, color);
+
+    mLightCBuffer = std::make_unique<ConstantBuffer<LightCBuffer>>(inputType, 4);
+    ADD_SEND_FUNC(mVector4BufferManager, ConstantBufferParameterType::DirectionalLightDirection, Math::Vector4, mLightCBuffer, direction);
+    ADD_SEND_FUNC(mColorBufferManager, ConstantBufferParameterType::DirectionalLightColor, Color4, mLightCBuffer, color);
 
     mLightMatrixCBuffer = std::make_unique<ConstantBuffer<LightMatrixCBuffer>>(inputType, 7);
     ADD_SEND_FUNC(mMatrixBufferManager, ConstantBufferParameterType::LightView, Math::Matrix4x4, mLightMatrixCBuffer, lightView);

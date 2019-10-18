@@ -29,6 +29,17 @@ struct UVInfo
     float height;
 };
 
+struct DirectionalLight
+{
+    float4 direction;
+    float4 color;
+};
+
+struct Light
+{
+    DirectionalLight dirLight;
+};
+
 struct LightMatrix
 {
     float4x4 view; //ライトビュー行列
@@ -59,6 +70,11 @@ cbuffer CB3 : register(b3)
     float4 color;
 }
 
+
+cbuffer Light : register(b4)
+{
+    Light light;
+};
 
 cbuffer LightMat : register(b7)
 {

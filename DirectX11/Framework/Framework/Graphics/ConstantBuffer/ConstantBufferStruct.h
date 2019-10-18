@@ -40,6 +40,12 @@ struct ColorCBuffer {
     Color4 color;
 };
 
+
+struct LightCBuffer {
+    Math::Vector4 direction;
+    Color4 color;
+};
+
 /**
 * @brief ÉâÉCÉgçsóÒ
 */

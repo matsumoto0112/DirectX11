@@ -19,8 +19,6 @@ struct PSInput
 {
     float4 pos : SV_POSITION;
     float3 normal : NORMAL;
-    float3 lightDir : LIGHTDIR;
-    float3 viewDir : VIEWDIR;
 };
 
 PSInput main(VSInput input)
@@ -28,8 +26,6 @@ PSInput main(VSInput input)
     PSInput o = (PSInput) 0;
     o.pos = mul(input.pos, WORLD_VIEW_PROJECTION_3D());
     o.normal = normalize(mul(input.normal, (float3x3) mat3D.world));
-    o.lightDir = normalize(float3(1, 1, 0));
-    o.viewDir = getViewDir(mat3D.view);
 
     return o;
 }

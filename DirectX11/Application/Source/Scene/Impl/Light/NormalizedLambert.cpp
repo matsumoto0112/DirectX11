@@ -19,15 +19,15 @@
 
 using namespace Framework;
 
-namespace  {
+namespace {
 std::unique_ptr<Graphics::Sampler> mDefaultSampler;
 std::shared_ptr<Graphics::Model> mModel;
 std::vector<Utility::Transform> mTransform;
 std::shared_ptr<Graphics::Model> mFloor;
 Utility::Transform mFloorTransform;
 
-Graphics::LightMatrixCBuffer mLightMatrixData;
-}  
+Graphics::LightCBuffer mLightData;
+}
 
 
 NormalizedLambert::NormalizedLambert() {
@@ -73,8 +73,8 @@ NormalizedLambert::NormalizedLambert() {
     //}
     mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 
-    mLightMatrixData.lightView = Math::Matrix4x4::createView({ Math::Vector3(-30,0,0),Math::Vector3(0,0,0),Math::Vector3::UP });
-    mLightMatrixData.lightProj = m3DCamera->getProjection();
+    mLightData.direction = Math::Vector4(1, 1, 0, 1);
+    mLightData.color = Graphics::Color4(1.0f, 0.0f, 0.0f, 1.0f);
 
     UINT width = Define::Config::getInstance()->getWidth();
     UINT height = Define::Config::getInstance()->getHeight();
@@ -91,6 +91,22 @@ NormalizedLambert::NormalizedLambert() {
         mat->mWorldMatrix.mData = mFloorTransform.createSRTMatrix();
         mat->mColor.mData = Graphics::Color4(0.0f, 1.0f, 1.0f, 1.0f);
     }
+
+    mDebugWindow = std::make_unique<ImGUI::Window>("Light Parameter");
+#define ADD_PARAMETE_CHANGE_FIELD(name,param,min,max) { \
+    std::shared_ptr<ImGUI::FloatField> field = std::make_shared<ImGUI::FloatField>(#name, param, [&](float val) { \
+        param = val; \
+    }); \
+    field->setMinValue(min); \
+    field->setMaxValue(max); \
+    mDebugWindow->addItem(field); \
+    }
+    ADD_PARAMETE_CHANGE_FIELD(X, mLightData.direction.x, -1.0f, 1.0f);
+    ADD_PARAMETE_CHANGE_FIELD(Y, mLightData.direction.y, -1.0f, 1.0f);
+    ADD_PARAMETE_CHANGE_FIELD(Z, mLightData.direction.z, -1.0f, 1.0f);
+    ADD_PARAMETE_CHANGE_FIELD(R, mLightData.color.r, 0.0f, 1.0f);
+    ADD_PARAMETE_CHANGE_FIELD(G, mLightData.color.g, 0.0f, 1.0f);
+    ADD_PARAMETE_CHANGE_FIELD(B, mLightData.color.b, 0.0f, 1.0f);
 }
 
 NormalizedLambert::~NormalizedLambert() { }
@@ -127,8 +143,8 @@ void NormalizedLambert::draw(Framework::Graphics::IRenderer* renderer) {
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
     Graphics::ConstantBufferManager* cbManager = Utility::getConstantBufferManager();
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightView, mLightMatrixData.lightView);
-    cbManager->setMatrix(Graphics::ConstantBufferParameterType::LightProj, mLightMatrixData.lightProj);
+    cbManager->setVector4(Graphics::ConstantBufferParameterType::DirectionalLightDirection, mLightData.direction);
+    cbManager->setColor(Graphics::ConstantBufferParameterType::DirectionalLightColor, mLightData.color);
     mDefaultSampler->setData(Graphics::ShaderInputType::Pixel, 0);
 
     {
@@ -139,6 +155,7 @@ void NormalizedLambert::draw(Framework::Graphics::IRenderer* renderer) {
         //renderer->render(mFloor.get());
     }
 
+    mDebugWindow->draw();
     m3DCamera->drawControlWindow();
 }
 
