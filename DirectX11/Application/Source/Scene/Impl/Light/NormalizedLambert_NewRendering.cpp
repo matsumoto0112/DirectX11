@@ -105,12 +105,6 @@ NormalizedLambert_NewRendering::NormalizedLambert_NewRendering() {
         }
     }
 
-    //“¯‚¶ƒ‚ƒfƒ‹‚ğg‚¢‚Ü‚í‚·‚½‚ß‚ÉÀ•W‚¾‚¯•¡”ŒÂì‚Á‚Ä‚¨‚­
-    //for (float x = -2.0f; x < 2.0f; x += 1.0f) {
-    //    for (float z = -2.0f; z <= 2.0f; z += 1.0f) {
-    //        mTransform.emplace_back(Math::Vector3(x, 0, z), Math::Quaternion::IDENTITY, Math::Vector3(1.0f, 1.0f, 1.0f));
-    //    }
-    //}
     mTransform.emplace_back(Math::Vector3(0, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
     mTransform.emplace_back(Math::Vector3(4, 0, 0), Math::Quaternion::IDENTITY, Math::Vector3(10, 10, 10));
 

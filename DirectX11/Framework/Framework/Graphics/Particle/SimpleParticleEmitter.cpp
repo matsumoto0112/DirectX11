@@ -47,7 +47,7 @@ void SimpleParticleEmitter::simulate(float delta) {
     }
 }
 
-void SimpleParticleEmitter::draw(Pipeline* pipeline) {
+void SimpleParticleEmitter::draw(RenderState* pipeline) {
     for (auto&& particle : mParticles) {
         particle->draw(pipeline);
     }

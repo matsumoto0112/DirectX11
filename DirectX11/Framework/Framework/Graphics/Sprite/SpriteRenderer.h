@@ -13,6 +13,7 @@ class Sampler;
 class Sprite2D;
 class Sprite3D;
 class VertexBuffer;
+class RenderState;
 
 /**
 * @class SpriteRenderer
@@ -52,6 +53,7 @@ public:
 private:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< 頂点・インデックスバッファ
+    std::shared_ptr<RenderState> mRenderState; //!< 描画設定
     std::shared_ptr<Effect> mEffect; //!< エフェクト
     std::unique_ptr<Sampler> mSampler; //!< サンプラー
 };

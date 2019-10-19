@@ -5,7 +5,7 @@
 
 namespace Framework {
 namespace Graphics {
-class Pipeline;
+class RenderState;
 
 /**
 * @class ParticleEmitter
@@ -33,7 +33,7 @@ public:
     /**
     * @brief 描画
     */
-    virtual void draw(Pipeline* pipeline) = 0;
+    virtual void draw(RenderState* pipeline) = 0;
     /**
     * @brief 現在のパーティクルの数を取得
     */

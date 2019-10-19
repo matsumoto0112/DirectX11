@@ -8,20 +8,20 @@ namespace Framework {
 namespace Graphics {
 
 /**
-* @class Pipeline
+* @class RenderState
 * @brief 描画パイプライン管理クラス
 */
-class Pipeline {
+class RenderState {
 public:
     /**
     * @brief コンストラクタ
     */
-    Pipeline(std::shared_ptr<AlphaBlend> alphaBlend,
+    RenderState(std::shared_ptr<AlphaBlend> alphaBlend,
         std::shared_ptr<RasterizerState> rasterizer);
     /**
     * @brief デストラクタ
     */
-    virtual ~Pipeline();
+    virtual ~RenderState();
     /**
     * @brief 描画パイプラインをセットする
     */

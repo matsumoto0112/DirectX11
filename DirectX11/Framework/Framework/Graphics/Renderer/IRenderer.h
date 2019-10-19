@@ -17,7 +17,7 @@ public:
     * @param rtv レンダーターゲットビュー
     * @param pipeline 描画パイプライン
     */
-    IRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv, std::shared_ptr<Graphics::Pipeline> pipeline);
+    IRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv, std::shared_ptr<Graphics::RenderState> pipeline);
     /**
     * @brief デストラクタ
     */
@@ -42,10 +42,10 @@ public:
     /**
     * @brief 描画ステートを取得する
     */
-    std::shared_ptr<Graphics::Pipeline> getPipeline() const { return mPipeline; }
+    std::shared_ptr<Graphics::RenderState> getPipeline() const { return mRenderState; }
 protected:
     std::shared_ptr<Graphics::RenderTargetView> mRenderTarget;
-    std::shared_ptr<Graphics::Pipeline> mPipeline;
+    std::shared_ptr<Graphics::RenderState> mRenderState;
 };
 
 } //Graphics 

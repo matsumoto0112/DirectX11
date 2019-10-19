@@ -16,7 +16,7 @@ BackBufferRenderer::BackBufferRenderer(std::shared_ptr<Texture2D>backBufferTextu
             &DepthStencilDesc::getMSAADepthStencilViewDesc(),
             Viewport(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height))),
             backColor),
-        std::make_shared<Pipeline>(
+        std::make_shared<RenderState>(
             std::make_shared<AlphaBlend>(BlendStateDesc::BLEND_DESC(AlphaBlendType::Alignment)),
             std::make_shared<RasterizerState>(RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::Back)))) { }
 
@@ -25,7 +25,7 @@ BackBufferRenderer::~BackBufferRenderer() { }
 void BackBufferRenderer::begin() {
     mRenderTarget->clear();
     mRenderTarget->set();
-    mPipeline->setPipeline();
+    mRenderState->setPipeline();
 }
 
 void BackBufferRenderer::end() { }

@@ -51,8 +51,8 @@ public:
     * @brief コンストラクタ
     */
     DepthRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv,
-        std::shared_ptr<Graphics::Pipeline> pipeline)
-        :IRenderer(rtv, pipeline) {
+        std::shared_ptr<Graphics::RenderState> state)
+        :IRenderer(rtv, state) {
         mEffect = std::make_shared<Graphics::Effect>(
             std::make_shared<Graphics::VertexShader>(Define::Path::getInstance()->shader() + "ShadowMap/ShadowMapCreate_VS.cso"),
             nullptr);
@@ -64,7 +64,7 @@ public:
     virtual void begin() override {
         mRenderTarget->set();
         mRenderTarget->clear();
-        mPipeline->setPipeline();
+        mRenderState->setPipeline();
     }
 
     virtual void end() override {
@@ -104,11 +104,11 @@ Shadow::Shadow() {
     m2DCamera = std::make_shared<Graphics::OrthographicCamera>(Define::Config::getInstance()->getSize());
 
     std::shared_ptr<Graphics::RenderTargetView> rtv;
-    std::shared_ptr<Graphics::Pipeline> pipeline = std::make_shared<Graphics::Pipeline>(
+    std::shared_ptr<Graphics::RenderState> state = std::make_shared<Graphics::RenderState>(
         std::make_shared<Graphics::AlphaBlend>(Graphics::BlendStateDesc::BLEND_DESC(Graphics::AlphaBlendType::Alignment)),
         std::make_shared<Graphics::RasterizerState>(Graphics::RasterizerStateDesc::getDefaultDesc(Graphics::FillMode::Solid, Graphics::CullMode::None)));
     createRTV(Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), &rtv, &mSprite);
-    mDepthRenderer = std::make_unique<DepthRenderer>(rtv, pipeline);
+    mDepthRenderer = std::make_unique<DepthRenderer>(rtv, state);
 
 
     mDefaultSampler = std::make_unique<Graphics::Sampler>(Graphics::TextureAddressMode::Wrap, Graphics::TextureFilterMode::MinMagMipLinear);

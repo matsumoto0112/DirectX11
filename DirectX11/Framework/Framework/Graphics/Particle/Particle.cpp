@@ -29,7 +29,7 @@ void Particle::simulate(float delta) {
     }
 }
 
-void Particle::draw(Pipeline* pipeline) {
+void Particle::draw(RenderState* pipeline) {
     if (!mIsAlive)return;
     mSprite->setPosition(mPosition);
     //pipeline->render(mSprite);

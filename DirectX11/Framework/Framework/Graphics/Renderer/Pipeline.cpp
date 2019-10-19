@@ -4,12 +4,12 @@
 namespace Framework {
 namespace Graphics {
 
-Pipeline::Pipeline(std::shared_ptr<AlphaBlend> alphaBlend, std::shared_ptr<RasterizerState> rasterizer)
+RenderState::RenderState(std::shared_ptr<AlphaBlend> alphaBlend, std::shared_ptr<RasterizerState> rasterizer)
     :mAlphaBlend(alphaBlend), mRasterizer(rasterizer) { }
 
-Pipeline::~Pipeline() { }
+RenderState::~RenderState() { }
 
-void Pipeline::setPipeline() {
+void RenderState::setPipeline() {
     mAlphaBlend->set();
     mRasterizer->set();
 }

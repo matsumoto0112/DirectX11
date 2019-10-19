@@ -3,8 +3,8 @@
 namespace Framework {
 namespace Graphics {
 
-IRenderer::IRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv, std::shared_ptr<Graphics::Pipeline> pipeline)
-    :mRenderTarget(rtv), mPipeline(pipeline) { }
+IRenderer::IRenderer(std::shared_ptr<Graphics::RenderTargetView> rtv, std::shared_ptr<Graphics::RenderState> state)
+    :mRenderTarget(rtv), mRenderState(state) { }
 
 } //Graphics 
 } //Framework 
