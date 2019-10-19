@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Config.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11RenderingManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\RenderTargetView.cpp" />
@@ -85,6 +86,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Config.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\Render\MultiSampleQuarity.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Define\StaticConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferStruct.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\BlendStateDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Desc\RasterizerStateDesc.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\DX11RenderingManager.h" />

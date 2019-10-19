@@ -1,6 +1,10 @@
 #include "DX11RenderingManager.h"
 #include "Framework/Define/StaticConfig.h"
 #include "Framework/Graphics/Desc/RenderTargetViewDesc.h"
+#include "Framework/Graphics/Desc/RasterizerStateDesc.h"
+namespace {
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> ras;
+} // 
 
 namespace Framework {
     namespace Graphics {
@@ -101,9 +105,12 @@ namespace Framework {
             ComPtr<ID3D11Texture2D> texture;
             throwIfFailed(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texture));
             std::shared_ptr<Texture2D> texture2D = std::make_shared<Texture2D>(texture);
-            Viewport viewport(Math::Rect(0, 0, width, height));
+            Viewport viewport(Math::Rect(0, 0, static_cast<float>(width), static_cast<float>(height)));
             mBackBuffer = std::make_shared<RenderTargetView>(mDevice.Get(), texture2D,
-                nullptr, viewport, Color4(1.0f, 0.0f, 1.0f, 1.0f));
+                nullptr, viewport, Color4(0.0f, 0.0f, 0.0f, 0.0f));
+
+            D3D11_RASTERIZER_DESC rasDesc = RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::None);
+            mDevice->CreateRasterizerState(&rasDesc, &ras);
             return true;
         }
 
@@ -127,12 +134,23 @@ namespace Framework {
             mRenderTarget = renderTarget;
         }
 
+        void DX11RenderingManager::updateConstantBuffer(ConstantBufferPtr constantBuffer, void* data) {
+            constantBuffer->updateBuffer(mImmediateContext.Get(), data);
+        }
+
+        void DX11RenderingManager::setConstantBuffer(const std::string& name, ConstantBufferPtr constantBuffer) {
+            MY_ASSERTION(Utility::exist(mConstantBuffers, name), "未登録のコンスタントバッファが対象になりました");
+            constantBuffer->set(mImmediateContext.Get());
+            mConstantBuffers[name] = constantBuffer;
+        }
+
         void DX11RenderingManager::draw() {
             mVertexBuffer->set(mImmediateContext.Get());
             mIndexBuffer->set(mImmediateContext.Get());
             mVertexShader->set(mImmediateContext.Get());
             mPixelShader->set(mImmediateContext.Get());
             mRenderTarget->set(mImmediateContext.Get());
+            mImmediateContext->RSSetState(ras.Get());
             mIndexBuffer->drawCall(mImmediateContext.Get());
         }
 
