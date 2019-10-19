@@ -1,23 +1,26 @@
 #include "Viewport.h"
-#include "Framework/Graphics/DX11InterfaceAccessor.h"
 
 namespace Framework {
-namespace Graphics {
+    namespace Graphics {
 
-Viewport::Viewport(const Math::Rect& rect) {
-    mViewport.TopLeftX = rect.getX();
-    mViewport.TopLeftY = rect.getY();
-    mViewport.Width = rect.getWidth();
-    mViewport.Height = rect.getHeight();
-    mViewport.MinDepth = 0.0f;
-    mViewport.MaxDepth = 1.0f;
-}
+        Viewport::Viewport(const Math::Rect& rect) {
+            mViewport.TopLeftX = rect.getX();
+            mViewport.TopLeftY = rect.getY();
+            mViewport.Width = rect.getWidth();
+            mViewport.Height = rect.getHeight();
+            mViewport.MinDepth = 0.0f;
+            mViewport.MaxDepth = 1.0f;
+        }
 
-Viewport::~Viewport() { }
+        Viewport::~Viewport() { }
 
-void Viewport::set() {
-    DX11InterfaceAccessor::getContext()->RSSetViewports(1, &mViewport);
-}
+        void Viewport::set(ID3D11DeviceContext* context) {
+            context->RSSetViewports(1, &mViewport);
+        }
 
-} //Graphics 
+        void Viewport::clearState(ID3D11DeviceContext* context) {
+            context->RSSetViewports(1, nullptr);
+        }
+
+    } //Graphics 
 } //Framework 

@@ -1,14 +1,13 @@
 #include "VertexBuffer.h"
 
 namespace Framework {
-namespace Graphics {
+    namespace Graphics {
+        //デストラクタ
+        VertexBuffer::~VertexBuffer() { }
 
-VertexBuffer::~VertexBuffer() { }
-
-void VertexBuffer::setData() {
-    DX11InterfaceAccessor::getContext()->IASetVertexBuffers(0, 1,
-        mBuffer.GetAddressOf(), &mStride, &mOffset);
-}
-
-} //Graphics 
+        //データをセットする
+        void VertexBuffer::set(ID3D11DeviceContext * context) {
+            context->IASetVertexBuffers(0, 1, mBuffer.GetAddressOf(), &mStride, &mOffset);
+        }
+    } //Graphics 
 } //Framework 

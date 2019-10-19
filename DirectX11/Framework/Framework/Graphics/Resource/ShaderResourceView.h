@@ -6,35 +6,35 @@
 #include "Framework/Graphics/Resource/ShaderInputType.h"
 
 namespace Framework {
-namespace Graphics {
+    namespace Graphics {
 
-/**
-* @class ShaderResourceView
-* @brief シェーダーリソースビュー管理
-*/
-class ShaderResourceView {
-public:
-    /**
-    * @brief コンストラクタ
-    * @param texture リソース元のテクスチャ
-    * @param srvDesc シェーダーリソースビューデスク
-    */
-    ShaderResourceView(std::shared_ptr<Texture2D> texture, const D3D11_SHADER_RESOURCE_VIEW_DESC* srvDesc);
-    /**
-    * @brief デストラクタ
-    */
-    ~ShaderResourceView();
-    /**
-    * @brief コンテキストにデータをセットする
-    */
-    void set(ShaderInputType inputType, UINT registerNum);
-    /**;
-    * @brief シェーダーリソースビューを取得する
-    */
-    ComPtr<ID3D11ShaderResourceView> getShaderResourceView() const { return mShaderResourceView; }
-private:
-    ComPtr<ID3D11ShaderResourceView> mShaderResourceView; //!< シェーダーリソースビュー
-};
+        /**
+        * @class ShaderResourceView
+        * @brief シェーダーリソースビュー管理
+        */
+        class ShaderResourceView {
+        public:
+            /**
+            * @brief コンストラクタ
+            * @param texture リソース元のテクスチャ
+            * @param srvDesc シェーダーリソースビューデスク
+            */
+            ShaderResourceView(ID3D11Device* device, std::shared_ptr<Texture2D> texture, const D3D11_SHADER_RESOURCE_VIEW_DESC* srvDesc);
+            /**
+            * @brief デストラクタ
+            */
+            ~ShaderResourceView();
+            /**
+            * @brief コンテキストにデータをセットする
+            */
+            void set(ID3D11DeviceContext* context, ShaderInputType inputType, UINT registerNum);
+            /**;
+            * @brief シェーダーリソースビューを取得する
+            */
+            ComPtr<ID3D11ShaderResourceView> getShaderResourceView() const { return mShaderResourceView; }
+        private:
+            ComPtr<ID3D11ShaderResourceView> mShaderResourceView; //!< シェーダーリソースビュー
+        };
 
-} //Graphics 
+    } //Graphics 
 } //Framework 

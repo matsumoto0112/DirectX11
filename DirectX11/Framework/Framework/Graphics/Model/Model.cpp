@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Framework/Define/Path.h"
-#include "Framework/Utility/Wrap/OftenUsed.h"
+// #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Graphics/ConstantBuffer/ConstantBufferManager.h"
 
 namespace Framework {

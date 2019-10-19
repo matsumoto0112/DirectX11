@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Framework/Window/Window.h"
-#include "Framework/Graphics/RenderingManager.h"
+//#include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Input/InputManager.h"
 #include "Framework/Utility/Singleton.h"
 
@@ -17,7 +17,7 @@ namespace Device {
 class GameDevice : public Utility::Singleton<GameDevice> {
 private:
     using WindowPtr = std::unique_ptr<Window::Window>;
-    using RenderingManagerPtr = std::unique_ptr<Graphics::RenderingManager>;
+    //using RenderingManagerPtr = std::unique_ptr<Graphics::RenderingManager>;
     using InputManagerPtr = std::unique_ptr<Input::InputManager>;
 public:
     /**
@@ -51,10 +51,10 @@ public:
     * @brief メインウィンドウの取得
     */
     Window::Window* getWindow() const;
-    /**
-    * @brief グラフィックデバイスの取得
-    */
-    Graphics::RenderingManager* getRenderingManager() const;
+    ///**
+    //* @brief グラフィックデバイスの取得
+    //*/
+    //Graphics::RenderingManager* getRenderingManager() const;
     /**
     * @brief 入力管理デバイスの取得
     */
@@ -62,7 +62,7 @@ public:
 
 private:
     WindowPtr mMainWindow; //!< メインウィンドウ
-    RenderingManagerPtr mRenderingManager; //!< グラフィックデバイス
+    //RenderingManagerPtr mRenderingManager; //!< グラフィックデバイス
     InputManagerPtr mInputManager; //!< 入力管理
 };
 

@@ -1,7 +1,7 @@
 #include "Manager.h"
 #include "Framework/Utility/Debug.h"
-#include "Framework/Graphics/DX11InterfaceAccessor.h"
-#include "Framework/Utility/Wrap/OftenUsed.h"
+//#include "Framework/Graphics/DX11InterfaceAccessor.h"
+// #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/ImGUI/Window.h"
 
 namespace Framework {

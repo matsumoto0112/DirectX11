@@ -1,6 +1,6 @@
 #include "Sampler.h"
 #include <assert.h>
-#include "Framework/Graphics/DX11InterfaceAccessor.h"
+//#include "Framework/Graphics/DX11InterfaceAccessor.h"
 #include "Framework/Graphics/Resource/ShaderInputType.h"
 #include "Framework/Utility/Debug.h"
 

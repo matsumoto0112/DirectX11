@@ -16,23 +16,25 @@
 #include "Framework/Input/Mouse.h"
 #include "Framework/Define/Path.h"
 #include "Framework/Graphics/GraphicsDevice.h"
-#include "Framework/Graphics/RenderingManager.h"
+////#include "Framework/Graphics/RenderingManager.h"
 #include "Framework/Utility/ImGUI/Window.h"
 #include "Framework/Utility/ImGUI/Button.h"
 #include "Framework/Scene/Manager.h"
 #include "Framework/Utility/Time.h"
 #include "Framework/Graphics/Renderer/Pipeline.h"
-#include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
-#include "Source/Scene/Impl/GPUParticle/Firefly.h"
-#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
-#include "Source/Scene/Impl/GPUParticle/IceBlock.h"
-#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
-#include "Source/Scene/Impl/Shadow/Shadow.h"
-#include "Source/Scene/Impl/RenderModel.h"
+//#include "Source/Scene/Impl/GPUParticle/BlackholeParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/Firefly.h"
+//#include "Source/Scene/Impl/GPUParticle/FallParticle.h"
+//#include "Source/Scene/Impl/GPUParticle/IceBlock.h"
+//#include "Source/Scene/Impl/GPUParticle/WormholeParticle.h"
+//#include "Source/Scene/Impl/Shadow/Shadow.h"
+//#include "Source/Scene/Impl/RenderModel.h"
 #include "Framework/Define/Config.h"
-#include "Source/Scene/Impl/Shadow/DirLight.h"
-#include "Source/Scene/Impl/Light/NormalizedLambert.h"
-#include "Source/Scene/Impl/Light/NormalizedLambert_NewRendering.h"
+//#include "Source/Scene/Impl/Shadow/DirLight.h"
+//#include "Source/Scene/Impl/Light/NormalizedLambert.h"
+//#include "Source/Scene/Impl/Light/NormalizedLambert_NewRendering.h"
+#include "Source/Scene/Impl/TestScene.h"
+#include "Framework/Graphics/DX11RenderingManager.h"
 
 #pragma comment(linker, "/entry:mainCRTStartup")
 #pragma comment(linker,"/SUBSYSTEM:WINDOWS")
@@ -83,17 +85,21 @@ private:
             mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
             mGlobalWindow->addItem(mFPSText);
-            BUILD_SCENE(FireFly, SceneType::Firefly, std::make_unique<Firefly>());
-            BUILD_SCENE(BlackholeParticle, SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-            BUILD_SCENE(FallParticle, SceneType::FallParticle, std::make_unique<FallParticle>());
-            BUILD_SCENE(IceBlock, SceneType::IceBlock, std::make_unique<IceBlock>());
-            BUILD_SCENE(WormholeParticle, SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-            BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
-            BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
-            BUILD_SCENE(DirLight, SceneType::DirLight, std::make_unique<DirLight>());
-            BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert>());
+            //BUILD_SCENE(FireFly, SceneType::Firefly, std::make_unique<Firefly>());
+            //BUILD_SCENE(BlackholeParticle, SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
+            //BUILD_SCENE(FallParticle, SceneType::FallParticle, std::make_unique<FallParticle>());
+            //BUILD_SCENE(IceBlock, SceneType::IceBlock, std::make_unique<IceBlock>());
+            //BUILD_SCENE(WormholeParticle, SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
+            //BUILD_SCENE(Shadow, SceneType::Shadow, std::make_unique<Shadow>());
+            //BUILD_SCENE(RenderModel, SceneType::RenderModel, std::make_unique<RenderModel>());
+            //BUILD_SCENE(DirLight, SceneType::DirLight, std::make_unique<DirLight>());
+            //BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert>());
             //BUILD_SCENE(NormalizedLambert, SceneType::NormalizedLambert, std::make_unique<NormalizedLambert_NewRendering>());
-            mSceneManager->loadScene(SceneType::NormalizedLambert);
+            BUILD_SCENE(TestScene, SceneType::TestScene, std::make_unique<TestScene>());
+            mSceneManager->loadScene(SceneType::TestScene);
+
+            Framework::Graphics::DX11RenderingManager::getInstance()->init(window->getHWND(),
+                Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), 2, false);
         }
 
         ATLASSERT(_CrtCheckMemory());
@@ -106,10 +112,12 @@ private:
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {
-        Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
-        mSceneManager->draw(renderer);
-        mGlobalWindow->draw();
-        Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
+        Graphics::DX11RenderingManager::getInstance()->beginFrame();
+        //Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
+        //mSceneManager->draw(renderer);
+        //mGlobalWindow->draw();
+        //Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
+        Graphics::DX11RenderingManager::getInstance()->endFrame();
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void finalize() override {

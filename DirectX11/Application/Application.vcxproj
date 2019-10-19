@@ -72,20 +72,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\Firefly.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\IceBlock.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\FallParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.cpp" />
-    <ClCompile Include="Source\Scene\Impl\GPUParticle\WormholeParticle.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.cpp" />
-    <ClCompile Include="Source\Scene\Impl\RenderModel.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Shadow\DirLight.cpp" />
-    <ClCompile Include="Source\Scene\Impl\Shadow\Shadow.cpp" />
-    <ClCompile Include="Source\Utility\DebugCamera.cpp" />
+    <ClCompile Include="Source\Scene\Impl\TestScene.cpp" />
     <ClCompile Include="Source\Utility\ImGUI\AddField.cpp" />
-    <ClCompile Include="Source\Utility\Shader\ShaderLoad.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -144,20 +132,8 @@
     <ClInclude Include="Source\Scene\Data\MainData.h" />
     <ClInclude Include="Source\Scene\Data\ParticleTestData.h" />
     <ClInclude Include="Source\Scene\Data\TitleData.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\BlackholeParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\Firefly.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\IceBlock.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\FallParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\GPUParticleBase.h" />
-    <ClInclude Include="Source\Scene\Impl\GPUParticle\WormholeParticle.h" />
-    <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert.h" />
-    <ClInclude Include="Source\Scene\Impl\Light\NormalizedLambert_NewRendering.h" />
-    <ClInclude Include="Source\Scene\Impl\RenderModel.h" />
-    <ClInclude Include="Source\Scene\Impl\Shadow\DirLight.h" />
-    <ClInclude Include="Source\Scene\Impl\Shadow\Shadow.h" />
-    <ClInclude Include="Source\Utility\DebugCamera.h" />
+    <ClInclude Include="Source\Scene\Impl\TestScene.h" />
     <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
-    <ClInclude Include="Source\Utility\Shader\ShaderLoad.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

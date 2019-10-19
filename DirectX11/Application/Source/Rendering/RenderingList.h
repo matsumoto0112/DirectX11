@@ -7,7 +7,7 @@
 #include "Framework/Math/Rect.h"
 #include "Framework/Math/MathUtility.h"
 #include "Framework/Graphics/Shader/Effect.h"
-#include "Framework/Utility/Wrap/OftenUsed.h"
+// #include "Framework/Utility/Wrap/OftenUsed.h"
 #include "Framework/Utility/Transform.h"
 
 /*

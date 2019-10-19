@@ -1,5 +1,5 @@
 #include "Effect.h"
-#include "Framework/Graphics/DX11InterfaceAccessor.h"
+//#include "Framework/Graphics/DX11InterfaceAccessor.h"
 namespace Framework {
 namespace Graphics {
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Framework/Graphics/Shader/ShaderBase.h"
+//#include "Framework/Graphics/Shader/ShaderBase.h"
 
 namespace Framework {
 namespace Graphics {

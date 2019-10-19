@@ -30,6 +30,7 @@ enum class SceneType {
     Firefly,
     DirLight,
     NormalizedLambert,
+    TestScene,
 };
 
 } //Define 

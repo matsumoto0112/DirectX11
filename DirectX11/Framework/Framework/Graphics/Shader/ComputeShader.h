@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "Framework/Graphics/Shader/ShaderBase.h"
+//#include "Framework/Graphics/Shader/ShaderBase.h"
 #include "Framework/Utility/Property.h"
 
 namespace Framework {
