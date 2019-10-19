@@ -49,7 +49,7 @@ public:
     /**
     * @brief スプライト描画に使用するデフォルトのエフェクトを取得する
     */
-    std::shared_ptr<Effect> getDefaultSpriteEffect() const { return mEffect; }
+    Effect* getDefaultSpriteEffect() const { return mEffect.get(); }
 private:
     std::shared_ptr<VertexBuffer> mVertexBuffer; //!< 頂点・インデックスバッファ
     std::shared_ptr<IndexBuffer> mIndexBuffer; //!< 頂点・インデックスバッファ
