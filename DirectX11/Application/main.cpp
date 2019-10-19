@@ -76,6 +76,8 @@ private:
         }));
 
         window->setProcedureEvent(new Window::CloseProc());
+        Framework::Graphics::DX11RenderingManager::getInstance()->init(window->getHWND(),
+            Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), 2, false);
 
         mSceneManager = std::make_unique<Scene::Manager>();
 
@@ -98,8 +100,6 @@ private:
             BUILD_SCENE(TestScene, SceneType::TestScene, std::make_unique<TestScene>());
             mSceneManager->loadScene(SceneType::TestScene);
 
-            Framework::Graphics::DX11RenderingManager::getInstance()->init(window->getHWND(),
-                Define::Config::getInstance()->getWidth(), Define::Config::getInstance()->getHeight(), 2, false);
         }
 
         ATLASSERT(_CrtCheckMemory());
@@ -114,7 +114,7 @@ private:
     virtual void draw() override {
         Graphics::DX11RenderingManager::getInstance()->beginFrame();
         //Graphics::IRenderer* renderer = Device::GameDevice::getInstance()->getRenderingManager()->drawBegin();
-        //mSceneManager->draw(renderer);
+        mSceneManager->draw(nullptr);
         //mGlobalWindow->draw();
         //Device::GameDevice::getInstance()->getRenderingManager()->drawEnd();
         Graphics::DX11RenderingManager::getInstance()->endFrame();

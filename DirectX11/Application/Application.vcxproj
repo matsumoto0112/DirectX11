@@ -135,6 +135,14 @@
     <ClInclude Include="Source\Scene\Impl\TestScene.h" />
     <ClInclude Include="Source\Utility\ImGUI\AddField.h" />
     <ClInclude Include="stdafx.h" />
+    <FxCompile Include="Resources\Shader\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\2D\NoActionVS.hlsl">

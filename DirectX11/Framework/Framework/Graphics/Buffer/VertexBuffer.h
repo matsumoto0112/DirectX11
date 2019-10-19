@@ -57,7 +57,7 @@ namespace Framework {
             subResource.SysMemPitch = 0;
             subResource.SysMemSlicePitch = 0;
             subResource.pSysMem = vertices.data();
-            throwIfFailed(DX11InterfaceAccessor::getDevice()->CreateBuffer(&desc, &subResource, &mBuffer));
+            throwIfFailed(device->CreateBuffer(&desc, &subResource, &mBuffer));
         }
     } //Graphics 
 } //Framework 

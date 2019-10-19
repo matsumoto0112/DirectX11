@@ -52,6 +52,8 @@
     <FxCompile Include="Resources\Shader\Lighting\DirLight\PS.hlsl" />
     <FxCompile Include="Resources\Shader\Lighting\NormalizedLambert_VS.hlsl" />
     <FxCompile Include="Resources\Shader\Lighting\NormalizedLambert_PS.hlsl" />
+    <FxCompile Include="Resources\Shader\VertexShader.hlsl" />
+    <FxCompile Include="Resources\Shader\PixelShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Utility\ShaderDefine.hlsli" />
