@@ -21,48 +21,48 @@
 using namespace Framework;
 
 namespace {
-std::unique_ptr<Graphics::Sampler> mDefaultSampler;
-//std::shared_ptr<Graphics::Model> mModel;
-std::vector<Utility::Transform> mTransform;
-std::shared_ptr<Graphics::Model> mFloor;
-Utility::Transform mFloorTransform;
+    std::unique_ptr<Graphics::Sampler> mDefaultSampler;
+    //std::shared_ptr<Graphics::Model> mModel;
+    std::vector<Utility::Transform> mTransform;
+    std::shared_ptr<Graphics::Model> mFloor;
+    Utility::Transform mFloorTransform;
 
-Graphics::LightCBuffer mLightData;
-RenderingList mRenderingList;
+    Graphics::LightCBuffer mLightData;
+    RenderingList mRenderingList;
 
-/**
-* @class Model
-* @brief モデル管理クラス
-*/
-class Model : public Renderable {
-public:
     /**
-    * @brief コンストラクタ
+    * @class Model
+    * @brief モデル管理クラス
     */
-    Model(std::shared_ptr<Graphics::VertexBuffer> vertexBuffer,
-        std::shared_ptr<Graphics::IndexBuffer> indexBuffer,
-        std::shared_ptr<IMaterial> material)
-        :Renderable(material), mVertexBuffer(vertexBuffer), mIndexBuffer(indexBuffer) { }
-    /**
-    * @brief デストラクタ
-    */
-    virtual ~Model() { }
-    /**
-    * @brief 描画する
-    */
-    virtual void render() override {
-        Renderable::render();
-        mVertexBuffer->setData();
-        mIndexBuffer->setData();
-        Framework::Utility::getConstantBufferManager()->send();
-        mIndexBuffer->drawCall();
-    }
-protected:
-    std::shared_ptr<Framework::Graphics::VertexBuffer> mVertexBuffer; //!< 頂点バッファ
-    std::shared_ptr<Framework::Graphics::IndexBuffer> mIndexBuffer; //!< インデックスバッファ
-};
+    class Model : public Renderable {
+    public:
+        /**
+        * @brief コンストラクタ
+        */
+        Model(std::shared_ptr<Graphics::VertexBuffer> vertexBuffer,
+            std::shared_ptr<Graphics::IndexBuffer> indexBuffer,
+            std::shared_ptr<IMaterial> material)
+            :Renderable(material), mVertexBuffer(vertexBuffer), mIndexBuffer(indexBuffer) { }
+        /**
+        * @brief デストラクタ
+        */
+        virtual ~Model() { }
+        /**
+        * @brief 描画する
+        */
+        virtual void render() override {
+            Renderable::render();
+            mVertexBuffer->setData();
+            mIndexBuffer->setData();
+            Framework::Utility::getConstantBufferManager()->send();
+            mIndexBuffer->drawCall();
+        }
+    protected:
+        std::shared_ptr<Framework::Graphics::VertexBuffer> mVertexBuffer; //!< 頂点バッファ
+        std::shared_ptr<Framework::Graphics::IndexBuffer> mIndexBuffer; //!< インデックスバッファ
+    };
 
-std::vector<std::shared_ptr<Model>> mModels;
+    std::vector<std::shared_ptr<Model>> mModels;
 }
 
 NormalizedLambert_NewRendering::NormalizedLambert_NewRendering() {
@@ -98,7 +98,10 @@ NormalizedLambert_NewRendering::NormalizedLambert_NewRendering() {
         for (size_t i = 0; i < MODEL_NUM; i++) {
             mModels.emplace_back(std::make_shared<Model>(vb, ib, std::make_shared<IMaterial>(ef)));
             mModels[i]->getMaterial()->mColor = Graphics::Color4(i, 1, 1, 1);
-            mModels[i]->getMaterial()->mTransform.setPosition(Math::Vector3(i * 2, 0, 0));
+            float x = ((i / 2 + 1) * 3 * i % 2 == 0 ? -1 : 1) * 5;
+            mModels[i]->getMaterial()->mTransform.setPosition(Math::Vector3(x, 0, 0));
+
+            mModels[i]->getMaterial()->mTransform.setScale(Math::Vector3(5, 5, 5));
         }
     }
 
@@ -177,7 +180,7 @@ bool NormalizedLambert_NewRendering::isEndScene() const {
 }
 
 void NormalizedLambert_NewRendering::draw(Framework::Graphics::IRenderer* renderer) {
-    renderer->getRenderTarget()->setBackColor(Graphics::Color4(0.0f, 0, 0, 0));
+    renderer->getRenderTarget()->setBackColor(Graphics::Color4(54.0f / 255.0f, 231.0f / 255.0f, 255.0f / 255.0f, 0.0f));
     Utility::getCameraManager()->setPerspectiveCamera(m3DCamera);
     Utility::getCameraManager()->setOrthographicCamera(m2DCamera);
 
@@ -188,13 +191,6 @@ void NormalizedLambert_NewRendering::draw(Framework::Graphics::IRenderer* render
 
     for (size_t i = 0; i < mModels.size(); i++) {
         mRenderingList.add(mModels[i].get());
-    }
-    {
-        //for (auto&& tr : mTransform) {
-        //    mModel->getMaterial<Graphics::ModelMaterial>()->mWorldMatrix.mData = tr.createSRTMatrix();
-        //    renderer->render(mModel.get());
-        //}
-        ////renderer->render(mFloor.get());
     }
 
     auto list = mRenderingList.getOpaqueList();

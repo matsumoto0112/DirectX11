@@ -12,9 +12,6 @@ GraphicsDevice::GraphicsDevice(HWND hWnd, UINT width, UINT height, bool isFullSc
 GraphicsDevice::~GraphicsDevice() { }
 
 void GraphicsDevice::drawBegin() {
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
 
     mDirectX11Device->getContext()->ClearState();
 }

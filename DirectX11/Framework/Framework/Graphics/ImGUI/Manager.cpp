@@ -8,7 +8,6 @@ namespace Framework {
 namespace ImGUI {
 
 Manager::Manager() {
-    //#ifdef _DEBUG
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -20,13 +19,18 @@ Manager::Manager() {
         Graphics::DX11InterfaceAccessor::getDevice().Get(),
         Graphics::DX11InterfaceAccessor::getContext().Get());
     MY_ASSERTION(success, "ImGUIÇÃèâä˙âªÇ…é∏îsÇµÇ‹ÇµÇΩ");
-    //#endif // DEBUG
 }
 
 Manager::~Manager() {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+}
+
+void Manager::beginFrame() {
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 }
 
 void Manager::drawAll() {

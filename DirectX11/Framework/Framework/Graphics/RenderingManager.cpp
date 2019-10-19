@@ -28,6 +28,7 @@ void RenderingManager::initialize() {
 }
 
 IRenderer* RenderingManager::drawBegin() {
+    mImGUIManager->beginFrame();
     mGraphicsDevice->drawBegin();
     mBackBufferRenderer->begin();
     mDefaultSampler->setData(ShaderInputType::Pixel, 0);

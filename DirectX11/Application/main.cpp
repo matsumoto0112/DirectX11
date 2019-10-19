@@ -79,17 +79,6 @@ private:
 
         {
             using Define::SceneType;
-            //mSceneManager->registerScene(SceneType::BlackholeParticle, std::make_unique<BlackholeParticle>());
-            //mSceneManager->registerScene(SceneType::FallParticle, std::make_unique<FallParticle>());
-            ////mSceneManager->registerScene(SceneType::FallBounceParticle, std::make_unique<FallBounceParticle>());
-            //mSceneManager->registerScene(SceneType::IceBlock, std::make_unique<IceBlock>());
-            ////mSceneManager->registerScene(SceneType::SpotInstancerParticle, std::make_unique<SpotInstancerParticle>());
-            ////mSceneManager->registerScene(SceneType::FireworkParticle, std::make_unique<FireworkParticle>());
-            ////mSceneManager->registerScene(SceneType::FlashParticle, std::make_unique<FlashParticle>());
-            ////mSceneManager->registerScene(SceneType::ShotParticle, std::make_unique<ShotParticle>());
-            //mSceneManager->registerScene(SceneType::WormholeParticle, std::make_unique<WormholeParticle>());
-            //mSceneManager->registerScene(SceneType::RenderModel, std::make_unique<RenderModel>());
-            //mSceneManager->registerScene(SceneType::Shadow, std::make_unique<Shadow>());
 
             mGlobalWindow = std::make_unique<ImGUI::Window>("Jumper");
             mFPSText = std::make_shared<ImGUI::Text>("FPS");
@@ -113,7 +102,7 @@ private:
     virtual void update() override {
         Device::GameDevice::getInstance()->update();
         mSceneManager->update();
-        mFPSText->setText(Utility::StringBuilder("") << Utility::Time::getInstance()->getCurrentFPS());
+        mFPSText->setText(Utility::StringBuilder("FPS:") << Utility::Time::getInstance()->getCurrentFPS());
         ATLASSERT(_CrtCheckMemory());
     }
     virtual void draw() override {

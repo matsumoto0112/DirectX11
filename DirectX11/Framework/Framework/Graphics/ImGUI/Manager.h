@@ -22,6 +22,10 @@ public:
     */
     ~Manager();
     /**
+    * @brief フレーム開始時処理
+    */
+    void beginFrame();
+    /**
     * @brief アイテムをすべて描画する
     */
     void drawAll();
