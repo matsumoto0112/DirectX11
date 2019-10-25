@@ -8,7 +8,7 @@
 * @details 変数のアクセス修飾子は直前のものが使用される
 */
 #define PROPERTY(type, typeName,funcName) \
-type typeName; \
+protected: type typeName; \
 public: inline void set ## funcName(const type& val) {typeName = val;} \
 public: inline const type& get ## funcName() const{ return (typeName);}
 
@@ -19,7 +19,7 @@ public: inline const type& get ## funcName() const{ return (typeName);}
 getterは参照を返す
 */
 #define PROPERTY_GETREF(type,typeName,funcName) \
-type typeName; \
+protected: type typeName; \
 public: inline void set ## funcName(const type& val) {typeName = val;} \
 public: inline type& get ## funcName() { return (typeName);}
 
@@ -29,7 +29,7 @@ public: inline type& get ## funcName() { return (typeName);}
 * @details 変数のアクセス修飾子は直前のものが使用される
 */
 #define PROPERTY_POINTER(type,typeName,funcName) \
-type typeName; \
+protected: type typeName; \
 public: inline void set ## funcName(type val) { typeName = val; } \
 public: inline type get ## funcName() const { return typeName; }
 
@@ -39,7 +39,7 @@ public: inline type get ## funcName() const { return typeName; }
 * @details 変数のアクセス修飾子は直前のものが使用される
 */
 #define PROPERTY_READONLY(type,typeName,funcName) \
-type typeName; \
+protected: type typeName; \
 public: inline const type& get##funcName() const { return typeName; } \
 
 /**
@@ -48,7 +48,7 @@ public: inline const type& get##funcName() const { return typeName; } \
 * @details 変数のアクセス修飾子は直前のものが使用される
 */
 #define PROPERTY_ORIGINAL_GETTER_SETTER(type,typeName,funcName,getter,setter) \
-type typeName; \
+protected: type typeName; \
 public: inline void set ## funcName(const type& val) { setter(val); } \
 public: inline const type& get ## funcName() const{ return getter();}
 
@@ -58,7 +58,7 @@ public: inline const type& get ## funcName() const{ return getter();}
 * @details 変数のアクセス修飾子は直前のものが使用される
 */
 #define PROPERTY_POINTER_ORIGINAL_GETTER_SETTER(type,typeName,funcName,getter,setter) \
-type typeName; \
+protected: type typeName; \
 public: inline void set ## funcName(type val) { setter(val); } \
 public: inline type get ## funcName() const{ return getter();}
 

@@ -73,6 +73,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Resource\ShaderResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Device\GameDevice.h" />
@@ -173,5 +174,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\PrimitiveVertex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBuffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\ConstantBuffer\ConstantBufferStruct.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Graphics\Renderer\Pipeline.h" />
   </ItemGroup>
 </Project>

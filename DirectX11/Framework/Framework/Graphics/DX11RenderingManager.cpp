@@ -109,8 +109,6 @@ namespace Framework {
             mBackBuffer = std::make_shared<RenderTargetView>(mDevice.Get(), texture2D,
                 nullptr, viewport, Color4(0.0f, 0.0f, 0.0f, 0.0f));
 
-            D3D11_RASTERIZER_DESC rasDesc = RasterizerStateDesc::getDefaultDesc(FillMode::Solid, CullMode::None);
-            mDevice->CreateRasterizerState(&rasDesc, &ras);
             return true;
         }
 
@@ -150,7 +148,6 @@ namespace Framework {
             mVertexShader->set(mImmediateContext.Get());
             mPixelShader->set(mImmediateContext.Get());
             mRenderTarget->set(mImmediateContext.Get());
-            mImmediateContext->RSSetState(ras.Get());
             mIndexBuffer->drawCall(mImmediateContext.Get());
         }
 

@@ -2,17 +2,13 @@
 #include "Framework/Graphics/Renderer/IDrawable.h"
 
 namespace Framework {
-namespace Graphics {
+    namespace Graphics {
 
-RenderState::RenderState(std::shared_ptr<AlphaBlend> alphaBlend, std::shared_ptr<RasterizerState> rasterizer)
-    :mAlphaBlend(alphaBlend), mRasterizer(rasterizer) { }
+        Pipeline::Pipeline() { }
 
-RenderState::~RenderState() { }
+        Pipeline::~Pipeline() { }
 
-void RenderState::setPipeline() {
-    mAlphaBlend->set();
-    mRasterizer->set();
-}
+        void Pipeline::setPipeline() { }
 
-} //Graphics 
+    } //Graphics 
 } //Framework 
