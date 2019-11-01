@@ -4,8 +4,7 @@
 #include <Windows.h>
 #include "Framework/Utility/ImGUI/ImGUI.h"
 
-namespace Framework {
-namespace ImGUI {
+namespace Framework::ImGUI {
 
 /**
 * @class Manager
@@ -28,8 +27,7 @@ public:
     /**
     * @brief ƒAƒCƒeƒ€‚ð‚·‚×‚Ä•`‰æ‚·‚é
     */
-    void drawAll();
+    void endFrame();
 };
 
-} //ImGUI
-} //Framework 
+} //Framework::ImGUI

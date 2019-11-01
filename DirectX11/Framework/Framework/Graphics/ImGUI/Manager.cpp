@@ -33,7 +33,7 @@ void Manager::beginFrame() {
     ImGui::NewFrame();
 }
 
-void Manager::drawAll() {
+void Manager::endFrame() {
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
